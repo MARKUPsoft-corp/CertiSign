@@ -1,14 +1,11 @@
-
-
 <template>
-    <h1>BIENVENU {{ nom }}</h1>
     
+    <div>
+        <navbar/>
+    </div>
+
 </template>
 
 <script setup>
-
-    import { ref } from 'vue';
-    const nom = ref("")
-    nom.value = prompt("entrez votre nom") 
-
+    import navbar from '@/components/navbar.vue'
 </script>
