@@ -1,43 +1,37 @@
+# Importation de requests pour envoyer des requêtes HTTP
 import requests
 
-# URL du serveur FastAPI qui gère les opérations
-API_URL = "http://127.0.0.1:8000"
+def upload_certificate():
+    """
+    Cette fonction demande à l'utilisateur un fichier de certificat,
+    puis l'envoie au microservice via l'API Gateway.
+    """
+    # Demander à l'utilisateur de saisir le chemin du certificat
+    cert_path = input("Entrez le chemin du certificat : ")
 
-def get_user_input():
-    """ Demande à l'utilisateur d'entrer deux nombres. """
-    while True:
-        try:
-            a = float(input("Entrez le premier nombre : "))
-            b = float(input("Entrez le deuxième nombre : "))
-            return a, b
-        except ValueError:
-            print("Entrée invalide. Veuillez entrer des nombres valides.")
+    try:
+        # Ouvrir le fichier certificat en mode binaire (lecture)
+        with open(cert_path, "rb") as cert_file:
+            # Préparer les données pour l'envoi via requête POST
+            files = {"cert_file": (cert_path, cert_file, "application/x-pem-file")}
+            
+            # Envoyer le certificat à l'API Gateway
+            response = requests.post("http://127.0.0.1:8000/upload-cert", files=files)
 
-def send_request(operation, a, b):
-    """ Envoie une requête HTTP à l'API FastAPI. """
-    response = requests.get(f"{API_URL}/{operation}", params={"a": a, "b": b})
-    return response.json()
+            # Vérifier si la requête a réussi
+            if response.status_code == 200:
+                print("\nInformations du certificat :")
+                print(response.json())  # Afficher la réponse JSON contenant les infos du certificat
+            else:
+                print("\nErreur :", response.text)  # Afficher l'erreur HTTP
 
-def main():
-    """ Fonction principale de l'application CLI. """
-    print("Bienvenue dans l'application CLI de calcul.")
-    print("Choisissez une opération :")
-    print("1. Addition")
-    print("2. Multiplication")
-    
-    choice = input("Votre choix (1 ou 2) : ")
+    except FileNotFoundError:
+        # Gérer le cas où le fichier n'existe pas
+        print("Fichier introuvable, vérifiez le chemin.")
+    except Exception as e:
+        # Gérer d'autres erreurs éventuelles
+        print(f"Erreur : {e}")
 
-    if choice not in ["1", "2"]:
-        print("Choix invalide. Veuillez sélectionner 1 ou 2.")
-        return
-    
-    a, b = get_user_input()  # Demande des nombres à l'utilisateur
-
-    operation = "add" if choice == "1" else "multiply"
-    
-    result = send_request(operation, a, b)  # Envoie la requête
-
-    print(f"Résultat de l'opération {operation} : {result}")
-
+# Vérifier si le script est exécuté directement
 if __name__ == "__main__":
-    main()
+    upload_certificate()

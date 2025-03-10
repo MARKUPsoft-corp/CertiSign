@@ -10,14 +10,11 @@
     <!-- Conteneur de connexion -->
     <div class="row border rounded-5 p-3 bg-white shadow box-area">
       
-      <!-- Partie gauche : Informations et logo -->
-      <div class="col-md-6 d-flex flex-column justify-content-center align-items-center left-box">
-        <div class="featured-image mb-3">
-          <img src="@/assets/logoantic.jpeg" class="img-fluid" alt="Logo ANTIC" />
-        </div>
-        <p class="fs-2 text-success fw-bold">Be verified</p>
-        <small class="text-center text-success text-wrap" style="width: 17rem;">Centre National de Cryptographie et de Certification Electronique</small>
-      </div>
+    <!-- Partie gauche : Image seule -->
+    <div class="col-md-6 d-flex align-items-center justify-content-center left-box rounded-5 overflow-hidden h-75">
+      <img src="@/assets/banniere.jpeg" class="img-fluid w-15 h-100 object-fit-cover" alt="Background Image" />
+    </div>
+
 
       <!-- Partie droite : Formulaire de connexion -->
       <div class="col-md-6 d-flex flex-column justify-content-center align-items-center right-box">
