@@ -10,11 +10,10 @@
     <!-- Conteneur de connexion -->
     <div class="row border rounded-5 p-3 bg-white shadow box-area">
       
-    <!-- Partie gauche : Image seule -->
-    <div class="col-md-6 d-flex align-items-center justify-content-center left-box rounded-5 overflow-hidden h-75">
-      <img src="@/assets/banniere.jpeg" class="img-fluid w-15 h-100 object-fit-cover" alt="Background Image" />
-    </div>
-
+      <!-- Partie gauche : Image pleine largeur et hauteur avec bords bien arrondis -->
+      <div class="col-md-6 d-flex align-items-center justify-content-center left-box rounded-5 overflow-hidden">
+        <img src="@/assets/banniere.jpeg" class="img-fluid w-100 h-100 object-fit-cover rounded-5" alt="Background Image" />
+      </div>
 
       <!-- Partie droite : Formulaire de connexion -->
       <div class="col-md-6 d-flex flex-column justify-content-center align-items-center right-box">
@@ -111,9 +110,14 @@ body {
 
 /* Partie gauche */
 .left-box {
-  background: whitesmoke;
-  padding: 30px;
-  text-align: center;
+  padding: 0;
+  height: 100%;
+}
+
+.left-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Style du titre "CONNEXION" */

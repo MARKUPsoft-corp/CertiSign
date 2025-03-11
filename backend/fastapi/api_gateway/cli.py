@@ -1,40 +1,69 @@
-import requests  # Importation du module 'requests' pour envoyer des requêtes HTTP
+import argparse  # Importation du module argparse pour traiter les arguments en ligne de commande
+import requests  # Importation du module requests pour envoyer des requêtes HTTP
+import os  # Importation du module os pour interagir avec le système de fichiers
 
-def main():
-    # Demande à l'utilisateur le chemin du certificat et le mot de passe
-    cert_path = input("Veuillez entrer le chemin du certificat (.pfx, .pem, .p12) : ")  # Demande à l'utilisateur de saisir le chemin du fichier certificat
-    password = input("Veuillez entrer le mot de passe du certificat : ")  # Demande à l'utilisateur de saisir le mot de passe du certificat
+def main(cert_path):
+    # Vérifier si le chemin donné correspond à un répertoire plutôt qu'à un fichier
+    if os.path.isdir(cert_path):
+        print(f"Erreur : Le chemin '{cert_path}' est un répertoire, pas un fichier.")
+        return  # Si c'est un répertoire, on arrête l'exécution de la fonction
 
-    # Affiche les informations saisies pour le débogage
-    print(f"Chemin du certificat : {cert_path}")  # Affiche le chemin du certificat saisi
-    print(f"Mot de passe : {password}")  # Affiche le mot de passe saisi
+    # Demander le mot de passe à l'utilisateur pour le certificat
+    password = input("Entrez le mot de passe du certificat : ")
 
-    # Prépare la requête pour l'API Gateway
-    api_url = "http://localhost:8000/extract_cert_info"  # L'URL de l'API Gateway qui va traiter la requête
-
-    # Ouvre le certificat en mode binaire pour l'envoyer dans la requête
+    # Construire les données de la requête
     try:
-        print("Ouverture du certificat...")  # Affiche un message pour indiquer que l'ouverture du certificat commence
-        with open(cert_path, 'rb') as cert_file:  # Ouvre le fichier du certificat en mode binaire ('rb')
-            files = {'cert': cert_file}  # Prépare les données à envoyer : le fichier du certificat
-            data = {'password': password}  # Prépare les données supplémentaires à envoyer : le mot de passe du certificat
-            
-            print(f"Envoi de la requête POST à {api_url}...")  # Affiche un message pour indiquer que la requête va être envoyée
-            # Envoie la requête POST au microservice via l'API Gateway
-            response = requests.post(api_url, files=files, data=data)  # Envoie la requête HTTP POST à l'API avec les fichiers et les données
-            
-            # Vérifie la réponse de l'API
-            if response.status_code == 200:  # Si le code de statut de la réponse est 200, cela signifie que la requête a réussi
-                print("Réponse reçue avec succès.")  # Affiche un message indiquant que la réponse a été reçue avec succès
-                print("Informations extraites :")  # Affiche un titre pour les données extraites
-                print(response.json())  # Affiche les données extraites du certificat sous forme de JSON
-            else:  # Si le code de statut n'est pas 200, une erreur est survenue
-                print(f"Erreur lors de l'extraction du certificat : {response.status_code}")  # Affiche l'erreur basée sur le code de statut
-                print(response.text)  # Affiche le texte d'erreur renvoyé par l'API pour plus de détails
-    except FileNotFoundError:  # Si le fichier certificat n'est pas trouvé, une exception est levée
-        print("Le fichier certificat n'a pas été trouvé. Vérifiez le chemin.")  # Affiche un message d'erreur pour indiquer que le fichier n'existe pas
-    except Exception as e:  # Si une autre erreur se produit (par exemple, problème de connexion ou autre erreur)
-        print(f"Erreur lors de la connexion ou du traitement : {e}")  # Affiche un message d'erreur générique avec la description de l'exception
+        # Ouvrir le fichier certificat en mode lecture binaire ('rb')
+        files = {'file': open(cert_path, 'rb')}
+    except FileNotFoundError:
+        # Si le fichier n'est pas trouvé, afficher un message d'erreur
+        print(f"Erreur : Le fichier '{cert_path}' n'a pas été trouvé.")
+        return  # Arrêter l'exécution de la fonction
+    except IsADirectoryError:
+        # Si le chemin correspond à un répertoire, afficher un message d'erreur spécifique
+        print(f"Erreur : Le chemin '{cert_path}' est un répertoire, pas un fichier.")
+        return  # Arrêter l'exécution de la fonction
+    except Exception as e:
+        # Si une autre erreur inattendue survient lors de l'ouverture du fichier
+        print(f"Erreur inattendue lors de l'ouverture du fichier : {e}")
+        return  # Arrêter l'exécution de la fonction
 
-if __name__ == "__main__":  # Vérifie si ce fichier est exécuté directement (et non importé en tant que module)
-    main()  # Appelle la fonction principale pour lancer le programme
+    data = {'password': password}  # Créer un dictionnaire avec le mot de passe pour l'envoyer dans la requête
+
+    # URL de l'API Gateway à laquelle la requête sera envoyée
+    gateway_url = "http://localhost:8000/gateway/cert_info/"  # Remplacer par l'URL réelle de l'API Gateway
+
+    # Envoyer une requête POST au serveur API Gateway avec les fichiers et les données
+    response = requests.post(gateway_url, files=files, data=data)
+
+    # Vérifier si la réponse de l'API est positive (code 200)
+    if response.status_code == 200:
+        print("Informations du certificat :")
+        # Convertir la réponse en format JSON
+        response_data = response.json()
+        
+        # Afficher chaque clé et valeur de la réponse JSON sur une nouvelle ligne
+        for key, value in response_data.items():
+            print(f"{key}: {value}")
+    else:
+        # Si le code de statut n'est pas 200, afficher l'erreur
+        print(f"Erreur {response.status_code}: {response.text}")
+    
+    files['file'].close()  # Fermer le fichier après l'envoi de la requête
+
+if __name__ == "__main__":
+    # Configuration d'argparse pour accepter un chemin de certificat via la ligne de commande
+    parser = argparse.ArgumentParser(description="Envoyer un certificat PFX à l'API Gateway.")
+    parser.add_argument('cert_path', type=str, nargs='?', help="Le chemin vers le certificat PFX.")
+    
+    # Analyser les arguments passés en ligne de commande
+    args = parser.parse_args()
+
+    # Si le chemin du certificat est passé en argument, on l'utilise, sinon on demande à l'utilisateur
+    if args.cert_path:
+        cert_path = args.cert_path
+    else:
+        cert_path = input("Entrez le chemin du fichier certificat PFX : ")
+
+    # Appeler la fonction principale avec le chemin du certificat
+    main(cert_path)
