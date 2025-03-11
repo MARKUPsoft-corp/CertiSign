@@ -1,86 +1,100 @@
-# Importation des modules nécessaires pour l'application FastAPI et la gestion des fichiers et des certificats
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Response
-from cryptography import x509  # Permet d'analyser les certificats X.509
-from cryptography.hazmat.primitives.serialization import pkcs12, Encoding, PublicFormat  # Gestion des formats PKCS12 et PEM
-import json  # Pour manipuler des objets JSON
-import base64  # Pour encoder en base64
+from cryptography import x509  # Module pour manipuler les certificats X.509
+from cryptography.hazmat.primitives.serialization import pkcs12, Encoding, PublicFormat  # Import des outils de manipulation des certificats PKCS#12
+import json  # Module pour convertir les données en JSON
+from datetime import datetime  # Pour gérer les dates
 
 # Création de l'application FastAPI
 app = FastAPI()
 
-# Définition de la route POST qui permet d'extraire les informations d'un certificat
+# Définition de l'endpoint pour extraire les informations du certificat
 @app.post("/extract-cert-info/")
 async def extract_cert_info(file: UploadFile = File(...), password: str = Form(...)):
     try:
-        # Lecture du fichier envoyé et stockage des octets du certificat
+        # Lire le fichier du certificat PFX/P12 envoyé par l'utilisateur
         cert_bytes = await file.read()
+        # Encoder le mot de passe en bytes
+        password_bytes = password.encode()
 
-        # Chargement du certificat et de la clé privée à partir des données PKCS12
+        # Charger le certificat PFX/P12 avec sa clé privée et les certificats additionnels
         private_key, cert, additional_certs = pkcs12.load_key_and_certificates(
-            cert_bytes, password.encode()  # Mot de passe pour déchiffrer le fichier .pfx
+            cert_bytes, password_bytes
         )
 
-        # Si le certificat est nul, on renvoie une erreur HTTP avec le message approprié
+        # Vérifier si le certificat est bien chargé
         if cert is None:
             raise HTTPException(status_code=400, detail="Certificat invalide ou mot de passe incorrect.")
 
         # Extraction des informations principales du certificat
-        subject = cert.subject.rfc4514_string()  # Récupération de l'identité du sujet du certificat
-        issuer = cert.issuer.rfc4514_string()  # Récupération de l'autorité émettrice du certificat
-        serial_number = cert.serial_number  # Récupération du numéro de série du certificat
+        subject = cert.subject.rfc4514_string()  # Nom du sujet (titulaire du certificat)
+        issuer = cert.issuer.rfc4514_string()  # Nom de l'autorité de certification émettrice
+        serial_number = cert.serial_number  # Numéro de série du certificat
         valid_from = cert.not_valid_before  # Date de début de validité du certificat
-        valid_to = cert.not_valid_after  # Date de fin de validité du certificat
-        signature_algo = cert.signature_algorithm_oid.dotted_string  # Algorithme de signature du certificat
+        valid_to = cert.not_valid_after  # Date d'expiration du certificat
+        signature_algo = cert.signature_algorithm_oid.dotted_string  # Algorithme de signature utilisé
 
-        # Encodage du certificat en format PEM
-        cert_pem = cert.public_bytes(Encoding.PEM).decode("utf-8")  # Le certificat est converti en format PEM et décodé en UTF-8
-        # Encodage de la clé publique en format PEM
+        # Vérification de l'expiration du certificat
+        current_date = datetime.utcnow()
+        status = "valide" if current_date < valid_to else "expiré"
+
+        # Initialisation des variables pour stocker le VID, les OID, la CRL et l'OCSP
+        vid = None  # Identifiant virtuel (s'il est défini dans le certificat)
+        oid_list = []  # Liste des OID présents dans le certificat
+        crl_urls = []  # Liste des URLs des CRL (Certificate Revocation List)
+        ocsp_urls = []  # Liste des URLs des serveurs OCSP (Online Certificate Status Protocol)
+
+        # Parcourir toutes les extensions du certificat
+        for ext in cert.extensions:
+            # Vérifier si l'extension est une Subject Alternative Name (SAN)
+            if isinstance(ext.value, x509.SubjectAlternativeName):
+                for san in ext.value:
+                    if isinstance(san, x509.DNSName):  # Vérifier si c'est un DNSName
+                        vid = san.value  # Récupérer le VID
+
+            # Vérifier si l'extension contient un OID et l'ajouter à la liste
+            if hasattr(ext, "oid"):
+                oid_list.append(ext.oid.dotted_string)
+
+            # Vérifier si l'extension contient une liste de distribution CRL
+            if isinstance(ext.value, x509.CRLDistributionPoints):
+                for point in ext.value:
+                    if point.full_name:
+                        crl_urls.append(point.full_name[0].value)  # Ajouter l'URL de la CRL
+
+            # Vérifier si l'extension contient des informations d'accès pour OCSP
+            if isinstance(ext.value, x509.AuthorityInformationAccess):
+                for access in ext.value:
+                    if access.access_method == x509.oid.AuthorityInformationAccessOID.OCSP:
+                        ocsp_urls.append(access.access_location.value)  # Ajouter l'URL OCSP
+
+        # Convertir le certificat en format PEM (lisible sous forme de texte)
+        cert_pem = cert.public_bytes(Encoding.PEM).decode("utf-8")
+        # Extraire la clé publique du certificat au format PEM
         public_key_pem = cert.public_key().public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo).decode("utf-8")
 
-        # Initialisation des listes pour stocker les URLs OCSP, CRL et TSA
-        ocsp_urls = []  # URLs de l'OCSP (Online Certificate Status Protocol)
-        crl_urls = []  # URLs des listes de révocation de certificats (CRL)
-        tsa_urls = []  # URLs du serveur de timestamp (TSA)
-
-        # Parcours des extensions du certificat pour en extraire les informations supplémentaires
-        for ext in cert.extensions:
-            # Vérification si l'extension est une autorité d'information
-            if isinstance(ext.value, x509.AuthorityInformationAccess):
-                for access_desc in ext.value:
-                    # Si l'extension est OCSP, on ajoute l'URL à la liste ocsp_urls
-                    if access_desc.access_method == x509.OID_OCSP:
-                        ocsp_urls.append(access_desc.access_location.value)
-                    # Si l'extension est une autorité de certificats, on ajoute l'URL à la liste tsa_urls
-                    elif access_desc.access_method == x509.OID_CA_ISSUERS:
-                        tsa_urls.append(access_desc.access_location.value)
-
-            # Vérification si l'extension est une distribution de CRL
-            elif isinstance(ext.value, x509.CRLDistributionPoints):
-                for point in ext.value:
-                    for name in point.full_name:
-                        crl_urls.append(name.value)  # Ajout des URLs CRL
-
-        # Création de la réponse JSON avec toutes les informations extraites
+        # Construire la réponse JSON avec toutes les informations extraites
         response_data = {
-            "subject": subject,  # Sujet du certificat
-            "issuer": issuer,  # Émetteur du certificat
-            "serial_number": serial_number,  # Numéro de série du certificat
+            "subject": subject,  # Titulaire du certificat
+            "issuer": issuer,  # Autorité de certification émettrice
+            "serial_number": serial_number,  # Numéro de série
             "valid_from": valid_from.isoformat(),  # Date de début de validité
-            "valid_to": valid_to.isoformat(),  # Date de fin de validité
+            "valid_to": valid_to.isoformat(),  # Date d'expiration
+            "status": status,  # Statut du certificat (valide ou expiré)
             "signature_algorithm": signature_algo,  # Algorithme de signature
-            "public_key_pem": public_key_pem,  # Clé publique en format PEM
-            "certificate_pem": cert_pem,  # Certificat en format PEM
-            "ocsp_urls": ocsp_urls,  # Liste des URLs OCSP
-            "crl_urls": crl_urls,  # Liste des URLs CRL
-            "tsa_urls": tsa_urls  # Liste des URLs TSA
+            "public_key_pem": public_key_pem,  # Clé publique du certificat en format PEM
+            "certificate_pem": cert_pem,  # Certificat complet en format PEM
+            "vid": vid,  # Identifiant virtuel (s'il existe)
+            "oid_list": oid_list,  # Liste des OID trouvés dans le certificat
+            "crl_urls": crl_urls,  # Liste des URLs de la CRL
+            "ocsp_urls": ocsp_urls  # Liste des URLs OCSP
         }
 
-        # Retourner la réponse formatée en JSON avec indentation (format joli avec des retours à la ligne)
+        # Retourner la réponse JSON formatée
         return Response(
-            content=json.dumps(response_data, indent=4),  # Format JSON avec un retour à la ligne (indentation)
-            media_type="application/json"  # Type MIME pour JSON
+            content=json.dumps(response_data, indent=4),
+            media_type="application/json"
         )
 
+    # Gestion des erreurs lors du traitement du certificat
     except Exception as e:
-        # Si une exception survient, retourner une erreur HTTP 500 avec le message de l'exception
         raise HTTPException(status_code=500, detail=f"Erreur lors de la lecture du certificat: {str(e)}")
