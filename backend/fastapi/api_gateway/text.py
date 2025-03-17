@@ -1,52 +1,108 @@
-import ldap  # Importation du module LDAP pour interagir avec un serveur LDAP
+from pathlib import Path
+import json
+from typing import Dict, Any
+from cryptography.x509 import Certificate, load_der_x509_certificate
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.asymmetric import rsa, ec
 
-def is_certificate_revoked(crl_url, serial_number):
+def load_der_certificate(file_path: str) -> Certificate:
     """
-    Vérifie si un certificat est révoqué via une requête LDAP.
-
+    Charge un certificat au format DER depuis un fichier.
+    
     Args:
-        crl_url (str): L'URL du point de distribution de la CRL (LDAP).
-        serial_number (str): Le numéro de série du certificat (sous forme de chaîne).
-
+        file_path: Chemin vers le fichier certificat
+    
     Returns:
-        bool: True si le certificat est révoqué, False sinon.
+        Certificate: L'objet certificat chargé
+        
+    Raises:
+        FileNotFoundError: Si le fichier n'existe pas
+        ValueError: Si le certificat est invalide
+    """
+    path = Path(file_path)
+    if not path.exists():
+        raise FileNotFoundError(f"Le fichier certificat {file_path} n'existe pas")
+        
+    try:
+        with open(file_path, 'rb') as f:
+            cert_data = f.read()
+        return load_der_x509_certificate(cert_data, default_backend())
+    except Exception as e:
+        raise ValueError(f"Erreur lors du chargement du certificat: {str(e)}")
+
+def display_certificate_info(cert: Certificate) -> str:
+    """
+    Génère une représentation JSON des informations du certificat.
+    
+    Args:
+        cert: L'objet certificat à analyser
+        
+    Returns:
+        str: Les informations du certificat au format JSON
     """
     try:
-        # Extraction des informations de l'URL LDAP
-        uri_parts = crl_url.split('/')  # Découpe l'URL en une liste d'éléments
-        ldap_server = uri_parts[2]  # Récupère le serveur LDAP à partir de l'URL (ex: ldap.example.com)
-        base_dn = '/'.join(uri_parts[3:])  # Construit le DN de base à partir du reste de l'URL
+        cert_info: Dict[str, Any] = {}
+
+        # Informations principales
+        cert_info["Subject"] = str(cert.subject)
+        cert_info["Issuer"] = str(cert.issuer)
+        cert_info["Serial Number"] = cert.serial_number
+        cert_info["Not Valid Before"] = cert.not_valid_before_utc.isoformat()  # Utilisation de not_valid_before_utc
+        cert_info["Not Valid After"] = cert.not_valid_after_utc.isoformat()  # Utilisation de not_valid_after_utc
+        cert_info["Version"] = cert.version.value  # Conversion de la version en entier
+
+        # Extensions (si présentes)
+        extensions = []
+        for ext in cert.extensions:
+            extensions.append({
+                "OID": str(ext.oid),
+                "Value": str(ext.value)
+            })
+        cert_info["Extensions"] = extensions
+
+        # Clé publique
+        public_key = cert.public_key()
+        public_key_info = {
+            "Algorithm": "Unknown",
+            "Key Info": {}
+        }
         
-        # Connexion au serveur LDAP
-        ldap_connection = ldap.initialize(f"ldap://{ldap_server}")  # Initialise la connexion avec le serveur LDAP
-        ldap_connection.protocol_version = 3  # Définit la version du protocole LDAP (LDAPv3)
-        
-        # Construction du filtre de recherche
-        search_filter = f"(&(objectClass=certificateRevocationList)(serialNumber={serial_number}))"
-        # Ce filtre recherche un objet de type 'certificateRevocationList' ayant le numéro de série spécifié
+        if isinstance(public_key, rsa.RSAPublicKey):
+            public_key_info.update({
+                "Algorithm": "RSA",
+                "Key Info": {
+                    "Key Size": public_key.key_size,
+                    "Public Numbers": public_key.public_numbers().__dict__
+                }
+            })
+        elif isinstance(public_key, ec.EllipticCurvePublicKey):
+            public_key_info.update({
+                "Algorithm": "ECDSA",
+                "Key Info": {
+                    "Curve": str(public_key.curve),
+                    "Public Numbers": public_key.public_numbers().__dict__
+                }
+            })
+            
+        cert_info["Public Key"] = public_key_info
 
-        # Recherche LDAP
-        results = ldap_connection.search_s(base_dn, ldap.SCOPE_SUBTREE, search_filter)
-        # Effectue une recherche récursive (SCOPE_SUBTREE) dans le LDAP à partir de base_dn avec le filtre search_filter
+        # Empreinte SHA256
+        cert_info["SHA256 Fingerprint"] = cert.fingerprint(cert.signature_hash_algorithm).hex()
 
-        # Retourne True si le certificat est trouvé (donc révoqué), sinon False
-        return bool(results)  # Si des résultats sont trouvés, cela signifie que le certificat est révoqué
+        return json.dumps(cert_info, indent=4)
+    except Exception as e:
+        raise ValueError(f"Erreur lors de l'analyse du certificat: {str(e)}")
 
-    except ldap.LDAPError:
-        return False  # En cas d'erreur (serveur inaccessible, mauvais DN, etc.), retourner False (certificat non révoqué)
+# Utilisation avec gestion des erreurs
+def main():
+    CERT_PATH = "/home/markup/Documents/crl/CN=CamRootCA,OU=Cameroon Root Certification Authority,O=ANTIC,C=CM.der"
+    
+    try:
+        certificate = load_der_certificate(CERT_PATH)
+        certificate_info_json = display_certificate_info(certificate)
+        print(certificate_info_json)
+    except (FileNotFoundError, ValueError) as e:
+        print(f"Erreur: {str(e)}")
 
-    finally:
-        if 'ldap_connection' in locals():  # Vérifie si la connexion a été créée
-            ldap_connection.unbind_s()  # Ferme proprement la connexion LDAP
-
-# Exemple d'utilisation
-crl_url = "ldap://ldap.camgovca.cm:389/ou=dp2p1,ou=crldp,ou=Cameroon Government Certification Authority,o=ANTIC CA,c=CM"
-# URL du serveur LDAP contenant la liste de révocation des certificats (CRL)
-
-serial_number = "6565"  # Numéro de série du certificat sous forme de chaîne
-
-# Vérifie si le certificat est révoqué et affiche le résultat
-if is_certificate_revoked(crl_url, serial_number):
-    print("Le certificat est révoqué.")
-else:
-    print("Le certificat n'est pas révoqué.")
+if __name__ == "__main__":
+    main()

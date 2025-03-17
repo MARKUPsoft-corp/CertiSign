@@ -8,6 +8,7 @@ from datetime import datetime  # Pour gérer les dates de validité
 import json  # Pour formater la réponse en JSON
 import requests  # Pour effectuer des requêtes HTTP (télécharger la CRL et envoyer la requête OCSP)
 import ldap  # Importation du module LDAP pour interagir avec un serveur LDAP
+import base64
 
 # Création de l'application FastAPI
 app = FastAPI()
@@ -123,6 +124,8 @@ async def extract_cert_info(file: UploadFile = File(...), password: str = Form(.
         valid_from = cert.not_valid_before  # Date de début de validité
         valid_to = cert.not_valid_after  # Date d'expiration du certificat
         signature_algo = cert.signature_algorithm_oid.dotted_string  # Algorithme de signature utilisé
+        signature_issiuer = base64.b64encode(cert.signature).decode('utf-8')
+
 
         # Vérifier l'expiration du certificat en comparant la date actuelle avec la date d'expiration
         current_date = datetime.utcnow()  # Date actuelle (UTC)
@@ -197,6 +200,7 @@ async def extract_cert_info(file: UploadFile = File(...), password: str = Form(.
             "revocation_status_crl": revocation_status_crl,  # Statut de révocation via CRL
             "revocation_status_ocsp": revocation_status_ocsp,  # Statut de révocation via OCSP
             "signature_algorithm": signature_algo,  # Algorithme de signature utilisé
+            "issuer_signature" : signature_issiuer,
             "public_key_pem": public_key_pem,         # Clé publique en format PEM
             "certificate_pem": cert_pem,              # Certificat complet en format PEM
             "vid": vid,                             # Identifiant virtuel (si présent)

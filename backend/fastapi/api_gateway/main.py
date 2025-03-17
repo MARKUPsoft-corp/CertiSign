@@ -7,7 +7,7 @@ app = FastAPI()
 # Liste des microservices disponibles avec leurs URL de base
 MICROSERVICES = {
     "cert_info": "http://localhost:8001/extract-cert-info/",  # L'URL du microservice de traitement des certificats
-    "cert_validation": "http://localhost:8002/validate_cert/",  # L'URL du microservice de validation du certificat
+    "sign": "http://localhost:8002/sign/",  # L'URL du microservice de signature
 }
 
 # Route POST pour le point d'entrée de l'API Gateway

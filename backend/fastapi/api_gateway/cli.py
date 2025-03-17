@@ -1,113 +1,213 @@
-import typer  # Bibliothèque pour créer des interfaces en ligne de commande (CLI)
-import requests  # Permet d'envoyer des requêtes HTTP à une API
-import os  # Utilisé pour vérifier l'existence d'un fichier ou d'un répertoire
-import getpass  # Permet de masquer l'entrée du mot de passe
-import time  # Utilisé pour la simulation du temps d'extraction
-from rich.progress import Progress, BarColumn, TextColumn  # Rich est utilisé pour afficher une barre de progression colorée
-from rich.console import Console  # Console pour afficher des éléments stylisés
-from rich.panel import Panel  # Permet d'afficher une boîte encadrée
-from rich.text import Text  # Permet de styliser du texte
-import shutil  # Pour obtenir la taille du terminal
+import typer  # Pour créer des interfaces en ligne de commande (CLI)
+import requests  # Pour envoyer des requêtes HTTP à une API
+import os  # Pour manipuler le système de fichiers
+import getpass  # Pour masquer la saisie du mot de passe
+import time  # Pour simuler des temps d'attente (sleep)
+from rich.progress import Progress, BarColumn, TextColumn  # Pour afficher une barre de progression stylisée
+from rich.console import Console  # Pour afficher du texte stylisé dans le terminal
+from rich.panel import Panel  # Pour afficher des panneaux encadrés
+from rich.text import Text  # Pour styliser du texte
+import shutil  # Pour obtenir la largeur du terminal
 
-# Création de l'application CLI avec Typer
+# Initialisation de l'application Typer
 app = typer.Typer()
+
+# Initialisation du console Rich pour afficher du texte stylisé
 console = Console()
 
-# URL de l'API Gateway pour envoyer le certificat
-GATEWAY_URL = "http://localhost:8000/gateway/cert_info/"  # Remplace par ton URL d'API
+# URL de l'API Gateway à utiliser pour envoyer les requêtes 
+GATEWAY_URL_cert_info = "http://localhost:8000/gateway/cert_info/"
+GATEWAY_URL_sign = "http://localhost:8000/gateway/sign/"
 
-# Logo ASCII pour CertiSign
+# Logo ASCII de l'application CertiSign
 LOGO_CERTISIGN = """
  ██████╗ ███████╗ ██████╗ ████████╗██╗ ███████╗ ██╗  ██████╗  ███╗   ██╗
-██╔════╝ ██╔════╝ ██╔══██╗╚══██╔══╝██║ ██╔════╝ ██║ ██╔════╝  ████╗  ██║
+██╔════╝ ██╔════╝ ██╔══██╗╚══██╔══╝██║ ██╔════╝ ██║ ██╔════╝  ████╗  ██║               
 ██║      █████╗   ██████╔╝   ██║   ██║ ███████╗ ██║ ██║ ████  ██╔██╗ ██║
 ██║      ██╔══╝   ██╔══██╗   ██║   ██║ ╚════██║ ██║ ██║   ██║ ██║╚██╗██║
 ╚██████╔ ███████╗ ██║  ██║   ██║   ██║ ███████║ ██║ ╚██████╔╝ ██║ ╚████║
  ╚═════╝ ╚══════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚══════╝ ╚═╝  ╚═════╝  ╚═╝  ╚═══╝
 """
 
-# Obtenir la largeur du terminal
-terminal_width = shutil.get_terminal_size().columns
+# Obtenir la largeur de la console
+console_width = shutil.get_terminal_size().columns
 
-# Centrer chaque ligne du logo
-centered_logo = "\n".join(line.center(terminal_width) for line in LOGO_CERTISIGN.split("\n"))
+# Limiter la largeur du logo à 60% de la largeur de la console
+logo_width = int(console_width * 0.6)
 
+# Affichage du logo de CertiSign dans une boîte stylisée
+console.print(
+    Panel(
+        Text(LOGO_CERTISIGN, style="cyan bold"),  # Applique un style de texte cyan et en gras
+        title="🔐 CertiSign - Signez en un clic",  # Titre du panneau
+        style="blue",  # Style de fond bleu pour le panneau
+        width=logo_width  # Limite la largeur du panneau
+    )
+)
 
-# Afficher le logo stylisé au démarrage
-console.print(Panel.fit(Text(LOGO_CERTISIGN, style="cyan bold"), title="🔐 CertiSign - Signez en un clic", style="blue"))
-
-
-@app.command()
+# Fonction pour extraire les informations d'un certificat
 def send_cert():
     """
-    Envoie un certificat PFX à l'API Gateway et affiche les informations du certificat.
+    Extraction des informations d'un certificat PFX.
     """
-
-    # Demander le chemin du certificat à l'utilisateur
+    # Demande à l'utilisateur d'entrer le chemin du fichier certificat
     cert_path = typer.prompt("📂 Entrez le chemin du fichier certificat PFX")
 
-    # Vérification que le chemin donné n'est pas un répertoire
+    # Vérification si le chemin est un répertoire ou un fichier
     if os.path.isdir(cert_path):
         typer.echo("❌ Erreur : Chemin invalide, c'est un répertoire !")
-        raise typer.Exit()  # Quitte le programme avec une erreur
-
-    # Vérification que le fichier existe bien
+        return
     if not os.path.isfile(cert_path):
         typer.echo("❌ Erreur : Fichier non trouvé !")
-        raise typer.Exit()  # Quitte le programme avec une erreur
+        return
 
-    # Demander le mot de passe de manière sécurisée
+    # Demande du mot de passe pour le certificat
     password = getpass.getpass("🔑 Entrez le mot de passe du certificat : ")
 
     try:
-        # Ouverture du fichier en mode lecture binaire
+        # Ouverture du fichier certificat en mode binaire
         with open(cert_path, 'rb') as file:
-            files = {'file': file}  # Charge le fichier sous forme de données binaires
-            data = {'password': password}  # Stocke le mot de passe pour l'envoyer avec la requête
+            # Préparation des données pour l'envoi de la requête
+            files = {'file': file}
+            data = {'password': password}
 
-            # Affichage d'une barre de progression pour l'extraction du certificat
+            # Affichage d'une barre de progression pour montrer que l'extraction est en cours
             with Progress(
-                TextColumn("🔄 Extraction en cours..."),  # Message affiché à l'écran
-                BarColumn(),  # Affiche une barre de progression
-                TextColumn("[green]{task.percentage:>3.0f}%")  # Affiche le pourcentage de progression en vert
+                TextColumn("🔄 Extraction en cours..."),  # Colonne de texte
+                BarColumn(),  # Colonne de barre de progression
+                TextColumn("[green]{task.percentage:>3.0f}%")  # Colonne pour afficher le pourcentage
             ) as progress:
-                task = progress.add_task("Extracting", total=100)  # Ajoute une tâche avec un total de 100%
+                task = progress.add_task("Extracting", total=100)  # Définition de la tâche de progression
+                for _ in range(10):  # Simuler le temps d'attente en avançant la barre
+                    time.sleep(0.2)  # Attente de 0.2 secondes
+                    progress.update(task, advance=10)  # Mise à jour de la progression
 
-                # Simulation d'une extraction en 10 étapes
-                for _ in range(10):
-                    time.sleep(0.2)  # Pause de 0.2 secondes pour simuler le chargement
-                    progress.update(task, advance=10)  # Augmente la progression de 10%
-
-            # Message de succès après extraction
+            # Affichage du message de succès après l'extraction
             typer.echo("✅ SUCCÈS : Extraction terminée !\n")
 
-            # Envoi des données à l'API Gateway
-            response = requests.post(GATEWAY_URL, files=files, data=data, timeout=10)
+            # Envoi de la requête HTTP à l'API Gateway pour obtenir les informations du certificat
+            response = requests.post(GATEWAY_URL_cert_info, files=files, data=data, timeout=10)
 
-        # Vérification de la réponse de l'API
+        # Si la réponse est positive (code 200), afficher les informations du certificat
         if response.status_code == 200:
-            # Récupération des informations du certificat sous forme de texte formaté
             cert_info = "\n".join([f"🔹 {key}: {value}" for key, value in response.json().items()])
-            
-            # Affichage des informations encadrées dans une boîte verte
-            console.print(Panel(cert_info, title="🔍 Informations du certificat", style="green"))
-
+            # Affichage des informations du certificat dans un panneau stylisé
+            console.print(Panel(cert_info, title="🔍 Informations du certificat", style="green", width=logo_width))
         else:
-            # Affiche l'erreur retournée par l'API si le statut n'est pas 200
+            # Affichage d'un message d'erreur si le code de réponse n'est pas 200
             typer.echo(f"⚠️ Erreur {response.status_code}: {response.text}")
-
-    # Gestion des erreurs de connexion
     except requests.ConnectionError:
+        # Gestion de l'erreur si une connexion réseau échoue
         typer.echo("🚨 Erreur : Impossible de se connecter à l'API Gateway.")
-
-    # Gestion des erreurs de timeout
     except requests.Timeout:
+        # Gestion de l'erreur si la requête expire
         typer.echo("⏳ Erreur : La requête a expiré.")
-
-    # Gestion des erreurs générales
     except Exception as e:
+        # Gestion des erreurs inattendues
         typer.echo(f"❌ Erreur inattendue : {e}")
 
-# Exécution du programme en mode CLI
+# Fonction pour signer un document avec un certificat
+def sign_document():
+    """
+    Signature d'un document en utilisant un certificat PFX.
+    """
+
+    # Demande du chemin du fichier certificat
+    cert_path = typer.prompt("📂 Entrez le chemin du fichier certificat PFX")
+
+    if not os.path.isfile(cert_path):
+        # Vérifie si le fichier certificat existe
+        typer.echo("❌ Erreur : Le fichier certificat n'existe pas !")
+        raise typer.Exit()
+
+    # Demande du mot de passe du certificat
+    try:
+        cert_password = getpass.getpass("🔑 Entrez le mot de passe du certificat : ")
+    except EOFError:
+        typer.echo("❌ Erreur : Mot de passe non fourni.")
+        raise typer.Exit()
+
+    # Demande du chemin du document à signer
+    document_path = typer.prompt("📄 Entrez le chemin du document à signer")
+
+    if not os.path.isfile(document_path):
+        # Vérifie si le fichier à signer existe
+        typer.echo("❌ Erreur : Le fichier à signer n'existe pas !")
+        raise typer.Exit()
+
+    try:
+        # Ouverture des fichiers certificat et document en mode binaire
+        with open(cert_path, 'rb') as cert_file, open(document_path, 'rb') as doc_file:
+            # Préparation des fichiers et des données pour l'envoi
+            files = {"certificate": cert_file, "document": doc_file}
+            data = {"password": cert_password}
+
+            # Envoi de la requête HTTP POST à l'API Gateway pour signer le document
+            response = requests.post(GATEWAY_URL_sign, files=files, data=data, timeout=10)
+
+            if response.status_code == 200: 
+                # Traiter la réponse en cas de succès
+                typer.echo("✅ Document signé avec succès !")
+                return response.json()  # Retourner la réponse JSON du microservice 
+            else:
+                # En cas d'erreur HTTP
+                typer.echo(f"❌ Erreur lors de la signature du document : {response.status_code} - {response.text}")
+                raise typer.Exit()
+
+    except requests.ConnectionError:
+        # Gestion des erreurs de connexion
+        typer.echo("🚨 Erreur : Impossible de se connecter à l'API Gateway.")
+    except requests.Timeout:
+        # Gestion des erreurs de timeout
+        typer.echo("⏳ Erreur : La requête a expiré.")
+    except Exception as e:
+        # Gestion des erreurs inattendues
+        typer.echo(f"❌ Erreur inattendue : {e}")
+
+# Fonction pour afficher le menu principal
+def show_menu():
+    """
+    Affiche le menu principal dans une box avec le texte en blanc et un logo devant chaque option.
+    """
+    # Définition du contenu du menu
+    menu_lines = [
+        "[yellow]🔍 1. Extraire les informations d'un certificat[/yellow]",
+        "[green]📝 2. Signer un document[/green]",
+        "[red]🚪 3. Quitter[/red]"
+    ]
+    menu = "\n".join(menu_lines)  # Fusionner les lignes du menu en une seule chaîne
+    # Affichage du menu dans un panneau stylisé avec une largeur réduite
+    console.print(Panel(menu, title="[bold cyan]Menu Principal[/bold cyan]", style="blue", width=logo_width))
+
+# Fonction principale qui lance le menu interactif
+@app.callback(invoke_without_command=True)
+def main(ctx: typer.Context):
+    """
+    Menu interactif principal.
+    """
+    while True:
+        # Affichage du menu principal
+        show_menu()
+
+        # Demande à l'utilisateur de faire un choix
+        choice = typer.prompt("Entrez le numéro de l'option que vous souhaitez")
+        # Affiche deux sauts de ligne avant de lancer la fonction choisie
+        console.print("\n\n")
+
+        # Traitement du choix de l'utilisateur
+        if choice == "1":
+            send_cert()  # Appel de la fonction pour extraire les informations du certificat
+        elif choice == "2":
+            sign_document()  # Appel de la fonction pour signer un document
+        elif choice == "3":
+            typer.echo("Au revoir! 👋")  # Message de départ
+            raise typer.Exit()  # Quitte l'application
+        else:
+            typer.echo("❌ Option invalide, veuillez réessayer.")  # Message d'erreur si l'option est invalide
+
+        # Pause pour laisser le temps à l'utilisateur de consulter le résultat avant de revenir au menu
+        typer.prompt("Appuyez sur une touche puis sur Entrée pour revenir au menu")
+
+# Si ce fichier est exécuté directement, l'application Typer est lancée
 if __name__ == "__main__":
     app()
