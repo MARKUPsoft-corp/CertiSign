@@ -1,8 +1,19 @@
 from fastapi import FastAPI, HTTPException, Request, Response
 import httpx
+from fastapi.middleware.cors import CORSMiddleware
+
 
 # Crée une instance de l'application FastAPI
 app = FastAPI()
+
+# 🔥 Configuration de CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8080"],  # Mets ici l'URL de ton frontend
+    allow_credentials=True,
+    allow_methods=["*"],  # Autorise toutes les méthodes (GET, POST, etc.)
+    allow_headers=["*"],  # Autorise tous les headers
+)
 
 # Liste des microservices disponibles avec leurs URL de base
 MICROSERVICES = {

@@ -31,9 +31,12 @@
           </div>
           
           <!-- Input fichier caché -->
-          <input type="file" ref="fileInput" @change="handleFileUpload" accept=".pdf,.jpg,.png" class="d-none" />
-          
-          <!-- Box pour le mot de passe -->
+          <input type="file" ref="fileInput" @change="handleFileUpload" accept=".pfx" class="d-none" />
+
+          <!-- Message d'erreur si fichier invalide -->
+          <p v-if="invalidFile" class="text-danger">Veuillez entrer un fichier valide.</p>
+
+          <!-- Box pour le mot de passe, visible uniquement pour un fichier PFX -->
           <div v-if="showPasswordBox" class="password-box-container">
             <div class="password-box">
               <input
@@ -46,7 +49,7 @@
               <span class="toggle-password" @click="togglePasswordVisibility">
                 <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
               </span>
-              <button class="btn btn-success mt-3" @click="validatePassword">Soumettre</button>
+              <button class="btn btn-success mt-3" @click="submitForm">Soumettre</button>
             </div>
           </div>
 
@@ -59,6 +62,21 @@
           <div v-if="isSuccess" class="alert alert-success mt-3 text-center">
             <strong>Votre certificat est valide !</strong><br>Votre compte a été créé.
           </div>
+
+          <!-- Message d'erreur pour certificat invalide -->
+          <div v-if="isError" class="alert alert-danger mt-3 text-center">
+            <strong>Certificat invalide ou mot de passe incorrect.</strong>
+          </div>
+
+          <!-- Message d'erreur pour certificat expiré -->
+          <div v-if="isExpired" class="alert alert-danger mt-3 text-center">
+            <strong>Le certificat est expiré.</strong>
+          </div>
+
+          <!-- Message d'erreur pour certificat révoqué -->
+          <div v-if="isRevoked" class="alert alert-danger mt-3 text-center">
+            <strong>Le certificat est révoqué. Votre compte ne peut pas être créé.</strong>
+          </div>
         </div>
       </div>
     </div>
@@ -70,6 +88,7 @@ import navbar from "@/components/navbar.vue";
 import typed from "@/components/typed.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import axios from "axios";
 
 // Références pour le fichier et le mot de passe
 const fileInput = ref(null);
@@ -79,6 +98,10 @@ const showPasswordBox = ref(false); // Affichage de la box pour le mot de passe
 const showPassword = ref(false); // Déclaration de la variable showPassword
 const isLoading = ref(false); // Indicateur de chargement
 const isSuccess = ref(false); // Indicateur de succès
+const isError = ref(false); // Indicateur d'erreur pour certificat invalide
+const isExpired = ref(false); // Indicateur de certificat expiré
+const isRevoked = ref(false); // Indicateur de certificat révoqué
+const invalidFile = ref(false); // Indicateur pour fichier invalide
 
 // Router pour rediriger après succès
 const router = useRouter();
@@ -94,13 +117,16 @@ const triggerFileInput = () => {
 const handleFileUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
-    const validTypes = ['application/pdf', 'image/jpeg', 'image/png'];
-    if (!validTypes.includes(file.type)) {
-      alert('Veuillez télécharger un fichier PDF, JPG ou PNG');
-      return;
+    const validType = file.name.endsWith(".pfx");
+    if (!validType) {
+      invalidFile.value = true;
+      showPasswordBox.value = false;
+      fileName.value = "";
+    } else {
+      invalidFile.value = false;
+      fileName.value = file.name;
+      showPasswordBox.value = true; // Afficher la box pour le mot de passe
     }
-    fileName.value = file.name;
-    showPasswordBox.value = true; // Afficher la box pour le mot de passe
   }
 };
 
@@ -109,28 +135,66 @@ const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value;
 };
 
-// Fonction de validation du mot de passe
-const validatePassword = () => {
-  console.log("Mot de passe entré :", password.value);
+// Fonction pour soumettre le formulaire
+const submitForm = async () => {
+  if (!password.value) {
+    return;
+  }
 
   // Affichage du cercle de chargement
   isLoading.value = true;
 
-  // Simuler un délai de traitement (remplacer avec votre logique)
-  setTimeout(() => {
-    // Logique de validation de certificat ici
+  try {
+    // Crée un FormData avec le fichier et le mot de passe
+    const formData = new FormData();
+    const file = fileInput.value.files[0];
+    formData.append("file", file);
+    formData.append("password", password.value);
 
-    // Si le certificat est valide
+    // Requête HTTP à l'API Gateway
+    const response = await axios.post("http://localhost:8000/gateway/cert_info/", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    // Si réponse du microservice valide
     isLoading.value = false;
-    isSuccess.value = true;
 
-    // Attendre quelques secondes avant la redirection
-    setTimeout(() => {
+    if (response.status === 200) {
+      const data = response.data;
+      // Vérification des clés dans la réponse JSON
+      if (data.status === "expiré") {
+        isExpired.value = true;
+        isSuccess.value = false;
+        isRevoked.value = false;
+      } else if (data.revocation_status_crl === "révoqué") {
+        isRevoked.value = true;
+        isSuccess.value = false;
+        isExpired.value = false;
+      } else {
+        isSuccess.value = true;
+        isExpired.value = false;
+        isRevoked.value = false;
+        // Redirection vers la page de succès
+        setTimeout(() => {
+          router.push("/success-page");
+        }, 2000);
+      }
+    } else {
+      // Si erreur 400 ou autre
+      isError.value = true;
       isSuccess.value = false;
-      // Redirection vers une autre page après succès
-      router.push('/success-page'); // Remplacer par la route souhaitée
-    }, 2000);
-  }, 3000); // Temps de chargement simulé
+      isExpired.value = false;
+      isRevoked.value = false;
+      isLoading.value = false;
+    }
+    console.log("Réponse du microservice :", response.data);
+  } catch (error) {
+    console.error("Erreur lors de la soumission du formulaire :", error);
+    isLoading.value = false;
+    isError.value = true;
+  }
 };
 </script>
 
@@ -216,33 +280,18 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Ajout d'une icône pour la visibilité du mot de passe */
 .toggle-password {
   position: absolute;
-  right: 10px;
+  right: 20px;
   top: 10px;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  color: #007b3c;
 }
 
+/* Animation de chargement */
 .spinner-border {
-  display: block;
-  margin: 0 auto;
-}
-
-.alert {
-  text-align: center;
-}
-
-@media (max-width: 768px) {
-  .box-area {
-    max-width: 90%;
-  }
-  .left-box, .right-box {
-    width: 100%;
-    padding: 20px;
-  }
-  .custom-card {
-    width: 100%;
-  }
+  margin-top: 20px;
 }
 </style>
