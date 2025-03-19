@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "esnext",
-    "baseUrl": "./",
-    "moduleResolution": "node",
+    "target": "es6",                    // Passer à "es6" ou "esnext" pour profiter des fonctionnalités modernes
+    "module": "esnext",                  // Utilise "esnext" pour les modules modernes
+    "baseUrl": "./",                     // Reste sur la racine actuelle du projet
+    "moduleResolution": "node",          // Mode de résolution des modules basé sur Node.js
     "paths": {
       "@/*": [
         "src/*"
       ]
     },
     "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
+      "esnext",                          // Inclure les fonctionnalités récentes d'ES
+      "dom",                              // Pour accéder aux objets DOM dans le navigateur
+      "dom.iterable",                     // Pour les itérables dans le DOM
+      "scripthost"                        // Support des objets liés à l'exécution dans un script
     ]
   }
 }
