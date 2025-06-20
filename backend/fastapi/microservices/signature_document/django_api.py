@@ -67,7 +67,7 @@ async def get_jwt_token() -> str:
     
     try:
         logger.debug(f"Authentification auprès de l'API Django: {auth_url}")
-        async with httpx.AsyncClient(timeout=10.0) as client:
+        async with httpx.AsyncClient(timeout=10.0, verify=False) as client:
             response = await client.post(auth_url, data=auth_data)  # Utiliser data au lieu de json
             
             # Afficher la réponse complète pour le débogage
@@ -198,7 +198,7 @@ async def store_signature_data(
         # Faire la requête à l'API Django
         logger.info(f"Envoi des données de signature à l'API Django pour le document {document_id}")
         try:
-            async with httpx.AsyncClient(timeout=30.0) as client:
+            async with httpx.AsyncClient(timeout=30.0, verify=False) as client:
                 response = await client.post(url, files=files, data=data, headers=headers)
                 
                 # Débugger la réponse complète
@@ -257,7 +257,7 @@ async def get_signature_data(document_id: str, jwt_token: Optional[str] = None) 
             
         # Faire la requête à l'API Django
         logger.info(f"Récupération des données de signature pour le document {document_id}")
-        async with httpx.AsyncClient(timeout=10.0) as client:
+        async with httpx.AsyncClient(timeout=10.0, verify=False) as client:
             response = await client.get(url, headers=headers)
             
         # Vérifier la réponse

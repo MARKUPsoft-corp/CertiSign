@@ -353,7 +353,7 @@ async def gateway(service_name: str, request: Request):
     logger.info(f"[{correlation_id}] En-têtes: {headers}")
 
     # Utilisation d'un client HTTP asynchrone pour effectuer la requête vers le microservice
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(verify=False) as client:
         try:
             # Vérifier si la requête est chiffrée (contient un en-tête spécifique)
             content_type = headers.get("content-type", "")
@@ -613,8 +613,8 @@ async def sign_document(
     logger.info(f"[{correlation_id}] Demande de signature reçue pour le document {document.filename}")
     
     try:
-        # Créer une instance du client HTTP
-        async with httpx.AsyncClient() as client:
+        # Créer une instance du client HTTP avec désactivation de la vérification SSL
+        async with httpx.AsyncClient(verify=False) as client:
             # Préparer les fichiers et données à envoyer
             files = {
                 "document": (document.filename, await document.read(), document.content_type),
@@ -720,7 +720,7 @@ async def authenticate_with_certificate(request: Request):
         
         # Envoyer le certificat au microservice d'extraction
         logger.info(f"[{correlation_id}] Envoi du certificat au microservice d'extraction")
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(verify=False) as client:
             extract_response = await client.post(
                 MICROSERVICES["cert_info_base64"],
                 json={
@@ -798,7 +798,7 @@ async def verify_document(
     
     try:
         # Créer une instance du client HTTP
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(verify=False) as client:
             # Préparer le fichier à envoyer
             files = {
                 "document": (document.filename, await document.read(), document.content_type)
@@ -852,7 +852,7 @@ async def verify_document(
         logger.info(f"[{correlation_id}] Vérification du document avec ID: {document_id}")
         
         # Créer une instance du client HTTP
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(verify=False) as client:
             # URL du microservice de vérification - utilisation du service 'verify' qui accepte maintenant directement un ID
             url = MICROSERVICES["verify"]
             logger.info(f"[{correlation_id}] Appel du microservice à l'URL: {url}")
