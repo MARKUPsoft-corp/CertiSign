@@ -101,18 +101,17 @@
                 </div>
               </div>
               
-              <!-- Option 3: Signature multiple -->
-              <div class="signature-option-card multiple-option" @click="selectSignatureOption('multiple')">
+              <!-- Option 3: Signature multiple de documents -->
+              <div class="signature-option-card" @click="selectSignatureOption('multiple')">
                 <div class="option-icon multiple">
-                  <i class="bi bi-people"></i>
+                  <i class="bi bi-files"></i>
                 </div>
                 <div class="option-content">
-                  <h4 class="option-title">Signature multiple</h4>
-                  <p class="option-description">Invitez plusieurs personnes à signer le même document</p>
+                  <h4 class="option-title">Signature multiple de documents</h4>
+                  <p class="option-description">Signez plusieurs documents à la fois avec le même certificat</p>
                 </div>
-                <div class="option-badge">
-                  <i class="bi bi-clock"></i>
-                  <span>Bientôt disponible</span>
+                <div class="option-arrow">
+                  <i class="bi bi-chevron-right"></i>
                 </div>
               </div>
             </div>
@@ -185,21 +184,9 @@
         <SignWithTemplate :template-data="selectedTemplate" @close="setActiveContent('dashboard')" />
       </div>
       
-      <!-- Section de signature multiple (en développement) -->
+      <!-- Section de signature multiple de documents -->
       <div v-else-if="activeContent === 'sign-multiple'" class="integrated-component-container">
-        <div class="coming-soon-container">
-          <div class="coming-soon-icon">
-            <i class="bi bi-tools"></i>
-          </div>
-          <h2 class="coming-soon-title">En cours de développement</h2>
-          <p class="coming-soon-description">
-            La fonctionnalité de signature multiple sera bientôt disponible.
-            Elle vous permettra d'inviter plusieurs signataires pour le même document.
-          </p>
-          <button class="btn btn-primary" @click="setActiveContent('dashboard')">
-            <i class="bi bi-arrow-left"></i> Retour au tableau de bord
-          </button>
-        </div>
+        <SignWithTemplateMultiple @close="setActiveContent('dashboard')" />
       </div>
       
       <!-- Composant Mes Documents intégré -->
@@ -558,6 +545,7 @@ import MyDocuments from '@/views/MyDocuments.vue';
 import UserHistory from '@/views/UserHistory.vue';
 import UserProfile from '@/views/UserProfile.vue';
 import SignWithTemplate from '@/views/SignWithTemplate.vue'; // Importer le nouveau composant
+import SignWithTemplateMultiple from '@/views/SignWithTemplateMultiple.vue'; // Importer le composant de signature multiple
 // VerifyDocument a été supprimé
 import AuthService from '@/services/AuthService';
 import { initScrollAnimations } from '@/assets/js/scrollAnimations.js';
