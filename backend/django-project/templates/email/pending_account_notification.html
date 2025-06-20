@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau compte en attente d'approbation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 3px solid #ffc107;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .logo span.highlight {
+            color: #ffc107;
+        }
+        .content {
+            padding: 20px 0;
+        }
+        .notification-box {
+            background-color: #f9f9f9;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .info-table th {
+            text-align: left;
+            background-color: #f2f2f2;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .info-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #ffc107;
+            color: #333;
+            font-weight: bold;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            font-size: 12px;
+            color: #777;
+            border-top: 1px solid #eee;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            background-color: #fbbd08;
+            color: #212529;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <span class="highlight">Certi</span>Sign
+        </div>
+        <p>Plateforme sécurisée de signature électronique</p>
+    </div>
+    
+    <div class="content">
+        <h2>Nouveau compte en attente d'approbation</h2>
+        
+        <div class="notification-box">
+            <p>
+                {% if is_organization_admin %}
+                Une nouvelle <strong>organisation</strong> a été créée et est en attente de validation.
+                {% else %}
+                Un nouvel <strong>utilisateur</strong> s'est inscrit et est en attente de validation.
+                {% endif %}
+            </p>
+            <p>Statut actuel: <span class="status-badge">En attente</span></p>
+        </div>
+        
+        {% if is_organization_admin %}
+        <h3>Détails de l'organisation</h3>
+        <table class="info-table">
+            <tr>
+                <th>Nom</th>
+                <td>{{ organization.name }}</td>
+            </tr>
+            <tr>
+                <th>Numéro d'immatriculation</th>
+                <td>{{ organization.registration_number }}</td>
+            </tr>
+            {% if organization.email %}
+            <tr>
+                <th>Email</th>
+                <td>{{ organization.email }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <th>Adresse</th>
+                <td>{{ organization.address|default:"Non spécifiée" }}</td>
+            </tr>
+            <tr>
+                <th>Date de création</th>
+                <td>{{ organization.created_at|date:"d/m/Y H:i" }}</td>
+            </tr>
+        </table>
+        {% endif %}
+        
+        <h3>Détails de l'utilisateur</h3>
+        <table class="info-table">
+            <tr>
+                <th>Nom d'utilisateur</th>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th>Nom complet</th>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Rôle</th>
+                <td>{{ user.get_role_display }}</td>
+            </tr>
+            <tr>
+                <th>Date d'inscription</th>
+                <td>{{ user.date_joined|date:"d/m/Y H:i" }}</td>
+            </tr>
+        </table>
+        
+        <p>Veuillez consulter l'interface d'administration pour valider ou rejeter ce compte :</p>
+        
+        <div style="text-align: center;">
+            <a href="{{ admin_url }}" class="cta-button">Accéder à l'administration</a>
+        </div>
+        
+        <p style="margin-top: 15px; color: #666; font-size: 13px;">
+            Si le bouton ne fonctionne pas, copiez et collez cette URL dans votre navigateur :
+            <br>
+            <span style="color: #3498db; word-break: break-all;">{{ admin_url }}</span>
+        </p>
+    </div>
+    
+    <div class="footer">
+        <p>Ce message a été envoyé automatiquement par le système CertiSign. Merci de ne pas y répondre.</p>
+        <p>&copy; {% now "Y" %} CertiSign. Tous droits réservés.</p>
+    </div>
+</body>
+</html>

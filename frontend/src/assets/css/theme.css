@@ -1,0 +1,164 @@
+:root {
+  /* Thème clair (par défaut) */
+  --primary-color: #2E8B57; /* Vert SeaGreen */
+  --primary-light: #3CB371; /* Vert MediumSeaGreen - plus clair */
+  --primary-dark: #1e5e3a; /* Vert foncé */
+  --accent-color: #4CAF50; /* Vert plus vif */
+  --accent-light: #81C784; /* Vert clair */
+  --accent-dark: #388E3C; /* Vert moyen-foncé */
+  
+  --success-color: #4CAF50;
+  --warning-color: #FFB74D;
+  --danger-color: #F44336;
+  
+  --text-color: #333333;
+  --text-secondary: #666666;
+  --text-light: #ffffff;
+  
+  --bg-color: #f8f9fa;
+  --bg-light: #ffffff;
+  --bg-dark: #e9ecef;
+  --border-color: #ced4da;
+  
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+  
+  --card-bg: #ffffff;
+  --navbar-bg: #f8f9fa;
+  --sidebar-bg: #f8f9fa;
+  --footer-bg: #f8f9fa;
+}
+
+/* Thème sombre */
+[data-theme="dark"] {
+  --primary-color: #3CB371; /* Vert un peu plus vif pour le mode sombre */
+  --primary-light: #4FD487; /* Vert clair */
+  --primary-dark: #2A7D53; /* Vert foncé */
+  --accent-color: #66BB6A; /* Vert vif */
+  --accent-light: #81C784; /* Vert clair */
+  --accent-dark: #43A047; /* Vert foncé */
+  
+  --success-color: #66BB6A;
+  --warning-color: #FFA726;
+  --danger-color: #E57373;
+  
+  --text-color: #E0E0E0;
+  --text-secondary: #BBBBBB;
+  --text-light: #FFFFFF;
+  
+  --bg-color: #212529;
+  --bg-light: #343a40;
+  --bg-dark: #1a1d20;
+  --border-color: #495057;
+  
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.4);
+  
+  --card-bg: #343a40;
+  --navbar-bg: #212529;
+  --sidebar-bg: #2a2e33;
+  --footer-bg: #212529;
+}
+
+/* Transitions fluides lors du changement de thème */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Classes utilitaires pour utiliser les couleurs du thème */
+.bg-primary { background-color: var(--primary-color) !important; }
+.bg-primary-light { background-color: var(--primary-light) !important; }
+.bg-primary-dark { background-color: var(--primary-dark) !important; }
+.bg-accent { background-color: var(--accent-color) !important; }
+
+.text-primary { color: var(--primary-color) !important; }
+.text-accent { color: var(--accent-color) !important; }
+.text-light { color: var(--text-light) !important; }
+
+/* Styles de base pour les boutons verts */
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-dark) !important;
+  color: var(--text-light) !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+}
+
+.btn-outline-primary {
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+  background-color: var(--primary-color) !important;
+  color: var(--text-light) !important;
+}
+
+/* Styles des cartes adaptés au thème */
+.card {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Styles de base pour la barre de navigation */
+.navbar {
+  background-color: var(--navbar-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Animation pour le sélecteur de thème */
+.theme-switch-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.theme-switch {
+  display: inline-block;
+  height: 24px;
+  position: relative;
+  width: 48px;
+}
+
+.theme-switch input {
+  display: none;
+}
+
+.slider {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  background-color: white;
+  bottom: 4px;
+  content: "";
+  height: 16px;
+  left: 4px;
+  position: absolute;
+  transition: .4s;
+  width: 16px;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+} 

@@ -1,0 +1,24 @@
+# Fichier de configuration avec secrets
+.env
+.env.*
+!.env.example
+
+# Fichiers générés par Python
+__pycache__/
+*.py[cod]
+*.class
+
+# Fichiers de base de données
+*.sqlite3
+db.sqlite3
+
+# Fichiers de média et statiques collectés
+media/
+static/
+staticfiles/ 
+
+# Fichiers de log
+*.log
+
+# Fichiers de notification locaux
+local_notifications/

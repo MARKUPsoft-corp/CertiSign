@@ -1,0 +1,267 @@
+% Documentation Technique - Projet CertiSign
+% Document créé le 2 juin 2025
+
+\documentclass[a4paper,12pt]{report}
+
+% Packages essentiels
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage[most]{tcolorbox}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{fontawesome5}
+\usepackage{tikzpagenodes}
+\usepackage{eso-pic}
+\usepackage{qrcode}
+\usepackage{setspace}
+\usepackage{colortbl}
+
+% Chargement des bibliothèques TikZ nécessaires pour les éléments décoratifs
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{fadings}
+\usetikzlibrary{patterns}
+\usetikzlibrary{shadows}
+\usetikzlibrary{shapes.symbols}
+\usetikzlibrary{positioning}
+
+% Définition des couleurs principales (vert et blanc)
+\definecolor{maingreen}{RGB}{0, 150, 70}
+\definecolor{lightgreen}{RGB}{200, 250, 200}
+\definecolor{darkgreen}{RGB}{0, 100, 0}
+\definecolor{headergreen}{RGB}{240, 250, 240}
+
+% Configuration de la géométrie du document
+\geometry{
+    a4paper,
+    margin=2.5cm,
+    top=3cm,
+    bottom=3cm,
+    headheight=25pt
+}
+
+% Configuration des en-têtes et pieds de page
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{maingreen}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\textcolor{maingreen}{\leftmark}}
+\fancyhead[R]{\textcolor{maingreen}{\thepage}}
+\fancyfoot[C]{\textcolor{darkgreen}{Documentation Technique CertiSign}}
+
+% Configuration des titres
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries\color{maingreen}}
+{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titleformat{\section}
+{\normalfont\Large\bfseries\color{maingreen}}
+{\thesection}{1em}{}
+\titleformat{\subsection}
+{\normalfont\large\bfseries\color{darkgreen}}
+{\thesubsection}{1em}{}
+
+% Configuration des liens hypertextes
+\hypersetup{
+    colorlinks=true,
+    linkcolor=maingreen,
+    urlcolor=maingreen,
+    citecolor=maingreen
+}
+
+% Configuration des listings de code
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{maingreen},
+    commentstyle=\color{gray},
+    stringstyle=\color{darkgreen},
+    breaklines=true,
+    breakatwhitespace=true,
+    frame=single,
+    framesep=5pt,
+    frameround=tttt,
+    rulecolor=\color{maingreen},
+    backgroundcolor=\color{lightgreen},
+    tabsize=4,
+    showstringspaces=false,
+    captionpos=b
+}
+
+% Définition des environnements de boîtes
+\tcbset{
+    enhanced,
+    fonttitle=\bfseries\color{white},
+    colback=lightgreen,
+    colframe=maingreen,
+    colbacktitle=maingreen,
+    attach boxed title to top left={xshift=0.5cm,yshift=-2mm},
+    boxed title style={sharp corners},
+    sharp corners
+}
+
+% Pour la page de titre personnalisée
+\begin{document}
+
+% Page de garde
+\begin{titlepage}
+    % Fond blanc avec bordure verte simple en haut et en bas
+    \begin{tikzpicture}[remember picture, overlay]
+        % Fond blanc
+        \fill[white] (current page.north west) rectangle (current page.south east);
+        
+        % Bande verte en haut
+        \fill[maingreen] (current page.north west) rectangle ([yshift=-1.5cm]current page.north east);
+        
+        % Bande verte en bas
+        \fill[maingreen] (current page.south west) rectangle ([yshift=0.8cm]current page.south east);
+    \end{tikzpicture}
+    
+    % Logo stylisé CS en haut à droite
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=north east, xshift=-2cm, yshift=-0.8cm] at (current page.north east) {
+            \begin{tikzpicture}[scale=0.7]
+                \fill[white] (0,0) circle (1.2cm);
+                \node[text=white, font=\fontsize{22}{24}\selectfont\bfseries] at (0,0) {\textcolor{darkgreen}{CS}};
+            \end{tikzpicture}
+        };
+    \end{tikzpicture}
+    
+    % Code QR dans le coin inférieur droit
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=south east, xshift=-1.5cm, yshift=1.5cm] at (current page.south east) {
+            \qrcode[height=2.5cm]{https://certisign.example.com/verify/doc-12345}
+        };
+    \end{tikzpicture}
+
+    % Contenu principal
+    \vspace*{4cm}
+    \begin{center}
+        {\sffamily\fontsize{24}{28}\selectfont\mdseries\textcolor{darkgreen}{DOCUMENTATION TECHNIQUE}}\\[1.5cm]
+        
+        {\sffamily\fontsize{40}{44}\selectfont\bfseries\textcolor{maingreen}{PROJET CERTISIGN}}\\[1.5cm]
+        
+        {\sffamily\fontsize{18}{22}\selectfont\mdseries\textcolor{darkgreen}{Solution de Signature Électronique}}\\[4cm]
+        
+        % Informations institutionnelles dans une boîte simple
+        \begin{tcolorbox}[width=0.7\textwidth, colback=white, colframe=maingreen!40, arc=0mm, boxrule=1pt]
+            \begin{center}
+                {\sffamily\fontsize{14}{18}\selectfont\bfseries\textcolor{darkgreen}{CNCCE}}\\[0.2cm]
+                {\sffamily\fontsize{11}{13}\selectfont\mdseries\textcolor{darkgreen}{Centre National de Cryptographie et de Certification Electronique}}\\[0.5cm]
+                
+                {\sffamily\fontsize{12}{14}\selectfont\mdseries\textcolor{darkgreen}{Responsable technique: M Mfepit Omar}}\\[0.2cm]                
+            \end{center}
+        \end{tcolorbox}
+        
+        \vfill
+        
+        {\sffamily\fontsize{14}{16}\selectfont\mdseries\textcolor{white}{
+            \begin{tikzpicture}[remember picture, overlay]
+                \node[anchor=south, yshift=0.4cm] at (current page.south) {
+                    2024 - 2025
+                };
+            \end{tikzpicture}
+        }}
+    \end{center}
+\end{titlepage}
+
+% Définition des entêtes de chapitre
+\chapter*{Avant-propos}
+\addcontentsline{toc}{chapter}{Avant-propos}
+
+\begin{tcolorbox}[title=À propos de cette documentation]
+Ce document présente la documentation technique complète du projet CertiSign, une solution de signature électronique de documents. Il est destiné aux développeurs qui souhaiteront travailler sur ce projet à l'avenir.
+
+La documentation couvre l'architecture globale, les technologies utilisées, la structure du code, ainsi que les procédures d'installation, de configuration et de déploiement.
+\end{tcolorbox}
+
+\tableofcontents
+
+\chapter{Introduction}
+
+\section{Présentation du projet CertiSign}
+
+CertiSign est une solution innovante de signature électronique de documents développée par le Centre National de Certification Électronique (CNCCE). Dans un contexte où la dématérialisation des processus administratifs et commerciaux s'accélère, CertiSign répond au besoin croissant d'outils fiables permettant la signature de documents avec valeur juridique.
+
+\begin{tcolorbox}[title=Vision du projet, colback=lightgreen!30!white]
+Permettre la dématérialisation sécurisée des processus de signature de documents en garantissant leur validité juridique, leur authenticité et leur intégrité tout au long de leur cycle de vie.
+\end{tcolorbox}
+
+\section{Objectifs principaux}
+
+Le projet CertiSign vise à atteindre les objectifs suivants :
+
+\begin{itemize}
+    \item Faciliter la signature électronique de documents dans un cadre juridique conforme aux réglementations en vigueur
+    \item Simplifier la gestion des documents électroniques pour les entreprises et les administrations
+    \item Accélérer les processus administratifs tout en réduisant les coûts liés à l'impression et à l'archivage physique
+    \item Offrir un niveau de sécurité optimal garantissant l'authenticité et l'intégrité des documents signés
+    \item Proposer une solution accessible et intuitive pour tous les utilisateurs, indépendamment de leur niveau technique
+\end{itemize}
+
+\section{Approche générale}
+
+CertiSign adopte une approche intégrée et modulaire, combinant plusieurs technologies et composants pour offrir une solution complète :
+
+\begin{itemize}
+    \item Une interface utilisateur web intuitive et réactive développée avec Vue.js
+    \item Un backend principal basé sur Django REST Framework pour la gestion des documents et des utilisateurs
+    \item Des microservices spécialisés développés avec FastAPI pour les fonctionnalités critiques comme la cryptographie et la validation
+    \item Une application mobile de vérification développée avec Flutter pour iOS et Android
+    \item Une infrastructure cloud sécurisée garantissant disponibilité et fiabilité
+\end{itemize}
+
+L'architecture détaillée de la solution sera présentée dans le chapitre suivant de cette documentation.
+
+
+\section{Fonctionnalités principales}
+
+\begin{tcolorbox}[title=Fonctionnalités clés, colback=lightgreen!30!white]
+\begin{itemize}
+    \item \textbf{Gestion des documents} : Téléversement, organisation et partage de documents numériques
+    \item \textbf{Signature électronique} : Signature avec différents niveaux de sécurité (simple, avancée, qualifiée)
+    \item \textbf{Workflows de validation} : Circuits de signature impliquant plusieurs signataires avec ordonnancement
+    \item \textbf{Vérification des documents} : Vérification de l'authenticité des documents via interface web ou application mobile
+    \item \textbf{Horodatage} : Certification temporelle des actions pour garantir leur non-répudiation
+    \item \textbf{Archivage sécurisé} : Stockage long terme des documents signés avec preuve d'intégrité
+    \item \textbf{Tableaux de bord} : Suivi des documents et des processus de signature en cours
+    \item \textbf{Support multilingue} : Interface disponible en plusieurs langues
+\end{itemize}
+\end{tcolorbox}
+
+\section{À propos de cette documentation}
+
+Cette documentation technique vise à présenter de manière détaillée tous les aspects du projet CertiSign. Elle est organisée comme suit :
+
+\begin{itemize}
+    \item \textbf{Chapitre 1 - Introduction} : Présentation générale du projet (ce chapitre)
+    \item \textbf{Chapitre 2 - Architecture Globale} : Description détaillée de l'architecture technique, incluant les composants frontend, backend, microservices FastAPI et l'application mobile
+    \item \textbf{Chapitre 3 - Frontend Vue.js} : Détails sur l'implémentation du frontend, sa structure et ses fonctionnalités
+    \item \textbf{Chapitre 4 - Backend Django} : Exploration du backend principal, des modèles de données et des API
+    \item \textbf{Chapitre 5 - Application Mobile Flutter} : Description de l'application mobile de vérification
+\end{itemize}
+
+Les chapitres suivants aborderont en détail les aspects techniques spécifiques à chaque composant de la solution CertiSign.
+
+\chapter{Architecture Globale}
+% Sera complété ultérieurement
+
+\chapter{Frontend Vue.js}
+% Sera complété ultérieurement
+
+\chapter{Backend Django}
+% Sera complété ultérieurement
+
+\chapter{Application Mobile Flutter}
+% Sera complété ultérieurement
+
+\end{document}

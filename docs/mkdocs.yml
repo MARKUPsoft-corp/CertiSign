@@ -1,0 +1,41 @@
+site_name: CertiSign Documentation
+theme:
+  name: material
+  search: true  # Activation de la recherche
+  palette:
+    scheme: slate
+    primary: teal
+    accent: amber
+  features:
+    - navigation.tabs  # Active les onglets en haut
+    - navigation.expand  # Déplie les sections
+    - search.suggest  # Suggestions de recherche
+    - search.highlight  # Mise en surbrillance des termes de recherche
+    - content.code.copy  # Permet de copier le code
+    - content.code.annotate  # Permet d'ajouter des annotations au code
+
+  # Personnalisation du footer
+  footer: 
+    text: ""  # Vide le texte du footer pour le supprimer
+
+nav:
+  - Accueil: index.md
+  - Front-end:
+      - Introduction: frontend/index.md
+      - API Calls: frontend/api_calls.md
+      - UI Components: frontend/ui_components.md
+  - Back-end:
+      - Introduction: backend/index.md
+      - API REST: backend/api_rest.md
+      - Authentification: backend/auth.md
+      - Signature Électronique: backend/signature.md
+  - Déploiement: deploy.md
+  - À propos: about.md
+
+markdown_extensions:
+  - pymdownx.highlight  # Pour la coloration du code
+  - pymdownx.superfences  # Pour les blocs de code avancés
+  - pymdownx.tabbed  # Pour les onglets
+  - pymdownx.emoji  # Pour les emojis
+  - toc  # Pour la table des matières
+

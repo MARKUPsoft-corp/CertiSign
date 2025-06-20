@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "pdf-lib": "^1.17.1",
+    "pdfmake": "^0.2.20",
+    "qrcode": "^1.5.4"
+  }
+}
