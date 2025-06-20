@@ -27,13 +27,119 @@
 
       <!-- Contenu principal qui change selon l'étape courante -->
       <div class="step-content">
-        <!-- Étape 1: Sélection des documents à signer -->
+        <!-- Étape 0: Sélection du template -->
         <div v-if="currentStep === 0" class="step-body">
+          <div class="template-selection-banner">
+            <i class="bi bi-layout-text-window-reverse"></i>
+            <div>
+              <h4>Sélectionnez un template de signature</h4>
+              <p>Choisissez le template qui sera utilisé pour signer tous vos documents. Le template définit la position du QR code et de la signature.</p>
+            </div>
+          </div>
+
+          <!-- Chargement des templates -->
+          <div v-if="loadingTemplates" class="templates-loading">
+            <i class="bi bi-arrow-repeat spinning"></i>
+            <p>Chargement des templates...</p>
+          </div>
+
+          <!-- Liste des templates disponibles -->
+          <div v-else-if="availableTemplates.length > 0" class="templates-grid">
+            <div 
+              v-for="template in availableTemplates" 
+              :key="template.id"
+              @click="selectTemplate(template)"
+              :class="['template-card', { 'selected': selectedTemplate?.id === template.id }]"
+            >
+              <div class="template-header">
+                <i class="bi bi-layout-text-window-reverse"></i>
+                <div class="template-status" v-if="selectedTemplate?.id === template.id">
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </div>
+              <div class="template-body">
+                <h5 class="template-name">{{ template.name }}</h5>
+                <p class="template-description">{{ template.description || 'Template de signature personnalisé' }}</p>
+                <div class="template-details">
+                  <div class="template-detail">
+                    <i class="bi bi-qr-code"></i>
+                    <span>QR: {{ getQrSizeLabel(template.qr_size) }}</span>
+                  </div>
+                  <div class="template-detail" v-if="template.signature_image">
+                    <i class="bi bi-vector-pen"></i>
+                    <span>Avec signature</span>
+                  </div>
+                  <div class="template-detail">
+                    <i class="bi bi-file-earmark"></i>
+                    <span>{{ template.page_application === 'all' ? 'Toutes pages' : 'Pages spécifiques' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Aucun template disponible -->
+          <div v-else class="no-templates">
+            <i class="bi bi-exclamation-triangle"></i>
+            <h4>Aucun template disponible</h4>
+            <p>Vous devez d'abord créer un template de signature dans votre espace collaborateur.</p>
+          </div>
+
+          <!-- Résumé du template sélectionné -->
+          <div v-if="selectedTemplate" class="selected-template-summary">
+            <h4>Template sélectionné: {{ selectedTemplate.name }}</h4>
+            <div class="template-settings-preview">
+              <div class="setting-preview">
+                <i class="bi bi-qr-code"></i>
+                <span>QR Code: {{ getQrSizeLabel(templateSettings.qr_position?.size) }}</span>
+              </div>
+              <div class="setting-preview">
+                <i class="bi bi-file-earmark"></i>
+                <span>Application: {{ templateSettings.qr_position?.mode === 'all' ? 'Toutes les pages' : 'Pages spécifiques' }}</span>
+              </div>
+              <div class="setting-preview" v-if="templateSettings.signature">
+                <i class="bi bi-vector-pen"></i>
+                <span>Signature: {{ templateSettings.signature.positions?.length || 0 }} position(s)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Étape 1: Sélection des documents à signer -->
+        <div v-if="currentStep === 1" class="step-body">
           <div class="template-info-banner">
             <i class="bi bi-files"></i>
             <div>
-              <h4>Signature multiple de documents</h4>
-              <p>Vous pouvez sélectionner plusieurs documents PDF qui seront tous signés avec le même certificat. Sélectionnez tous les documents à signer.</p>
+              <h4>Signature multiple avec template: {{ selectedTemplate?.name }}</h4>
+              <p>Sélectionnez plusieurs documents PDF qui seront tous signés avec le template "{{ selectedTemplate?.name }}". Le même certificat et les mêmes paramètres seront appliqués à tous les documents.</p>
+            </div>
+          </div>
+
+          <!-- Résumé du template sélectionné -->
+          <div class="template-settings-summary">
+            <h4>Paramètres du template sélectionné</h4>
+            <div class="settings-grid">
+              <div class="setting-item">
+                <div class="setting-label">Position QR</div>
+                <div class="setting-value">{{ templateSettings.qr_position?.mode === 'all' ? 'Toutes les pages' : 'Pages spécifiques' }}</div>
+              </div>
+              <div class="setting-item">
+                <div class="setting-label">Taille QR</div>
+                <div class="setting-value">{{ getQrSizeLabel(templateSettings.qr_position?.size) }}</div>
+              </div>
+              <div class="setting-item">
+                <div class="setting-label">Signature</div>
+                <div class="setting-value">{{ templateSettings.signature ? 'Incluse' : 'Non incluse' }}</div>
+              </div>
+              <div v-if="templateSettings.signature" class="setting-item">
+                <div class="setting-label">Positions signature</div>
+                <div class="setting-value">{{ templateSettings.signature.positions?.length || 0 }} position(s)</div>
+              </div>
+            </div>
+            
+            <div v-if="templateSettings.signature && templateSettings.signature.image" class="signature-preview">
+              <h5>Aperçu de la signature</h5>
+              <img :src="templateSettings.signature.image" class="signature-image" alt="Signature" />
             </div>
           </div>
 
@@ -68,7 +174,7 @@
         </div>
 
         <!-- Étape 2: Prévisualisation des documents avec onglets -->
-        <div v-if="currentStep === 1" class="step-body">
+        <div v-if="currentStep === 2" class="step-body">
           <div class="documents-summary">
             <h4>{{ selectedFiles.length }} document(s) sélectionné(s) pour la signature</h4>
             <p>Vous pouvez prévisualiser chaque document en cliquant sur les onglets ci-dessous.</p>
@@ -105,7 +211,11 @@
 
               <!-- Prévisualisation PDF -->
               <div class="pdf-preview-container">
-                <div v-if="documentPreviews[activeDocumentIndex]?.loading" class="pdf-loading">
+                <div v-if="!documentPreviews || !documentPreviews[activeDocumentIndex]" class="pdf-loading">
+                  <i class="bi bi-arrow-repeat spinning"></i>
+                  <p>Initialisation de la prévisualisation...</p>
+                </div>
+                <div v-else-if="documentPreviews[activeDocumentIndex]?.loading" class="pdf-loading">
                   <i class="bi bi-arrow-repeat spinning"></i>
                   <p>Chargement de la prévisualisation...</p>
                 </div>
@@ -117,14 +227,22 @@
                   v-else-if="documentPreviews[activeDocumentIndex]?.url" 
                   class="pdf-preview" 
                   :src="documentPreviews[activeDocumentIndex].url"
+                  width="100%"
+                  height="600"
+                  frameborder="0"
                 ></iframe>
+                <div v-else class="pdf-error">
+                  <i class="bi bi-exclamation-triangle"></i>
+                  <p>Aucune prévisualisation disponible pour ce document.</p>
+                  <button @click="createDocumentPreviews" class="retry-btn">Réessayer</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Étape 3: Saisie du certificat et du mot de passe -->
-        <div v-if="currentStep === 2" class="step-body">
+        <div v-if="currentStep === 3" class="step-body">
           <div class="certificate-info-banner">
             <i class="bi bi-shield-lock-fill"></i>
             <div>
@@ -162,7 +280,7 @@
         </div>
 
         <!-- Étape 4: En cours de signature -->
-        <div v-if="currentStep === 3" class="step-body signature-processing">
+        <div v-if="currentStep === 4" class="step-body signature-processing">
           <div v-if="signatureStatus === 'loading'">
             <div class="processing-animation">
               <i class="bi bi-shield-fill-check pulsing"></i>
@@ -200,7 +318,7 @@
         </div>
 
         <!-- Étape 5: Téléchargement des documents signés -->
-        <div v-if="currentStep === 4" class="step-body signature-complete">
+        <div v-if="currentStep === 5" class="step-body signature-complete">
           <div class="success-animation">
             <i class="bi bi-check-circle-fill"></i>
           </div>
@@ -258,7 +376,7 @@
       <!-- Boutons de navigation entre les étapes -->
       <div class="step-navigation">
         <button 
-          v-if="currentStep > 0 && currentStep < 4" 
+          v-if="currentStep > 0 && currentStep < 5" 
           @click="prevStep" 
           class="nav-button secondary"
         >
@@ -268,7 +386,7 @@
         <div class="spacer" v-if="currentStep > 0"></div>
         
         <button 
-          v-if="currentStep < 3" 
+          v-if="currentStep < 4" 
           @click="nextStep" 
           class="nav-button primary"
           :disabled="!canProceedToNextStep"
@@ -277,7 +395,7 @@
         </button>
         
         <button 
-          v-if="currentStep === 4" 
+          v-if="currentStep === 5" 
           @click="closeSignature" 
           class="nav-button primary"
         >
@@ -289,13 +407,15 @@
 </template>
 
 <script setup>
-import { ref, computed, defineEmits } from 'vue';
+import { ref, computed, defineEmits, onMounted } from 'vue';
+import TemplateService from '@/services/TemplateService';
 
 // Définir les émetteurs d'événements
 const emit = defineEmits(['close']);
 
 // Étapes du workflow de signature multiple
 const steps = [
+  { label: 'Template' },
   { label: 'Sélection' },
   { label: 'Prévisualisation' },
   { label: 'Certificat' },
@@ -330,15 +450,101 @@ const completedDocuments = ref([]);
 const signedDocuments = ref([]);
 const signatureDate = ref('');
 
+// Template sélectionné et ses paramètres
+const selectedTemplate = ref(null);
+const availableTemplates = ref([]);
+const templateSettings = ref({
+  qr_position: null,
+  signature: null
+});
+const loadingTemplates = ref(false);
+
+// Fonctions pour gérer les templates
+async function loadTemplates() {
+  loadingTemplates.value = true;
+  try {
+    const response = await TemplateService.getTemplates();
+    console.log('Réponse des templates:', response);
+    
+    // Gérer la structure paginée de l'API
+    if (response && response.results && Array.isArray(response.results)) {
+      availableTemplates.value = response.results;
+      console.log('Templates extraits des résultats:', response.results);
+    } else if (Array.isArray(response)) {
+      // Si c'est déjà un tableau direct
+      availableTemplates.value = response;
+      console.log('Templates en format tableau direct:', response);
+    } else {
+      console.warn('Format de réponse inattendu:', response);
+      availableTemplates.value = [];
+    }
+  } catch (error) {
+    console.error('Erreur lors du chargement des templates:', error);
+    availableTemplates.value = [];
+  } finally {
+    loadingTemplates.value = false;
+  }
+}
+
+function selectTemplate(template) {
+  selectedTemplate.value = template;
+  console.log('Template sélectionné:', template);
+  
+  // Charger les détails complets du template
+  loadTemplateDetails(template.id);
+}
+
+async function loadTemplateDetails(templateId) {
+  try {
+    const templateDetails = await TemplateService.getTemplate(templateId);
+    console.log('Détails du template chargés:', templateDetails);
+    
+    // Configurer les paramètres du template
+    templateSettings.value = {
+      qr_position: {
+        mode: templateDetails.page_application || 'all',
+        size: templateDetails.qr_size || 'medium',
+        positions: templateDetails.qr_positions?.positions || templateDetails.qr_positions || [],
+        pages: templateDetails.selected_pages || []
+      },
+      signature: templateDetails.signature_image ? {
+        image: templateDetails.signature_image,
+        positions: templateDetails.signature_positions || []
+      } : null
+    };
+    
+    console.log('Paramètres du template configurés:', templateSettings.value);
+  } catch (error) {
+    console.error('Erreur lors du chargement des détails du template:', error);
+  }
+}
+
+function getQrSizeLabel(size) {
+  switch(size) {
+    case 'small': return 'Petit';
+    case 'medium': return 'Moyen';
+    case 'large': return 'Grand';
+    default: return 'Moyen';
+  }
+}
+
+// Charger les templates au montage du composant
+onMounted(() => {
+  loadTemplates();
+});
+
 // Propriété calculée pour contrôler la progression des étapes
 const canProceedToNextStep = computed(() => {
   if (currentStep.value === 0) {
+    // Étape 0: Un template doit être sélectionné
+    return selectedTemplate.value !== null;
+  } else if (currentStep.value === 1) {
     // Étape 1: Au moins un fichier PDF doit être sélectionné
     return selectedFiles.value.length > 0;
-  } else if (currentStep.value === 1) {
+  } else if (currentStep.value === 2) {
     // Étape 2: Les prévisualisations doivent être chargées
     return selectedFiles.value.length > 0;
-  } else if (currentStep.value === 2) {
+  } else if (currentStep.value === 3) {
     // Étape 3: Le certificat et le mot de passe doivent être fournis
     return certificateFile.value !== null && certificatePassword.value.trim() !== '';
   }
@@ -349,14 +555,19 @@ const canProceedToNextStep = computed(() => {
 // Méthodes de navigation entre les étapes
 function nextStep() {
   if (currentStep.value < steps.length - 1 && canProceedToNextStep.value) {
-    if (currentStep.value === 0) {
-      // Lors du passage à l'étape de prévisualisation, créer les prévisualisations
+    // Incrémenter d'abord l'étape
+    currentStep.value++;
+    
+    // Puis exécuter les actions selon la nouvelle étape
+    if (currentStep.value === 2) {
+      // Arrivée à l'étape de prévisualisation, créer les prévisualisations
+      console.log('Création des prévisualisations pour', selectedFiles.value.length, 'documents');
       createDocumentPreviews();
-    } else if (currentStep.value === 2) {
-      // Si nous sommes à l'étape du certificat et passons à la signature, lancer le processus
+    } else if (currentStep.value === 4) {
+      // Arrivée à l'étape de signature, lancer le processus
+      console.log('Démarrage du processus de signature');
       startSigningProcess();
     }
-    currentStep.value++;
   }
 }
 
@@ -455,6 +666,8 @@ function formatFileSize(size) {
 
 // Créer les prévisualisations pour tous les documents
 function createDocumentPreviews() {
+  console.log('Création des prévisualisations pour', selectedFiles.value.length, 'documents');
+  
   documentPreviews.value = selectedFiles.value.map((file, index) => {
     const preview = {
       loading: true,
@@ -462,40 +675,82 @@ function createDocumentPreviews() {
       url: null
     };
     
-    // Créer l'URL de prévisualisation
-    setTimeout(() => {
-      try {
-        const fileUrl = URL.createObjectURL(file);
-        preview.url = fileUrl;
-        preview.loading = false;
-      } catch (error) {
-        preview.error = 'Erreur de chargement';
-        preview.loading = false;
-      }
-    }, 500 * index); // Décaler le chargement pour éviter les conflits
+    console.log(`Création prévisualisation pour ${file.name} (index ${index})`);
+    
+    // Créer l'URL de prévisualisation immédiatement
+    try {
+      const fileUrl = URL.createObjectURL(file);
+      preview.url = fileUrl;
+      preview.loading = false;
+      console.log(`URL créée pour ${file.name}:`, fileUrl);
+    } catch (error) {
+      console.error(`Erreur création URL pour ${file.name}:`, error);
+      preview.error = 'Erreur de chargement';
+      preview.loading = false;
+    }
     
     return preview;
   });
+  
+  console.log('Prévisualisations créées:', documentPreviews.value);
 }
 
 // Lancer le processus de signature pour tous les documents
 async function startSigningProcess() {
+  console.log('Démarrage du processus de signature');
+  console.log('Démarrage du processus de signature pour', selectedFiles.value.length, 'documents');
+  
   signatureStatus.value = 'loading';
   currentProcessingDocument.value = 0;
   completedDocuments.value = [];
   signedDocuments.value = [];
+  signatureError.value = '';
   
   try {
     // Obtenir les informations de l'utilisateur connecté
     const userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+    console.log('Informations utilisateur:', userInfo);
     
     // Signer chaque document séquentiellement
     for (let i = 0; i < selectedFiles.value.length; i++) {
       currentProcessingDocument.value = i;
+      console.log(`Signature du document ${i + 1}/${selectedFiles.value.length}: ${selectedFiles.value[i].name}`);
       
       const file = selectedFiles.value[i];
       
-      // Créer les métadonnées utilisateur
+      // Debug - vérifier l'état du template sélectionné et ses paramètres
+      console.log('Template sélectionné lors de la signature:', selectedTemplate.value);
+      console.log('Paramètres du template lors de la signature:', templateSettings.value);
+      
+      // Extraire les positions QR du template
+      let qrX = 85; // valeur par défaut
+      let qrY = 90; // valeur par défaut
+      
+      if (templateSettings.value.qr_position?.positions) {
+        // Vérifier si positions est un objet avec des clés numériques (format {1: {x, y}, 2: {x, y}})
+        if (typeof templateSettings.value.qr_position.positions === 'object' && 
+            !Array.isArray(templateSettings.value.qr_position.positions)) {
+          
+          console.log('Positions QR sous format objet, extraction de la première position');
+          const firstPageKey = Object.keys(templateSettings.value.qr_position.positions)[0];
+          if (firstPageKey && templateSettings.value.qr_position.positions[firstPageKey]) {
+            const firstPosition = templateSettings.value.qr_position.positions[firstPageKey];
+            qrX = firstPosition.x || 85;
+            qrY = firstPosition.y || 90;
+            console.log(`Position QR extraite de la page ${firstPageKey}: x=${qrX}, y=${qrY}`);
+          }
+        } else if (Array.isArray(templateSettings.value.qr_position.positions) && 
+                   templateSettings.value.qr_position.positions.length > 0) {
+          
+          console.log('Positions QR sous format tableau, extraction de la première position');
+          const firstPosition = templateSettings.value.qr_position.positions[0];
+          qrX = firstPosition.x || 85;
+          qrY = firstPosition.y || 90;
+          console.log(`Position QR extraite du tableau: x=${qrX}, y=${qrY}`);
+        }
+      }
+      
+      // Créer les métadonnées utilisateur avec les paramètres du template
       const userMetadata = {
         user_id: userInfo.id || '',
         username: userInfo.username || '',
@@ -504,14 +759,79 @@ async function startSigningProcess() {
         organization: userInfo.organization || '',
         organization_id: userInfo.organizationId || '',
         signer_role: userInfo.position || userInfo.role || '',
+        jwt_token: localStorage.getItem('jwtToken') || '',
         qr_position: {
-          x: 85,
-          y: 90,
-          size: 'medium',
-          pages: 'all',
-          mode: 'all'
-        }
+          x: qrX,
+          y: qrY,
+          size: templateSettings.value.qr_position?.size || 'medium',
+          pages: templateSettings.value.qr_position?.pages || 'all',
+          positions: templateSettings.value.qr_position?.positions || [],
+          mode: templateSettings.value.qr_position?.mode || 'all'
+        },
+        signature_position: null
       };
+      
+      console.log('Métadonnées QR position préparées:', {
+        template_qr_position: templateSettings.value.qr_position,
+        metadata_qr_position: userMetadata.qr_position
+      });
+      
+      // DEBUG - Inspection détaillée des positions QR
+      console.log('DEBUGAGE POSITIONS QR:', {
+        'qr_position_exists': !!templateSettings.value.qr_position,
+        'positions_exists': !!templateSettings.value.qr_position?.positions,
+        'positions_type': typeof templateSettings.value.qr_position?.positions,
+        'positions_is_array': Array.isArray(templateSettings.value.qr_position?.positions),
+        'positions_content': templateSettings.value.qr_position?.positions,
+        'first_position_x': templateSettings.value.qr_position?.positions?.[0]?.x,
+        'first_position_y': templateSettings.value.qr_position?.positions?.[0]?.y
+      });
+      
+      // Ajouter les informations de signature si disponibles dans le template
+      if (templateSettings.value.signature) {
+        let signatureImage = templateSettings.value.signature.image;
+        
+        // S'assurer que l'image est au bon format
+        if (signatureImage && !signatureImage.startsWith('data:image')) {
+          console.warn('Format d\'image incorrect, tentative de correction');
+          let imageType = 'png';
+          if (signatureImage.startsWith('/9j/')) {
+            imageType = 'jpeg';
+          }
+          signatureImage = `data:image/${imageType};base64,${signatureImage}`;
+        }
+        
+        // Convertir les positions de signature en format attendu par le microservice
+        let signaturePositions = [];
+        if (templateSettings.value.signature.positions) {
+          if (typeof templateSettings.value.signature.positions === 'object' && 
+              !Array.isArray(templateSettings.value.signature.positions)) {
+            
+            console.log('Conversion des positions de signature du format objet au format tableau');
+            Object.entries(templateSettings.value.signature.positions).forEach(([pageNum, position]) => {
+              signaturePositions.push({
+                page: parseInt(pageNum),
+                x: position.x,
+                y: position.y,
+                width: 20,
+                height: 10
+              });
+            });
+          } else if (Array.isArray(templateSettings.value.signature.positions)) {
+            signaturePositions = templateSettings.value.signature.positions;
+          }
+        }
+        
+        userMetadata.signature_position = {
+          positions: signaturePositions,
+          signature_image: signatureImage
+        };
+        
+        console.log('Données de signature préparées pour le document:', file.name, {
+          'positions_count': userMetadata.signature_position.positions?.length || 0,
+          'image_disponible': !!userMetadata.signature_position.signature_image
+        });
+      }
       
       // Créer un FormData pour l'envoi au microservice
       const formData = new FormData();
@@ -527,6 +847,8 @@ async function startSigningProcess() {
         formData.append('organization_id', userInfo.organizationId);
       }
       
+      console.log('Envoi de la requête de signature pour:', file.name);
+      
       // URL de l'API gateway
       const apiUrl = 'https://192.168.4.131:8001/gateway/sign/';
       
@@ -537,12 +859,21 @@ async function startSigningProcess() {
       });
       
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Erreur lors de la signature de ${file.name}: ${errorData.detail}`);
+        const errorText = await response.text();
+        let errorMessage;
+        try {
+          const errorData = JSON.parse(errorText);
+          errorMessage = errorData.detail || errorData.message || 'Erreur inconnue';
+        } catch {
+          errorMessage = errorText || 'Erreur de communication avec le serveur';
+        }
+        throw new Error(`Erreur lors de la signature de ${file.name}: ${errorMessage}`);
       }
       
       // Récupérer le document signé
       const blob = await response.blob();
+      console.log('Document signé reçu pour:', file.name, 'Taille:', blob.size);
+      
       const signedDocUrl = URL.createObjectURL(blob);
       
       // Ajouter le document signé à la liste
@@ -554,6 +885,7 @@ async function startSigningProcess() {
       
       // Marquer ce document comme terminé
       completedDocuments.value.push(i);
+      console.log(`Document ${i + 1} signé avec succès`);
     }
     
     // Tous les documents sont signés
@@ -565,8 +897,10 @@ async function startSigningProcess() {
       minute: '2-digit'
     });
     
+    console.log('Tous les documents ont été signés avec succès');
+    
     // Passer à l'étape de téléchargement
-    currentStep.value = 4;
+    currentStep.value = 5;
     signatureStatus.value = 'success';
     
   } catch (error) {
@@ -603,7 +937,6 @@ function closeSignature() {
   
   emit('close');
 }
-
 
 </script>
 
@@ -1198,8 +1531,12 @@ function closeSignature() {
 
 .document-name {
   font-weight: 600;
-  margin-bottom: 3px;
-  word-break: break-word;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: var(--text-color, #333);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .document-size {
@@ -1763,8 +2100,6 @@ function closeSignature() {
   transform: translateY(-1px);
 }
 
-
-
 /* Responsive styles */
 @media (max-width: 768px) {
   .steps-progress {
@@ -1876,4 +2211,225 @@ function closeSignature() {
   margin: 0 auto;
   border-radius: 4px;
 }
+
+/* Styles pour la sélection de template */
+.template-selection-banner {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: linear-gradient(135deg, rgba(58, 134, 255, 0.1), rgba(0, 123, 255, 0.05));
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  border: 1px solid rgba(58, 134, 255, 0.2);
+}
+
+.template-selection-banner i {
+  font-size: 2.5rem;
+  color: var(--primary-color, #3a86ff);
+}
+
+.template-selection-banner h4 {
+  margin: 0 0 5px;
+  color: var(--text-color, #333);
+  font-size: 1.2rem;
+}
+
+.template-selection-banner p {
+  margin: 0;
+  color: var(--text-muted, #6c757d);
+  line-height: 1.4;
+}
+
+.templates-loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted, #6c757d);
+}
+
+.templates-loading i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.template-card {
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.template-card:hover {
+  border-color: var(--primary-color, #3a86ff);
+  box-shadow: 0 4px 12px rgba(58, 134, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.template-card.selected {
+  border-color: var(--primary-color, #3a86ff);
+  background: linear-gradient(135deg, rgba(58, 134, 255, 0.05), rgba(0, 123, 255, 0.02));
+  box-shadow: 0 6px 20px rgba(58, 134, 255, 0.2);
+}
+
+.template-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.template-header i {
+  font-size: 2rem;
+  color: var(--primary-color, #3a86ff);
+}
+
+.template-status {
+  color: var(--success-color, #28a745);
+  font-size: 1.5rem;
+}
+
+.template-body h5 {
+  margin: 0 0 8px;
+  color: var(--text-color, #333);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.template-description {
+  color: var(--text-muted, #6c757d);
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.template-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.template-detail {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: var(--text-muted, #6c757d);
+}
+
+.template-detail i {
+  font-size: 0.9rem;
+  color: var(--primary-color, #3a86ff);
+}
+
+.no-templates {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted, #6c757d);
+}
+
+.no-templates i {
+  font-size: 3rem;
+  color: var(--warning-color, #ffc107);
+  margin-bottom: 15px;
+  display: block;
+}
+
+.no-templates h4 {
+  margin: 0 0 10px;
+  color: var(--text-color, #333);
+}
+
+.selected-template-summary {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(32, 201, 151, 0.05));
+  border: 1px solid rgba(40, 167, 69, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 25px;
+}
+
+.selected-template-summary h4 {
+  margin: 0 0 15px;
+  color: var(--success-color, #28a745);
+  font-size: 1.1rem;
+}
+
+.template-settings-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.setting-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text-color, #333);
+}
+
+.setting-preview i {
+  color: var(--success-color, #28a745);
+  font-size: 1rem;
+}
+
+/* Responsive pour les templates */
+@media (max-width: 768px) {
+  .templates-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .template-details {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .template-settings-preview {
+    flex-direction: column;
+  }
+}
+
+.pdf-error i {
+  color: var(--danger, #dc3545);
+}
+
+.retry-btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: var(--primary-color, #3a86ff);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.retry-btn:hover {
+  background-color: var(--primary-hover, #2969d6);
+  transform: translateY(-1px);
+}
+
+.spinning {
+  animation: spin 1.5s linear infinite;
+}
+
 </style> 

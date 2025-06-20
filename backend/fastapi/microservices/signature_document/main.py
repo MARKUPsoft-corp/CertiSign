@@ -50,11 +50,14 @@ logger.warning("Pour résoudre ce problème, réinstallez ces bibliothèques ave
 # Obtenir le répertoire courant
 current_dir = os.getcwd()
 
-# Définir le chemin du répertoire "signed_files" dans le répertoire courant
-signed_files_dir = os.path.join(current_dir, "signed_files")
+# Définir le chemin du répertoire "signed_files" dans le répertoire courant (DÉSACTIVÉ)
+# signed_files_dir = os.path.join(current_dir, "signed_files")
 
-# Créer le répertoire s'il n'existe pas
-os.makedirs(signed_files_dir, exist_ok=True)
+# Créer le répertoire s'il n'existe pas (DÉSACTIVÉ - plus besoin)
+# os.makedirs(signed_files_dir, exist_ok=True)
+
+# SUPPRIMÉ: Les documents signés ne seront plus sauvegardés localement
+# pour éviter l'accumulation de fichiers sur le serveur
 
 # Fonction pour nettoyer les fichiers temporaires
 def cleanup_temp_files(file_paths):
@@ -868,20 +871,32 @@ async def sign_document(
         if metadata:
             try:
                 metadata_dict = json.loads(metadata)
+                logger.info(f"Métadonnées parsées avec succès. Clés disponibles: {list(metadata_dict.keys())}")
+                
                 if 'qr_position' in metadata_dict:
                     qr_position = metadata_dict['qr_position']
                     logger.info(f"Position du QR code extraite des métadonnées: {qr_position}")
+                else:
+                    logger.warning("Aucune position QR trouvée dans les métadonnées")
                 
                 # Extraire les informations de l'image de signature
                 if 'signature_position' in metadata_dict and metadata_dict['signature_position']:
                     signature_data = metadata_dict['signature_position']
+                    logger.info(f"Données de signature trouvées. Clés: {list(signature_data.keys())}")
+                    
                     if 'signature_image' in signature_data and signature_data['signature_image']:
                         signature_image = signature_data['signature_image']
-                        logger.info("Image de signature trouvée dans les métadonnées")
+                        logger.info(f"Image de signature trouvée. Longueur: {len(signature_image)} caractères. Début: {signature_image[:50]}...")
+                    else:
+                        logger.warning("Aucune image de signature trouvée dans signature_position")
                     
                     if 'positions' in signature_data and signature_data['positions']:
                         signature_positions = signature_data['positions']
-                        logger.info(f"Positions de signature trouvées: {len(signature_positions)} position(s)")
+                        logger.info(f"Positions de signature trouvées: {len(signature_positions)} position(s). Détails: {signature_positions}")
+                    else:
+                        logger.warning("Aucune position de signature trouvée dans signature_position")
+                else:
+                    logger.warning("Aucune section signature_position trouvée dans les métadonnées")
                 
                 # Extraire les informations d'organisation et de rôle
                 if 'organization_id' in metadata_dict:
@@ -894,8 +909,11 @@ async def sign_document(
                 elif 'role' in metadata_dict:
                     signer_role = metadata_dict['role']
                     logger.info(f"Rôle du signataire extrait des métadonnées (champ 'role'): {signer_role}")
-            except json.JSONDecodeError:
-                logger.warning("Impossible de parser les métadonnées JSON, utilisation des positions par défaut")
+            except json.JSONDecodeError as e:
+                logger.error(f"Erreur de parsing JSON des métadonnées: {str(e)}. Métadonnées reçues: {metadata}")
+                logger.warning("Utilisation des positions par défaut")
+        else:
+            logger.warning("Aucune métadonnée fournie, utilisation des positions par défaut")
         
         # Étape 1: Ajouter l'image de signature si disponible
         processed_pdf = document_data
@@ -916,13 +934,6 @@ async def sign_document(
         original_name = os.path.splitext(document.filename)[0]
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         signed_filename = f"{original_name}_signed_{timestamp}.pdf"
-        
-        # Chemins complets des fichiers
-        signed_path = os.path.join(signed_files_dir, signed_filename)
-        
-        # Sauvegarder le fichier signé
-        with open(signed_path, "wb") as f:
-            f.write(signed_pdf)
         
         # Stocker toutes les informations dans la base de données Django
         storage_result = await store_signature_data(
@@ -945,59 +956,30 @@ async def sign_document(
         else:
             logger.info(f"Données de signature stockées avec succès pour le document {document_id}")
         
-        # Créer un fichier ZIP contenant le fichier signé et le README
+        # Retourner directement le document signé (plus de ZIP)
         temp_dir = tempfile.gettempdir()
-        zip_filename = f"{original_name}_signed_package_{timestamp}.zip"
-        zip_path = os.path.join(temp_dir, zip_filename)
-        readme_path = os.path.join(temp_dir, "README.txt")
+        temp_signed_path = os.path.join(temp_dir, signed_filename)
         
-        try:
-            with zipfile.ZipFile(zip_path, 'w') as zipf:
-                zipf.write(signed_path, arcname=signed_filename)
-                
-                # Ajouter un fichier README.txt avec des instructions
-                readme_content = f"""DOCUMENT SIGNÉ NUMÉRIQUEMENT
-Date de signature: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-Identifiant du document: {document_id}
-
-Ce package contient:
-1. Le document signé: {signed_filename}
-
-La signature numérique est:
-- Stockée de manière sécurisée dans notre base de données
-- L'identifiant unique du document est visible sous forme de QR code sur chaque page
-
-Pour vérifier la signature, utilisez l'API de vérification en fournissant le document signé.
-"""
-                with open(readme_path, "w") as f:
-                    f.write(readme_content)
-                zipf.write(readme_path, arcname="README.txt")
-            
-            # Programmer la suppression des fichiers temporaires
-            background_tasks.add_task(cleanup_temp_files, [zip_path, readme_path])
-            
-            execution_time = time.time() - start_time
-            logger.info(f"Signature terminée en {execution_time:.2f} secondes")
-            
-            # Renvoyer les informations de signature et le document signé
-            return FileResponse(
-                zip_path, 
-                filename=zip_filename,
-                media_type="application/zip",
-                headers={
-                    "X-Document-ID": document_id,
-                    "X-Signature-Status": "success"
-                }
-            )
-        except Exception as e:
-            # Nettoyer les fichiers en cas d'erreur
-            for path in [zip_path, readme_path]:
-                if os.path.exists(path):
-                    try:
-                        os.remove(path)
-                    except:
-                        pass
-            raise e
+        # Écrire le fichier signé temporairement pour le retour
+        with open(temp_signed_path, "wb") as f:
+            f.write(signed_pdf)
+        
+        # Programmer la suppression du fichier temporaire
+        background_tasks.add_task(cleanup_temp_files, [temp_signed_path])
+        
+        execution_time = time.time() - start_time
+        logger.info(f"Signature terminée en {execution_time:.2f} secondes")
+        
+        # Retourner directement le document signé (plus de ZIP)
+        return FileResponse(
+            temp_signed_path, 
+            filename=signed_filename,
+            media_type="application/pdf",
+            headers={
+                "X-Document-ID": document_id,
+                "X-Signature-Status": "success"
+            }
+        )
 
     except HTTPException:
         raise

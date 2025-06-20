@@ -603,14 +603,21 @@ async def sign_document(
     certificate: UploadFile = File(...),
     password: str = Form(...),
     metadata: Optional[str] = Form(None),
-    owner_id: Optional[str] = Form(None)
+    owner_id: Optional[str] = Form(None),
+    organization_id: Optional[str] = Form(None),
+    signer_role: Optional[str] = Form(None),
+    jwt_token: Optional[str] = Form(None)
 ):
     """
     Endpoint pour signer un document PDF.
-    Transmet la demande au microservice de signature.
+    Transmet la demande au microservice de signature avec tous les paramètres.
     """
     correlation_id = str(uuid.uuid4())
     logger.info(f"[{correlation_id}] Demande de signature reçue pour le document {document.filename}")
+    
+    # Log des métadonnées pour debug
+    if metadata:
+        logger.info(f"[{correlation_id}] Métadonnées reçues: {metadata[:200]}...")
     
     try:
         # Créer une instance du client HTTP avec désactivation de la vérification SSL
@@ -625,11 +632,23 @@ async def sign_document(
                 "password": password
             }
             
+            # Ajouter tous les paramètres optionnels s'ils sont fournis
             if metadata:
                 form_data["metadata"] = metadata
                 
             if owner_id:
                 form_data["owner_id"] = owner_id
+                
+            if organization_id:
+                form_data["organization_id"] = organization_id
+                
+            if signer_role:
+                form_data["signer_role"] = signer_role
+                
+            if jwt_token:
+                form_data["jwt_token"] = jwt_token
+            
+            logger.info(f"[{correlation_id}] Paramètres envoyés au microservice: {list(form_data.keys())}")
             
             # URL du microservice de signature
             url = MICROSERVICES["sign"]
@@ -642,8 +661,8 @@ async def sign_document(
                 # Retourner directement la réponse du microservice
                 return StreamingResponse(
                     response.iter_bytes(),
-                    media_type=response.headers.get("content-type", "application/zip"),
-                    headers={"Content-Disposition": response.headers.get("content-disposition", f'attachment; filename="signed_document.zip"')}
+                    media_type=response.headers.get("content-type", "application/pdf"),
+                    headers={"Content-Disposition": response.headers.get("content-disposition", f'attachment; filename="signed_document.pdf"')}
                 )
             else:
                 # En cas d'erreur, retourner le message d'erreur du microservice

@@ -311,14 +311,14 @@ onMounted(() => {
     
     templateSettings.value = {
       qr_position: {
-        mode: props.templateData.pageApplication || 'all',
-        size: props.templateData.qrSize || 'medium',
-        positions: props.templateData.qrPositions?.positions || [],
-        pages: props.templateData.selectedPages || []
+        mode: props.templateData.pageApplication || props.templateData.page_application || 'all',
+        size: props.templateData.qrSize || props.templateData.qr_size || 'medium',
+        positions: props.templateData.qrPositions?.positions || props.templateData.qr_positions?.positions || props.templateData.qrPositions || props.templateData.qr_positions || [],
+        pages: props.templateData.selectedPages || props.templateData.selected_pages || []
       },
-      signature: props.templateData.signatureImage ? {
-        image: props.templateData.signatureImage,
-        positions: props.templateData.signaturePositions || []
+      signature: props.templateData.signatureImage || props.templateData.signature_image ? {
+        image: props.templateData.signatureImage || props.templateData.signature_image,
+        positions: props.templateData.signaturePositions || props.templateData.signature_positions || []
       } : null
     };
     
@@ -566,6 +566,12 @@ async function detectPdfPages(file) {
 
 // Lancer le processus de signature
 async function startSigningProcess() {
+  console.log('Début du processus de signature');
+  
+  // Debug - vérifier l'état du template et ses paramètres
+  console.log('Template props lors de la signature:', props.templateData);
+  console.log('Paramètres du template lors de la signature:', templateSettings.value);
+  
   signatureStatus.value = 'loading';
   processingStep.value = 0;
   
@@ -585,15 +591,45 @@ async function startSigningProcess() {
       organization: userInfo.organization || '',
       organization_id: userInfo.organizationId || '',
       signer_role: userInfo.position || userInfo.role || '',
-      // Utiliser les informations du template pour le positionnement du QR code
-      qr_position: {
-        x: templateSettings.value.qr_position?.positions?.[0]?.x || 85,
-        y: templateSettings.value.qr_position?.positions?.[0]?.y || 90,
-        size: templateSettings.value.qr_position?.size || 'medium',
-        pages: templateSettings.value.qr_position?.pages || 'all',
-        positions: templateSettings.value.qr_position?.positions || [],
-        mode: templateSettings.value.qr_position?.mode || 'all'
-      },
+      jwt_token: localStorage.getItem('jwtToken') || '',
+      // Extraire les positions QR du template
+      qr_position: (() => {
+        let qrX = 85; // valeur par défaut
+        let qrY = 90; // valeur par défaut
+        
+        if (templateSettings.value.qr_position?.positions) {
+          // Vérifier si positions est un objet avec des clés numériques (format {1: {x, y}, 2: {x, y}})
+          if (typeof templateSettings.value.qr_position.positions === 'object' && 
+              !Array.isArray(templateSettings.value.qr_position.positions)) {
+            
+            console.log('Positions QR sous format objet, extraction de la première position');
+            const firstPageKey = Object.keys(templateSettings.value.qr_position.positions)[0];
+            if (firstPageKey && templateSettings.value.qr_position.positions[firstPageKey]) {
+              const firstPosition = templateSettings.value.qr_position.positions[firstPageKey];
+              qrX = firstPosition.x || 85;
+              qrY = firstPosition.y || 90;
+              console.log(`Position QR extraite de la page ${firstPageKey}: x=${qrX}, y=${qrY}`);
+            }
+          } else if (Array.isArray(templateSettings.value.qr_position.positions) && 
+                     templateSettings.value.qr_position.positions.length > 0) {
+            
+            console.log('Positions QR sous format tableau, extraction de la première position');
+            const firstPosition = templateSettings.value.qr_position.positions[0];
+            qrX = firstPosition.x || 85;
+            qrY = firstPosition.y || 90;
+            console.log(`Position QR extraite du tableau: x=${qrX}, y=${qrY}`);
+          }
+        }
+        
+        return {
+          x: qrX,
+          y: qrY,
+          size: templateSettings.value.qr_position?.size || 'medium',
+          pages: templateSettings.value.qr_position?.pages || 'all',
+          positions: templateSettings.value.qr_position?.positions || [],
+          mode: templateSettings.value.qr_position?.mode || 'all'
+        };
+      })(),
       signature_position: null
     };
     
