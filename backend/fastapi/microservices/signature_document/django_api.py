@@ -271,4 +271,4 @@ async def get_signature_data(document_id: str, jwt_token: Optional[str] = None) 
     except Exception as e:
         error_msg = f"Exception lors de la récupération des données de signature: {str(e)}"
         logger.error(error_msg)
-        return {"error": error_msg}
+        return {"error": error_msg} 
