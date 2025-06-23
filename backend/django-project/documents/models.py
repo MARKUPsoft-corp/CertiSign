@@ -155,6 +155,11 @@ class DocumentQRPosition(models.Model):
     qr_pages = models.CharField(_('Pages avec QR code'), max_length=255, default='all')
     qr_positions = models.JSONField(_('Positions du QR code par page'), default=dict, null=True, blank=True)
     qr_mode = models.CharField(_('Mode de positionnement'), max_length=20, default='standard')
+
+    # NOUVEAU: Informations de signature
+    signature_image = models.FileField(_('Image de signature'), upload_to='signatures/images/', null=True, blank=True)
+    signature_positions = models.JSONField(_('Positions de la signature par page'), default=dict, null=True, blank=True)
+    signature_size = models.IntegerField(_('Taille de la signature en %'), default=50, null=True, blank=True)
     
     # Références aux utilisateurs et organisation
     collaborator = models.ForeignKey(

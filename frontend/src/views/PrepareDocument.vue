@@ -544,6 +544,24 @@ function onQrPositionConfirmed(position) {
   console.log('DEBUG - qrPosition créé:', qrPosition);
   
   documentPositions.value[activePositioningIndex.value].qr_position = qrPosition;
+  
+  // NOUVEAU: Stocker aussi les informations de signature si disponibles
+  if (position.signature) {
+    console.log('DEBUG - Signature trouvée:', position.signature);
+    console.log('DEBUG - position.signature.imageUrl:', position.signature.imageUrl);
+    console.log('DEBUG - position.signature.image:', position.signature.image);
+    
+    const imageToStore = position.signature.imageUrl || position.signature.image || null;
+    console.log('DEBUG - imageToStore:', imageToStore);
+    
+    documentPositions.value[activePositioningIndex.value].signature = {
+      image: imageToStore,  // Stocker tel quel, conversion lors de l'envoi
+      positions: position.signature.positions || {},
+      size: position.signature.size || 50
+    };
+    console.log('DEBUG - Signature stockée pour le document', activePositioningIndex.value, ':', documentPositions.value[activePositioningIndex.value].signature);
+  }
+  
   documentPositions.value[activePositioningIndex.value].hasPositions = true;
   documentPositions.value[activePositioningIndex.value].completed = true;
   
@@ -625,6 +643,79 @@ async function submitDocument() {
       formData.append('qr_pages', documentPosition.qr_position.pages || 'all');
       formData.append('qr_positions', JSON.stringify(documentPosition.qr_position.positions || {}));
       formData.append('qr_mode', documentPosition.qr_position.mode || 'standard');
+      
+      // NOUVEAU: Ajouter les informations de signature si disponibles
+      if (documentPosition.signature) {
+        console.log('DEBUG - Envoi signature pour document', i, ':', documentPosition.signature);
+        
+        // Traiter l'image de signature
+        if (documentPosition.signature.image) {
+          console.log('DEBUG - Image de signature détectée:', documentPosition.signature.image.substring(0, 50) + '...');
+          
+          let imageBlob;
+          const imageData = documentPosition.signature.image;
+          
+          if (imageData.startsWith('blob:')) {
+            // Nouvelle approche pour gérer les URLs blob avec canvas
+            console.log('DEBUG - Conversion blob via canvas');
+            try {
+              // Créer une image et un canvas pour éviter CORS
+              const img = new Image();
+              const canvas = document.createElement('canvas');
+              const ctx = canvas.getContext('2d');
+              
+              // Attendre que l'image se charge
+              await new Promise((resolve, reject) => {
+                img.onload = () => {
+                  canvas.width = img.width;
+                  canvas.height = img.height;
+                  ctx.drawImage(img, 0, 0);
+                  
+                  // Convertir le canvas en blob
+                  canvas.toBlob((blob) => {
+                    imageBlob = blob;
+                    console.log('DEBUG - Conversion canvas réussie:', imageBlob);
+                    resolve();
+                  }, 'image/png');
+                };
+                img.onerror = reject;
+                img.src = imageData;
+              });
+            } catch (error) {
+              console.error('Erreur conversion canvas:', error);
+              // Fallback: essayer fetch quand même
+              const response = await fetch(imageData);
+              imageBlob = await response.blob();
+            }
+          } else if (imageData.startsWith('data:image')) {
+            // C'est une image base64 complète - conversion directe
+            console.log('DEBUG - Conversion base64 en Blob');
+            const response = await fetch(imageData);
+            imageBlob = await response.blob();
+          } else {
+            // Fallback : créer un Blob à partir des données base64 pures
+            console.log('DEBUG - Conversion base64 pur en Blob');
+            const byteCharacters = atob(imageData);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let j = 0; j < byteCharacters.length; j++) {
+              byteNumbers[j] = byteCharacters.charCodeAt(j);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            imageBlob = new Blob([byteArray], { type: 'image/png' });
+          }
+          
+          console.log('DEBUG - Blob créé:', imageBlob);
+          formData.append('signature_image', imageBlob, 'signature.png');
+        } else {
+          console.log('DEBUG - Aucune image de signature à envoyer');
+        }
+        
+        // Ajouter les positions de signature
+        formData.append('signature_positions', JSON.stringify(documentPosition.signature.positions || {}));
+        formData.append('signature_size', documentPosition.signature.size?.toString() || '50');
+      } else {
+        console.log('DEBUG - Aucune signature pour le document', i);
+      }
       
       // Ajouter le statut
       formData.append('status', 'pending_signature');
@@ -769,6 +860,79 @@ async function saveAsDraft() {
       formData.append('qr_pages', documentPosition.qr_position.pages || 'all');
       formData.append('qr_positions', JSON.stringify(documentPosition.qr_position.positions || {}));
       formData.append('qr_mode', documentPosition.qr_position.mode || 'standard');
+      
+      // NOUVEAU: Ajouter les informations de signature si disponibles
+      if (documentPosition.signature) {
+        console.log('DEBUG - Envoi signature pour document', i, ':', documentPosition.signature);
+        
+        // Traiter l'image de signature
+        if (documentPosition.signature.image) {
+          console.log('DEBUG - Image de signature détectée:', documentPosition.signature.image.substring(0, 50) + '...');
+          
+          let imageBlob;
+          const imageData = documentPosition.signature.image;
+          
+          if (imageData.startsWith('blob:')) {
+            // Nouvelle approche pour gérer les URLs blob avec canvas
+            console.log('DEBUG - Conversion blob via canvas');
+            try {
+              // Créer une image et un canvas pour éviter CORS
+              const img = new Image();
+              const canvas = document.createElement('canvas');
+              const ctx = canvas.getContext('2d');
+              
+              // Attendre que l'image se charge
+              await new Promise((resolve, reject) => {
+                img.onload = () => {
+                  canvas.width = img.width;
+                  canvas.height = img.height;
+                  ctx.drawImage(img, 0, 0);
+                  
+                  // Convertir le canvas en blob
+                  canvas.toBlob((blob) => {
+                    imageBlob = blob;
+                    console.log('DEBUG - Conversion canvas réussie:', imageBlob);
+                    resolve();
+                  }, 'image/png');
+                };
+                img.onerror = reject;
+                img.src = imageData;
+              });
+            } catch (error) {
+              console.error('Erreur conversion canvas:', error);
+              // Fallback: essayer fetch quand même
+              const response = await fetch(imageData);
+              imageBlob = await response.blob();
+            }
+          } else if (imageData.startsWith('data:image')) {
+            // C'est une image base64 complète - conversion directe
+            console.log('DEBUG - Conversion base64 en Blob');
+            const response = await fetch(imageData);
+            imageBlob = await response.blob();
+          } else {
+            // Fallback : créer un Blob à partir des données base64 pures
+            console.log('DEBUG - Conversion base64 pur en Blob');
+            const byteCharacters = atob(imageData);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let j = 0; j < byteCharacters.length; j++) {
+              byteNumbers[j] = byteCharacters.charCodeAt(j);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            imageBlob = new Blob([byteArray], { type: 'image/png' });
+          }
+          
+          console.log('DEBUG - Blob créé:', imageBlob);
+          formData.append('signature_image', imageBlob, 'signature.png');
+        } else {
+          console.log('DEBUG - Aucune image de signature à envoyer');
+        }
+        
+        // Ajouter les positions de signature
+        formData.append('signature_positions', JSON.stringify(documentPosition.signature.positions || {}));
+        formData.append('signature_size', documentPosition.signature.size?.toString() || '50');
+      } else {
+        console.log('DEBUG - Aucune signature pour le document', i);
+      }
       
       // Ajouter le statut
       formData.append('status', 'draft');

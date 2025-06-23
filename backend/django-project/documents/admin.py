@@ -157,16 +157,34 @@ class DocumentQRPositionAdmin(admin.ModelAdmin):
     """
     Administration des positions de QR code sur les documents.
     """
-    list_display = ('document_name', 'collaborator', 'organization', 'status', 'created_at')
+    list_display = ('document_name', 'collaborator', 'organization', 'status', 'has_signature', 'created_at')
     list_filter = ('status', 'collaborator', 'organization', 'created_at')
     search_fields = ('document_name', 'collaborator__username', 'organization__name')
-    readonly_fields = ('id', 'created_at', 'updated_at')
+    readonly_fields = ('id', 'created_at', 'updated_at', 'signature_preview')
+    
+    def has_signature(self, obj):
+        """Indique si le document a une signature associée."""
+        return bool(obj.signature_image)
+    has_signature.boolean = True
+    has_signature.short_description = _('Signature')
+    
+    def signature_preview(self, obj):
+        """Affiche un aperçu de l'image de signature."""
+        if obj.signature_image:
+            return format_html('<img src="{}" alt="Signature" style="max-height: 80px; max-width: 200px;" />', obj.signature_image.url)
+        return "Aucune signature"
+    signature_preview.short_description = _('Aperçu signature')
+    
     fieldsets = (
         ('Document', {
             'fields': ('id', 'document_name', 'document_file', 'status')
         }),
         ('Positionnement QR', {
             'fields': ('qr_x_position', 'qr_y_position', 'qr_size', 'qr_pages', 'qr_positions', 'qr_mode')
+        }),
+        ('Signature', {
+            'fields': ('signature_image', 'signature_preview', 'signature_positions', 'signature_size'),
+            'classes': ('collapse',)
         }),
         ('Relations', {
             'fields': ('collaborator', 'organization')

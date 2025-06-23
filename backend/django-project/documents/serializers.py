@@ -51,6 +51,7 @@ class DocumentQRPositionSerializer(serializers.ModelSerializer):
             'id', 'document_name', 'document_file', 
             'qr_x_position', 'qr_y_position', 'qr_size',
             'qr_pages', 'qr_positions', 'qr_mode',
+            'signature_image', 'signature_positions', 'signature_size',
             'collaborator', 'organization', 
             'collaborator_username', 'organization_name',
             'status', 'metadata', 'created_at', 'updated_at'
@@ -93,6 +94,14 @@ class DocumentQRPositionSerializer(serializers.ModelSerializer):
                 data['qr_positions'] = json.loads(data['qr_positions'])
             except json.JSONDecodeError:
                 raise serializers.ValidationError({"qr_positions": "Format JSON invalide pour les positions"})
+        
+        # NOUVEAU: Validation pour signature_positions si présentes
+        if isinstance(data.get('signature_positions'), str):
+            try:
+                import json
+                data['signature_positions'] = json.loads(data['signature_positions'])
+            except json.JSONDecodeError:
+                raise serializers.ValidationError({"signature_positions": "Format JSON invalide pour les positions de signature"})
                 
         # Validation des métadonnées (si présentes)
         if isinstance(data.get('metadata'), str):
