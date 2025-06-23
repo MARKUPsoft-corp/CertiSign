@@ -176,12 +176,23 @@ class UserService {
         throw new Error(errorData.detail || 'Erreur lors de la signature du document');
       }
       
-      // Récupérer le fichier ZIP contenant le document signé
+      // Récupérer le fichier PDF signé
       const blob = await response.blob();
+      
+      // Extraire le nom de fichier du header Content-Disposition s'il est présent
+      let filename = `${pdfFile.name.replace('.pdf', '')}_signed.pdf`;
+      const contentDisposition = response.headers.get('content-disposition');
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*)\2|[^;\n]*/i);
+        if (filenameMatch && filenameMatch[1]) {
+          filename = filenameMatch[1].replace(/['"]*/g, '');
+        }
+      }
+      
       return {
         success: true,
         signedDocument: URL.createObjectURL(blob),
-        filename: `${pdfFile.name.replace('.pdf', '')}_signed.zip`
+        filename: filename
       };
     } catch (error) {
       console.error('Erreur lors de la signature du document:', error);

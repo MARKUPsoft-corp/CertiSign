@@ -678,6 +678,104 @@ async function submitSignature() {
     };
     
     console.log('Informations de positionnement du QR code formatées:', qrPosition);
+
+    // ========== RÉCUPÉRATION DES INFORMATIONS DE SIGNATURE ==========
+    // Récupérer et formater les informations de signature depuis DocumentQRPosition
+    let signaturePosition = null;
+    
+    // Vérifier si le document a des informations de signature
+    if (documentDetails.signature_image || documentDetails.signature_positions) {
+      console.log('Informations de signature trouvées dans le document:', {
+        has_image: !!documentDetails.signature_image,
+        has_positions: !!documentDetails.signature_positions,
+        signature_size: documentDetails.signature_size
+      });
+      
+      // Construire l'objet signature_position au format attendu par le microservice
+      signaturePosition = {};
+      
+      // Ajouter l'image de signature si disponible
+      if (documentDetails.signature_image) {
+        // L'image est stockée comme un fichier dans le backend Django
+        // On doit la récupérer et la convertir en base64 pour le microservice
+        try {
+          let imageUrl = documentDetails.signature_image;
+          // Construire l'URL absolue si nécessaire
+          if (imageUrl.startsWith('/')) {
+            imageUrl = `https://192.168.4.131:8000${imageUrl}`;
+          } else if (!imageUrl.startsWith('https')) {
+            imageUrl = `https://192.168.4.131:8000/${imageUrl}`;
+          }
+          
+          console.log('Récupération de l\'image de signature depuis:', imageUrl);
+          
+          // Télécharger l'image de signature
+          const imageResponse = await axios.get(imageUrl, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+            responseType: 'blob'
+          });
+          
+          // Convertir l'image en base64
+          const imageBlob = imageResponse.data;
+          const imageBase64 = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(imageBlob);
+          });
+          
+          signaturePosition.signature_image = imageBase64;
+          console.log('Image de signature convertie en base64:', imageBase64.substring(0, 50) + '...');
+          
+        } catch (imageError) {
+          console.error('Erreur lors de la récupération de l\'image de signature:', imageError);
+          console.log('Signature sera appliquée sans image personnalisée');
+        }
+      }
+      
+      // Ajouter les positions de signature si disponibles
+      if (documentDetails.signature_positions) {
+        try {
+          let positions = documentDetails.signature_positions;
+          
+          // Parser si c'est une chaîne JSON
+          if (typeof positions === 'string') {
+            positions = JSON.parse(positions);
+          }
+          
+          // Convertir le format objet {page_num: {x, y}} vers tableau [{page, x, y, width, height}]
+          const signaturePositionsArray = [];
+          
+          if (positions && typeof positions === 'object') {
+            Object.entries(positions).forEach(([pageNum, position]) => {
+              if (position && typeof position === 'object' && position.x !== undefined && position.y !== undefined) {
+                signaturePositionsArray.push({
+                  page: parseInt(pageNum),
+                  x: position.x,
+                  y: position.y,
+                  width: 20, // Largeur par défaut
+                  height: 10 // Hauteur par défaut
+                });
+              }
+            });
+          }
+          
+          signaturePosition.positions = signaturePositionsArray;
+          console.log('Positions de signature formatées:', signaturePositionsArray);
+          
+        } catch (positionError) {
+          console.error('Erreur lors du parsing des positions de signature:', positionError);
+          signaturePosition.positions = [];
+        }
+      } else {
+        signaturePosition.positions = [];
+      }
+      
+      console.log('Informations de signature finales:', signaturePosition);
+    } else {
+      console.log('Aucune information de signature trouvée dans le document');
+    }
     
     // Vérifier si le document a une URL de fichier
     if (!documentDetails.document_file) {
@@ -711,16 +809,28 @@ async function submitSignature() {
       { type: 'application/pdf' }
     );
 
-    // Préparer les métadonnées avec la position du QR code
-    const metadata = JSON.stringify({
+    // Préparer les métadonnées avec la position du QR code et les informations de signature
+    const metadataObject = {
       qr_position: qrPosition,
       document_id: documentDetails.id,
       document_title: documentDetails.document_name,
       organization_id: organizationId  // Ajouter l'ID de l'organisation aux métadonnées
-    });
+    };
+    
+    // Ajouter les informations de signature si disponibles (même format que SignSimple.vue)
+    if (signaturePosition) {
+      metadataObject.signature_position = signaturePosition;
+      console.log('Informations de signature ajoutées aux métadonnées:', {
+        has_image: !!signaturePosition.signature_image,
+        positions_count: signaturePosition.positions?.length || 0,
+        positions_detail: signaturePosition.positions
+      });
+    }
+    
+    const metadata = JSON.stringify(metadataObject);
 
     // Afficher les métadonnées qui seront envoyées pour vérification
-    console.log('Métadonnées envoyées au microservice de signature:', JSON.parse(metadata));
+    console.log('Métadonnées complètes envoyées au microservice de signature:', JSON.parse(metadata));
 
     // Créer le FormData pour l'envoi au microservice de signature
     const formData = new FormData();
@@ -745,14 +855,31 @@ async function submitSignature() {
 
     // Traiter la réponse
     if (signResponse.status === 200) {
-      // Enregistrer le document signé
-      const url = window.URL.createObjectURL(new Blob([signResponse.data]));
+      // Extraire le nom du fichier du header Content-Disposition s'il est présent
+      const contentDisposition = signResponse.headers['content-disposition'];
+      let filename = `${documentDetails.document_name.replace('.pdf', '')}_signé.pdf`;
+      
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*)\2|[^;\n]*/i);
+        if (filenameMatch && filenameMatch[1]) {
+          filename = filenameMatch[1].replace(/['"]*/g, '');
+        }
+      }
+      
+      console.log('Téléchargement du document signé:', filename);
+      
+      // Créer le blob PDF et déclencher le téléchargement
+      const blob = new Blob([signResponse.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `${documentDetails.document_name.replace('.pdf', '')}_signé.zip`);
+      link.setAttribute('download', filename);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      
+      // Libérer l'URL objet
+      window.URL.revokeObjectURL(url);
       
       // Mettre à jour le statut
       signatureStatus.value = {

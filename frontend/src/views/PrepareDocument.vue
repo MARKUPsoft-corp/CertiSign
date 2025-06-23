@@ -221,12 +221,12 @@
               
               <div class="documents-list">
                 <div v-for="(file, index) in selectedFiles" :key="index" class="document-info">
-                  <div class="document-icon large">
-                    <i class="bi bi-file-earmark-check"></i>
-                  </div>
-                  <div class="document-details">
+                <div class="document-icon large">
+                  <i class="bi bi-file-earmark-check"></i>
+                </div>
+                <div class="document-details">
                     <div class="document-name">{{ file.name }}</div>
-                    <div class="preparation-date">Préparé le {{ preparationDate }}</div>
+                  <div class="preparation-date">Préparé le {{ preparationDate }}</div>
                   </div>
                 </div>
               </div>
@@ -403,7 +403,7 @@ function createDocumentPreviews() {
     
     // Créer l'URL de prévisualisation immédiatement
     try {
-      const fileUrl = URL.createObjectURL(file);
+  const fileUrl = URL.createObjectURL(file);
       preview.url = fileUrl;
       preview.loading = false;
       
@@ -630,16 +630,16 @@ async function submitDocument() {
       console.log('Position QR à envoyer pour', file.name, ':', documentPosition.qr_position);
       
       // Créer les données pour ce document
-      const formData = new FormData();
+    const formData = new FormData();
       formData.append('document_file', file);
       formData.append('document_name', file.name);
-      
-      // Ajouter les informations de position du QR code avec conversion explicite en string
+    
+    // Ajouter les informations de position du QR code avec conversion explicite en string
       formData.append('qr_x_position', documentPosition.qr_position.x.toString());
       formData.append('qr_y_position', documentPosition.qr_position.y.toString());
       formData.append('qr_size', documentPosition.qr_position.size.toString());
-      
-      // Simplification de qr_pages qui est maintenant un CharField
+    
+    // Simplification de qr_pages qui est maintenant un CharField
       formData.append('qr_pages', documentPosition.qr_position.pages || 'all');
       formData.append('qr_positions', JSON.stringify(documentPosition.qr_position.positions || {}));
       formData.append('qr_mode', documentPosition.qr_position.mode || 'standard');
@@ -716,55 +716,55 @@ async function submitDocument() {
       } else {
         console.log('DEBUG - Aucune signature pour le document', i);
       }
-      
-      // Ajouter le statut
-      formData.append('status', 'pending_signature');
-      
-      // Ajouter le nom de l'organisation
-      formData.append('organization_name', userInfo.organization.name);
-      
+    
+    // Ajouter le statut
+    formData.append('status', 'pending_signature');
+    
+    // Ajouter le nom de l'organisation
+    formData.append('organization_name', userInfo.organization.name);
+    
       // Ajouter des métadonnées supplémentaires
-      const metadata = {
-        prepared_by: {
-          user_id: userInfo.id || '',
-          username: userInfo.username || '',
-          email: userInfo.email || '',
-          full_name: userInfo.fullName || '',
-        },
-        organization: {
-          id: userInfo.organization.id,
-          name: userInfo.organization.name || '',
-          serial_number: userInfo.organization.serial_number || '',
-        },
-        browser_info: navigator.userAgent,
+    const metadata = {
+      prepared_by: {
+        user_id: userInfo.id || '',
+        username: userInfo.username || '',
+        email: userInfo.email || '',
+        full_name: userInfo.fullName || '',
+      },
+      organization: {
+        id: userInfo.organization.id,
+        name: userInfo.organization.name || '',
+        serial_number: userInfo.organization.serial_number || '',
+      },
+      browser_info: navigator.userAgent,
         batch_info: {
           document_index: i + 1,
           total_documents: selectedFiles.value.length,
           batch_id: Date.now().toString()
         }
-      };
-      formData.append('metadata', JSON.stringify(metadata));
-      
-      // Configuration de la requête avec axios
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+    };
+    formData.append('metadata', JSON.stringify(metadata));
+    
+    // Configuration de la requête avec axios
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      };
+      }
+    };
       
       // Appel direct à l'API Django
       const apiUrl = 'https://192.168.4.131:8000/api/documents/qr-positions/';
-      
-      // Appel API avec timeout plus long pour les gros fichiers
-      const response = await axios.post(apiUrl, formData, {
-        ...config,
-        timeout: 30000 // 30 secondes
-      });
-      
-      // Traiter la réponse
-      if (response.status === 200 || response.status === 201) {
-        const documentId = response.data.id;
+    
+    // Appel API avec timeout plus long pour les gros fichiers
+    const response = await axios.post(apiUrl, formData, {
+      ...config,
+      timeout: 30000 // 30 secondes
+    });
+    
+    // Traiter la réponse
+    if (response.status === 200 || response.status === 201) {
+      const documentId = response.data.id;
         console.log(`Document ${file.name} préparé avec succès, ID:`, documentId);
         
         processedDocuments.push({
@@ -776,25 +776,25 @@ async function submitDocument() {
         throw new Error(`Erreur lors de la préparation du document "${file.name}"`);
       }
     }
-    
-    // Formater la date de préparation
-    preparationDate.value = new Date().toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-    
-    // Passer à l'étape de confirmation
-    submissionStatus.value = 'success';
-    
+      
+      // Formater la date de préparation
+      preparationDate.value = new Date().toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      
+      // Passer à l'étape de confirmation
+      submissionStatus.value = 'success';
+      
     // Émettre l'événement documentPrepared pour tous les documents
-    emit('documentPrepared', {
+      emit('documentPrepared', {
       documents: processedDocuments,
       count: processedDocuments.length,
-      status: 'pending_signature'
-    });
+        status: 'pending_signature'
+      });
     
     console.log('Tous les documents ont été préparés avec succès');
     
@@ -847,16 +847,16 @@ async function saveAsDraft() {
       console.log('Position QR à envoyer pour le brouillon', file.name, ':', documentPosition.qr_position);
       
       // Créer les données pour ce document
-      const formData = new FormData();
+    const formData = new FormData();
       formData.append('document_file', file);
       formData.append('document_name', file.name);
-      
-      // Ajouter les informations de position du QR code avec conversion explicite en string
+    
+    // Ajouter les informations de position du QR code avec conversion explicite en string
       formData.append('qr_x_position', documentPosition.qr_position.x.toString());
       formData.append('qr_y_position', documentPosition.qr_position.y.toString());
       formData.append('qr_size', documentPosition.qr_position.size.toString());
-      
-      // Simplification de qr_pages qui est maintenant un CharField
+    
+    // Simplification de qr_pages qui est maintenant un CharField
       formData.append('qr_pages', documentPosition.qr_position.pages || 'all');
       formData.append('qr_positions', JSON.stringify(documentPosition.qr_position.positions || {}));
       formData.append('qr_mode', documentPosition.qr_position.mode || 'standard');
@@ -933,55 +933,55 @@ async function saveAsDraft() {
       } else {
         console.log('DEBUG - Aucune signature pour le document', i);
       }
-      
-      // Ajouter le statut
-      formData.append('status', 'draft');
-      
-      // Ajouter le nom de l'organisation
-      formData.append('organization_name', userInfo.organization.name);
-      
+    
+    // Ajouter le statut
+    formData.append('status', 'draft');
+    
+    // Ajouter le nom de l'organisation
+    formData.append('organization_name', userInfo.organization.name);
+    
       // Ajouter des métadonnées supplémentaires
-      const metadata = {
-        prepared_by: {
-          user_id: userInfo.id || '',
-          username: userInfo.username || '',
-          email: userInfo.email || '',
-          full_name: userInfo.fullName || '',
-        },
-        organization: {
-          id: userInfo.organization.id,
-          name: userInfo.organization.name || '',
-          serial_number: userInfo.organization.serial_number || '',
-        },
-        browser_info: navigator.userAgent,
+    const metadata = {
+      prepared_by: {
+        user_id: userInfo.id || '',
+        username: userInfo.username || '',
+        email: userInfo.email || '',
+        full_name: userInfo.fullName || '',
+      },
+      organization: {
+        id: userInfo.organization.id,
+        name: userInfo.organization.name || '',
+        serial_number: userInfo.organization.serial_number || '',
+      },
+      browser_info: navigator.userAgent,
         batch_info: {
           document_index: i + 1,
           total_documents: selectedFiles.value.length,
           batch_id: Date.now().toString()
         }
-      };
-      formData.append('metadata', JSON.stringify(metadata));
-      
-      // Configuration de la requête avec axios
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+    };
+    formData.append('metadata', JSON.stringify(metadata));
+    
+    // Configuration de la requête avec axios
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      };
+      }
+    };
       
       // Appel direct à l'API Django
       const apiUrl = 'https://192.168.4.131:8000/api/documents/qr-positions/';
-      
-      // Appel API avec timeout plus long pour les gros fichiers
-      const response = await axios.post(apiUrl, formData, {
-        ...config,
-        timeout: 30000 // 30 secondes
-      });
-      
-      // Traiter la réponse
-      if (response.status === 200 || response.status === 201) {
-        const documentId = response.data.id;
+    
+    // Appel API avec timeout plus long pour les gros fichiers
+    const response = await axios.post(apiUrl, formData, {
+      ...config,
+      timeout: 30000 // 30 secondes
+    });
+    
+    // Traiter la réponse
+    if (response.status === 200 || response.status === 201) {
+      const documentId = response.data.id;
         console.log(`Brouillon ${file.name} sauvegardé avec succès, ID:`, documentId);
         
         savedDocuments.push({
@@ -993,25 +993,25 @@ async function saveAsDraft() {
         throw new Error(`Erreur lors de la sauvegarde du brouillon "${file.name}"`);
       }
     }
-    
-    // Formater la date de préparation
-    preparationDate.value = new Date().toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-    
-    // Passer à l'étape de confirmation
-    submissionStatus.value = 'success';
-    
+      
+      // Formater la date de préparation
+      preparationDate.value = new Date().toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      
+      // Passer à l'étape de confirmation
+      submissionStatus.value = 'success';
+      
     // Émettre l'événement documentPrepared pour tous les documents
-    emit('documentPrepared', {
+      emit('documentPrepared', {
       documents: savedDocuments,
       count: savedDocuments.length,
-      status: 'draft'
-    });
+        status: 'draft'
+      });
     
     console.log('Tous les brouillons ont été sauvegardés avec succès');
     
@@ -1045,7 +1045,7 @@ onMounted(() => {
     documentPreviews.value.forEach(preview => {
       if (preview.url) {
         URL.revokeObjectURL(preview.url);
-      }
+    }
     });
   };
 });
