@@ -487,10 +487,10 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
         """
         user = request.user
         
-        # Vérifier que l'utilisateur a le rôle de signataire
-        if not user.is_signer and not user.is_admin and not user.is_superadmin:
+        # Vérifier que l'utilisateur a le rôle de signataire ou collaborateur
+        if not user.is_signer and not user.is_collaborator and not user.is_admin and not user.is_superadmin:
             return Response(
-                {"error": "Vous n'avez pas les droits de signataire"},
+                {"error": "Vous n'avez pas les droits de signataire ou collaborateur"},
                 status=status.HTTP_403_FORBIDDEN
             )
         

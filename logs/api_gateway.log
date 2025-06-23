@@ -15,3 +15,10 @@ INFO:     192.168.4.131:46148 - "OPTIONS /gateway/sign/ HTTP/1.1" 200 OK
 INFO:     192.168.4.131:46148 - "POST /gateway/sign/ HTTP/1.1" 200 OK
 INFO:     192.168.5.49:54382 - "POST /gateway/sign/ HTTP/1.1" 200 OK
 INFO:     192.168.4.131:52432 - "POST /gateway/sign/ HTTP/1.1" 200 OK
+INFO:     192.168.4.131:53292 - "OPTIONS /gateway/sign/ HTTP/1.1" 200 OK
+INFO:     192.168.4.131:53292 - "POST /gateway/sign/ HTTP/1.1" 200 OK
+INFO:     192.168.4.131:55738 - "POST /dh-exchange/ HTTP/1.1" 200 OK
+INFO:     192.168.4.131:52088 - "POST /dh-exchange/ HTTP/1.1" 200 OK
+INFO:     192.168.4.131:55322 - "POST /gateway/sign/ HTTP/1.1" 200 OK
+INFO:     192.168.4.131:45416 - "OPTIONS /gateway/sign/ HTTP/1.1" 200 OK
+INFO:     192.168.4.131:45416 - "POST /gateway/sign/ HTTP/1.1" 200 OK

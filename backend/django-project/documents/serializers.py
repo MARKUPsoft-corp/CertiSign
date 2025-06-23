@@ -69,22 +69,26 @@ class DocumentQRPositionSerializer(serializers.ModelSerializer):
         Validation personnalisée pour assurer que tous les champs nécessaires sont présents
         et correctement formatés.
         """
-        # Vérifier la présence du fichier
-        if not data.get('document_file') and self.context['request'].method == 'POST':
+        # Pour les mises à jour PATCH, permettre des validations partielles
+        is_update = self.instance is not None
+        request_method = self.context.get('request', {}).method if self.context.get('request') else 'POST'
+        
+        # Vérifier la présence du fichier seulement lors de la création
+        if not data.get('document_file') and request_method == 'POST' and not is_update:
             raise serializers.ValidationError({"document_file": "Le fichier du document est requis"})
             
-        # Vérifier la présence du nom
-        if not data.get('document_name'):
+        # Vérifier la présence du nom seulement lors de la création ou si explicitement fourni
+        if not data.get('document_name') and request_method == 'POST' and not is_update:
             raise serializers.ValidationError({"document_name": "Le nom du document est requis"})
             
-        # Vérifier les positions du QR code
-        if 'qr_x_position' not in data:
+        # Vérifier les positions du QR code seulement lors de la création
+        if 'qr_x_position' not in data and request_method == 'POST' and not is_update:
             raise serializers.ValidationError({"qr_x_position": "La position X du QR code est requise"})
             
-        if 'qr_y_position' not in data:
+        if 'qr_y_position' not in data and request_method == 'POST' and not is_update:
             raise serializers.ValidationError({"qr_y_position": "La position Y du QR code est requise"})
             
-        if 'qr_size' not in data:
+        if 'qr_size' not in data and request_method == 'POST' and not is_update:
             raise serializers.ValidationError({"qr_size": "La taille du QR code est requise"})
                 
         # Convertir les chaînes JSON pour qr_positions si nécessaire

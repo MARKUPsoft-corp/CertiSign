@@ -372,7 +372,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import AuthService from '@/services/AuthService';
 import axios from 'axios';
@@ -435,6 +435,20 @@ const signatureHistory = ref([
     status: 'signed'
   }
 ]);
+
+// Watcher pour rafraîchir les données quand la section active change
+watch(activeSection, (newSection) => {
+  console.log('Section active changée vers:', newSection);
+  
+  if (newSection === 'pending') {
+    fetchPendingDocuments();
+  } else if (newSection === 'signed') {
+    fetchSignedDocuments();
+  } else if (newSection === 'history') {
+    // L'historique est statique pour l'instant
+    console.log('Section historique activée');
+  }
+});
 
 // Computed
 const urgentDocuments = computed(() => {
@@ -881,15 +895,49 @@ async function submitSignature() {
       // Libérer l'URL objet
       window.URL.revokeObjectURL(url);
       
-      // Mettre à jour le statut
+      console.log('Document téléchargé, mise à jour du statut...');
+      
+      try {
+        // Mettre à jour le statut du document dans la base de données
+        await updateDocumentStatus(currentDocument.value.id, 'signed');
+        console.log('Statut du document mis à jour vers "signed"');
+        
+        // Déplacer le document de la liste "en attente" vers "signés"
+        const signedDoc = {
+          ...currentDocument.value,
+          status: 'signed',
+          signedAt: new Date().toISOString(),
+          signedBy: AuthService.getCurrentUser()?.username || 'Signataire'
+        };
+        
+        // Ajouter à la liste des documents signés
+        signedDocuments.value.unshift(signedDoc);
+        
+        // Retirer de la liste des documents en attente
+        pendingDocuments.value = pendingDocuments.value.filter(doc => doc.id !== currentDocument.value.id);
+        
+        console.log('Document déplacé vers la section signés');
+        
+        // Mettre à jour les statistiques
+        stats.value.thisWeek += 1;
+        stats.value.total += 1;
+        
+      } catch (statusUpdateError) {
+        console.error('Erreur lors de la mise à jour du statut:', statusUpdateError);
+        // Ne pas faire échouer toute l'opération si la mise à jour du statut échoue
+        signatureStatus.value = {
+          message: 'Document signé, mais erreur de synchronisation. Actualisez la page.',
+          icon: 'bi bi-exclamation-triangle',
+          class: 'warning'
+        };
+      }
+      
+      // Mettre à jour le statut d'affichage
       signatureStatus.value = {
         message: 'Document signé avec succès',
         icon: 'bi bi-check-circle',
         class: 'success'
       };
-      
-      // Mettre à jour les documents
-      await fetchPendingDocuments();
       
       // Fermer la popup après un délai
       setTimeout(() => {
@@ -1035,6 +1083,9 @@ onMounted(() => {
   fetchUserData();
   fetchDocuments();
   initStats();
+  
+  // Activer la section "pending" par défaut
+  activeSection.value = 'pending';
 });
 
 // Méthodes supplémentaires
@@ -1064,7 +1115,7 @@ async function fetchPendingDocuments() {
       } 
     };  
 
-    const response = await axios.get('https://192.168.4.131:8000/api/documents/signer/pending-documents/', config);
+    const response = await axios.get('https://192.168.4.131:8000/api/documents/qr-positions/pending_for_signer/', config);
     if (response.data) {
       pendingDocuments.value = response.data.pending_documents || [];
       
@@ -1078,6 +1129,105 @@ async function fetchPendingDocuments() {
   } catch (error) {
     console.error('Erreur lors de la récupération des documents:', error);
   }
+}
+
+// Fonction pour récupérer les documents signés
+async function fetchSignedDocuments() {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token d\'authentification manquant');
+      return;
+    }
+
+    // Récupérer l'ID de l'organisation actuelle
+    const currentUser = AuthService.getCurrentUser();
+    const organizationId = currentUser?.organization?.id;
+    
+    if (!organizationId) {
+      console.error('ID d\'organisation manquant');
+      return;
+    }
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      params: {
+        organization_id: organizationId,
+        status: 'signed'  // Filtrer sur les documents signés
+      } 
+    };  
+
+    const response = await axios.get('https://192.168.4.131:8000/api/documents/qr-positions/', config);
+    if (response.data && response.data.results) {
+      // Filtrer les documents signés pour ce signataire
+      const signedDocs = response.data.results.filter(doc => 
+        doc.status === 'signed' && 
+        doc.organization === organizationId
+      );
+      
+      signedDocuments.value = signedDocs.map(doc => ({
+        ...doc,
+        signedAt: doc.updated_at,
+        signedBy: currentUser?.username || 'Signataire'
+      }));
+      
+      console.log('Documents signés récupérés:', signedDocuments.value);
+    }
+  } catch (error) {
+    console.error('Erreur lors de la récupération des documents signés:', error);
+  }
+}
+
+// Fonction pour mettre à jour le statut d'un document
+async function updateDocumentStatus(documentId, newStatus) {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('Token d\'authentification manquant');
+    }
+
+    const currentUser = AuthService.getCurrentUser();
+    const organizationId = currentUser?.organization?.id;
+    
+    if (!organizationId) {
+      throw new Error('ID d\'organisation manquant');
+    }
+
+    // Utiliser FormData au lieu de JSON pour l'API Django
+    const formData = new FormData();
+    formData.append('status', newStatus);
+    
+    const response = await axios.patch(
+      `https://192.168.4.131:8000/api/documents/qr-positions/${documentId}/`,
+      formData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        },
+        params: {
+          organization_id: organizationId
+        }
+      }
+    );
+
+    console.log('Statut du document mis à jour:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du statut:', error);
+    throw error;
+  }
+}
+
+// Fonction pour récupérer tous les documents (en attente et signés)
+async function fetchDocuments() {
+  console.log('Récupération de tous les documents...');
+  await Promise.all([
+    fetchPendingDocuments(),
+    fetchSignedDocuments()
+  ]);
 }
 
 // Fonction pour récupérer les données de l'utilisateur
@@ -1099,21 +1249,11 @@ function fetchUserData() {
   }
 }
 
-// Fonction pour récupérer les documents
-function fetchDocuments() {
-  // Récupérer les documents en attente pour le signataire
-  fetchPendingDocuments();
-  // Vous pouvez ajouter d'autres fonctions de récupération de documents ici
-}
-
 // Fonction pour initialiser les statistiques
 function initStats() {
-  // Initialisation des statistiques (peut être remplacée par un appel API)
-  stats.value = {
-    thisWeek: 5,
-    total: 24,
-    avgTime: '2j'
-  };
+  // Les statistiques sont mises à jour automatiquement 
+  // via fetchPendingDocuments qui récupère les stats du backend
+  console.log('Initialisation des statistiques...');
 }
 </script>
 

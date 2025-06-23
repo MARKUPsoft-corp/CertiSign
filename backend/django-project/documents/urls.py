@@ -37,6 +37,6 @@ urlpatterns = [
     # QR Position specific endpoints
     path('collaborator/<str:user_id>/documents/', DocumentQRPositionViewSet.as_view({'get': 'by_collaborator'}), name='collaborator-documents'),
     
-    # Endpoints pour le signataire
-    path('signer/pending-documents/', DocumentQRPositionViewSet.as_view({'get': 'pending_for_signer'}), name='signer-pending-documents'),
+    # Endpoints pour le signataire - Utilisé via router automatiquement
+    # path('signer/pending-documents/', DocumentQRPositionViewSet.as_view({'get': 'pending_for_signer'}), name='signer-pending-documents'),
 ]

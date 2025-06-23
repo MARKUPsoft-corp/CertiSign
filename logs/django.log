@@ -97,3 +97,696 @@ Forbidden: /api/documents/signer/pending-documents/
 192.168.4.131 - - [23/Jun/2025 14:59:25] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -
 Forbidden: /api/documents/signer/pending-documents/
 192.168.4.131 - - [23/Jun/2025 14:59:25] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+192.168.4.131 - - [23/Jun/2025 15:09:27] "GET /admin/documents/documentqrposition/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:09:27] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:09:30] "GET /admin/documents/documentqrposition/915b5bb5-d465-4cde-9955-625ff66cbafe/change/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:09:30] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:09:30] "GET /media/signatures/images/signature_sDCGAHd.png HTTP/1.1" 200 -
+Forbidden: /api/documents/signer/pending-documents/
+192.168.5.49 - - [23/Jun/2025 15:13:56] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+Forbidden: /api/documents/signer/pending-documents/
+192.168.5.49 - - [23/Jun/2025 15:13:56] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+Forbidden: /api/documents/signer/pending-documents/
+192.168.4.131 - - [23/Jun/2025 15:13:56] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+Forbidden: /api/documents/signer/pending-documents/
+192.168.4.131 - - [23/Jun/2025 15:13:56] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+192.168.5.49 - - [23/Jun/2025 15:13:57] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 15:13:57] "OPTIONS /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 15:13:57] "OPTIONS /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 15:13:57] "OPTIONS /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1" 200 -
+Forbidden: /api/documents/signer/pending-documents/
+192.168.5.49 - - [23/Jun/2025 15:13:57] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+Forbidden: /api/documents/signer/pending-documents/
+192.168.5.49 - - [23/Jun/2025 15:13:57] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+192.168.5.49 - - [23/Jun/2025 15:13:57] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:13:58] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:13:58] "OPTIONS /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+Forbidden: /api/documents/signer/pending-documents/
+192.168.4.131 - - [23/Jun/2025 15:13:58] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+Forbidden: /api/documents/signer/pending-documents/
+192.168.4.131 - - [23/Jun/2025 15:13:58] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+192.168.4.131 - - [23/Jun/2025 15:13:58] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:15:18] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+Forbidden: /api/documents/signer/pending-documents/
+192.168.4.131 - - [23/Jun/2025 15:15:19] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+Forbidden: /api/documents/signer/pending-documents/
+192.168.4.131 - - [23/Jun/2025 15:15:19] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+192.168.4.131 - - [23/Jun/2025 15:15:19] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/views.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/views.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+Forbidden: /api/documents/signer/pending-documents/
+192.168.5.49 - - [23/Jun/2025 15:16:47] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+Forbidden: /api/documents/signer/pending-documents/
+192.168.5.49 - - [23/Jun/2025 15:16:48] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+Forbidden: /api/documents/signer/pending-documents/
+192.168.4.131 - - [23/Jun/2025 15:16:48] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+Forbidden: /api/documents/signer/pending-documents/
+192.168.4.131 - - [23/Jun/2025 15:16:48] "[31m[1mGET /api/documents/signer/pending-documents/?organization_id=1 HTTP/1.1[0m" 403 -
+192.168.5.49 - - [23/Jun/2025 15:16:48] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:16:48] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/urls.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG - Accès refusé pour MARKUPsafe avec rôle collaborator
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG - Accès refusé pour MARKUPsafe avec rôle collaborator
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG - Accès refusé pour MARKUPsafe avec rôle collaborator
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG - Accès refusé pour MARKUPsafe avec rôle collaborator
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+192.168.5.49 - - [23/Jun/2025 15:17:41] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 15:17:41] "OPTIONS /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 15:17:41] "OPTIONS /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+Forbidden: /api/documents/qr-positions/pending_for_signer/
+192.168.5.49 - - [23/Jun/2025 15:17:41] "[31m[1mGET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1[0m" 403 -
+Forbidden: /api/documents/qr-positions/pending_for_signer/
+192.168.5.49 - - [23/Jun/2025 15:17:41] "[31m[1mGET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1[0m" 403 -
+192.168.5.49 - - [23/Jun/2025 15:17:41] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:17:42] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:17:42] "OPTIONS /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:17:42] "OPTIONS /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+Forbidden: /api/documents/qr-positions/pending_for_signer/
+192.168.4.131 - - [23/Jun/2025 15:17:43] "[31m[1mGET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1[0m" 403 -
+Forbidden: /api/documents/qr-positions/pending_for_signer/
+192.168.4.131 - - [23/Jun/2025 15:17:43] "[31m[1mGET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1[0m" 403 -
+192.168.4.131 - - [23/Jun/2025 15:17:43] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+Forbidden: /api/documents/qr-positions/pending_for_signer/
+192.168.4.131 - - [23/Jun/2025 15:17:53] "[31m[1mGET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1[0m" 403 -
+192.168.4.131 - - [23/Jun/2025 15:18:40] "[32mGET /admin/users/customuser/3/ HTTP/1.1[0m" 302 -
+Forbidden: /api/documents/qr-positions/pending_for_signer/
+192.168.4.131 - - [23/Jun/2025 15:19:02] "[31m[1mGET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1[0m" 403 -
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/views.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG - Accès refusé pour MARKUPsafe avec rôle collaborator
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG - Accès refusé pour MARKUPsafe avec rôle collaborator
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG - Accès refusé pour MARKUPsafe avec rôle collaborator
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG - Accès refusé pour MARKUPsafe avec rôle collaborator
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG - Accès refusé pour MARKUPsafe avec rôle collaborator
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG - Accès refusé pour MARKUPsafe avec rôle collaborator
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:20:03.832064) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:20:03] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:20:22] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:20:23.302600) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:20:23] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:20:23] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:20:23.365629) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:20:23] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:20:42] "GET /api/documents/qr-positions/915b5bb5-d465-4cde-9955-625ff66cbafe/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:20:42] "[36mGET /media/signatures/images/signature_sDCGAHd.png HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 15:20:42] "[36mGET /media/documents/prepared/b7813175-8df3-484d-_DWAH8Eh.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT.pdf HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 15:20:43] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -
+Unsupported Media Type: /api/documents/qr-positions/915b5bb5-d465-4cde-9955-625ff66cbafe/
+192.168.4.131 - - [23/Jun/2025 15:20:43] "[31m[1mPATCH /api/documents/qr-positions/915b5bb5-d465-4cde-9955-625ff66cbafe/?organization_id=1 HTTP/1.1[0m" 415 -
+192.168.4.131 - - [23/Jun/2025 15:20:57] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:21:00.155895) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:21:00] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/urls.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/views.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:22:20.593316) while time zone support is active.
+  warnings.warn(
+192.168.5.49 - - [23/Jun/2025 15:22:20] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:22:20.773628) while time zone support is active.
+  warnings.warn(
+192.168.5.49 - - [23/Jun/2025 15:22:20] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 15:22:20] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:22:20.844539) while time zone support is active.
+  warnings.warn(
+192.168.5.49 - - [23/Jun/2025 15:22:20] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:22:20.865246) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:22:20.889192) while time zone support is active.
+  warnings.warn(
+192.168.5.49 - - [23/Jun/2025 15:22:20] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 15:22:20] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:22:20] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:22:20] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:22:20] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:22:21.008570) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:22:21] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:22:21.022942) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:22:21.035328) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:22:21] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:22:21] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/views.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+DEBUG pending_for_signer - User: MARKUPsafe (Collaborateur)
+DEBUG pending_for_signer - User role: collaborator
+DEBUG pending_for_signer - User.is_signer: False
+DEBUG pending_for_signer - User.is_admin: False
+DEBUG pending_for_signer - User.is_superadmin: False
+DEBUG pending_for_signer - User.organization: MINFI
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+Unsupported Media Type: /api/documents/qr-positions/915b5bb5-d465-4cde-9955-625ff66cbafe/
+192.168.4.131 - - [23/Jun/2025 15:23:30] "[31m[1mPATCH /api/documents/qr-positions/915b5bb5-d465-4cde-9955-625ff66cbafe/?organization_id=1 HTTP/1.1[0m" 415 -
+Bad Request: /api/documents/qr-positions/915b5bb5-d465-4cde-9955-625ff66cbafe/
+192.168.4.131 - - [23/Jun/2025 15:23:40] "[31m[1mPATCH /api/documents/qr-positions/915b5bb5-d465-4cde-9955-625ff66cbafe/?organization_id=1 HTTP/1.1[0m" 400 -
+Bad Request: /api/documents/qr-positions/525ee248-dccd-4ab0-8947-b6698d8cf59a/
+192.168.4.131 - - [23/Jun/2025 15:24:26] "[31m[1mPATCH /api/documents/qr-positions/525ee248-dccd-4ab0-8947-b6698d8cf59a/?organization_id=1 HTTP/1.1[0m" 400 -
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/serializers.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/serializers.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+192.168.4.131 - - [23/Jun/2025 15:25:07] "PATCH /api/documents/qr-positions/525ee248-dccd-4ab0-8947-b6698d8cf59a/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:25:34] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:25:34] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:25:34.688342) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:25:34] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:25:34.718891) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:25:34] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:25:36] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:25:45] "GET /media/documents/prepared/acte_K8ST5e8.pdf?organization_id=1 HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:25:57.136562) while time zone support is active.
+  warnings.warn(
+192.168.5.49 - - [23/Jun/2025 15:25:57] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:25:57.241637) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:25:57.294918) while time zone support is active.
+  warnings.warn(
+192.168.5.49 - - [23/Jun/2025 15:25:57] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:25:57.309593) while time zone support is active.
+  warnings.warn(
+192.168.5.49 - - [23/Jun/2025 15:25:57] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 15:25:57] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 15:25:57] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 15:25:57] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:26:00] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:26:00.496058) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:26:00.501526) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:26:00] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:26:00] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:26:00] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:26:06] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:26:32] "GET /admin/documents/documentsignature/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:26:32] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:26:32] "GET /static/admin/js/filters.js HTTP/1.1" 200 -
+Not Found: /favicon.ico
+192.168.4.131 - - [23/Jun/2025 15:26:32] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+192.168.4.131 - - [23/Jun/2025 15:26:53] "[32mPOST /admin/documents/documentsignature/ HTTP/1.1[0m" 302 -
+192.168.4.131 - - [23/Jun/2025 15:26:53] "GET /admin/documents/documentsignature/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:26:53] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:26:53] "GET /static/admin/img/icon-alert.svg HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:01] "POST /admin/documents/documentsignature/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:04] "[32mPOST /admin/documents/documentsignature/ HTTP/1.1[0m" 302 -
+192.168.4.131 - - [23/Jun/2025 15:27:04] "GET /admin/documents/documentsignature/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:04] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:06] "GET /admin/documents/documentqrposition/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:06] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:22] "POST /admin/documents/documentqrposition/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:23] "[32mPOST /admin/documents/documentqrposition/ HTTP/1.1[0m" 302 -
+192.168.4.131 - - [23/Jun/2025 15:27:23] "GET /admin/documents/documentqrposition/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:24] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:26] "GET /admin/users/customuser/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:27] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:29] "GET /admin/users/customuser/3/change/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:29] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:37] "[32mPOST /admin/users/customuser/3/change/ HTTP/1.1[0m" 302 -
+192.168.4.131 - - [23/Jun/2025 15:27:37] "GET /admin/users/customuser/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:37] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+Unauthorized: /api/users/activity-log/
+192.168.4.131 - - [23/Jun/2025 15:27:41] "[31m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 401 -
+192.168.4.131 - - [23/Jun/2025 15:27:42] "GET /api/users/organizations/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:54] "POST /api/users/auth/with-organization/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:55] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:27:55] "OPTIONS /api/documents/qr-positions/by_collaborator/?organization_name=MINFI HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-16 15:27:55.714659) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-05-24 15:27:55.719175) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:27:55] "GET /api/documents/qr-positions/by_collaborator/?organization_name=MINFI HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:29:40] "OPTIONS /api/documents/qr-positions/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:29:40] "[35m[1mPOST /api/documents/qr-positions/ HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 15:29:40] "[35m[1mPOST /api/documents/qr-positions/ HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 15:29:41] "[35m[1mPOST /api/documents/qr-positions/ HTTP/1.1[0m" 201 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-16 15:29:41.130856) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-05-24 15:29:41.133972) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:29:41] "GET /api/documents/qr-positions/by_collaborator/?organization_name=MINFI HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:03] "GET /admin/users/customuser/3/change/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:03] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:10] "[32mPOST /admin/users/customuser/3/change/ HTTP/1.1[0m" 302 -
+192.168.4.131 - - [23/Jun/2025 15:30:10] "GET /admin/users/customuser/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:11] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+Unauthorized: /api/users/activity-log/
+192.168.4.131 - - [23/Jun/2025 15:30:16] "[31m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 401 -
+192.168.4.131 - - [23/Jun/2025 15:30:16] "GET /api/users/organizations/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:27] "POST /api/users/auth/with-organization/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:27] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:30:28.132095) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:30:28] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:28] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:30:28.181567) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:30:28] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:42] "OPTIONS /api/documents/qr-positions/4d684649-64a4-4368-984f-1b8a36f45aaa/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:42] "GET /api/documents/qr-positions/4d684649-64a4-4368-984f-1b8a36f45aaa/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:42] "OPTIONS /media/signatures/images/signature_gQawBRS.png HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:42] "GET /media/signatures/images/signature_gQawBRS.png HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:42] "OPTIONS /media/documents/prepared/b7813175-8df3-484d-_hOuHbSe.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT.pdf HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:42] "GET /media/documents/prepared/b7813175-8df3-484d-_hOuHbSe.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT.pdf HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:43] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 15:30:43] "PATCH /api/documents/qr-positions/4d684649-64a4-4368-984f-1b8a36f45aaa/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:30:51] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:30:58.135387) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:30:58] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:31:01] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:31:12] "GET /media/documents/prepared/b7813175-8df3-484d-_hOuHbSe.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT.pdf?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:31:17] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:31:18.220498) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:31:18] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:31:18.240518) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:31:18] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:31:18] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:31:43] "OPTIONS /api/documents/qr-positions/c3b3fe08-f464-47f9-9c14-3ade2d39b1ba/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:31:43] "GET /api/documents/qr-positions/c3b3fe08-f464-47f9-9c14-3ade2d39b1ba/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:31:43] "OPTIONS /media/signatures/images/signature_YNlyR7r.png HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:31:43] "GET /media/signatures/images/signature_YNlyR7r.png HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:31:43] "OPTIONS /media/documents/prepared/20028.pdf HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:31:43] "GET /media/documents/prepared/20028.pdf HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:31:43] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 15:31:43] "PATCH /api/documents/qr-positions/c3b3fe08-f464-47f9-9c14-3ade2d39b1ba/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:31:54] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:32:03.162230) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:32:03] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/views.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+Données reçues: <QueryDict: {'document_name': ['acte.pdf'], 'qr_x_position': ['81.76470588235294'], 'qr_y_position': ['84.06175626994879'], 'qr_size': ['medium'], 'qr_pages': ['1'], 'qr_positions': ['{"1":{"x":81.76470588235294,"y":84.06175626994879}}'], 'qr_mode': ['standard'], 'signature_positions': ['{"1":{"x":20.588235294117645,"y":85.72446592063632}}'], 'signature_size': ['50'], 'status': ['pending_signature'], 'organization_name': ['MINFI'], 'metadata': ['{"prepared_by":{"user_id":3,"username":"MARKUPsafe","email":"emmanuelyakam@gmail.com","full_name":""},"organization":{"id":1,"name":"MINFI","serial_number":""},"browser_info":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0","batch_info":{"document_index":1,"total_documents":3,"batch_id":"1750692580043"}}'], 'document_file': [<InMemoryUploadedFile: acte.pdf (application/pdf)>], 'signature_image': [<InMemoryUploadedFile: signature.png (image/png)>]}>
+Clés et types:
+  - document_name: <class 'str'>
+  - qr_x_position: <class 'str'>
+    Valeur: 81.76470588235294...
+  - qr_y_position: <class 'str'>
+    Valeur: 84.06175626994879...
+  - qr_size: <class 'str'>
+    Valeur: medium...
+  - qr_pages: <class 'str'>
+    Valeur: 1...
+  - qr_positions: <class 'str'>
+    Valeur: {"1":{"x":81.76470588235294,"y":84.06175626994879}}...
+  - qr_mode: <class 'str'>
+  - signature_positions: <class 'str'>
+    Valeur: {"1":{"x":20.588235294117645,"y":85.72446592063632}}...
+  - signature_size: <class 'str'>
+    Valeur: 50...
+  - status: <class 'str'>
+  - organization_name: <class 'str'>
+    Valeur: MINFI...
+  - metadata: <class 'str'>
+    Valeur: {"prepared_by":{"user_id":3,"username":"MARKUPsafe","email":"emmanuelyakam@gmail.com","full_name":""...
+  - document_file: <class 'django.core.files.uploadedfile.InMemoryUploadedFile'>
+  - signature_image: <class 'django.core.files.uploadedfile.InMemoryUploadedFile'>
+Données reçues: <QueryDict: {'document_name': ['b7813175-8df3-484d-a554-4e2470eb5958.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT.pdf'], 'qr_x_position': ['18.067226890756302'], 'qr_y_position': ['78.12351580187148'], 'qr_size': ['medium'], 'qr_pages': ['1'], 'qr_positions': ['{"1":{"x":18.067226890756302,"y":78.12351580187148}}'], 'qr_mode': ['standard'], 'signature_positions': ['{"1":{"x":67.31092436974791,"y":79.19239941232277}}'], 'signature_size': ['50'], 'status': ['pending_signature'], 'organization_name': ['MINFI'], 'metadata': ['{"prepared_by":{"user_id":3,"username":"MARKUPsafe","email":"emmanuelyakam@gmail.com","full_name":""},"organization":{"id":1,"name":"MINFI","serial_number":""},"browser_info":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0","batch_info":{"document_index":2,"total_documents":3,"batch_id":"1750692580546"}}'], 'document_file': [<InMemoryUploadedFile: b7813175-8df3-484d-a554-4e2470eb5958.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT.pdf (application/pdf)>], 'signature_image': [<InMemoryUploadedFile: signature.png (image/png)>]}>
+Clés et types:
+  - document_name: <class 'str'>
+  - qr_x_position: <class 'str'>
+    Valeur: 18.067226890756302...
+  - qr_y_position: <class 'str'>
+    Valeur: 78.12351580187148...
+  - qr_size: <class 'str'>
+    Valeur: medium...
+  - qr_pages: <class 'str'>
+    Valeur: 1...
+  - qr_positions: <class 'str'>
+    Valeur: {"1":{"x":18.067226890756302,"y":78.12351580187148}}...
+  - qr_mode: <class 'str'>
+  - signature_positions: <class 'str'>
+    Valeur: {"1":{"x":67.31092436974791,"y":79.19239941232277}}...
+  - signature_size: <class 'str'>
+    Valeur: 50...
+  - status: <class 'str'>
+  - organization_name: <class 'str'>
+    Valeur: MINFI...
+  - metadata: <class 'str'>
+    Valeur: {"prepared_by":{"user_id":3,"username":"MARKUPsafe","email":"emmanuelyakam@gmail.com","full_name":""...
+  - document_file: <class 'django.core.files.uploadedfile.InMemoryUploadedFile'>
+  - signature_image: <class 'django.core.files.uploadedfile.InMemoryUploadedFile'>
+Données reçues: <QueryDict: {'document_name': ['20028.pdf'], 'qr_x_position': ['21.764705882352942'], 'qr_y_position': ['29.66745879474558'], 'qr_size': ['medium'], 'qr_pages': ['1'], 'qr_positions': ['{"1":{"x":21.764705882352942,"y":29.66745879474558}}'], 'qr_mode': ['standard'], 'signature_positions': ['{"1":{"x":64.45378151260505,"y":82.87410781389177}}'], 'signature_size': ['50'], 'status': ['pending_signature'], 'organization_name': ['MINFI'], 'metadata': ['{"prepared_by":{"user_id":3,"username":"MARKUPsafe","email":"emmanuelyakam@gmail.com","full_name":""},"organization":{"id":1,"name":"MINFI","serial_number":""},"browser_info":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0","batch_info":{"document_index":3,"total_documents":3,"batch_id":"1750692580956"}}'], 'document_file': [<InMemoryUploadedFile: 20028.pdf (application/pdf)>], 'signature_image': [<InMemoryUploadedFile: signature.png (image/png)>]}>
+Clés et types:
+  - document_name: <class 'str'>
+  - qr_x_position: <class 'str'>
+    Valeur: 21.764705882352942...
+  - qr_y_position: <class 'str'>
+    Valeur: 29.66745879474558...
+  - qr_size: <class 'str'>
+    Valeur: medium...
+  - qr_pages: <class 'str'>
+    Valeur: 1...
+  - qr_positions: <class 'str'>
+    Valeur: {"1":{"x":21.764705882352942,"y":29.66745879474558}}...
+  - qr_mode: <class 'str'>
+  - signature_positions: <class 'str'>
+    Valeur: {"1":{"x":64.45378151260505,"y":82.87410781389177}}...
+  - signature_size: <class 'str'>
+    Valeur: 50...
+  - status: <class 'str'>
+  - organization_name: <class 'str'>
+    Valeur: MINFI...
+  - metadata: <class 'str'>
+    Valeur: {"prepared_by":{"user_id":3,"username":"MARKUPsafe","email":"emmanuelyakam@gmail.com","full_name":""...
+  - document_file: <class 'django.core.files.uploadedfile.InMemoryUploadedFile'>
+  - signature_image: <class 'django.core.files.uploadedfile.InMemoryUploadedFile'>
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+192.168.4.131 - - [23/Jun/2025 15:32:24] "GET /admin/users/customuser/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:32:24] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:32:25] "GET /admin/documents/documentqrposition/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:32:26] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:32:31] "GET /admin/documents/documentsignature/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:32:31] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:32:43] "GET /admin/documents/documentqrposition/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:32:43] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:35:24] "GET /admin/documents/documentsignature/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:35:24] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:35:27] "GET /admin/documents/documentsignature/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:35:27] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/signature_views.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/signature_views.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/signature_views.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+192.168.5.49 - - [23/Jun/2025 15:42:51] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:42:51.564035) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:42:51.582585) while time zone support is active.
+  warnings.warn(
+192.168.5.49 - - [23/Jun/2025 15:42:51] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 15:42:51] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 15:42:51] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:42:52] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/serializers.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://192.168.4.131:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:42:54.452609) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:42:54] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.updated_at received a naive datetime (2025-06-16 15:42:54.486449) while time zone support is active.
+  warnings.warn(
+192.168.4.131 - - [23/Jun/2025 15:42:54] "GET /api/documents/qr-positions/pending_for_signer/?organization_id=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 15:42:54] "GET /api/documents/qr-positions/?organization_id=1&status=signed HTTP/1.1" 200 -
