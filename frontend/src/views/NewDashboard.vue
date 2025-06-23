@@ -554,6 +554,8 @@ import SignWithTemplateMultiple from '@/views/SignWithTemplateMultiple.vue'; // 
 import SignSimple from '@/views/SignSimple.vue'; // Importer le composant de signature rapide
 // VerifyDocument a été supprimé
 import AuthService from '@/services/AuthService';
+import AnalyticsService from '@/services/AnalyticsService';
+import DocumentService from '@/services/DocumentService';
 import { initScrollAnimations } from '@/assets/js/scrollAnimations.js';
 import QrPositioner from '@/components/QrPositioner.vue';
 
@@ -568,6 +570,20 @@ const activityChart = ref(null);
 const docTypesChart = ref(null);
 const activityChartInstance = ref(null);
 const docTypesChartInstance = ref(null);
+
+// Données pour les graphiques
+const chartData = ref({
+  activity: {
+    signatures: [],
+    verifications: [],
+    labels: []
+  },
+  documentTypes: {
+    labels: [],
+    data: [],
+    colors: []
+  }
+});
 
 // Variables pour les templates
 const templates = ref([]);
@@ -700,36 +716,106 @@ function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value;
 }
 
-// Données statistiques
+// Données statistiques (initialisées avec des valeurs par défaut)
 const stats = ref({
-  signed: 12,
-  verified: 8,
-  pending: 3,
-  shared: 5
+  signed: 0,
+  verified: 0,
+  pending: 0,
+  shared: 0
 });
 
-// Activité récente
-const recentActivity = ref([{
-  type: 'signed',
-  icon: 'bi bi-file-earmark-check',
-  title: 'Document signé',
-  description: 'Vous avez signé <strong>Contrat_A12345.pdf</strong>',
-  time: 'Il y a 2 heures'
-},
-{
-  type: 'shared',
-  icon: 'bi bi-share',
-  title: 'Document partagé',
-  description: 'Vous avez partagé <strong>Rapport_2023.pdf</strong> avec Jean Dupont',
-  time: 'Hier, 14:30'
-},
-{
-  type: 'verified',
-  icon: 'bi bi-shield-check',
-  title: 'Document vérifié',
-  description: 'Vous avez vérifié <strong>Facture_B789.pdf</strong>',
-  time: '22 juin 2023'
-}]);
+// Activité récente (données dynamiques)
+const recentActivity = ref([]);
+
+// Fonction pour charger les activités récentes
+const loadRecentActivities = async () => {
+  try {
+    console.log('Chargement des activités récentes...');
+    const activitiesResponse = await DocumentService.getMyActivities();
+    const activities = activitiesResponse.data || [];
+    
+    // Prendre les 3 dernières activités et les transformer
+    const latestActivities = activities
+      .slice(0, 3)
+      .map(activity => ({
+        type: activity.activity_type,
+        icon: getActivityIcon(activity.activity_type),
+        title: getActivityTitle(activity.activity_type),
+        description: activity.description || `Activité de type ${activity.activity_type}`,
+        time: formatRelativeTime(activity.timestamp || activity.created_at)
+      }));
+    
+    recentActivity.value = latestActivities;
+    console.log('Activités récentes chargées:', latestActivities);
+  } catch (error) {
+    console.error('Erreur lors du chargement des activités récentes:', error);
+    // En cas d'erreur, garder les données par défaut (tableau vide)
+  }
+};
+
+// Fonction utilitaire pour obtenir l'icône d'une activité
+const getActivityIcon = (activityType) => {
+  const iconMap = {
+    'signed': 'bi bi-file-earmark-check',
+    'signature_simple': 'bi bi-pen',
+    'signature_multiple': 'bi bi-files',
+    'signature_with_template': 'bi bi-file-earmark-medical',
+    'template_created': 'bi bi-file-earmark-plus',
+    'template_used': 'bi bi-file-earmark-check',
+    'viewed': 'bi bi-eye',
+    'original_viewed': 'bi bi-file-earmark',
+    'downloaded': 'bi bi-download',
+    'signed_downloaded': 'bi bi-file-earmark-arrow-down',
+    'original_downloaded': 'bi bi-file-arrow-down',
+    'created': 'bi bi-file-plus',
+    'modified': 'bi bi-file-earmark-text'
+  };
+  return iconMap[activityType] || 'bi bi-file-earmark';
+};
+
+// Fonction utilitaire pour obtenir le titre d'une activité
+const getActivityTitle = (activityType) => {
+  const titleMap = {
+    'signed': 'Document signé',
+    'signature_simple': 'Signature simple',
+    'signature_multiple': 'Signature multiple',
+    'signature_with_template': 'Signature avec template',
+    'template_created': 'Template créé',
+    'template_used': 'Template utilisé',
+    'viewed': 'Document consulté',
+    'original_viewed': 'Document original consulté',
+    'downloaded': 'Document téléchargé',
+    'signed_downloaded': 'Document signé téléchargé',
+    'original_downloaded': 'Document original téléchargé',
+    'created': 'Document créé',
+    'modified': 'Document modifié'
+  };
+  return titleMap[activityType] || 'Activité';
+};
+
+// Fonction utilitaire pour formater le temps relatif
+const formatRelativeTime = (timestamp) => {
+  const now = new Date();
+  const activityDate = new Date(timestamp);
+  const diffMs = now - activityDate;
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  
+  if (diffMinutes < 60) {
+    return `Il y a ${diffMinutes} min`;
+  } else if (diffHours < 24) {
+    return `Il y a ${diffHours} h`;
+  } else if (diffDays < 7) {
+    return `Il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`;
+  } else {
+    return activityDate.toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  }
+};
 
 // Positionnement aléatoire des particules
 const particlePositions = Array.from({ length: 20 }, () => ({
@@ -800,32 +886,70 @@ const logout = async () => {
   }
 };
 
-// Initialisation au chargement
-onMounted(async () => {
-  // Initialiser les animations
-  initScrollAnimations();
-  
-  document.title = 'Tableau de bord - Doc@uthANTIC';
-  
-  // Charger les templates depuis l'API
-  await loadTemplates();
-  
+// Fonction pour charger les données des graphiques
+const loadChartData = async () => {
+  try {
+    console.log('Chargement des données pour les graphiques...');
+    
+    // Charger les données d'activité et de types de documents en parallèle
+    const [activityData, documentTypeData] = await Promise.all([
+      AnalyticsService.getActivityAnalytics(),
+      AnalyticsService.getDocumentTypeAnalytics()
+    ]);
+    
+    console.log('Données d\'activité reçues:', activityData);
+    console.log('Données de types de documents reçues:', documentTypeData);
+    
+    // Mettre à jour les données
+    chartData.value.activity = activityData;
+    chartData.value.documentTypes = documentTypeData;
+    
+    // Réinitialiser les graphiques avec les nouvelles données
+    await initCharts();
+    
+  } catch (error) {
+    console.error('Erreur lors du chargement des données des graphiques:', error);
+    // En cas d'erreur, initialiser avec des données par défaut
+    await initCharts();
+  }
+};
+
 // Fonction pour initialiser les graphiques
 const initCharts = async () => {
   try {
     const { Chart, registerables } = await import('chart.js');
     Chart.register(...registerables);
 
-    // Graphique d'activité
+    // Détruire les graphiques existants s'ils existent
+    if (activityChartInstance.value) {
+      activityChartInstance.value.destroy();
+    }
+    if (docTypesChartInstance.value) {
+      docTypesChartInstance.value.destroy();
+    }
+
+    // Graphique d'activité avec vraies données
     if (activityChart.value) {
+      const activityLabels = chartData.value.activity.labels.length > 0 
+        ? chartData.value.activity.labels 
+        : ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil'];
+      
+      const signaturesData = chartData.value.activity.monthlySignatures.length > 0 
+        ? chartData.value.activity.monthlySignatures 
+        : [0, 0, 0, 0, 0, 0, 0];
+      
+      const verificationsData = chartData.value.activity.monthlyVerifications.length > 0 
+        ? chartData.value.activity.monthlyVerifications 
+        : [0, 0, 0, 0, 0, 0, 0];
+
       activityChartInstance.value = new Chart(activityChart.value.getContext('2d'), {
         type: 'line',
         data: {
-          labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil'],
+          labels: activityLabels,
           datasets: [
             {
               label: 'Signatures',
-              data: [3, 5, 8, 6, 9, 12, 7],
+              data: signaturesData,
               borderColor: '#3a86ff',
               backgroundColor: 'rgba(58, 134, 255, 0.1)',
               tension: 0.3,
@@ -833,7 +957,7 @@ const initCharts = async () => {
             },
             {
               label: 'Vérifications',
-              data: [2, 4, 5, 7, 6, 8, 5],
+              data: verificationsData,
               borderColor: '#4cb58e',
               backgroundColor: 'rgba(76, 181, 142, 0.1)',
               tension: 0.3,
@@ -859,7 +983,8 @@ const initCharts = async () => {
               ticks: {
                 font: {
                   size: 10
-                }
+                },
+                stepSize: 1 // Pour afficher seulement les entiers
               }
             },
             x: {
@@ -877,21 +1002,27 @@ const initCharts = async () => {
       });
     }
 
-    // Graphique des types de documents
+    // Graphique des types de documents avec vraies données
     if (docTypesChart.value) {
+      const typeLabels = chartData.value.documentTypes.labels.length > 0 
+        ? chartData.value.documentTypes.labels 
+        : ['PDF'];
+      
+      const typeData = chartData.value.documentTypes.data.length > 0 
+        ? chartData.value.documentTypes.data 
+        : [100];
+      
+      const typeColors = chartData.value.documentTypes.colors.length > 0 
+        ? chartData.value.documentTypes.colors 
+        : ['#3a86ff'];
+
       docTypesChartInstance.value = new Chart(docTypesChart.value.getContext('2d'), {
         type: 'doughnut',
         data: {
-          labels: ['PDF', 'Word', 'Excel', 'Images', 'Autres'],
+          labels: typeLabels,
           datasets: [{
-            data: [65, 15, 10, 5, 5],
-            backgroundColor: [
-              '#3a86ff',
-              '#4cb58e',
-              '#ff6b6b',
-              '#ffd166',
-              '#9d8df1'
-            ],
+            data: typeData,
+            backgroundColor: typeColors,
             borderWidth: 0
           }]
         },
@@ -918,6 +1049,33 @@ const initCharts = async () => {
     console.error('Erreur lors de l\'initialisation des graphiques:', error);
   }
 };
+
+// Fonction pour charger les statistiques
+const loadStatistics = async () => {
+  try {
+    console.log('Chargement des statistiques...');
+    const generalStats = await AnalyticsService.getGeneralStats();
+    console.log('Statistiques reçues:', generalStats);
+    
+    // Mettre à jour les statistiques
+    stats.value = {
+      signed: generalStats.signedDocuments,
+      verified: generalStats.totalVerifications,
+      pending: generalStats.pendingDocuments,
+      shared: generalStats.totalDownloads
+    };
+  } catch (error) {
+    console.error('Erreur lors du chargement des statistiques:', error);
+    // En cas d'erreur, garder les valeurs par défaut
+  }
+};
+
+// Initialisation au chargement
+onMounted(async () => {
+  // Initialiser les animations
+  initScrollAnimations();
+  
+  document.title = 'Tableau de bord - Doc@uthANTIC';
   
   // Vérifier si l'utilisateur est authentifié
   if (AuthService.isAuthenticated()) {
@@ -933,6 +1091,14 @@ const initCharts = async () => {
       } catch (error) {
         console.error('Erreur lors de l\'enregistrement de l\'activité:', error);
       }
+      
+      // Charger toutes les données en parallèle
+      await Promise.all([
+        loadTemplates(),
+        loadChartData(),
+        loadStatistics(),
+        loadRecentActivities()
+      ]);
     } else {
       // Rediriger vers la page de connexion si le token n'est pas valide
       router.push('/login');
@@ -941,9 +1107,6 @@ const initCharts = async () => {
     // Rediriger vers la page de connexion si l'utilisateur n'est pas authentifié
     router.push('/login');
   }
-  
-  // Initialiser les graphiques
-  initCharts();
 });
 
 // Observer les changements d'authentification
