@@ -3657,3 +3657,5 @@ INFO:django_api:Données de signature stockées avec succès pour le document 0b
 INFO:main:Données de signature stockées avec succès pour le document 0b859009-d8f4-4144-8895-6ecd88a9aeed
 INFO:main:Signature terminée en 0.93 secondes
 INFO:     192.168.4.131:58656 - "POST /sign HTTP/1.1" 200 OK
+INFO:main:Fichier temporaire supprimé: /tmp/acte_signed_20250623081849.pdf
+INFO:main:Fichier temporaire supprimé: /tmp/b7813175-8df3-484d-a554-4e2470eb5958.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT_signed_20250623081849.pdf
