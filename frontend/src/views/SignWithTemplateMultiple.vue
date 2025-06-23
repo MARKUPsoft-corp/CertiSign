@@ -514,6 +514,16 @@ async function loadTemplateDetails(templateId) {
     };
     
     console.log('Paramètres du template configurés:', templateSettings.value);
+    
+    // Télécharger l'image de signature si c'est une URL
+    if (templateSettings.value.signature && 
+        templateSettings.value.signature.image && 
+        typeof templateSettings.value.signature.image === 'string' && 
+        templateSettings.value.signature.image.startsWith('https')) {
+      
+      console.log('Image de signature est une URL, téléchargement en cours...');
+      await downloadSignatureImage(templateSettings.value.signature.image);
+    }
   } catch (error) {
     console.error('Erreur lors du chargement des détails du template:', error);
   }
@@ -791,6 +801,14 @@ async function startSigningProcess() {
       if (templateSettings.value.signature) {
         let signatureImage = templateSettings.value.signature.image;
         
+        console.log('DEBUG SIGNATURE IMAGE - État initial:', {
+          'image_exists': !!signatureImage,
+          'image_type': typeof signatureImage,
+          'image_length': signatureImage?.length || 0,
+          'image_starts_with_data': signatureImage?.startsWith('data:image'),
+          'image_preview': signatureImage?.substring(0, 100) + '...'
+        });
+        
         // S'assurer que l'image est au bon format
         if (signatureImage && !signatureImage.startsWith('data:image')) {
           console.warn('Format d\'image incorrect, tentative de correction');
@@ -799,26 +817,32 @@ async function startSigningProcess() {
             imageType = 'jpeg';
           }
           signatureImage = `data:image/${imageType};base64,${signatureImage}`;
+          console.log('Image corrigée:', signatureImage.substring(0, 100) + '...');
         }
         
         // Convertir les positions de signature en format attendu par le microservice
         let signaturePositions = [];
+        console.log('DEBUG SIGNATURE POSITIONS - Positions brutes:', templateSettings.value.signature.positions);
+        
         if (templateSettings.value.signature.positions) {
           if (typeof templateSettings.value.signature.positions === 'object' && 
               !Array.isArray(templateSettings.value.signature.positions)) {
             
             console.log('Conversion des positions de signature du format objet au format tableau');
             Object.entries(templateSettings.value.signature.positions).forEach(([pageNum, position]) => {
-              signaturePositions.push({
+              const convertedPosition = {
                 page: parseInt(pageNum),
                 x: position.x,
                 y: position.y,
                 width: 20,
                 height: 10
-              });
+              };
+              signaturePositions.push(convertedPosition);
+              console.log(`Position signature page ${pageNum}:`, convertedPosition);
             });
           } else if (Array.isArray(templateSettings.value.signature.positions)) {
             signaturePositions = templateSettings.value.signature.positions;
+            console.log('Positions signature déjà en format tableau:', signaturePositions);
           }
         }
         
@@ -827,10 +851,19 @@ async function startSigningProcess() {
           signature_image: signatureImage
         };
         
+        console.log('DEBUG SIGNATURE FINAL - Données finales:', {
+          'positions_count': userMetadata.signature_position.positions?.length || 0,
+          'image_disponible': !!userMetadata.signature_position.signature_image,
+          'image_final_format': userMetadata.signature_position.signature_image?.startsWith('data:image'),
+          'positions_detail': userMetadata.signature_position.positions
+        });
+        
         console.log('Données de signature préparées pour le document:', file.name, {
           'positions_count': userMetadata.signature_position.positions?.length || 0,
           'image_disponible': !!userMetadata.signature_position.signature_image
         });
+      } else {
+        console.warn('Aucune signature trouvée dans templateSettings:', templateSettings.value);
       }
       
       // Créer un FormData pour l'envoi au microservice
@@ -938,6 +971,42 @@ function closeSignature() {
   emit('close');
 }
 
+// Fonction pour télécharger l'image de signature et la convertir en base64
+async function downloadSignatureImage(imageUrl) {
+  try {
+    console.log('Téléchargement de l\'image depuis:', imageUrl);
+    
+    // Récupérer l'image
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      throw new Error(`Erreur lors du téléchargement de l'image: ${response.status}`);
+    }
+    
+    // Convertir en blob
+    const blob = await response.blob();
+    
+    // Créer un FileReader pour convertir le blob en base64
+    const reader = new FileReader();
+    reader.onloadend = function() {
+      // Le résultat est une chaîne base64
+      const base64data = reader.result;
+      console.log('Image convertie en base64:', base64data.substring(0, 50) + '...');
+      
+      // Mettre à jour l'image de signature dans les paramètres du template
+      if (templateSettings.value.signature) {
+        templateSettings.value.signature.image = base64data;
+        console.log('Image de signature mise à jour avec les données base64');
+      }
+    };
+    
+    // Déclencher la lecture du blob en base64
+    reader.readAsDataURL(blob);
+  } catch (error) {
+    console.error('Erreur lors du téléchargement de l\'image de signature:', error);
+  }
+}
+
+// Fonction pour obtenir le libellé de la taille du QR code
 </script>
 
 <style scoped>

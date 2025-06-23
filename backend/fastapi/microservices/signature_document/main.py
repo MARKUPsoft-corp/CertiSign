@@ -566,7 +566,13 @@ def add_signature_image_to_pdf(pdf_data: bytes, signature_image_data: str, signa
         # Vérifier que les positions sont valides
         if not signature_positions or not isinstance(signature_positions, list) or len(signature_positions) == 0:
             logger.warning("Positions de signature invalides ou manquantes")
+            logger.warning(f"Positions reçues: {signature_positions}")
             return pdf_data
+        
+        # LOG DEBUG des positions reçues
+        logger.info(f"DEBUG MICROSERVICE - Positions de signature reçues: {signature_positions}")
+        for i, pos in enumerate(signature_positions):
+            logger.info(f"DEBUG MICROSERVICE - Position {i+1}: page={pos.get('page')}, x={pos.get('x')}, y={pos.get('y')}, width={pos.get('width')}, height={pos.get('height')}")
             
         # Extraire les données binaires de l'image depuis le base64
         try:
