@@ -189,6 +189,11 @@
         <SignWithTemplateMultiple @close="setActiveContent('dashboard')" />
       </div>
       
+      <!-- Composant SignSimple pour signature rapide -->
+      <div v-else-if="activeContent === 'signSimple'">
+        <SignSimple @close="setActiveContent('dashboard')" />
+      </div>
+      
       <!-- Composant Mes Documents intégré -->
       <div v-else-if="activeContent === 'documents'" class="integrated-component-container">
         <MyDocuments />
@@ -546,6 +551,7 @@ import UserHistory from '@/views/UserHistory.vue';
 import UserProfile from '@/views/UserProfile.vue';
 import SignWithTemplate from '@/views/SignWithTemplate.vue'; // Importer le nouveau composant
 import SignWithTemplateMultiple from '@/views/SignWithTemplateMultiple.vue'; // Importer le composant de signature multiple
+import SignSimple from '@/views/SignSimple.vue'; // Importer le composant de signature rapide
 // VerifyDocument a été supprimé
 import AuthService from '@/services/AuthService';
 import { initScrollAnimations } from '@/assets/js/scrollAnimations.js';
@@ -602,7 +608,7 @@ function selectSignatureOption(option) {
       setActiveContent('sign-template');
       break;
     case 'quick':
-      setActiveContent('sign');
+      setActiveContent('signSimple');
       break;
     case 'multiple':
       setActiveContent('sign-multiple');

@@ -527,3 +527,45 @@ Unauthorized: /api/users/activity-log/
 192.168.4.131 - - [23/Jun/2025 07:22:10] "GET /api/signature-templates/templates/3/ HTTP/1.1" 200 -
 192.168.4.131 - - [23/Jun/2025 07:22:34] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -
 192.168.4.131 - - [23/Jun/2025 07:22:36] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 07:25:46] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 07:25:46] "GET /api/signature-templates/templates/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 07:25:46] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 07:25:46] "[35m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 07:43:34] "OPTIONS /api/users/me/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 07:43:35] "GET /api/users/me/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 07:43:35] "OPTIONS /api/documents/activities/my_activities/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 07:43:35] "OPTIONS /api/documents/signatures/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 07:43:35] "GET /api/documents/activities/my_activities/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 07:43:35] "GET /api/documents/signatures/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 07:43:35] "GET /api/documents/activities/my_activities/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 07:43:48] "GET /api/documents/activities/my_activities/ HTTP/1.1" 200 -
+Unauthorized: /api/users/token-verify/
+192.168.5.49 - - [23/Jun/2025 08:13:22] "[31m[1mPOST /api/users/token-verify/ HTTP/1.1[0m" 401 -
+Unauthorized: /api/users/activity-log/
+192.168.5.49 - - [23/Jun/2025 08:13:22] "[31m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 401 -
+192.168.5.49 - - [23/Jun/2025 08:13:22] "GET /api/users/organizations/ HTTP/1.1" 200 -
+Unauthorized: /api/users/token-verify/
+192.168.4.131 - - [23/Jun/2025 08:13:25] "[31m[1mPOST /api/users/token-verify/ HTTP/1.1[0m" 401 -
+Unauthorized: /api/users/activity-log/
+192.168.4.131 - - [23/Jun/2025 08:13:25] "[31m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 401 -
+192.168.4.131 - - [23/Jun/2025 08:13:26] "GET /api/users/organizations/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 08:13:49] "POST /api/users/auth/with-organization/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 08:13:50] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 08:13:50] "GET /api/signature-templates/templates/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 08:13:50] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 08:13:50] "[35m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 201 -
+192.168.5.49 - - [23/Jun/2025 08:16:08] "POST /api/users/auth/with-organization/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 08:16:08] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 08:16:08] "GET /api/signature-templates/templates/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 08:16:09] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 08:16:09] "[35m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 08:18:27] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 08:18:27] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 08:20:11] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 08:20:12] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 08:20:50] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 08:20:50] "GET /api/signature-templates/templates/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 08:20:50] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 08:20:50] "[35m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 08:20:58] "GET /api/signature-templates/templates/3/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 08:21:18] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -

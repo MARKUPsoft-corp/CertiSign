@@ -140,13 +140,14 @@ INFO:     192.168.4.131:49156 - "POST /gateway/sign/ HTTP/1.1" 200 OK
 INFO:     192.168.4.131:49156 - "POST /gateway/sign/ HTTP/1.1" 200 OK
 INFO:     192.168.4.131:56854 - "POST /gateway/sign/ HTTP/1.1" 200 OK
 INFO:     192.168.4.131:56854 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-  File "/home/ssatl/.local/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
-    config.load()
-  File "/home/ssatl/.local/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
-    self.loaded_app = import_from_string(self.app)
-  File "/home/ssatl/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
-    raise exc from None
-  File "/home/ssatl/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+INFO:     192.168.4.131:39394 - "POST /dh-exchange/ HTTP/1.1" 200 OK
+INFO:     192.168.4.131:39396 - "POST /dh-exchange/ HTTP/1.1" 200 OK
+INFO:     192.168.5.49:51748 - "POST /gateway/sign/ HTTP/1.1" 200 OK
+INFO:     192.168.5.49:51748 - "POST /gateway/sign/ HTTP/1.1" 200 OK
+INFO:     192.168.4.131:42740 - "POST /gateway/sign/ HTTP/1.1" 200 OK
+INFO:     192.168.4.131:42740 - "POST /gateway/sign/ HTTP/1.1" 200 OK
+INFO:     192.168.4.131:42604 - "POST /gateway/sign/ HTTP/1.1" 200 OK
+t_from_string
     module = importlib.import_module(module_str)
   File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
     return _bootstrap._gcd_import(name[level:], package, level)
