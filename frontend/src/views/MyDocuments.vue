@@ -76,7 +76,7 @@
     <!-- Liste des documents -->
     <div v-else class="documents-grid">
       <div 
-        v-for="document in validFilteredDocuments" 
+        v-for="document in paginatedDocuments" 
         :key="document.id" 
         class="document-card"
         :class="{
@@ -193,6 +193,73 @@
       </div>
     </div>
 
+    <!-- Pagination -->
+    <div v-if="totalPages > 1" class="pagination-container">
+      <div class="pagination-info">
+        <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+        <span class="documents-count">({{ validFilteredDocuments.length }} documents au total)</span>
+      </div>
+      
+      <div class="pagination-controls">
+        <!-- Bouton Précédent -->
+        <button 
+          class="pagination-btn prev" 
+          :disabled="currentPage === 1"
+          @click="previousPage"
+          title="Page précédente"
+        >
+          <i class="bi bi-chevron-left"></i>
+          Précédent
+        </button>
+        
+        <!-- Première page si pas visible -->
+        <button 
+          v-if="visiblePages[0] > 1"
+          class="pagination-btn page"
+          @click="goToPage(1)"
+        >
+          1
+        </button>
+        
+        <!-- Points de suspension si nécessaire -->
+        <span v-if="visiblePages[0] > 2" class="pagination-dots">...</span>
+        
+        <!-- Pages visibles -->
+        <button 
+          v-for="page in visiblePages"
+          :key="page"
+          class="pagination-btn page"
+          :class="{ 'active': page === currentPage }"
+          @click="goToPage(page)"
+        >
+          {{ page }}
+        </button>
+        
+        <!-- Points de suspension si nécessaire -->
+        <span v-if="visiblePages[visiblePages.length - 1] < totalPages - 1" class="pagination-dots">...</span>
+        
+        <!-- Dernière page si pas visible -->
+        <button 
+          v-if="visiblePages[visiblePages.length - 1] < totalPages"
+          class="pagination-btn page"
+          @click="goToPage(totalPages)"
+        >
+          {{ totalPages }}
+        </button>
+        
+        <!-- Bouton Suivant -->
+        <button 
+          class="pagination-btn next" 
+          :disabled="currentPage === totalPages"
+          @click="nextPage"
+          title="Page suivante"
+        >
+          Suivant
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -211,10 +278,52 @@ const error = ref(null);
 const searchQuery = ref('');
 const showFilterMenu = ref(false);
 
+// Variables de pagination
+const currentPage = ref(1);
+const itemsPerPage = 9; // 9 documents par page
+
 // Propriété calculée pour filtrer les documents valides
 const validFilteredDocuments = computed(() => {
   // S'assurer que les documents ont une structure valide
   return filteredDocuments.value.filter(doc => doc && typeof doc === 'object' && doc.document_id);
+});
+
+// Propriété calculée pour la pagination
+const paginatedDocuments = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return validFilteredDocuments.value.slice(start, end);
+});
+
+// Propriété calculée pour le nombre total de pages
+const totalPages = computed(() => {
+  return Math.ceil(validFilteredDocuments.value.length / itemsPerPage);
+});
+
+// Propriété calculée pour les numéros de pages à afficher
+const visiblePages = computed(() => {
+  const pages = [];
+  const total = totalPages.value;
+  const current = currentPage.value;
+  
+  // Afficher au maximum 5 pages à la fois
+  let start = Math.max(1, current - 2);
+  let end = Math.min(total, current + 2);
+  
+  // Ajuster si on est au début ou à la fin
+  if (end - start < 4) {
+    if (start === 1) {
+      end = Math.min(total, start + 4);
+    } else if (end === total) {
+      start = Math.max(1, end - 4);
+    }
+  }
+  
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  
+  return pages;
 });
 // Variables précédemment utilisées pour les modales, maintenant désactivées avec eslint-disable
 // eslint-disable-next-line no-unused-vars
@@ -349,9 +458,31 @@ function filterDocuments() {
         return matchesSearch && matchesStatus;
       });
     }
+    
+    // Réinitialiser à la première page après un filtrage
+    currentPage.value = 1;
   } catch (error) {
     console.error('Erreur lors du filtrage des documents:', error);
     filteredDocuments.value = [];
+  }
+}
+
+// Fonctions de pagination
+function goToPage(page) {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+  }
+}
+
+function previousPage() {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+}
+
+function nextPage() {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
   }
 }
 
@@ -2011,5 +2142,162 @@ function getActivityDescription(activityType) {
   height: 4px;
   background-color: var(--primary-color, #007bff);
   border-radius: 2px;
+}
+
+/* Styles pour la pagination */
+.pagination-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: 40px;
+  padding: 30px;
+  background-color: var(--card-bg, white);
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.pagination-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+  color: var(--text-color, #495057);
+}
+
+.pagination-info span:first-child {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.documents-count {
+  font-size: 14px;
+  color: var(--text-secondary, #6c757d);
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  border: 1px solid var(--border-color, #ddd);
+  background-color: var(--card-bg, white);
+  color: var(--text-color, #495057);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 44px;
+  min-height: 44px;
+  text-decoration: none;
+  gap: 6px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border-color: var(--primary-color, #007bff);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.pagination-btn.active {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border-color: var(--primary-color, #007bff);
+  font-weight: 600;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--light-bg, #f8f9fa);
+  color: var(--text-secondary, #6c757d);
+}
+
+.pagination-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+  background-color: var(--light-bg, #f8f9fa);
+  color: var(--text-secondary, #6c757d);
+  border-color: var(--border-color, #ddd);
+}
+
+.pagination-btn.prev,
+.pagination-btn.next {
+  padding: 10px 20px;
+  font-weight: 600;
+}
+
+.pagination-btn.page {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.pagination-dots {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  color: var(--text-secondary, #6c757d);
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Responsive pour la pagination */
+@media (max-width: 768px) {
+  .pagination-container {
+    margin-top: 30px;
+    padding: 20px;
+  }
+  
+  .pagination-controls {
+    gap: 4px;
+  }
+  
+  .pagination-btn {
+    min-width: 40px;
+    min-height: 40px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  
+  .pagination-btn.page {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .pagination-btn.prev,
+  .pagination-btn.next {
+    padding: 8px 16px;
+  }
+  
+  /* Masquer le texte sur mobile, garder seulement les icônes */
+  .pagination-btn.prev span,
+  .pagination-btn.next span {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-info {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .pagination-controls {
+    flex-wrap: wrap;
+  }
 }
 </style>

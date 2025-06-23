@@ -577,3 +577,179 @@ Unauthorized: /api/users/activity-log/
 192.168.4.131 - - [23/Jun/2025 08:42:35] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -
 192.168.4.131 - - [23/Jun/2025 08:48:30] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -
 192.168.4.131 - - [23/Jun/2025 08:48:31] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 08:59:07] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 08:59:07] "GET /api/signature-templates/templates/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 08:59:07] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 08:59:07] "[35m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 08:59:48] "GET /api/documents/signatures/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "OPTIONS /api/documents/signatures/?page=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "GET /api/documents/signatures/?page=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "OPTIONS /api/documents/signatures/?page=2 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "GET /api/documents/signatures/?page=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "GET /api/documents/signatures/?page=2 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "OPTIONS /api/documents/signatures/?page=3 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "GET /api/documents/signatures/?page=2 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "GET /api/documents/signatures/?page=3 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "GET /api/documents/signatures/?page=3 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "OPTIONS /api/documents/signatures/?page=4 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "OPTIONS /api/documents/signatures/?page=4 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "GET /api/documents/signatures/?page=4 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "GET /api/documents/signatures/?page=4 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "OPTIONS /api/documents/signatures/?page=5 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "OPTIONS /api/documents/signatures/?page=5 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "GET /api/documents/signatures/?page=5 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "GET /api/documents/signatures/?page=5 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "OPTIONS /api/documents/signatures/?page=6 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "GET /api/documents/signatures/?page=6 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:08:47] "GET /api/documents/signatures/?page=6 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:09:15] "GET /api/documents/signatures/?page=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:09:15] "GET /api/documents/signatures/?page=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:09:15] "GET /api/documents/signatures/?page=2 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:09:15] "GET /api/documents/signatures/?page=2 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:09:15] "GET /api/documents/signatures/?page=3 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:09:15] "GET /api/documents/signatures/?page=3 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:09:15] "GET /api/documents/signatures/?page=4 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:09:15] "GET /api/documents/signatures/?page=4 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:09:15] "GET /api/documents/signatures/?page=5 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:09:15] "GET /api/documents/signatures/?page=5 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:09:15] "GET /api/documents/signatures/?page=6 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:09:15] "GET /api/documents/signatures/?page=6 HTTP/1.1" 200 -
+Unauthorized: /api/documents/signatures/
+192.168.4.131 - - [23/Jun/2025 09:18:20] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/documents/signatures/
+192.168.4.131 - - [23/Jun/2025 09:18:20] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/documents/signatures/
+192.168.4.131 - - [23/Jun/2025 09:18:20] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/documents/signatures/
+192.168.4.131 - - [23/Jun/2025 09:18:20] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/documents/signatures/
+192.168.4.131 - - [23/Jun/2025 09:18:20] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/documents/signatures/
+192.168.4.131 - - [23/Jun/2025 09:18:21] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/documents/signatures/
+192.168.4.131 - - [23/Jun/2025 09:18:21] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/documents/signatures/
+192.168.4.131 - - [23/Jun/2025 09:18:21] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/documents/signatures/
+192.168.4.131 - - [23/Jun/2025 09:20:06] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/users/token-verify/
+192.168.4.131 - - [23/Jun/2025 09:20:09] "[31m[1mPOST /api/users/token-verify/ HTTP/1.1[0m" 401 -
+Unauthorized: /api/users/activity-log/
+192.168.4.131 - - [23/Jun/2025 09:20:10] "[31m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 401 -
+192.168.4.131 - - [23/Jun/2025 09:20:10] "GET /api/users/organizations/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:20:21] "POST /api/users/auth/with-organization/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:20:22] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:20:22] "GET /api/signature-templates/templates/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:20:22] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:20:22] "[35m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 09:20:28] "GET /api/documents/signatures/?page=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:20:28] "GET /api/documents/signatures/?page=2 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:20:28] "GET /api/documents/signatures/?page=3 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:20:28] "GET /api/documents/signatures/?page=4 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:20:29] "GET /api/documents/signatures/?page=5 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:20:29] "GET /api/documents/signatures/?page=6 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:22:03] "GET /api/documents/signatures/?page=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:22:04] "GET /api/documents/signatures/?page=2 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:22:04] "GET /api/documents/signatures/?page=3 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:22:04] "GET /api/documents/signatures/?page=4 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:22:04] "GET /api/documents/signatures/?page=5 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:22:05] "GET /api/documents/signatures/?page=6 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:23:51] "GET /api/documents/signatures/?page=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:23:51] "GET /api/documents/signatures/?page=2 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:23:51] "GET /api/documents/signatures/?page=3 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:23:51] "GET /api/documents/signatures/?page=4 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:23:51] "GET /api/documents/signatures/?page=5 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:23:51] "GET /api/documents/signatures/?page=6 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:24:13] "GET /admin/documents/documentsignature/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:24:13] "[36mGET /static/admin/css/base.css HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:13] "[36mGET /static/admin/css/dark_mode.css HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:13] "[36mGET /static/admin/js/theme.js HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:13] "[36mGET /static/admin/css/nav_sidebar.css HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:13] "[36mGET /static/admin/css/changelists.css HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:13] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:24:13] "[36mGET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "GET /static/admin/js/filters.js HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "GET /static/admin/css/responsive.css HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "[36mGET /static/admin/js/nav_sidebar.js HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "[36mGET /static/admin/js/core.js HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "[36mGET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "[36mGET /static/admin/js/actions.js HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "[36mGET /static/admin/js/urlify.js HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "[36mGET /static/admin/js/prepopulate.js HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "[36mGET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "GET /static/admin/img/search.svg HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "[36mGET /static/admin/img/icon-addlink.svg HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "[36mGET /static/admin/img/tooltag-add.svg HTTP/1.1[0m" 304 -
+192.168.4.131 - - [23/Jun/2025 09:24:14] "[36mGET /static/admin/img/icon-viewlink.svg HTTP/1.1[0m" 304 -
+192.168.5.49 - - [23/Jun/2025 09:25:37] "OPTIONS /api/documents/signatures/?page=1 HTTP/1.1" 200 -
+Unauthorized: /api/documents/signatures/
+192.168.5.49 - - [23/Jun/2025 09:25:37] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/documents/signatures/
+192.168.5.49 - - [23/Jun/2025 09:25:38] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/documents/signatures/
+192.168.5.49 - - [23/Jun/2025 09:25:39] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/documents/signatures/
+192.168.5.49 - - [23/Jun/2025 09:25:40] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/documents/signatures/
+192.168.5.49 - - [23/Jun/2025 09:25:40] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+Unauthorized: /api/documents/signatures/
+192.168.5.49 - - [23/Jun/2025 09:25:40] "[31m[1mGET /api/documents/signatures/?page=1 HTTP/1.1[0m" 401 -
+192.168.4.131 - - [23/Jun/2025 09:25:49] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:25:49] "GET /api/signature-templates/templates/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:25:49] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:25:49] "[35m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 201 -
+192.168.4.131 - - [23/Jun/2025 09:25:53] "GET /api/documents/signatures/?page=1 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:25:53] "GET /api/documents/signatures/?page=2 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:25:53] "GET /api/documents/signatures/?page=3 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:25:53] "GET /api/documents/signatures/?page=4 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:25:53] "GET /api/documents/signatures/?page=5 HTTP/1.1" 200 -
+192.168.4.131 - - [23/Jun/2025 09:25:53] "GET /api/documents/signatures/?page=6 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:06] "GET /admin/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:06] "[36mGET /static/admin/css/base.css HTTP/1.1[0m" 304 -
+192.168.5.49 - - [23/Jun/2025 09:26:06] "GET /static/admin/css/responsive.css HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:06] "[36mGET /static/admin/css/dark_mode.css HTTP/1.1[0m" 304 -
+192.168.5.49 - - [23/Jun/2025 09:26:06] "GET /static/admin/css/dashboard.css HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:06] "[36mGET /static/admin/js/theme.js HTTP/1.1[0m" 304 -
+192.168.5.49 - - [23/Jun/2025 09:26:06] "[36mGET /static/admin/css/nav_sidebar.css HTTP/1.1[0m" 304 -
+192.168.5.49 - - [23/Jun/2025 09:26:06] "[36mGET /static/admin/js/nav_sidebar.js HTTP/1.1[0m" 304 -
+192.168.5.49 - - [23/Jun/2025 09:26:06] "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:06] "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:06] "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /admin/documents/documentsignature/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /static/admin/css/changelists.css HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /admin/jsi18n/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /static/admin/js/core.js HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /static/admin/js/urlify.js HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /static/admin/js/actions.js HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /static/admin/js/filters.js HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /static/admin/img/search.svg HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:10] "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 -
+Unauthorized: /api/users/token-verify/
+192.168.5.49 - - [23/Jun/2025 09:26:16] "[31m[1mPOST /api/users/token-verify/ HTTP/1.1[0m" 401 -
+Unauthorized: /api/users/activity-log/
+192.168.5.49 - - [23/Jun/2025 09:26:16] "[31m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 401 -
+192.168.5.49 - - [23/Jun/2025 09:26:17] "GET /api/users/organizations/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:22] "POST /api/users/auth/with-organization/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:23] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:23] "GET /api/signature-templates/templates/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:23] "POST /api/users/token-verify/ HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:23] "[35m[1mPOST /api/users/activity-log/ HTTP/1.1[0m" 201 -
+192.168.5.49 - - [23/Jun/2025 09:26:27] "GET /api/documents/signatures/?page=1 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:27] "OPTIONS /api/documents/signatures/?page=2 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:27] "GET /api/documents/signatures/?page=2 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:27] "OPTIONS /api/documents/signatures/?page=3 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:27] "GET /api/documents/signatures/?page=3 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:28] "OPTIONS /api/documents/signatures/?page=4 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:28] "GET /api/documents/signatures/?page=4 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:28] "OPTIONS /api/documents/signatures/?page=5 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:28] "GET /api/documents/signatures/?page=5 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:28] "OPTIONS /api/documents/signatures/?page=6 HTTP/1.1" 200 -
+192.168.5.49 - - [23/Jun/2025 09:26:28] "GET /api/documents/signatures/?page=6 HTTP/1.1" 200 -

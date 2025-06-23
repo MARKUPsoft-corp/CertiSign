@@ -7,28 +7,76 @@ const API_URL = process.env.VUE_APP_API_URL || 'https://192.168.4.131:8000';
 class DocumentService {
   /**
    * Récupère tous les documents signés de l'utilisateur connecté
+   * Gère automatiquement la pagination pour récupérer tous les documents
    */
   async getDocuments() {
     const token = AuthService.getToken();
     console.log('Token d\'authentification:', token ? 'Présent' : 'Manquant');
     
     // Utiliser l'endpoint des signatures au lieu des documents
-    const url = `${API_URL}/api/documents/signatures/`;
-    console.log('Récupération des documents signés depuis:', url);
+    const baseUrl = `${API_URL}/api/documents/signatures/`;
+    console.log('Récupération des documents signés depuis:', baseUrl);
     
     try {
-      const response = await axios.get(url, {
-        headers: { 
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+      let allDocuments = [];
+      let page = 1;
+      let hasNextPage = true;
+      
+      // Boucle pour récupérer toutes les pages
+      while (hasNextPage) {
+        const url = `${baseUrl}?page=${page}`;
+        console.log(`Récupération de la page ${page}:`, url);
+        
+        const response = await axios.get(url, {
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        // Log de la réponse pour le débogage
+        console.log(`Page ${page} - Statut:`, response.status, response.statusText);
+        console.log(`Page ${page} - Données:`, response.data);
+        
+        // Vérifier la structure de la réponse
+        if (response.data) {
+          if (response.data.results) {
+            // Format paginé Django REST Framework
+            allDocuments = allDocuments.concat(response.data.results);
+            hasNextPage = !!response.data.next;
+            console.log(`Page ${page} - Documents ajoutés: ${response.data.results.length}, Page suivante: ${hasNextPage}`);
+          } else if (Array.isArray(response.data)) {
+            // Format direct (pas de pagination)
+            allDocuments = response.data;
+            hasNextPage = false;
+            console.log(`Tous les documents récupérés directement: ${response.data.length}`);
+          } else {
+            // Format inattendu
+            console.warn('Format de réponse inattendu:', response.data);
+            hasNextPage = false;
+          }
+        } else {
+          hasNextPage = false;
         }
-      });
+        
+        page++;
+        
+        // Protection contre les boucles infinies
+        if (page > 100) {
+          console.warn('Arrêt de la récupération après 100 pages pour éviter une boucle infinie');
+          break;
+        }
+      }
       
-      // Log de la réponse pour le débogage
-      console.log('Réponse de l\'API:', response.status, response.statusText);
-      console.log('Données reçues:', response.data);
+      console.log(`Total des documents récupérés: ${allDocuments.length}`);
       
-      return response;
+      // Retourner la même structure que la réponse originale
+      return {
+        data: allDocuments,
+        status: 200,
+        statusText: 'OK'
+      };
+      
     } catch (error) {
       console.error('Erreur lors de la récupération des documents signés:', error.message);
       if (error.response) {
