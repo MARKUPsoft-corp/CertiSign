@@ -140,29 +140,140 @@
           <div class="positioning-info-banner">
             <i class="bi bi-cursor"></i>
             <div>
-              <h4>Positionnement des éléments</h4>
-              <p>Définissez la position du QR code et de votre signature sur les documents. Si vous avez plusieurs documents, le même positionnement sera appliqué à tous.</p>
+              <h4>Positionnement individuel des éléments</h4>
+              <p>Définissez la position du QR code et de votre signature sur chaque document. Utilisez les onglets ci-dessous pour naviguer entre vos documents et positionner les éléments individuellement.</p>
             </div>
           </div>
 
-          <!-- Sélection du document de référence pour le positionnement -->
-          <div v-if="selectedFiles.length > 1" class="reference-document-selector">
-            <label>Document de référence pour le positionnement :</label>
-            <select v-model="referenceDocumentIndex" class="form-select">
-              <option v-for="(file, index) in selectedFiles" :key="index" :value="index">
-                {{ file.name }}
-              </option>
-            </select>
+          <!-- Onglets pour chaque document -->
+          <div class="positioning-tabs">
+            <div class="tabs-header">
+              <button 
+                v-for="(file, index) in selectedFiles" 
+                :key="index"
+                @click="setActivePositioningDocument(index)"
+                :class="['tab-button positioning-tab', { 
+                  'active': activePositioningIndex === index,
+                  'completed': documentPositions[index]?.completed
+                }]"
+              >
+                <div class="tab-content">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                  <span class="tab-title">{{ truncateFileName(file.name, 15) }}</span>
+                  <div class="tab-status">
+                    <i v-if="documentPositions[index]?.completed" class="bi bi-check-circle-fill" title="Positionnement terminé"></i>
+                    <i v-else-if="documentPositions[index]?.hasPositions" class="bi bi-circle-half" title="Positionnement en cours"></i>
+                    <i v-else class="bi bi-circle" title="À positionner"></i>
+                  </div>
+                </div>
+              </button>
+            </div>
+            
+            <!-- Contenu de l'onglet actif -->
+            <div class="tab-content-positioning" v-if="selectedFiles[activePositioningIndex]">
+              <div class="document-positioning-header">
+                <div class="document-info">
+                  <div class="document-icon">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                  </div>
+                  <div class="document-details">
+                    <div class="document-name">{{ selectedFiles[activePositioningIndex].name }}</div>
+                    <div class="document-progress">
+                      Document {{ activePositioningIndex + 1 }} sur {{ selectedFiles.length }}
+                      <span v-if="documentPositions[activePositioningIndex]?.completed" class="status-completed">
+                        <i class="bi bi-check-circle-fill"></i> Terminé
+                      </span>
+                      <span v-else class="status-pending">
+                        <i class="bi bi-clock"></i> En attente
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Boutons de navigation rapide -->
+                <div class="document-navigation">
+                  <button 
+                    @click="previousPositioningDocument" 
+                    :disabled="activePositioningIndex === 0"
+                    class="nav-doc-btn"
+                    title="Document précédent"
+                  >
+                    <i class="bi bi-chevron-left"></i>
+                  </button>
+                  <button 
+                    @click="nextPositioningDocument" 
+                    :disabled="activePositioningIndex === selectedFiles.length - 1"
+                    class="nav-doc-btn"
+                    title="Document suivant"
+                  >
+                    <i class="bi bi-chevron-right"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Intégration du composant QrPositioner pour le document actuel -->
+              <QrPositioner
+                :key="`positioner-${activePositioningIndex}`"
+                :pdfFile="selectedFiles[activePositioningIndex]"
+                :totalPages="documentTotalPages[activePositioningIndex] || 1"
+                :initialQrPosition="documentPositions[activePositioningIndex]?.qr_position"
+                :initialSignaturePosition="documentPositions[activePositioningIndex]?.signature"
+                @position-confirmed="handleIndividualPositionConfirmed"
+                @signature-uploaded="handleIndividualSignatureUploaded"
+              />
+              
+              <!-- Boutons d'action pour ce document -->
+              <div class="positioning-actions">
+                <!-- Message informatif quand le document est terminé -->
+                <div v-if="documentPositions[activePositioningIndex]?.completed" class="document-completed-info">
+                  <i class="bi bi-check-circle-fill"></i>
+                  <span>Positionnement confirmé pour ce document</span>
+                </div>
+                
+                <!-- Message informatif pour le workflow -->
+                <div v-else class="positioning-instructions">
+                  <i class="bi bi-info-circle"></i>
+                  <span>Positionnez les éléments puis cliquez sur "Aperçu final" → "Confirmer" pour valider automatiquement ce document</span>
+                </div>
+                
+                <!-- Bouton pour éditer un document déjà confirmé -->
+                <button 
+                  v-if="documentPositions[activePositioningIndex]?.completed"
+                  @click="editDocumentPositioning"
+                  class="edit-positioning-btn"
+                >
+                  <i class="bi bi-pencil"></i>
+                  Modifier le positionnement
+                </button>
+              </div>
+            </div>
           </div>
 
-          <!-- Intégration du composant QrPositioner -->
-          <QrPositioner
-            v-if="selectedFiles[referenceDocumentIndex]"
-            :pdfFile="selectedFiles[referenceDocumentIndex]"
-            :totalPages="documentTotalPages[referenceDocumentIndex] || 1"
-            @position-confirmed="handlePositionConfirmed"
-            @signature-uploaded="handleSignatureUploaded"
-          />
+          <!-- Résumé global du positionnement -->
+          <div class="positioning-summary" v-if="selectedFiles.length > 1">
+            <h5>Résumé du positionnement</h5>
+            <div class="summary-grid">
+              <div 
+                v-for="(file, index) in selectedFiles" 
+                :key="index"
+                class="summary-item"
+              >
+                <div class="summary-icon">
+                  <i v-if="documentPositions[index]?.completed" class="bi bi-check-circle-fill text-success"></i>
+                  <i v-else-if="documentPositions[index]?.hasPositions" class="bi bi-circle-half text-warning"></i>
+                  <i v-else class="bi bi-circle text-muted"></i>
+                </div>
+                <div class="summary-text">
+                  <div class="summary-filename">{{ truncateFileName(file.name, 20) }}</div>
+                  <div class="summary-status">
+                    <span v-if="documentPositions[index]?.completed">Positionnement confirmé</span>
+                    <span v-else-if="documentPositions[index]?.hasPositions">En cours de positionnement</span>
+                    <span v-else>Non positionné</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Étape 3: Saisie du certificat et du mot de passe -->
@@ -376,14 +487,12 @@ const completedDocuments = ref([]);
 const signedDocuments = ref([]);
 const signatureDate = ref('');
 
-// Paramètres de positionnement
-const positionSettings = ref({
-  qr_position: null,
-  signature: null
-});
-
 // Image de signature uploadée
 const uploadedSignatureImage = ref(null);
+
+// État de positionnement pour chaque document
+const documentPositions = ref({});
+const activePositioningIndex = ref(0);
 
 // Propriété calculée pour contrôler la progression des étapes
 const canProceedToNextStep = computed(() => {
@@ -394,8 +503,10 @@ const canProceedToNextStep = computed(() => {
     // Étape 1: Les prévisualisations doivent être chargées
     return selectedFiles.value.length > 0;
   } else if (currentStep.value === 2) {
-    // Étape 2: Les positions doivent être confirmées
-    return positionSettings.value.qr_position !== null;
+    // Étape 2: Tous les documents doivent avoir leurs positions confirmées
+    return selectedFiles.value.every((_, index) => 
+      documentPositions.value[index]?.completed === true
+    );
   } else if (currentStep.value === 3) {
     // Étape 3: Le certificat et le mot de passe doivent être fournis
     return certificateFile.value !== null && certificatePassword.value.trim() !== '';
@@ -554,24 +665,48 @@ function createDocumentPreviews() {
 }
 
 // Gérer la confirmation de position depuis QrPositioner
-function handlePositionConfirmed(positionData) {
-  console.log('Positions confirmées:', positionData);
+function handleIndividualPositionConfirmed(positionData) {
+  console.log('Positions confirmées pour le document', activePositioningIndex.value, ':', positionData);
   
-  // Stocker les positions
-  positionSettings.value = {
-    qr_position: positionData.qrPosition,
-    signature: positionData.signaturePosition ? {
+  // Stocker les positions pour le document actuel
+  if (!documentPositions.value[activePositioningIndex.value]) {
+    documentPositions.value[activePositioningIndex.value] = {};
+  }
+  
+  documentPositions.value[activePositioningIndex.value].qr_position = positionData.qr;
+  
+  if (positionData.signature) {
+    documentPositions.value[activePositioningIndex.value].signature = {
       image: uploadedSignatureImage.value,
-      positions: positionData.signaturePosition.positions
-    } : null
-  };
+      positions: positionData.signature.positions
+    };
+  }
   
-  console.log('Paramètres de position stockés:', positionSettings.value);
+  // Marquer que ce document a des positions définies
+  documentPositions.value[activePositioningIndex.value].hasPositions = true;
+  
+  // **NOUVEAU** : Marquer automatiquement le document comme terminé
+  documentPositions.value[activePositioningIndex.value].completed = true;
+  
+  console.log('Document', activePositioningIndex.value, 'automatiquement marqué comme terminé après confirmation des positions');
+  console.log('Paramètres de position stockés pour le document', activePositioningIndex.value, ':', documentPositions.value[activePositioningIndex.value]);
+  
+  // Passer automatiquement au document suivant s'il y en a un non terminé
+  const nextIncomplete = selectedFiles.value.findIndex((_, index) => 
+    index > activePositioningIndex.value && !documentPositions.value[index]?.completed
+  );
+  
+  if (nextIncomplete !== -1) {
+    console.log('Passage automatique au document suivant non terminé:', nextIncomplete);
+    activePositioningIndex.value = nextIncomplete;
+  } else {
+    console.log('Tous les documents suivants sont terminés ou il n\'y en a plus');
+  }
 }
 
 // Gérer l'upload de signature depuis QrPositioner
-function handleSignatureUploaded(signatureFile) {
-  console.log('Signature uploadée:', signatureFile);
+function handleIndividualSignatureUploaded(signatureFile) {
+  console.log('Signature uploadée pour le document', activePositioningIndex.value, ':', signatureFile);
   
   // Convertir le fichier en base64
   const reader = new FileReader();
@@ -605,43 +740,44 @@ async function startSigningProcess() {
       
       const file = selectedFiles.value[i];
       
-      // Debug - vérifier les paramètres de position
-      console.log('Paramètres de position lors de la signature:', positionSettings.value);
+      // Debug - vérifier les paramètres de position pour ce document spécifique
+      const documentPosition = documentPositions.value[i];
+      console.log(`Paramètres de position pour le document ${i} (${file.name}):`, documentPosition);
       
-      // Extraire les positions QR
+      // Extraire les positions QR pour ce document spécifique
       let qrX = 85; // valeur par défaut
       let qrY = 90; // valeur par défaut
       
-      if (positionSettings.value.qr_position?.positions) {
+      if (documentPosition?.qr_position?.positions) {
         // Vérifier si positions est un objet avec des clés numériques
-        if (typeof positionSettings.value.qr_position.positions === 'object' && 
-            !Array.isArray(positionSettings.value.qr_position.positions)) {
+        if (typeof documentPosition.qr_position.positions === 'object' && 
+            !Array.isArray(documentPosition.qr_position.positions)) {
           
           console.log('Positions QR sous format objet, extraction de la première position');
-          const firstPageKey = Object.keys(positionSettings.value.qr_position.positions)[0];
-          if (firstPageKey && positionSettings.value.qr_position.positions[firstPageKey]) {
-            const firstPosition = positionSettings.value.qr_position.positions[firstPageKey];
+          const firstPageKey = Object.keys(documentPosition.qr_position.positions)[0];
+          if (firstPageKey && documentPosition.qr_position.positions[firstPageKey]) {
+            const firstPosition = documentPosition.qr_position.positions[firstPageKey];
             qrX = firstPosition.x || 85;
             qrY = firstPosition.y || 90;
             console.log(`Position QR extraite de la page ${firstPageKey}: x=${qrX}, y=${qrY}`);
           }
-        } else if (Array.isArray(positionSettings.value.qr_position.positions) && 
-                   positionSettings.value.qr_position.positions.length > 0) {
+        } else if (Array.isArray(documentPosition.qr_position.positions) && 
+                   documentPosition.qr_position.positions.length > 0) {
           
           console.log('Positions QR sous format tableau, extraction de la première position');
-          const firstPosition = positionSettings.value.qr_position.positions[0];
+          const firstPosition = documentPosition.qr_position.positions[0];
           qrX = firstPosition.x || 85;
           qrY = firstPosition.y || 90;
           console.log(`Position QR extraite du tableau: x=${qrX}, y=${qrY}`);
         }
-      } else if (positionSettings.value.qr_position?.x && positionSettings.value.qr_position?.y) {
+      } else if (documentPosition?.qr_position?.x && documentPosition?.qr_position?.y) {
         // Position unique
-        qrX = positionSettings.value.qr_position.x;
-        qrY = positionSettings.value.qr_position.y;
+        qrX = documentPosition.qr_position.x;
+        qrY = documentPosition.qr_position.y;
         console.log(`Position QR unique: x=${qrX}, y=${qrY}`);
       }
       
-      // Créer les métadonnées utilisateur avec les paramètres de position
+      // Créer les métadonnées utilisateur avec les paramètres de position pour ce document
       const userMetadata = {
         user_id: userInfo.id || '',
         username: userInfo.username || '',
@@ -654,23 +790,23 @@ async function startSigningProcess() {
         qr_position: {
           x: qrX,
           y: qrY,
-          size: positionSettings.value.qr_position?.size || 'medium',
-          pages: positionSettings.value.qr_position?.pages || 'all',
-          positions: positionSettings.value.qr_position?.positions || [],
-          mode: positionSettings.value.qr_position?.mode || 'all'
+          size: documentPosition?.qr_position?.size || 'medium',
+          pages: documentPosition?.qr_position?.pages || 'all',
+          positions: documentPosition?.qr_position?.positions || [],
+          mode: documentPosition?.qr_position?.mode || 'all'
         },
         signature_position: null
       };
       
-      console.log('Métadonnées QR position préparées:', {
+      console.log('Métadonnées QR position préparées pour le document', i, ':', {
         qr_position: userMetadata.qr_position
       });
       
-      // Ajouter les informations de signature si disponibles
-      if (positionSettings.value.signature && uploadedSignatureImage.value) {
-        let signatureImage = uploadedSignatureImage.value;
+      // Ajouter les informations de signature si disponibles pour ce document
+      if (documentPosition?.signature && documentPosition?.signature?.image) {
+        let signatureImage = documentPosition.signature.image;
         
-        console.log('DEBUG SIGNATURE IMAGE - État initial:', {
+        console.log('DEBUG SIGNATURE IMAGE - État initial pour document', i, ':', {
           'image_exists': !!signatureImage,
           'image_type': typeof signatureImage,
           'image_length': signatureImage?.length || 0,
@@ -691,14 +827,14 @@ async function startSigningProcess() {
         
         // Convertir les positions de signature en format attendu par le microservice
         let signaturePositions = [];
-        console.log('DEBUG SIGNATURE POSITIONS - Positions brutes:', positionSettings.value.signature.positions);
+        console.log('DEBUG SIGNATURE POSITIONS - Positions brutes pour document', i, ':', documentPosition.signature.positions);
         
-        if (positionSettings.value.signature.positions) {
-          if (typeof positionSettings.value.signature.positions === 'object' && 
-              !Array.isArray(positionSettings.value.signature.positions)) {
+        if (documentPosition.signature.positions) {
+          if (typeof documentPosition.signature.positions === 'object' && 
+              !Array.isArray(documentPosition.signature.positions)) {
             
             console.log('Conversion des positions de signature du format objet au format tableau');
-            Object.entries(positionSettings.value.signature.positions).forEach(([pageNum, position]) => {
+            Object.entries(documentPosition.signature.positions).forEach(([pageNum, position]) => {
               const convertedPosition = {
                 page: parseInt(pageNum),
                 x: position.x,
@@ -709,8 +845,8 @@ async function startSigningProcess() {
               signaturePositions.push(convertedPosition);
               console.log(`Position signature page ${pageNum}:`, convertedPosition);
             });
-          } else if (Array.isArray(positionSettings.value.signature.positions)) {
-            signaturePositions = positionSettings.value.signature.positions;
+          } else if (Array.isArray(documentPosition.signature.positions)) {
+            signaturePositions = documentPosition.signature.positions;
             console.log('Positions signature déjà en format tableau:', signaturePositions);
           }
         }
@@ -720,7 +856,7 @@ async function startSigningProcess() {
           signature_image: signatureImage
         };
         
-        console.log('DEBUG SIGNATURE FINAL - Données finales:', {
+        console.log('DEBUG SIGNATURE FINAL - Données finales pour document', i, ':', {
           'positions_count': userMetadata.signature_position.positions?.length || 0,
           'image_disponible': !!userMetadata.signature_position.signature_image,
           'image_final_format': userMetadata.signature_position.signature_image?.startsWith('data:image'),
@@ -831,6 +967,31 @@ function closeSignature() {
   });
   
   emit('close');
+}
+
+function setActivePositioningDocument(index) {
+  activePositioningIndex.value = index;
+  console.log('Document de positionnement actif:', index);
+}
+
+function previousPositioningDocument() {
+  if (activePositioningIndex.value > 0) {
+    activePositioningIndex.value--;
+  }
+}
+
+function nextPositioningDocument() {
+  if (activePositioningIndex.value < selectedFiles.value.length - 1) {
+    activePositioningIndex.value++;
+  }
+}
+
+// Permettre la modification du positionnement d'un document terminé
+function editDocumentPositioning() {
+  if (documentPositions.value[activePositioningIndex.value]) {
+    documentPositions.value[activePositioningIndex.value].completed = false;
+    console.log('Mode édition activé pour le document', activePositioningIndex.value);
+  }
 }
 
 
@@ -1749,7 +1910,8 @@ function closeSignature() {
 }
 
 /* Banner d'information */
-.template-info-banner {
+.template-info-banner,
+.positioning-info-banner {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -1760,21 +1922,322 @@ function closeSignature() {
   border: 1px solid rgba(255, 152, 0, 0.2);
 }
 
-.template-info-banner i {
+.template-info-banner i,
+.positioning-info-banner i {
   font-size: 2.5rem;
   color: #ff9800;
 }
 
-.template-info-banner h4 {
+.template-info-banner h4,
+.positioning-info-banner h4 {
   margin: 0 0 5px;
   color: var(--text-color, #333);
   font-size: 1.2rem;
 }
 
-.template-info-banner p {
+.template-info-banner p,
+.positioning-info-banner p {
   margin: 0;
   color: var(--text-muted, #6c757d);
   line-height: 1.4;
+}
+
+/* Onglets de positionnement */
+.positioning-tabs {
+  margin-bottom: 30px;
+}
+
+.positioning-tab {
+  position: relative;
+  min-width: 200px;
+  border-radius: 12px 12px 0 0 !important;
+  border-bottom: none !important;
+}
+
+.positioning-tab.completed {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(139, 195, 74, 0.05));
+  border-color: rgba(76, 175, 80, 0.3);
+}
+
+.positioning-tab .tab-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.positioning-tab .tab-title {
+  flex: 1;
+  text-align: left;
+  font-weight: 500;
+}
+
+.positioning-tab .tab-status {
+  flex-shrink: 0;
+}
+
+.positioning-tab .tab-status i {
+  font-size: 1rem;
+}
+
+.positioning-tab .tab-status .bi-check-circle-fill {
+  color: #4caf50;
+}
+
+.positioning-tab .tab-status .bi-circle-half {
+  color: #ff9800;
+}
+
+.positioning-tab .tab-status .bi-circle {
+  color: #bbb;
+}
+
+/* Contenu de l'onglet de positionnement */
+.tab-content-positioning {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 0 12px 12px 12px;
+  padding: 25px;
+  min-height: 600px;
+}
+
+.document-positioning-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.document-positioning-header .document-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.document-positioning-header .document-icon {
+  font-size: 2rem;
+  color: #dc3545;
+}
+
+.document-positioning-header .document-details {
+  flex: 1;
+}
+
+.document-positioning-header .document-name {
+  font-weight: 600;
+  color: var(--text-color, #333);
+  margin-bottom: 5px;
+}
+
+.document-positioning-header .document-progress {
+  font-size: 0.9rem;
+  color: var(--text-muted, #6c757d);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.document-positioning-header .status-completed {
+  color: #4caf50;
+  font-weight: 500;
+}
+
+.document-positioning-header .status-pending {
+  color: #ff9800;
+  font-weight: 500;
+}
+
+.document-navigation {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-doc-btn {
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-color, #333);
+  transition: all 0.2s;
+  font-size: 1.1rem;
+}
+
+.nav-doc-btn:hover:not(:disabled) {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.nav-doc-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Actions de positionnement */
+.positioning-actions {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.document-completed-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(139, 195, 74, 0.05));
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 8px;
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.document-completed-info i {
+  font-size: 1.2rem;
+  color: #4caf50;
+}
+
+.positioning-instructions {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 15px 20px;
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(100, 181, 246, 0.05));
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  border-radius: 8px;
+  color: #1565c0;
+  font-weight: 500;
+  text-align: center;
+  max-width: 600px;
+}
+
+.positioning-instructions i {
+  font-size: 1.2rem;
+  color: #2196f3;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.positioning-instructions span {
+  line-height: 1.4;
+}
+
+.confirm-positioning-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.confirm-positioning-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #43a047, #5cb85c);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.confirm-positioning-btn:disabled {
+  background: #e9ecef;
+  color: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.edit-positioning-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ff9800, #ffa726);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
+.edit-positioning-btn:hover {
+  background: linear-gradient(135deg, #f57c00, #ff9800);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+}
+
+/* Résumé du positionnement */
+.positioning-summary {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 25px;
+}
+
+.positioning-summary h5 {
+  margin: 0 0 15px;
+  color: var(--text-color, #333);
+  font-weight: 600;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.summary-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.summary-text {
+  flex: 1;
+}
+
+.summary-filename {
+  font-weight: 500;
+  color: var(--text-color, #333);
+  margin-bottom: 2px;
+}
+
+.summary-status {
+  font-size: 0.85rem;
+  color: var(--text-muted, #6c757d);
+}
+
+.text-success {
+  color: #4caf50 !important;
+}
+
+.text-warning {
+  color: #ff9800 !important;
+}
+
+.text-muted {
+  color: #6c757d !important;
 }
 
 /* Animations */
