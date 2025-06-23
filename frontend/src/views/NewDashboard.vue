@@ -902,7 +902,7 @@ const loadChartData = async () => {
     
     console.log('Données d\'activité reçues:', activityData);
     console.log('Données de types de documents reçues:', documentTypeData);
-    
+  
     // Mettre à jour les données
     chartData.value.activity = activityData;
     chartData.value.documentTypes = documentTypeData;

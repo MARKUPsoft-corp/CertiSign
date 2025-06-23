@@ -31,65 +31,165 @@
         <div v-if="currentStep === 0" class="step-body">
           <div class="upload-area" @click="triggerFileInput" @dragover.prevent @drop.prevent="handleFileDrop">
             <i class="bi bi-cloud-arrow-up-fill"></i>
-            <p>Déposez votre fichier PDF ici ou cliquez pour sélectionner</p>
-            <span class="upload-hint">Formats acceptés: .pdf (max 10MB)</span>
-            <input type="file" ref="fileInput" accept=".pdf" @change="handleFileSelection" class="file-input">
+            <p>Déposez vos fichiers PDF ici ou cliquez pour sélectionner</p>
+            <span class="upload-hint">Formats acceptés: .pdf (max 10MB par fichier) - Sélection multiple supportée</span>
+            <input type="file" ref="fileInput" accept=".pdf" multiple @change="handleFileSelection" class="file-input">
           </div>
         </div>
 
-        <!-- Étape 2: Prévisualisation du document -->
+        <!-- Étape 2: Prévisualisation des documents (MODIFICATION: support multi-documents) -->
         <div v-if="currentStep === 1" class="step-body">
-          <div class="document-info">
+          <!-- Onglets des documents -->
+          <div class="document-tabs" v-if="selectedFiles.length > 1">
+            <div 
+              v-for="(file, index) in selectedFiles" 
+              :key="index"
+              :class="['document-tab', { 'active': activeDocumentIndex === index }]"
+              @click="selectDocument(index)"
+            >
+              <div class="tab-content">
+                <i class="bi bi-file-earmark-pdf"></i>
+                <span class="tab-name">{{ truncateFileName(file.name) }}</span>
+                <button @click.stop="removeDocument(index)" class="remove-document-btn">
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Information du document actuel -->
+          <div class="document-info" v-if="selectedFiles[activeDocumentIndex]">
             <div class="document-icon">
               <i class="bi bi-file-earmark-pdf"></i>
             </div>
             <div class="document-details">
-              <div class="document-name">{{ selectedFile.name }}</div>
-              <div class="document-size">{{ formatFileSize(selectedFile.size) }}</div>
+              <div class="document-name">{{ selectedFiles[activeDocumentIndex].name }}</div>
+              <div class="document-size">{{ formatFileSize(selectedFiles[activeDocumentIndex].size) }}</div>
+              <div class="document-pages" v-if="documentPreviews[activeDocumentIndex]?.totalPages">
+                {{ documentPreviews[activeDocumentIndex].totalPages }} page(s)
+              </div>
             </div>
           </div>
 
-          <div class="pdf-preview-container">
-            <div v-if="pdfPreviewLoading" class="pdf-loading">
+          <!-- Prévisualisation du document actuel -->
+          <div class="pdf-preview-container" v-if="documentPreviews[activeDocumentIndex]">
+            <div v-if="documentPreviews[activeDocumentIndex].loading" class="pdf-loading">
               <i class="bi bi-arrow-repeat spinning"></i>
               <p>Chargement de la prévisualisation...</p>
             </div>
-            <div v-else-if="pdfPreviewError" class="pdf-error">
+            <div v-else-if="documentPreviews[activeDocumentIndex].error" class="pdf-error">
               <i class="bi bi-exclamation-triangle"></i>
-              <p>Impossible de charger la prévisualisation. {{ pdfPreviewError }}</p>
+              <p>Impossible de charger la prévisualisation. {{ documentPreviews[activeDocumentIndex].error }}</p>
             </div>
-            <iframe v-else ref="pdfPreview" class="pdf-preview" :src="pdfPreviewUrl"></iframe>
+            <iframe v-else ref="pdfPreview" class="pdf-preview" :src="documentPreviews[activeDocumentIndex].url"></iframe>
+          </div>
+
+          <!-- Bouton pour ajouter d'autres documents -->
+          <div class="add-more-documents">
+            <button @click="triggerFileInput" class="add-document-btn">
+              <i class="bi bi-plus-circle"></i> Ajouter d'autres documents
+            </button>
           </div>
         </div>
 
-        <!-- Étape 3: Position du QR code -->
+        <!-- Étape 3: Position du QR code (MODIFICATION: support multi-documents) -->
         <div v-if="currentStep === 2" class="step-body">
-          <div class="qr-position-container">
+          <!-- Onglets des documents pour le positionnement -->
+          <div class="positioning-tabs" v-if="selectedFiles.length > 1">
+            <div 
+              v-for="(file, index) in selectedFiles" 
+              :key="index"
+              :class="['positioning-tab', { 
+                'active': activePositioningIndex === index,
+                'completed': documentPositions[index]?.completed 
+              }]"
+              @click="selectPositioningDocument(index)"
+            >
+              <div class="positioning-tab-content">
+                <i class="bi bi-file-earmark-pdf"></i>
+                <span class="tab-name">{{ truncateFileName(file.name) }}</span>
+                <div class="completion-status">
+                  <i v-if="documentPositions[index]?.completed" class="bi bi-check-circle-fill completed-icon"></i>
+                  <i v-else class="bi bi-circle pending-icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Information du document en cours de positionnement -->
+          <div class="positioning-info" v-if="selectedFiles[activePositioningIndex]">
+            <h4>
+              <i class="bi bi-crosshair"></i> 
+              Positionnement du QR code - {{ selectedFiles[activePositioningIndex].name }}
+            </h4>
+            <p class="positioning-hint">
+              Document {{ activePositioningIndex + 1 }} sur {{ selectedFiles.length }}
+              <span v-if="documentPositions[activePositioningIndex]?.completed" class="status-completed">
+                ✓ Positionné
+              </span>
+              <span v-else class="status-pending">
+                En attente de positionnement
+              </span>
+            </p>
+          </div>
+
+          <!-- Composant de positionnement -->
+          <div class="qr-position-container" v-if="selectedFiles[activePositioningIndex]">
             <qr-positioner
-              :pdf-file="selectedFile"
-              :total-pages="pdfTotalPages || 1"
+              :pdf-file="selectedFiles[activePositioningIndex]"
+              :total-pages="documentPreviews[activePositioningIndex]?.totalPages || 1"
               @position-changed="onQrPositionChanged"
               @position-confirmed="onQrPositionConfirmed"
             ></qr-positioner>
           </div>
           
+          <!-- Statut global et boutons de soumission -->
           <div class="submit-options">
+            <div class="global-status">
+              <div class="documents-status">
+                <span class="completed-count">
+                  {{ Object.keys(documentPositions).filter(key => documentPositions[key]?.completed).length }}
+                </span>
+                /
+                <span class="total-count">{{ selectedFiles.length }}</span>
+                documents positionnés
+              </div>
+              
+              <div class="status-list">
+                <div v-for="(file, index) in selectedFiles" :key="index" class="document-status-item">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                  <span class="status-file-name">{{ truncateFileName(file.name, 15) }}</span>
+                  <span v-if="documentPositions[index]?.completed" class="status-badge completed">
+                    <i class="bi bi-check"></i> Positionné
+                  </span>
+                  <span v-else class="status-badge pending">
+                    <i class="bi bi-clock"></i> En attente
+                  </span>
+                </div>
+              </div>
+            </div>
+
             <p class="submit-hint">
               <i class="bi bi-info-circle"></i>
-              Une fois que vous êtes satisfait du positionnement du QR code, vous pouvez soumettre le document pour signature ou l'enregistrer comme brouillon.
+              Une fois que tous les documents ont leurs QR codes positionnés, vous pouvez les soumettre pour signature ou les enregistrer comme brouillons.
             </p>
+            
             <div class="submit-buttons">
               <button 
                 @click="submitDocument" 
                 class="submit-button primary"
+                :disabled="!canProceedToNextStep"
               >
                 <i class="bi bi-send"></i> Soumettre pour signature
+                <span class="button-count">({{ selectedFiles.length }})</span>
               </button>
               <button 
                 @click="saveAsDraft" 
                 class="submit-button secondary"
+                :disabled="!canProceedToNextStep"
               >
-                <i class="bi bi-save"></i> Enregistrer comme brouillon
+                <i class="bi bi-save"></i> Enregistrer comme brouillons
+                <span class="button-count">({{ selectedFiles.length }})</span>
               </button>
             </div>
           </div>
@@ -105,7 +205,7 @@
                   <div class="spinner"></div>
                 </div>
               </div>
-              <p class="processing-text">Préparation du document en cours...</p>
+              <p class="processing-text">Préparation des {{ selectedFiles.length }} document(s) en cours...</p>
             </div>
             <div v-else-if="submissionStatus === 'error'" class="submission-error">
               <i class="bi bi-exclamation-circle"></i>
@@ -116,16 +216,18 @@
               <div class="success-animation">
                 <i class="bi bi-check-circle-fill"></i>
               </div>
-              <h3>Document préparé avec succès !</h3>
-              <p>Le document a été envoyé au signataire et est disponible dans votre tableau de bord.</p>
+              <h3>Documents préparés avec succès !</h3>
+              <p>Les {{ selectedFiles.length }} document(s) ont été envoyés au signataire et sont disponibles dans votre tableau de bord.</p>
               
-              <div class="document-info">
-                <div class="document-icon large">
-                  <i class="bi bi-file-earmark-check"></i>
-                </div>
-                <div class="document-details">
-                  <div class="document-name">{{ selectedFile.name }}</div>
-                  <div class="preparation-date">Préparé le {{ preparationDate }}</div>
+              <div class="documents-list">
+                <div v-for="(file, index) in selectedFiles" :key="index" class="document-info">
+                  <div class="document-icon large">
+                    <i class="bi bi-file-earmark-check"></i>
+                  </div>
+                  <div class="document-details">
+                    <div class="document-name">{{ file.name }}</div>
+                    <div class="preparation-date">Préparé le {{ preparationDate }}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -189,38 +291,37 @@ const currentStep = ref(0);
 const fileInput = ref(null);
 const pdfPreview = ref(null);
 
-// État des documents
-const selectedFile = ref(null);
+// État des documents (MODIFICATION: support multi-documents)
+const selectedFiles = ref([]);
+const activeDocumentIndex = ref(0);
+const activePositioningIndex = ref(0);
 
-// État de la prévisualisation
-const pdfPreviewUrl = ref('');
-const pdfPreviewLoading = ref(false);
-const pdfPreviewError = ref(null);
-const pdfTotalPages = ref(1);
+// État de la prévisualisation (MODIFICATION: support multi-documents)
+const documentPreviews = ref([]);
+const documentPositions = ref({});
 
 // État de la soumission
 const submissionStatus = ref(null); // 'loading', 'error', 'success'
 const submissionError = ref(null);
 const preparationDate = ref('');
 
-// État pour le positionnement du QR code
-const qrPosition = ref({
-  x: 85,
-  y: 90,
-  size: 'medium'
-});
+// État pour le positionnement du QR code (SUPPRIMÉ: remplacé par documentPositions)
 
-// Propriété calculée pour contrôler la progression des étapes
+// Propriété calculée pour contrôler la progression des étapes (MODIFICATION: multi-documents)
 const canProceedToNextStep = computed(() => {
   if (currentStep.value === 0) {
-    // Étape 1: Un fichier PDF doit être sélectionné
-    return selectedFile.value !== null;
+    // Étape 1: Au moins un fichier PDF doit être sélectionné
+    return selectedFiles.value.length > 0;
   } else if (currentStep.value === 1) {
-    // Étape 2: La prévisualisation doit être chargée
-    return selectedFile.value !== null && !pdfPreviewLoading.value && !pdfPreviewError.value;
+    // Étape 2: Les prévisualisations doivent être chargées
+    return selectedFiles.value.length > 0 && 
+           documentPreviews.value.length === selectedFiles.value.length &&
+           documentPreviews.value.every(preview => !preview.loading && !preview.error);
   } else if (currentStep.value === 2) {
-    // Étape 3: Position du QR code doit être définie
-    return qrPosition.value !== null;
+    // Étape 3: Tous les documents doivent avoir leurs positions définies
+    return selectedFiles.value.every((_, index) => 
+      documentPositions.value[index]?.hasPositions
+    );
   }
   
   return true;
@@ -245,14 +346,16 @@ function triggerFileInput() {
 }
 
 function handleFileSelection(event) {
-  const file = event.target.files[0];
-  if (file && file.type === 'application/pdf') {
-    selectedFile.value = file;
+  const files = Array.from(event.target.files);
+  const pdfFiles = files.filter(file => file.type === 'application/pdf');
+  
+  if (pdfFiles.length > 0) {
+    selectedFiles.value = [...selectedFiles.value, ...pdfFiles];
     
     // Si nous sommes à l'étape de sélection, passer automatiquement à la prévisualisation
     if (currentStep.value === 0) {
       nextStep();
-      createPdfPreview(file);
+      createDocumentPreviews();
     }
   }
 }
@@ -260,14 +363,16 @@ function handleFileSelection(event) {
 function handleFileDrop(event) {
   event.preventDefault();
   
-  const file = event.dataTransfer.files[0];
-  if (file && file.type === 'application/pdf') {
-    selectedFile.value = file;
+  const files = Array.from(event.dataTransfer.files);
+  const pdfFiles = files.filter(file => file.type === 'application/pdf');
+  
+  if (pdfFiles.length > 0) {
+    selectedFiles.value = [...selectedFiles.value, ...pdfFiles];
     
     // Si nous sommes à l'étape de sélection, passer automatiquement à la prévisualisation
     if (currentStep.value === 0) {
       nextStep();
-      createPdfPreview(file);
+      createDocumentPreviews();
     }
   }
 }
@@ -282,27 +387,45 @@ function formatFileSize(size) {
   }
 }
 
-// Générer une prévisualisation du PDF
-function createPdfPreview(file) {
-  if (!file) return;
+// Créer les prévisualisations pour tous les documents (NOUVEAU: multi-documents)
+function createDocumentPreviews() {
+  console.log('Création des prévisualisations pour', selectedFiles.value.length, 'documents');
   
-  pdfPreviewLoading.value = true;
-  pdfPreviewError.value = null;
+  documentPreviews.value = selectedFiles.value.map((file, index) => {
+    const preview = {
+      loading: true,
+      error: null,
+      url: null,
+      totalPages: 1
+    };
+    
+    console.log(`Création prévisualisation pour ${file.name} (index ${index})`);
+    
+    // Créer l'URL de prévisualisation immédiatement
+    try {
+      const fileUrl = URL.createObjectURL(file);
+      preview.url = fileUrl;
+      preview.loading = false;
+      
+      // Détecter le nombre de pages
+      detectPdfPages(file).then(pages => {
+        preview.totalPages = pages;
+      });
+      
+      console.log(`URL créée pour ${file.name}:`, fileUrl);
+    } catch (error) {
+      console.error(`Erreur création URL pour ${file.name}:`, error);
+      preview.error = 'Erreur de chargement';
+      preview.loading = false;
+    }
+    
+    return preview;
+  });
   
-  // Créer une URL d'objet pour le fichier
-  const fileUrl = URL.createObjectURL(file);
-  pdfPreviewUrl.value = fileUrl;
-  
-  // Essayer de déterminer le nombre de pages du PDF
-  detectPdfPages(file);
-  
-  // Vérifier que le fichier charge correctement
-  setTimeout(() => {
-    pdfPreviewLoading.value = false;
-  }, 1500);
+  console.log('Prévisualisations créées:', documentPreviews.value);
 }
 
-// Fonction pour détecter le nombre de pages du PDF
+// Fonction pour détecter le nombre de pages du PDF (MODIFICATION: retourne une promesse)
 async function detectPdfPages(file) {
   try {
     console.log('Tentative de détection du nombre de pages...');
@@ -313,9 +436,8 @@ async function detectPdfPages(file) {
     // Utiliser PDF.js si disponible
     if (window.pdfjsLib) {
       const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      pdfTotalPages.value = pdf.numPages;
       console.log(`PDF analysé avec PDF.js: ${pdf.numPages} pages détectées`);
-      return;
+      return pdf.numPages;
     }
     
     // Fallback : essayer de deviner depuis la taille du fichier
@@ -323,30 +445,133 @@ async function detectPdfPages(file) {
     let estimatedPages = Math.max(1, Math.round(fileSizeKB / 50)); // Estimation: ~50KB par page
     estimatedPages = Math.min(estimatedPages, 100); // Max 100 pages estimées
     
-    pdfTotalPages.value = estimatedPages;
     console.log(`Estimation du nombre de pages basée sur la taille: ${estimatedPages} pages (taille: ${fileSizeKB.toFixed(1)}KB)`);
+    return estimatedPages;
     
   } catch (error) {
     console.error('Erreur lors de la détection des pages:', error);
-    pdfTotalPages.value = 1;
+    return 1;
   }
 }
 
-// Méthodes pour le positionnement du QR code
+// Fonctions de navigation entre documents (NOUVEAU: multi-documents)
+function selectDocument(index) {
+  activeDocumentIndex.value = index;
+}
+
+function selectPositioningDocument(index) {
+  activePositioningIndex.value = index;
+}
+
+function truncateFileName(fileName, maxLength = 20) {
+  if (fileName.length <= maxLength) return fileName;
+  const extension = fileName.split('.').pop();
+  const nameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
+  const truncatedName = nameWithoutExt.substring(0, maxLength - extension.length - 4);
+  return `${truncatedName}...${extension}`;
+}
+
+function removeDocument(index) {
+  selectedFiles.value.splice(index, 1);
+  documentPreviews.value.splice(index, 1);
+  
+  // Supprimer les positions de ce document et réorganiser les indices
+  const newPositions = {};
+  Object.keys(documentPositions.value).forEach(key => {
+    const keyIndex = parseInt(key);
+    if (keyIndex < index) {
+      newPositions[keyIndex] = documentPositions.value[key];
+    } else if (keyIndex > index) {
+      newPositions[keyIndex - 1] = documentPositions.value[key];
+    }
+  });
+  documentPositions.value = newPositions;
+  
+  // Ajuster les indices actifs
+  if (activeDocumentIndex.value >= index && activeDocumentIndex.value > 0) {
+    activeDocumentIndex.value--;
+  }
+  if (activePositioningIndex.value >= index && activePositioningIndex.value > 0) {
+    activePositioningIndex.value--;
+  }
+  
+  // Si plus de documents, revenir à l'étape de sélection
+  if (selectedFiles.value.length === 0) {
+    currentStep.value = 0;
+  }
+}
+
+// Méthodes pour le positionnement du QR code (MODIFICATION: support multi-documents)
 function onQrPositionChanged(position) {
-  qrPosition.value = position;
+  if (!documentPositions.value[activePositioningIndex.value]) {
+    documentPositions.value[activePositioningIndex.value] = {};
+  }
+  documentPositions.value[activePositioningIndex.value].qr_position = position.qr || position; // CORRECTION: gérer les deux structures
 }
 
 function onQrPositionConfirmed(position) {
-  qrPosition.value = position;
+  console.log('Positions confirmées pour le document', activePositioningIndex.value, ':', position);
+  console.log('DEBUG - Position storing for index:', activePositioningIndex.value);
+  console.log('DEBUG - Position data:', position);
+  console.log('DEBUG - position.qr:', position.qr);
+  console.log('DEBUG - position.qr keys:', Object.keys(position.qr || {}));
+  console.log('DEBUG - position.qr.x:', position.qr?.x);
+  console.log('DEBUG - position.qr.y:', position.qr?.y);
+  
+  // Stocker les positions pour le document actuel
+  if (!documentPositions.value[activePositioningIndex.value]) {
+    documentPositions.value[activePositioningIndex.value] = {};
+  }
+  
+  // CORRECTION: Extraire les coordonnées de la première page positionée
+  const firstPageKey = Object.keys(position.qr?.positions || {})[0];
+  const firstPagePosition = position.qr?.positions?.[firstPageKey];
+  
+  console.log('DEBUG - firstPageKey:', firstPageKey);
+  console.log('DEBUG - firstPagePosition:', firstPagePosition);
+  console.log('DEBUG - firstPagePosition.x:', firstPagePosition?.x);
+  console.log('DEBUG - firstPagePosition.y:', firstPagePosition?.y);
+  
+  const qrPosition = {
+    x: firstPagePosition?.x || 85, // valeur par défaut si pas trouvée
+    y: firstPagePosition?.y || 90, // valeur par défaut si pas trouvée
+    size: position.qr?.size || 'medium',
+    pages: position.qr?.pages || ['all'],
+    positions: position.qr?.positions || {},
+    mode: position.qr?.mode || 'standard'
+  };
+  
+  console.log('DEBUG - qrPosition créé:', qrPosition);
+  
+  documentPositions.value[activePositioningIndex.value].qr_position = qrPosition;
+  documentPositions.value[activePositioningIndex.value].hasPositions = true;
+  documentPositions.value[activePositioningIndex.value].completed = true;
+  
+  console.log('Document', activePositioningIndex.value, 'marqué comme terminé');
+  console.log('DEBUG - After storing, documentPositions keys:', Object.keys(documentPositions.value));
+  console.log('DEBUG - Stored QR position for index', activePositioningIndex.value, ':', documentPositions.value[activePositioningIndex.value].qr_position);
+  console.log('DEBUG - Stored QR x:', documentPositions.value[activePositioningIndex.value].qr_position?.x);
+  console.log('DEBUG - Stored QR y:', documentPositions.value[activePositioningIndex.value].qr_position?.y);
+  
+  // Passer automatiquement au document suivant s'il y en a un non terminé
+  const nextIncomplete = selectedFiles.value.findIndex((_, index) => 
+    index > activePositioningIndex.value && !documentPositions.value[index]?.completed
+  );
+  
+  if (nextIncomplete !== -1) {
+    console.log('Passage automatique au document suivant non terminé:', nextIncomplete);
+    activePositioningIndex.value = nextIncomplete;
+  }
 }
 
-// Soumettre le document pour signature
+// Soumettre tous les documents pour signature (MODIFICATION: support multi-documents)
 async function submitDocument() {
   submissionStatus.value = 'loading';
   currentStep.value = 3; // Passer à l'étape de confirmation
   
   try {
+    console.log('Démarrage de la soumission de', selectedFiles.value.length, 'documents');
+    
     // Obtenir les informations du collaborateur connecté
     const userInfo = JSON.parse(localStorage.getItem('user') || '{}');
     if (!userInfo.id) {
@@ -358,121 +583,149 @@ async function submitDocument() {
       throw new Error('Informations de l\'organisation manquantes. Veuillez vous reconnecter.');
     }
     
-    // Vérifier que les données de position du QR sont valides
-    if (!qrPosition.value || typeof qrPosition.value.x !== 'number' || typeof qrPosition.value.y !== 'number') {
-      throw new Error('Position du QR code invalide. Veuillez repositionner le QR code.');
-    }
+    const processedDocuments = [];
     
-    console.log('Position QR à envoyer:', qrPosition.value);
-    
-    // Créer les données de position du QR code
-    const formData = new FormData();
-    formData.append('document_file', selectedFile.value);
-    formData.append('document_name', selectedFile.value.name);
-    
-    // Ajouter les informations de position du QR code avec conversion explicite en string
-    formData.append('qr_x_position', qrPosition.value.x.toString());
-    formData.append('qr_y_position', qrPosition.value.y.toString());
-    formData.append('qr_size', qrPosition.value.size.toString());
-    
-    // Simplification de qr_pages qui est maintenant un CharField
-    formData.append('qr_pages', qrPosition.value.pages || 'all');
-    formData.append('qr_positions', JSON.stringify(qrPosition.value.positions || {}));
-    formData.append('qr_mode', qrPosition.value.mode || 'standard');
-    
-    // Ajouter le statut
-    formData.append('status', 'pending_signature');
-    
-    // Ajouter le nom de l'organisation
-    formData.append('organization_name', userInfo.organization.name);
-    
-    // Ajouter des métadonnées supplémentaires si nécessaire
-    const metadata = {
-      prepared_by: {
-        user_id: userInfo.id || '',
-        username: userInfo.username || '',
-        email: userInfo.email || '',
-        full_name: userInfo.fullName || '',
-      },
-      organization: {
-        id: userInfo.organization.id,
-        name: userInfo.organization.name || '',
-        serial_number: userInfo.organization.serial_number || '',
-      },
-      browser_info: navigator.userAgent,
-    };
-    formData.append('metadata', JSON.stringify(metadata));
-    
-    console.log('Envoi du document au backend...');
-    
-    // Vérifier le contenu du formData (debug)
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value instanceof File ? value.name : value}`);
-    }
-    
-    // Appel direct à l'API Django
-    const apiUrl = 'https://192.168.4.131:8000/api/documents/qr-positions/';
-    
-    // Configuration de la requête avec axios
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${localStorage.getItem('token')}` // Utiliser le token d'authentification
+    // Traiter chaque document séquentiellement
+    for (let i = 0; i < selectedFiles.value.length; i++) {
+      const file = selectedFiles.value[i];
+      const documentPosition = documentPositions.value[i];
+      
+      console.log(`Soumission du document ${i + 1}/${selectedFiles.value.length}: ${file.name}`);
+      console.log('DEBUG - Index:', i, 'DocumentPosition:', documentPosition);
+      console.log('DEBUG - DocumentPosition exists:', !!documentPosition);
+      console.log('DEBUG - DocumentPosition.qr_position:', documentPosition?.qr_position);
+      console.log('DEBUG - QR position x:', documentPosition?.qr_position?.x);
+      console.log('DEBUG - QR position y:', documentPosition?.qr_position?.y);
+      console.log('DEBUG - Toutes les positions keys:', Object.keys(documentPositions.value));
+      
+      // Vérifier que les données de position du QR sont valides pour ce document
+      if (!documentPosition?.qr_position || 
+          typeof documentPosition.qr_position.x !== 'number' || 
+          typeof documentPosition.qr_position.y !== 'number') {
+        console.log('DEBUG - Validation failed. documentPosition:', documentPosition);
+        console.log('DEBUG - qr_position:', documentPosition?.qr_position);
+        console.log('DEBUG - x type:', typeof documentPosition?.qr_position?.x);
+        console.log('DEBUG - y type:', typeof documentPosition?.qr_position?.y);
+        throw new Error(`Position du QR code invalide pour le document "${file.name}". Veuillez repositionner le QR code.`);
       }
-    };
+      
+      console.log('Position QR à envoyer pour', file.name, ':', documentPosition.qr_position);
+      
+      // Créer les données pour ce document
+      const formData = new FormData();
+      formData.append('document_file', file);
+      formData.append('document_name', file.name);
+      
+      // Ajouter les informations de position du QR code avec conversion explicite en string
+      formData.append('qr_x_position', documentPosition.qr_position.x.toString());
+      formData.append('qr_y_position', documentPosition.qr_position.y.toString());
+      formData.append('qr_size', documentPosition.qr_position.size.toString());
+      
+      // Simplification de qr_pages qui est maintenant un CharField
+      formData.append('qr_pages', documentPosition.qr_position.pages || 'all');
+      formData.append('qr_positions', JSON.stringify(documentPosition.qr_position.positions || {}));
+      formData.append('qr_mode', documentPosition.qr_position.mode || 'standard');
+      
+      // Ajouter le statut
+      formData.append('status', 'pending_signature');
+      
+      // Ajouter le nom de l'organisation
+      formData.append('organization_name', userInfo.organization.name);
+      
+      // Ajouter des métadonnées supplémentaires
+      const metadata = {
+        prepared_by: {
+          user_id: userInfo.id || '',
+          username: userInfo.username || '',
+          email: userInfo.email || '',
+          full_name: userInfo.fullName || '',
+        },
+        organization: {
+          id: userInfo.organization.id,
+          name: userInfo.organization.name || '',
+          serial_number: userInfo.organization.serial_number || '',
+        },
+        browser_info: navigator.userAgent,
+        batch_info: {
+          document_index: i + 1,
+          total_documents: selectedFiles.value.length,
+          batch_id: Date.now().toString()
+        }
+      };
+      formData.append('metadata', JSON.stringify(metadata));
+      
+      // Configuration de la requête avec axios
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      };
+      
+      // Appel direct à l'API Django
+      const apiUrl = 'https://192.168.4.131:8000/api/documents/qr-positions/';
+      
+      // Appel API avec timeout plus long pour les gros fichiers
+      const response = await axios.post(apiUrl, formData, {
+        ...config,
+        timeout: 30000 // 30 secondes
+      });
+      
+      // Traiter la réponse
+      if (response.status === 200 || response.status === 201) {
+        const documentId = response.data.id;
+        console.log(`Document ${file.name} préparé avec succès, ID:`, documentId);
+        
+        processedDocuments.push({
+          id: documentId,
+          name: file.name,
+          status: 'pending_signature'
+        });
+      } else {
+        throw new Error(`Erreur lors de la préparation du document "${file.name}"`);
+      }
+    }
     
-    // Appel API avec timeout plus long pour les gros fichiers
-    const response = await axios.post(apiUrl, formData, {
-      ...config,
-      timeout: 30000 // 30 secondes
+    // Formater la date de préparation
+    preparationDate.value = new Date().toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
     
-    // Traiter la réponse
-    if (response.status === 200 || response.status === 201) {
-      // Extraire l'ID du document préparé des données de réponse
-      const documentId = response.data.id;
-      console.log('Document préparé avec succès, ID:', documentId);
-      
-      // Formater la date de préparation
-      preparationDate.value = new Date().toLocaleDateString('fr-FR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      
-      // Passer à l'étape de confirmation
-      currentStep.value = 3;
-      submissionStatus.value = 'success';
-      
-      // Émettre l'événement documentPrepared
-      emit('documentPrepared', {
-        id: documentId,
-        name: selectedFile.value.name,
-        status: 'pending_signature'
-      });
-    } else {
-      throw new Error('Erreur lors de la préparation du document');
-    }
+    // Passer à l'étape de confirmation
+    submissionStatus.value = 'success';
+    
+    // Émettre l'événement documentPrepared pour tous les documents
+    emit('documentPrepared', {
+      documents: processedDocuments,
+      count: processedDocuments.length,
+      status: 'pending_signature'
+    });
+    
+    console.log('Tous les documents ont été préparés avec succès');
     
   } catch (error) {
-    console.error('Erreur lors de la préparation du document:', error);
+    console.error('Erreur lors de la préparation des documents:', error);
     console.error('Détails de l\'erreur:', error.response?.data || 'Pas de détails disponibles');
     submissionStatus.value = 'error';
     submissionError.value = error.response?.data?.error || 
                             error.response?.data?.detail || 
                             error.message || 
-                            "Une erreur est survenue lors de la préparation du document.";
+                            "Une erreur est survenue lors de la préparation des documents.";
   }
 }
 
-// Sauvegarder le document comme brouillon
+// Sauvegarder tous les documents comme brouillons (MODIFICATION: support multi-documents)
 async function saveAsDraft() {
   submissionStatus.value = 'loading';
   currentStep.value = 3; // Passer à l'étape de confirmation
   
   try {
+    console.log('Démarrage de la sauvegarde de', selectedFiles.value.length, 'documents comme brouillons');
+    
     // Obtenir les informations du collaborateur connecté
     const userInfo = JSON.parse(localStorage.getItem('user') || '{}');
     if (!userInfo.id) {
@@ -484,132 +737,152 @@ async function saveAsDraft() {
       throw new Error('Informations de l\'organisation manquantes. Veuillez vous reconnecter.');
     }
     
-    // Vérifier que les données de position du QR sont valides
-    if (!qrPosition.value || typeof qrPosition.value.x !== 'number' || typeof qrPosition.value.y !== 'number') {
-      throw new Error('Position du QR code invalide. Veuillez repositionner le QR code.');
-    }
+    const savedDocuments = [];
     
-    console.log('Position QR à envoyer (brouillon):', qrPosition.value);
-    
-    // Créer les données de position du QR code
-    const formData = new FormData();
-    formData.append('document_file', selectedFile.value);
-    formData.append('document_name', selectedFile.value.name);
-    
-    // Ajouter les informations de position du QR code avec conversion explicite en string
-    formData.append('qr_x_position', qrPosition.value.x.toString());
-    formData.append('qr_y_position', qrPosition.value.y.toString());
-    formData.append('qr_size', qrPosition.value.size.toString());
-    
-    // Simplification de qr_pages qui est maintenant un CharField
-    formData.append('qr_pages', qrPosition.value.pages || 'all');
-    formData.append('qr_positions', JSON.stringify(qrPosition.value.positions || {}));
-    formData.append('qr_mode', qrPosition.value.mode || 'standard');
-    
-    // Ajouter le statut
-    formData.append('status', 'draft');
-    
-    // Ajouter le nom de l'organisation
-    formData.append('organization_name', userInfo.organization.name);
-    
-    // Ajouter des métadonnées supplémentaires si nécessaire
-    const metadata = {
-      prepared_by: {
-        user_id: userInfo.id || '',
-        username: userInfo.username || '',
-        email: userInfo.email || '',
-        full_name: userInfo.fullName || '',
-      },
-      organization: {
-        id: userInfo.organization.id,
-        name: userInfo.organization.name || '',
-        serial_number: userInfo.organization.serial_number || '',
-      },
-      browser_info: navigator.userAgent,
-    };
-    formData.append('metadata', JSON.stringify(metadata));
-    
-    console.log('Envoi du brouillon au backend...');
-    
-    // Vérifier le contenu du formData (debug)
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value instanceof File ? value.name : value}`);
-    }
-    
-    // Appel direct à l'API Django
-    const apiUrl = 'http://192.168.4.131:8000/api/documents/qr-positions/';
-    
-    // Configuration de la requête avec axios
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${localStorage.getItem('token')}` // Utiliser le token d'authentification
+    // Traiter chaque document séquentiellement
+    for (let i = 0; i < selectedFiles.value.length; i++) {
+      const file = selectedFiles.value[i];
+      const documentPosition = documentPositions.value[i];
+      
+      console.log(`Sauvegarde du document ${i + 1}/${selectedFiles.value.length}: ${file.name}`);
+      
+      // Vérifier que les données de position du QR sont valides pour ce document
+      if (!documentPosition?.qr_position || 
+          typeof documentPosition.qr_position.x !== 'number' || 
+          typeof documentPosition.qr_position.y !== 'number') {
+        throw new Error(`Position du QR code invalide pour le document "${file.name}". Veuillez repositionner le QR code.`);
       }
-    };
+      
+      console.log('Position QR à envoyer pour le brouillon', file.name, ':', documentPosition.qr_position);
+      
+      // Créer les données pour ce document
+      const formData = new FormData();
+      formData.append('document_file', file);
+      formData.append('document_name', file.name);
+      
+      // Ajouter les informations de position du QR code avec conversion explicite en string
+      formData.append('qr_x_position', documentPosition.qr_position.x.toString());
+      formData.append('qr_y_position', documentPosition.qr_position.y.toString());
+      formData.append('qr_size', documentPosition.qr_position.size.toString());
+      
+      // Simplification de qr_pages qui est maintenant un CharField
+      formData.append('qr_pages', documentPosition.qr_position.pages || 'all');
+      formData.append('qr_positions', JSON.stringify(documentPosition.qr_position.positions || {}));
+      formData.append('qr_mode', documentPosition.qr_position.mode || 'standard');
+      
+      // Ajouter le statut
+      formData.append('status', 'draft');
+      
+      // Ajouter le nom de l'organisation
+      formData.append('organization_name', userInfo.organization.name);
+      
+      // Ajouter des métadonnées supplémentaires
+      const metadata = {
+        prepared_by: {
+          user_id: userInfo.id || '',
+          username: userInfo.username || '',
+          email: userInfo.email || '',
+          full_name: userInfo.fullName || '',
+        },
+        organization: {
+          id: userInfo.organization.id,
+          name: userInfo.organization.name || '',
+          serial_number: userInfo.organization.serial_number || '',
+        },
+        browser_info: navigator.userAgent,
+        batch_info: {
+          document_index: i + 1,
+          total_documents: selectedFiles.value.length,
+          batch_id: Date.now().toString()
+        }
+      };
+      formData.append('metadata', JSON.stringify(metadata));
+      
+      // Configuration de la requête avec axios
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      };
+      
+      // Appel direct à l'API Django
+      const apiUrl = 'https://192.168.4.131:8000/api/documents/qr-positions/';
+      
+      // Appel API avec timeout plus long pour les gros fichiers
+      const response = await axios.post(apiUrl, formData, {
+        ...config,
+        timeout: 30000 // 30 secondes
+      });
+      
+      // Traiter la réponse
+      if (response.status === 200 || response.status === 201) {
+        const documentId = response.data.id;
+        console.log(`Brouillon ${file.name} sauvegardé avec succès, ID:`, documentId);
+        
+        savedDocuments.push({
+          id: documentId,
+          name: file.name,
+          status: 'draft'
+        });
+      } else {
+        throw new Error(`Erreur lors de la sauvegarde du brouillon "${file.name}"`);
+      }
+    }
     
-    // Appel API avec timeout plus long pour les gros fichiers
-    const response = await axios.post(apiUrl, formData, {
-      ...config,
-      timeout: 30000 // 30 secondes
+    // Formater la date de préparation
+    preparationDate.value = new Date().toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
     
-    // Traiter la réponse
-    if (response.status === 200 || response.status === 201) {
-      // Extraire l'ID du document préparé des données de réponse
-      const documentId = response.data.id;
-      console.log('Brouillon sauvegardé avec succès, ID:', documentId);
-      
-      // Formater la date de préparation
-      preparationDate.value = new Date().toLocaleDateString('fr-FR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      
-      // Passer à l'étape de confirmation
-      currentStep.value = 3;
-      submissionStatus.value = 'success';
-      
-      // Émettre l'événement documentPrepared
-      emit('documentPrepared', {
-        id: documentId,
-        name: selectedFile.value.name,
-        status: 'draft'
-      });
-    } else {
-      throw new Error('Erreur lors de la sauvegarde du brouillon');
-    }
+    // Passer à l'étape de confirmation
+    submissionStatus.value = 'success';
+    
+    // Émettre l'événement documentPrepared pour tous les documents
+    emit('documentPrepared', {
+      documents: savedDocuments,
+      count: savedDocuments.length,
+      status: 'draft'
+    });
+    
+    console.log('Tous les brouillons ont été sauvegardés avec succès');
     
   } catch (error) {
-    console.error('Erreur lors de la sauvegarde du brouillon:', error);
+    console.error('Erreur lors de la sauvegarde des brouillons:', error);
     console.error('Détails de l\'erreur:', error.response?.data || 'Pas de détails disponibles');
     submissionStatus.value = 'error';
     submissionError.value = error.response?.data?.error || 
                             error.response?.data?.detail || 
                             error.message || 
-                            "Une erreur est survenue lors de la sauvegarde du brouillon.";
+                            "Une erreur est survenue lors de la sauvegarde des brouillons.";
   }
 }
 
-// Méthode pour fermer le composant
+// Méthode pour fermer le composant (MODIFICATION: nettoyage multi-documents)
 function closePreparation() {
-  // Nettoyer les ressources
-  if (pdfPreviewUrl.value) {
-    URL.revokeObjectURL(pdfPreviewUrl.value);
-  }
+  // Nettoyer les ressources pour tous les documents
+  documentPreviews.value.forEach(preview => {
+    if (preview.url) {
+      URL.revokeObjectURL(preview.url);
+    }
+  });
   
   // Émettre l'événement pour fermer le composant
   emit('close');
 }
 
-// Nettoyer les ressources lors du démontage du composant
+// Nettoyer les ressources lors du démontage du composant (MODIFICATION: nettoyage multi-documents)
 onMounted(() => {
   return () => {
-    if (pdfPreviewUrl.value) {
-      URL.revokeObjectURL(pdfPreviewUrl.value);
-    }
+    documentPreviews.value.forEach(preview => {
+      if (preview.url) {
+        URL.revokeObjectURL(preview.url);
+      }
+    });
   };
 });
 </script>
@@ -1147,6 +1420,307 @@ onMounted(() => {
   }
 }
 
+/* Styles pour les onglets de documents */
+.document-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color, #dee2e6);
+  padding-bottom: 15px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.document-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.document-tab {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color, #dee2e6);
+  background: #fff;
+  min-width: 180px;
+  flex-shrink: 0;
+}
+
+.document-tab:hover {
+  border-color: var(--primary, #4a6cf7);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(74, 108, 247, 0.15);
+}
+
+.document-tab.active {
+  border-color: var(--accent-color, #06ffa5);
+  background: linear-gradient(135deg, rgba(6, 255, 165, 0.1), rgba(6, 255, 165, 0.05));
+  box-shadow: 0 4px 12px rgba(6, 255, 165, 0.2);
+}
+
+.tab-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.tab-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-color, #212529);
+  flex: 1;
+}
+
+.remove-document-btn {
+  background: rgba(220, 53, 69, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--danger, #dc3545);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+}
+
+.remove-document-btn:hover {
+  background: rgba(220, 53, 69, 0.2);
+  transform: scale(1.1);
+}
+
+/* Styles pour le positionnement multi-documents */
+.positioning-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color, #dee2e6);
+  padding-bottom: 15px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.positioning-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.positioning-tab {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 10px 15px;
+  border: 1px solid var(--border-color, #dee2e6);
+  background: #fff;
+  min-width: 200px;
+  flex-shrink: 0;
+}
+
+.positioning-tab:hover {
+  border-color: var(--primary, #4a6cf7);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(74, 108, 247, 0.15);
+}
+
+.positioning-tab.active {
+  border-color: var(--accent-color, #06ffa5);
+  background: linear-gradient(135deg, rgba(6, 255, 165, 0.1), rgba(6, 255, 165, 0.05));
+  box-shadow: 0 4px 12px rgba(6, 255, 165, 0.2);
+}
+
+.positioning-tab.completed {
+  border-color: var(--success, #28a745);
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(40, 167, 69, 0.05));
+}
+
+.positioning-tab-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.completion-status {
+  margin-left: auto;
+}
+
+.completed-icon {
+  color: var(--success, #28a745);
+  font-size: 16px;
+}
+
+.pending-icon {
+  color: var(--text-muted, #6c757d);
+  font-size: 16px;
+}
+
+/* Styles pour les informations de positionnement */
+.positioning-info {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(6, 255, 165, 0.05);
+  border-radius: 8px;
+  border-left: 4px solid var(--accent-color, #06ffa5);
+}
+
+.positioning-info h4 {
+  margin: 0 0 5px 0;
+  color: var(--text-color, #212529);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.positioning-hint {
+  margin: 0;
+  color: var(--text-muted, #6c757d);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-completed {
+  color: var(--success, #28a745);
+  font-weight: 500;
+}
+
+.status-pending {
+  color: var(--warning, #ffc107);
+  font-weight: 500;
+}
+
+/* Styles pour le statut global */
+.global-status {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #dee2e6);
+}
+
+.documents-status {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-color, #212529);
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.completed-count {
+  color: var(--success, #28a745);
+}
+
+.total-count {
+  color: var(--text-muted, #6c757d);
+}
+
+.status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.document-status-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #dee2e6);
+}
+
+.status-file-name {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-color, #212529);
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-badge.completed {
+  background: rgba(40, 167, 69, 0.1);
+  color: var(--success, #28a745);
+}
+
+.status-badge.pending {
+  background: rgba(255, 193, 7, 0.1);
+  color: var(--warning, #ffc107);
+}
+
+/* Styles pour le bouton d'ajout de documents */
+.add-more-documents {
+  margin-top: 20px;
+  text-align: center;
+  padding: 15px;
+  border: 2px dashed var(--border-color, #dee2e6);
+  border-radius: 8px;
+  background: rgba(6, 255, 165, 0.02);
+}
+
+.add-document-btn {
+  background: transparent;
+  border: 1px solid var(--accent-color, #06ffa5);
+  color: var(--accent-color, #06ffa5);
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto;
+}
+
+.add-document-btn:hover {
+  background: var(--accent-color, #06ffa5);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 255, 165, 0.3);
+}
+
+/* Styles pour la liste des documents dans la confirmation */
+.documents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.documents-list .document-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(6, 255, 165, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(6, 255, 165, 0.1);
+}
+
+/* Styles pour les compteurs dans les boutons */
+.button-count {
+  font-size: 11px;
+  opacity: 0.8;
+  margin-left: 4px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .step-label {
@@ -1175,6 +1749,48 @@ onMounted(() => {
    
   .submit-button {
     width: 100%;
+  }
+  
+  /* Responsive pour les onglets */
+  .document-tabs, .positioning-tabs {
+    gap: 6px;
+  }
+  
+  .document-tab, .positioning-tab {
+    min-width: 140px;
+    padding: 6px 10px;
+  }
+  
+  .tab-name {
+    font-size: 12px;
+  }
+  
+  .positioning-info h4 {
+    font-size: 14px;
+  }
+  
+  .positioning-hint {
+    font-size: 13px;
+  }
+  
+  .status-list {
+    gap: 6px;
+  }
+  
+  .document-status-item {
+    padding: 6px 10px;
+  }
+  
+  .status-file-name {
+    font-size: 13px;
+  }
+  
+  .global-status {
+    padding: 12px;
+  }
+  
+  .documents-status {
+    font-size: 14px;
   }
 }
 
