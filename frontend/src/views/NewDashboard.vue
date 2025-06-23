@@ -187,7 +187,7 @@
       <!-- Section de signature multiple de documents -->
       <div v-else-if="activeContent === 'sign-multiple'" class="integrated-component-container">
         <SignWithTemplateMultiple @close="setActiveContent('dashboard')" />
-      </div>
+          </div>
       
       <!-- Composant SignSimple pour signature rapide -->
       <div v-else-if="activeContent === 'signSimple'">
@@ -916,7 +916,7 @@ const loadChartData = async () => {
     await initCharts();
   }
 };
-
+  
 // Fonction pour initialiser les graphiques
 const initCharts = async () => {
   try {

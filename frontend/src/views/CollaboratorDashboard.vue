@@ -285,12 +285,130 @@
       </section>
     </main>
 
-    <!-- Composant pour préparer un document -->
+    <!-- Modal de choix du type de préparation -->
+    <div v-if="showPrepareChoice" class="modal-overlay">
+      <div class="preparation-choice-modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title">
+              <i class="bi bi-file-earmark-plus"></i>
+              Préparer un document
+            </h3>
+            <button @click="closePrepareChoice" class="close-button">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          
+          <div class="modal-body">
+            <p class="choice-description">
+              Comment souhaitez-vous préparer votre document ?
+            </p>
+            
+            <div class="preparation-options">
+              <!-- Option Template -->
+              <div class="preparation-option" @click="selectTemplatePreparation">
+                <div class="option-icon template">
+                  <i class="bi bi-file-earmark-richtext"></i>
+                </div>
+                <div class="option-content">
+                  <h4 class="option-title">À partir d'un template</h4>
+                  <p class="option-description">
+                    Utiliser un modèle existant avec positions prédéfinies pour QR code et signature
+                  </p>
+                  <div class="option-features">
+                    <span class="feature">
+                      <i class="bi bi-check2"></i>
+                      Positions pré-configurées
+                    </span>
+                    <span class="feature">
+                      <i class="bi bi-check2"></i>
+                      Processus accéléré
+                    </span>
+                    <span class="feature">
+                      <i class="bi bi-check2"></i>
+                      Cohérence organisationnelle
+                    </span>
+                  </div>
+                </div>
+                <div class="option-arrow">
+                  <i class="bi bi-chevron-right"></i>
+                </div>
+              </div>
+              
+              <!-- Option Directe -->
+              <div class="preparation-option" @click="selectDirectPreparation">
+                <div class="option-icon direct">
+                  <i class="bi bi-file-earmark"></i>
+                </div>
+                <div class="option-content">
+                  <h4 class="option-title">Préparation directe</h4>
+                  <p class="option-description">
+                    Préparer le document manuellement en définissant vous-même les positions
+                  </p>
+                  <div class="option-features">
+                    <span class="feature">
+                      <i class="bi bi-check2"></i>
+                      Contrôle total
+                    </span>
+                    <span class="feature">
+                      <i class="bi bi-check2"></i>
+                      Personnalisation maximale
+                    </span>
+                    <span class="feature">
+                      <i class="bi bi-check2"></i>
+                      Flexibilité complète
+                    </span>
+                  </div>
+                </div>
+                <div class="option-arrow">
+                  <i class="bi bi-chevron-right"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal pour la préparation de document directe -->
     <div v-if="showPrepareDocument" class="modal-overlay">
       <prepare-document 
         @close="closePrepareDocument" 
         @documentPrepared="onDocumentPrepared"
       />
+    </div>
+
+    <!-- Modal pour la préparation avec template -->
+    <div v-if="showTemplatePreparation" class="modal-overlay">
+      <div class="template-preparation-modal">
+        <div class="modal-content large">
+          <div class="modal-header">
+            <h3 class="modal-title">
+              <i class="bi bi-file-earmark-richtext"></i>
+              Préparer avec un template
+            </h3>
+            <button @click="closeTemplatePreparation" class="close-button">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          
+          <div class="modal-body">
+            <p class="template-description">
+              Sélectionnez un template existant pour préparer votre document rapidement.
+            </p>
+            
+            <!-- Ici on intégrera la sélection de templates -->
+            <div class="coming-soon">
+              <i class="bi bi-hourglass-split"></i>
+              <h4>Fonctionnalité en cours de développement</h4>
+              <p>La préparation avec templates sera bientôt disponible.</p>
+              <button @click="selectDirectPreparation" class="btn-primary">
+                Utiliser la préparation directe
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -311,7 +429,9 @@ const organizationName = ref('');
 const organizationStatus = ref('');
 
 // État pour l'affichage des modales
+const showPrepareChoice = ref(false);
 const showPrepareDocument = ref(false);
+const showTemplatePreparation = ref(false);
 
 // Statistiques
 const stats = {
@@ -391,11 +511,29 @@ function getTimeElapsed(date) {
 }
 
 function openPrepareDocument() {
+  showPrepareChoice.value = true;
+}
+
+function closePrepareChoice() {
+  showPrepareChoice.value = false;
+}
+
+function selectTemplatePreparation() {
+  closePrepareChoice();
+  showTemplatePreparation.value = true;
+}
+
+function selectDirectPreparation() {
+  closePrepareChoice();
   showPrepareDocument.value = true;
 }
 
 function closePrepareDocument() {
   showPrepareDocument.value = false;
+}
+
+function closeTemplatePreparation() {
+  showTemplatePreparation.value = false;
 }
 
 async function fetchDocuments() {
@@ -1564,5 +1702,503 @@ onMounted(() => {
 @keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Modal de choix de préparation */
+.preparation-choice-modal .modal-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 1.25rem;
+  box-shadow: 0 20px 60px rgba(6, 255, 165, 0.15);
+  border: 1px solid rgba(6, 255, 165, 0.1);
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slide-up 0.4s ease;
+  position: relative;
+}
+
+.preparation-choice-modal .modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-color, #06ffa5), #39ffb4, var(--accent-color, #06ffa5));
+  background-size: 200% 100%;
+  border-radius: 1.25rem 1.25rem 0 0;
+  animation: gradientMove 3s ease infinite;
+}
+
+.preparation-choice-modal .modal-header {
+  padding: 2.5rem 2.5rem 1.5rem;
+  border-bottom: 1px solid rgba(6, 255, 165, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.preparation-choice-modal .modal-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 2.5rem;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-color, #06ffa5), #39ffb4);
+  border-radius: 3px;
+}
+
+.preparation-choice-modal .modal-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-color, #333);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.preparation-choice-modal .modal-title i {
+  color: var(--accent-color, #06ffa5);
+  font-size: 2rem;
+  background: rgba(6, 255, 165, 0.1);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+}
+
+.preparation-choice-modal .close-button {
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(6, 255, 165, 0.2);
+  font-size: 1.2rem;
+  color: var(--text-muted, #6c757d);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.preparation-choice-modal .close-button:hover {
+  background: var(--accent-color, #06ffa5);
+  border-color: var(--accent-color, #06ffa5);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 255, 165, 0.3);
+}
+
+.preparation-choice-modal .modal-body {
+  padding: 2.5rem;
+}
+
+.choice-description {
+  font-size: 1.2rem;
+  color: var(--text-muted, #6c757d);
+  text-align: center;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.preparation-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.preparation-option {
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+  border: 2px solid rgba(6, 255, 165, 0.1);
+  border-radius: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.preparation-option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(6, 255, 165, 0.05), transparent);
+  transition: left 0.5s ease;
+}
+
+.preparation-option:hover::before {
+  left: 100%;
+}
+
+.preparation-option:hover {
+  border-color: var(--accent-color, #06ffa5);
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(6, 255, 165, 0.15);
+}
+
+.option-icon {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: white;
+  margin-right: 2rem;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.option-icon::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.preparation-option:hover .option-icon::after {
+  opacity: 1;
+  animation: shimmer 0.6s ease;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.option-icon.template {
+  background: linear-gradient(45deg, #e91e63, #ff5722);
+  box-shadow: 0 8px 25px rgba(233, 30, 99, 0.3);
+}
+
+.option-icon.direct {
+  background: linear-gradient(45deg, var(--primary-color, #3a86ff), var(--accent-color, #06ffa5));
+  box-shadow: 0 8px 25px rgba(58, 134, 255, 0.3);
+}
+
+.option-content {
+  flex: 1;
+}
+
+.option-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color, #333);
+  margin-bottom: 0.75rem;
+  position: relative;
+}
+
+.option-description {
+  color: var(--text-muted, #6c757d);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.option-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  color: var(--text-muted, #6c757d);
+  background: rgba(6, 255, 165, 0.08);
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(6, 255, 165, 0.15);
+  transition: all 0.2s ease;
+}
+
+.preparation-option:hover .feature {
+  background: rgba(6, 255, 165, 0.12);
+  border-color: rgba(6, 255, 165, 0.25);
+  transform: translateY(-1px);
+}
+
+.feature i {
+  color: #28a745;
+  font-size: 0.9rem;
+  background: rgba(40, 167, 69, 0.1);
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.option-arrow {
+  font-size: 2rem;
+  color: var(--accent-color, #06ffa5);
+  margin-left: 1.5rem;
+  transition: all 0.3s ease;
+  opacity: 0.6;
+}
+
+.preparation-option:hover .option-arrow {
+  opacity: 1;
+  transform: translateX(8px);
+}
+
+/* Modal de template */
+.template-preparation-modal .modal-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 1.25rem;
+  box-shadow: 0 20px 60px rgba(6, 255, 165, 0.15);
+  border: 1px solid rgba(6, 255, 165, 0.1);
+  max-width: 1000px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slide-up 0.4s ease;
+  position: relative;
+}
+
+.template-preparation-modal .modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #e91e63, #ff5722, #e91e63);
+  background-size: 200% 100%;
+  border-radius: 1.25rem 1.25rem 0 0;
+  animation: gradientMove 3s ease infinite;
+}
+
+.template-preparation-modal .modal-content.large {
+  max-width: 1200px;
+}
+
+.template-preparation-modal .modal-header {
+  padding: 2.5rem 2.5rem 1.5rem;
+  border-bottom: 1px solid rgba(6, 255, 165, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.template-preparation-modal .modal-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 2.5rem;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #e91e63, #ff5722);
+  border-radius: 3px;
+}
+
+.template-preparation-modal .modal-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-color, #333);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.template-preparation-modal .modal-title i {
+  color: #e91e63;
+  font-size: 2rem;
+  background: rgba(233, 30, 99, 0.1);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+}
+
+.template-preparation-modal .close-button {
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(233, 30, 99, 0.2);
+  font-size: 1.2rem;
+  color: var(--text-muted, #6c757d);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.template-preparation-modal .close-button:hover {
+  background: #e91e63;
+  border-color: #e91e63;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+}
+
+.template-preparation-modal .modal-body {
+  padding: 2.5rem;
+}
+
+.template-description {
+  font-size: 1.2rem;
+  color: var(--text-muted, #6c757d);
+  text-align: center;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.coming-soon {
+  text-align: center;
+  padding: 4rem 3rem;
+  background: linear-gradient(135deg, 
+    rgba(6, 255, 165, 0.08), 
+    rgba(58, 134, 255, 0.05), 
+    rgba(233, 30, 99, 0.05)
+  );
+  border-radius: 1.25rem;
+  border: 2px dashed rgba(6, 255, 165, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.coming-soon::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(6, 255, 165, 0.05), transparent);
+  animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.coming-soon i {
+  font-size: 5rem;
+  color: var(--accent-color, #06ffa5);
+  margin-bottom: 2rem;
+  opacity: 0.8;
+  position: relative;
+  z-index: 1;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
+}
+
+.coming-soon h4 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-color, #333);
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.coming-soon p {
+  color: var(--text-muted, #6c757d);
+  margin-bottom: 2.5rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+.coming-soon .btn-primary {
+  background: linear-gradient(45deg, var(--primary-color, #3a86ff), var(--accent-color, #06ffa5));
+  border: none;
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 8px 25px rgba(58, 134, 255, 0.3);
+}
+
+.coming-soon .btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(58, 134, 255, 0.4);
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive pour les modales */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 1rem;
+  }
+  
+  .preparation-choice-modal .modal-content,
+  .template-preparation-modal .modal-content {
+    max-width: 100%;
+  }
+  
+  .preparation-options {
+    gap: 1.5rem;
+  }
+  
+  .preparation-option {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+  
+  .option-icon {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .option-arrow {
+    display: none;
+  }
+  
+  .option-features {
+    justify-content: center;
+  }
 }
 </style> 
