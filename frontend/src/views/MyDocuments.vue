@@ -53,24 +53,12 @@
     </div>
 
     <!-- Aucun document -->
-    <div v-else-if="filteredDocuments.length === 0" class="empty-state">
-      <i class="bi bi-file-earmark-x"></i>
-      <p v-if="searchQuery">Aucun document ne correspond à votre recherche</p>
-      <p v-else>Vous n'avez pas encore de documents</p>
-      <div class="debug-info" style="margin-bottom: 20px; padding: 10px; background-color: #f8f9fa; border-radius: 4px; text-align: left;">
-        <p><strong>Informations de débogage:</strong></p>
-        <p>Documents chargés: {{ documents.length || 0 }}</p>
-        <p>Documents filtrés: {{ filteredDocuments.length || 0 }}</p>
-        <p>Documents valides: {{ validFilteredDocuments.length || 0 }}</p>
-        <p>Erreur: {{ error || 'Aucune' }}</p>
-        <p>Chargement: {{ loading ? 'En cours' : 'Terminé' }}</p>
-      </div>
-      <button class="btn btn-primary" @click="fetchDocuments">
-        <i class="bi bi-arrow-clockwise"></i> Actualiser la liste
-      </button>
-      <button class="btn btn-primary" style="margin-left: 10px;" @click="openUploadModal">
-        <i class="bi bi-upload"></i> Téléverser votre premier document
-      </button>
+    <div v-else-if="documents.length === 0 || filteredDocuments.length === 0" class="empty-state">
+      <i class="bi bi-folder2-open"></i>
+      <h3 v-if="searchQuery">Aucun résultat trouvé</h3>
+      <h3 v-else>Aucun document</h3>
+      <p v-if="searchQuery">Aucun document ne correspond à votre recherche "{{ searchQuery }}"</p>
+      <p v-else>Vous n'avez pas encore téléversé de documents</p>
     </div>
 
     <!-- Liste des documents -->
@@ -1135,17 +1123,48 @@ function getActivityDescription(activityType) {
   margin-bottom: 15px;
 }
 
-.error-state i,
-.empty-state i {
+.error-state i {
   font-size: 3rem;
   margin-bottom: 10px;
   color: var(--text-secondary);
 }
 
-.error-state p,
-.empty-state p {
+.error-state p {
   margin-bottom: 20px;
   font-size: 1.1rem;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 40px 20px;
+}
+
+.empty-state i {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  color: var(--text-muted, #bbb);
+  opacity: 0.7;
+}
+
+.empty-state h3 {
+  margin: 0 0 15px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-secondary, #666);
+  max-width: 400px;
+  line-height: 1.5;
 }
 
 /* Grille de documents */

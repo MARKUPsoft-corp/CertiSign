@@ -730,13 +730,16 @@ const recentActivity = ref([]);
 // Fonction pour charger les activités récentes
 const loadRecentActivities = async () => {
   try {
-    console.log('Chargement des activités récentes...');
+    console.log('Chargement des 4 activités récentes depuis UserHistory...');
     const activitiesResponse = await DocumentService.getMyActivities();
     const activities = activitiesResponse.data || [];
     
-    // Prendre les 3 dernières activités et les transformer
+    console.log('Activités brutes récupérées:', activities);
+    console.log('Nombre total d\'activités:', activities.length);
+    
+    // Prendre les 4 dernières activités et les transformer
     const latestActivities = activities
-      .slice(0, 3)
+      .slice(0, 4)
       .map(activity => ({
         type: activity.activity_type,
         icon: getActivityIcon(activity.activity_type),
@@ -746,7 +749,7 @@ const loadRecentActivities = async () => {
       }));
     
     recentActivity.value = latestActivities;
-    console.log('Activités récentes chargées:', latestActivities);
+    console.log('4 activités récentes chargées et transformées:', latestActivities);
   } catch (error) {
     console.error('Erreur lors du chargement des activités récentes:', error);
     // En cas d'erreur, garder les données par défaut (tableau vide)
