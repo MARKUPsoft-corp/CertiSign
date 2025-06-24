@@ -105,7 +105,9 @@ async def store_signature_data(
     metadata: Optional[str] = None,
     jwt_token: Optional[str] = None,
     organization_id: Optional[str] = None,
-    signer_role: Optional[str] = None
+    signer_role: Optional[str] = None,
+    organization_name: Optional[str] = None,
+    signer_name: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Stocke les données de signature dans la base de données Django.
@@ -186,6 +188,16 @@ async def store_signature_data(
         if signer_role:
             data["signer_role"] = signer_role
             logger.debug(f"Rôle du signataire: {signer_role}")
+        
+        # Ajouter le nom de l'organisation si fourni
+        if organization_name:
+            data["organization_name"] = organization_name
+            logger.debug(f"Nom de l'organisation: {organization_name}")
+        
+        # Ajouter le nom du signataire si fourni
+        if signer_name:
+            data["signer_name"] = signer_name
+            logger.debug(f"Nom du signataire: {signer_name}")
         
         if document_title:
             data["title"] = document_title

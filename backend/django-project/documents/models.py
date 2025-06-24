@@ -83,7 +83,9 @@ class DocumentSignature(models.Model):
         related_name='organization_documents',
         verbose_name=_('Organisation')
     )
+    organization_name = models.CharField(_('Nom de l\'organisation'), max_length=255, blank=True, null=True)
     signer_role = models.CharField(_('Rôle du signataire'), max_length=100, blank=True, null=True)
+    signer_name = models.CharField(_('Nom du signataire'), max_length=255, blank=True, null=True)
     
     # Fichiers du document
     original_file = models.FileField(_('Fichier original'), upload_to='signatures/original/')

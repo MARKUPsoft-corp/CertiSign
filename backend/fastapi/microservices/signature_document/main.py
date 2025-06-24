@@ -819,7 +819,9 @@ async def sign_document(
     metadata: Optional[str] = Form(None, description="Métadonnées optionnelles pour la signature"),
     owner_id: Optional[str] = Form(None, description="ID de l'utilisateur propriétaire (facultatif)"),
     organization_id: Optional[str] = Form(None, description="ID de l'organisation (facultatif)"),
+    organization_name: Optional[str] = Form(None, description="Nom de l'organisation (facultatif)"),
     signer_role: Optional[str] = Form(None, description="Rôle du signataire dans l'organisation (facultatif)"),
+    signer_name: Optional[str] = Form(None, description="Nom du signataire (facultatif)"),
     jwt_token: Optional[str] = Form(None, description="Token JWT pour l'authentification avec Django")
 ):
     """
@@ -871,8 +873,10 @@ async def sign_document(
         qr_position = None
         signature_image = None
         signature_positions = None
-        organization_id = None
-        signer_role = None
+        organization_id_meta = None
+        organization_name_meta = None
+        signer_role_meta = None
+        signer_name_meta = None
         
         if metadata:
             try:
@@ -904,22 +908,37 @@ async def sign_document(
                 else:
                     logger.warning("Aucune section signature_position trouvée dans les métadonnées")
                 
-                # Extraire les informations d'organisation et de rôle
+                # Extraire les informations d'organisation et de rôle depuis les métadonnées
                 if 'organization_id' in metadata_dict:
-                    organization_id = metadata_dict['organization_id']
-                    logger.info(f"ID d'organisation extrait des métadonnées: {organization_id}")
+                    organization_id_meta = metadata_dict['organization_id']
+                    logger.info(f"ID d'organisation extrait des métadonnées: {organization_id_meta}")
+                
+                if 'organization_name' in metadata_dict:
+                    organization_name_meta = metadata_dict['organization_name']
+                    logger.info(f"Nom d'organisation extrait des métadonnées: {organization_name_meta}")
                 
                 if 'signer_role' in metadata_dict:
-                    signer_role = metadata_dict['signer_role']
-                    logger.info(f"Rôle du signataire extrait des métadonnées: {signer_role}")
+                    signer_role_meta = metadata_dict['signer_role']
+                    logger.info(f"Rôle du signataire extrait des métadonnées: {signer_role_meta}")
                 elif 'role' in metadata_dict:
-                    signer_role = metadata_dict['role']
-                    logger.info(f"Rôle du signataire extrait des métadonnées (champ 'role'): {signer_role}")
+                    signer_role_meta = metadata_dict['role']
+                    logger.info(f"Rôle du signataire extrait des métadonnées (champ 'role'): {signer_role_meta}")
+                
+                if 'signer_name' in metadata_dict:
+                    signer_name_meta = metadata_dict['signer_name']
+                    logger.info(f"Nom du signataire extrait des métadonnées: {signer_name_meta}")
+                    
             except json.JSONDecodeError as e:
                 logger.error(f"Erreur de parsing JSON des métadonnées: {str(e)}. Métadonnées reçues: {metadata}")
                 logger.warning("Utilisation des positions par défaut")
         else:
             logger.warning("Aucune métadonnée fournie, utilisation des positions par défaut")
+        
+        # Utiliser les valeurs des métadonnées si disponibles, sinon utiliser les paramètres de formulaire
+        final_organization_id = organization_id_meta or organization_id
+        final_organization_name = organization_name_meta or organization_name
+        final_signer_role = signer_role_meta or signer_role
+        final_signer_name = signer_name_meta or signer_name
         
         # Étape 1: Ajouter l'image de signature si disponible
         processed_pdf = document_data
@@ -953,8 +972,10 @@ async def sign_document(
             document_title=document.filename,
             metadata=metadata,
             jwt_token=jwt_token,
-            organization_id=organization_id,
-            signer_role=signer_role
+            organization_id=final_organization_id,
+            signer_role=final_signer_role,
+            organization_name=final_organization_name,
+            signer_name=final_signer_name
         )
         
         if "error" in storage_result:

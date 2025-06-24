@@ -197,6 +197,10 @@
                     <i class="bi bi-shield-check-fill"></i>
                     <span>Signature vérifiée</span>
                   </div>
+                  <div class="signer-info" v-if="doc.organization_name || doc.signer_role">
+                    <i class="bi bi-building"></i>
+                    <span>{{ doc.organization_name }}{{ doc.signer_role ? ` - ${doc.signer_role}` : '' }}</span>
+                  </div>
                 </div>
               </div>
               <div class="doc-status">
@@ -828,7 +832,12 @@ async function submitSignature() {
       qr_position: qrPosition,
       document_id: documentDetails.id,
       document_title: documentDetails.document_name,
-      organization_id: organizationId  // Ajouter l'ID de l'organisation aux métadonnées
+      organization_id: organizationId,  // Ajouter l'ID de l'organisation aux métadonnées
+      organization_name: currentUser?.organization?.name || 'Organisation inconnue',  // Nom de l'organisation
+      signer_role: currentUser?.position || currentUser?.role || 'Signataire',  // Rôle du signataire
+      signer_name: currentUser?.first_name && currentUser?.last_name ? 
+        `${currentUser.first_name} ${currentUser.last_name}` : 
+        currentUser?.username || 'Signataire'  // Nom complet du signataire
     };
     
     // Ajouter les informations de signature si disponibles (même format que SignSimple.vue)
@@ -852,7 +861,13 @@ async function submitSignature() {
     formData.append('password', certificatePassword.value);
     formData.append('document', documentFile);
     formData.append('metadata', metadata);
-    formData.append('owner_id', AuthService.getCurrentUser().id);
+    formData.append('owner_id', currentUser.id);
+    formData.append('organization_id', organizationId);
+    formData.append('organization_name', currentUser?.organization?.name || 'Organisation inconnue');
+    formData.append('signer_role', currentUser?.position || currentUser?.role || 'Signataire');
+    formData.append('signer_name', currentUser?.first_name && currentUser?.last_name ? 
+      `${currentUser.first_name} ${currentUser.last_name}` : 
+      currentUser?.username || 'Signataire');
     
     // Envoyer la requête au microservice de signature via l'API gateway
     const signResponse = await axios.post(
@@ -1002,40 +1017,62 @@ function logout() {
   router.push('/login');
 }
 
-function downloadSignedDocument(doc) {
+async function downloadSignedDocument(doc) {
   console.log('Télécharger le document signé:', doc.document_name || doc.name);
   
-  // Si le document a une URL de fichier, ouvrir dans un nouvel onglet
-  if (doc.document_file) {
-    let fileUrl = doc.document_file;
-    
-    // Si l'URL commence par un slash, on le traite comme un chemin relatif au backend
-    if (fileUrl.startsWith('/')) {
-      fileUrl = `https://192.168.4.131:8000${fileUrl}`;
-    } else if (!fileUrl.startsWith('https')) {
-      // Si l'URL ne commence pas par https, on ajoute le préfixe
-      fileUrl = `https://192.168.4.131:8000/${fileUrl}`;
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token d\'authentification manquant');
+      return;
     }
-    
-    // Ajouter l'ID de l'organisation comme paramètre de requête
+
+    // Récupérer l'ID de l'organisation actuelle
     const currentUser = AuthService.getCurrentUser();
     const organizationId = currentUser?.organization?.id;
     
-    if (organizationId) {
-      // Ajouter l'ID de l'organisation comme paramètre de requête
-      const separator = fileUrl.includes('?') ? '&' : '?';
-      fileUrl += `${separator}organization_id=${organizationId}`;
+    if (!organizationId) {
+      console.error('ID d\'organisation manquant');
+      return;
+    }
+
+    // Utiliser l'endpoint de téléchargement de DocumentSignature
+    const downloadUrl = `https://192.168.4.131:8000/api/documents/signatures/${doc.document_id || doc.id}/download/`;
+    
+    const response = await axios.get(downloadUrl, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      params: {
+        organization_id: organizationId
+      },
+      responseType: 'blob'
+    });
+
+    // Créer le blob et déclencher le téléchargement
+    const blob = new Blob([response.data], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    
+    // Déterminer le nom du fichier
+    let filename = doc.document_name || doc.name || doc.title || 'document_signe.pdf';
+    if (!filename.endsWith('.pdf')) {
+      filename += '.pdf';
     }
     
-    // Créer un lien et déclencher le téléchargement
-    const a = document.createElement('a');
-    a.href = fileUrl;
-    a.download = doc.document_name || doc.name || 'document_signe.pdf';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  } else {
-    console.error('Aucun fichier disponible pour ce document');
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Libérer l'URL objet
+    window.URL.revokeObjectURL(url);
+    
+    console.log('Document signé téléchargé avec succès');
+  } catch (error) {
+    console.error('Erreur lors du téléchargement du document signé:', error);
+    alert('Erreur lors du téléchargement du document. Veuillez réessayer.');
   }
 }
 
@@ -1154,26 +1191,26 @@ async function fetchSignedDocuments() {
         'Authorization': `Bearer ${token}`
       },
       params: {
-        organization_id: organizationId,
-        status: 'signed'  // Filtrer sur les documents signés
+        organization_id: organizationId
       } 
     };  
 
-    const response = await axios.get('https://192.168.4.131:8000/api/documents/qr-positions/', config);
+    // Récupérer les documents signés depuis l'API DocumentSignature
+    const response = await axios.get('https://192.168.4.131:8000/api/documents/signatures/', config);
     if (response.data && response.data.results) {
-      // Filtrer les documents signés pour ce signataire
-      const signedDocs = response.data.results.filter(doc => 
-        doc.status === 'signed' && 
-        doc.organization === organizationId
-      );
-      
-      signedDocuments.value = signedDocs.map(doc => ({
+      signedDocuments.value = response.data.results.map(doc => ({
         ...doc,
-        signedAt: doc.updated_at,
-        signedBy: currentUser?.username || 'Signataire'
+        // Mapper les champs pour compatibilité avec l'interface existante
+        id: doc.document_id,
+        document_name: doc.title,
+        name: doc.title,
+        signedAt: doc.created_at,
+        signedBy: doc.owner_username || 'Signataire',
+        organization_name: doc.organization_name || 'Organisation',
+        signer_role: doc.signer_role || 'Signataire'
       }));
       
-      console.log('Documents signés récupérés:', signedDocuments.value);
+      console.log('Documents signés récupérés depuis DocumentSignature:', signedDocuments.value);
     }
   } catch (error) {
     console.error('Erreur lors de la récupération des documents signés:', error);
@@ -2280,6 +2317,19 @@ function initStats() {
   font-size: 0.8rem;
   color: #28a745;
   background: rgba(40, 167, 69, 0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 1rem;
+  margin-top: 0.25rem;
+  display: inline-flex;
+}
+
+.signer-info {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #ff9500;
+  background: rgba(255, 149, 0, 0.1);
   padding: 0.2rem 0.6rem;
   border-radius: 1rem;
   margin-top: 0.25rem;

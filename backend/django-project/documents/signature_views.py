@@ -33,6 +33,7 @@ class DocumentSignatureViewSet(viewsets.ModelViewSet):
     queryset = DocumentSignature.objects.all()
     serializer_class = DocumentSignatureSerializer
     parser_classes = (MultiPartParser, FormParser, JSONParser)
+    permission_classes = [permissions.IsAuthenticated]  # Autoriser les utilisateurs authentifiés
     lookup_field = 'document_id'  # Utiliser document_id au lieu de pk
     
     def get_queryset(self):
@@ -434,39 +435,25 @@ def standard_store_signature_public(request):
         else:
             logger.info("Aucun owner_id valide fourni, signature sans propriétaire")
             
+        # Récupérer les informations d'organisation et de signataire
+        organization_id = request.POST.get('organization_id')
+        organization_name = request.POST.get('organization_name')
+        signer_role = request.POST.get('signer_role')
+        signer_name = request.POST.get('signer_name')
+        
         # Récupérer l'organisation si un ID est fourni
         organization = None
-        organization_id = request.POST.get('organization_id')
-        
-        # Journaliser l'organization_id reçu
-        logger.info(f"Organization ID reçu: {organization_id}")
-        
-        # Si l'organization_id est fourni et valide
-        if organization_id and organization_id.lower() != 'string':
+        if organization_id:
+            from users.models import Organization
             try:
-                from users.models import Organization
-                organization_id_int = int(organization_id)
-                try:
-                    organization = Organization.objects.get(id=organization_id_int)
-                    logger.info(f"Organisation trouvée: {organization.name}")
-                except Organization.DoesNotExist:
-                    logger.warning(f"Organisation avec ID {organization_id_int} non trouvée")
-            except (ValueError, TypeError):
-                logger.warning(f"Organization ID invalide (non numérique): {organization_id}")
-        else:
-            # Si l'utilisateur a une organisation, l'utiliser par défaut
-            if owner and owner.organization:
-                organization = owner.organization
-                logger.info(f"Utilisation de l'organisation de l'utilisateur: {organization.name}")
-            else:
-                logger.info("Aucune organisation fournie ou trouvée")
+                organization = Organization.objects.get(id=organization_id)
+                # Si organization_name n'est pas fourni, utiliser le nom de l'organisation trouvée
+                if not organization_name:
+                    organization_name = organization.name
+            except Organization.DoesNotExist:
+                logger.warning(f"Organisation avec ID {organization_id} non trouvée")
         
-        # Récupérer le rôle du signataire
-        signer_role = request.POST.get('signer_role')
-        if not signer_role and owner:
-            # Utiliser le poste ou le rôle de l'utilisateur comme valeur par défaut
-            signer_role = owner.position or owner.get_role_display()
-            logger.info(f"Utilisation du rôle de l'utilisateur comme valeur par défaut: {signer_role}")
+        logger.info(f"Informations de signature - Organisation: {organization_name}, Signataire: {signer_name}, Rôle: {signer_role}")
         
         # Récupérer les fichiers
         original_file = request.FILES['original_file']
@@ -490,7 +477,11 @@ def standard_store_signature_public(request):
             signature=signature,
             public_key_pem=public_key_pem,
             title=title,
-            owner=owner
+            owner=owner,
+            organization=organization,
+            organization_name=organization_name,
+            signer_role=signer_role,
+            signer_name=signer_name
         )
         
         # Associer les fichiers
@@ -713,6 +704,26 @@ def store_signature_public(request):
             except User.DoesNotExist:
                 logger.warning(f"Propriétaire avec ID {owner_id} non trouvé")
         
+        # Récupérer les informations d'organisation et de signataire
+        organization_id = request.data.get('organization_id')
+        organization_name = request.data.get('organization_name')
+        signer_role = request.data.get('signer_role')
+        signer_name = request.data.get('signer_name')
+        
+        # Récupérer l'organisation si un ID est fourni
+        organization = None
+        if organization_id:
+            from users.models import Organization
+            try:
+                organization = Organization.objects.get(id=organization_id)
+                # Si organization_name n'est pas fourni, utiliser le nom de l'organisation trouvée
+                if not organization_name:
+                    organization_name = organization.name
+            except Organization.DoesNotExist:
+                logger.warning(f"Organisation avec ID {organization_id} non trouvée")
+        
+        logger.info(f"Informations de signature - Organisation: {organization_name}, Signataire: {signer_name}, Rôle: {signer_role}")
+        
         # Récupérer les fichiers
         original_file = request.FILES['original_file']
         signed_file = request.FILES['signed_file']
@@ -735,7 +746,11 @@ def store_signature_public(request):
             signature=signature,
             public_key_pem=public_key_pem,
             title=title,
-            owner=owner
+            owner=owner,
+            organization=organization,
+            organization_name=organization_name,
+            signer_role=signer_role,
+            signer_name=signer_name
         )
         
         # Associer les fichiers
