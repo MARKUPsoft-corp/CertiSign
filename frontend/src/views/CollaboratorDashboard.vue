@@ -545,11 +545,11 @@ async function fetchDocuments() {
       return;
     }
 
-    // Récupérer le nom de l'organisation actuelle
-    const organizationName = user?.organization?.name;
+    // Récupérer l'ID de l'organisation actuelle
+    const organizationId = user?.organization?.id;
     
-    if (!organizationName) {
-      console.error('Nom d\'organisation manquant');
+    if (!organizationId) {
+      console.error('ID d\'organisation manquant');
       return;
     }
 
@@ -560,7 +560,7 @@ async function fetchDocuments() {
         'Authorization': `Bearer ${token}`
       },
       params: {
-        organization_name: organizationName  // Utiliser le nom de l'organisation plutôt que l'ID
+        organization_id: organizationId  // Utiliser l'ID de l'organisation pour être cohérent
       }
     };
 
@@ -568,43 +568,38 @@ async function fetchDocuments() {
     const response = await axios.get(`https://192.168.4.131:8000/api/documents/qr-positions/by_collaborator/`, config);
     
     if (response.data) {
-      // Filtrer les documents pour n'afficher que ceux de l'organisation actuelle
+      // Maintenant que le filtrage se fait automatiquement côté backend avec organization_id,
+      // nous n'avons plus besoin de filtrer côté frontend
       // Mettre à jour les documents brouillons
       if (response.data.drafts) {
-        drafts.value = response.data.drafts
-          .filter(doc => doc.organization_name === organizationName)
-          .map(doc => ({
-            id: doc.id,
-            name: doc.document_name,
-            createdAt: new Date(doc.created_at),
-            status: 'draft'
-          }));
+        drafts.value = response.data.drafts.map(doc => ({
+          id: doc.id,
+          name: doc.document_name,
+          createdAt: new Date(doc.created_at),
+          status: 'draft'
+        }));
       }
       
       // Mettre à jour les documents en attente
       if (response.data.pending) {
-        pendingDocuments.value = response.data.pending
-          .filter(doc => doc.organization_name === organizationName)
-          .map(doc => ({
-            id: doc.id,
-            name: doc.document_name,
-            assignedAt: new Date(doc.created_at),
-            assignedTo: doc.collaborator_username || 'En attente de signature',
-            status: 'pending'
-          }));
+        pendingDocuments.value = response.data.pending.map(doc => ({
+          id: doc.id,
+          name: doc.document_name,
+          assignedAt: new Date(doc.created_at),
+          assignedTo: doc.collaborator_username || 'En attente de signature',
+          status: 'pending'
+        }));
       }
       
       // Mettre à jour les documents complétés
       if (response.data.completed) {
-        completedDocuments.value = response.data.completed
-          .filter(doc => doc.organization_name === organizationName)
-          .map(doc => ({
-            id: doc.id,
-            name: doc.document_name,
-            signedAt: new Date(doc.updated_at),
-            signedBy: doc.organization_name || 'Signataire',
-            status: 'completed'
-          }));
+        completedDocuments.value = response.data.completed.map(doc => ({
+          id: doc.id,
+          name: doc.document_name,
+          signedAt: new Date(doc.updated_at),
+          signedBy: doc.organization_name || 'Signataire',
+          status: 'completed'
+        }));
       }
       
       // Mettre à jour les statistiques en fonction des documents filtrés
@@ -647,52 +642,52 @@ function onDocumentPrepared(document) {
 function continueEdit(doc) {
   console.log('Continuer l\'édition de:', doc.name);
   
-  // Récupérer le nom de l'organisation actuelle
+  // Récupérer l'ID de l'organisation actuelle
   const user = AuthService.getCurrentUser();
-  const organizationName = user?.organization?.name;
+  const organizationId = user?.organization?.id;
   
-  if (!organizationName) {
-    console.error('Nom d\'organisation manquant');
+  if (!organizationId) {
+    console.error('ID d\'organisation manquant');
     return;
   }
   
-  // Rediriger vers la page d'édition avec l'ID du document et le nom de l'organisation
+  // Rediriger vers la page d'édition avec l'ID du document et l'ID de l'organisation
   router.push({
     name: 'edit-document',
     params: { id: doc.id },
-    query: { organization_name: organizationName }
+    query: { organization_id: organizationId }
   });
 }
 
 function assignForSignature(doc) {
   console.log('Assigner pour signature:', doc.name);
   
-  // Récupérer le nom de l'organisation actuelle
+  // Récupérer l'ID de l'organisation actuelle
   const user = AuthService.getCurrentUser();
-  const organizationName = user?.organization?.name;
+  const organizationId = user?.organization?.id;
   
-  if (!organizationName) {
-    console.error('Nom d\'organisation manquant');
+  if (!organizationId) {
+    console.error('ID d\'organisation manquant');
     return;
   }
   
-  // Rediriger vers la page d'assignation avec l'ID du document et le nom de l'organisation
+  // Rediriger vers la page d'assignation avec l'ID du document et l'ID de l'organisation
   router.push({
     name: 'assign-document',
     params: { id: doc.id },
-    query: { organization_name: organizationName }
+    query: { organization_id: organizationId }
   });
 }
 
 async function deleteDraft(doc) {
   if (confirm('Êtes-vous sûr de vouloir supprimer ce brouillon ?')) {
     try {
-      // Récupérer le nom de l'organisation actuelle
+      // Récupérer l'ID de l'organisation actuelle
       const user = AuthService.getCurrentUser();
-      const organizationName = user?.organization?.name;
+      const organizationId = user?.organization?.id;
       
-      if (!organizationName) {
-        console.error('Nom d\'organisation manquant');
+      if (!organizationId) {
+        console.error('ID d\'organisation manquant');
         return;
       }
       
@@ -703,7 +698,7 @@ async function deleteDraft(doc) {
           'Authorization': `Bearer ${token}`
         },
         params: {
-          organization_name: organizationName
+          organization_id: organizationId
         }
       });
       
@@ -722,19 +717,19 @@ async function remindSigner(doc) {
   console.log('Relancer le signataire pour:', doc.name);
   
   try {
-    // Récupérer le nom de l'organisation actuelle
+    // Récupérer l'ID de l'organisation actuelle
     const user = AuthService.getCurrentUser();
-    const organizationName = user?.organization?.name;
+    const organizationId = user?.organization?.id;
     
-    if (!organizationName) {
-      console.error('Nom d\'organisation manquant');
+    if (!organizationId) {
+      console.error('ID d\'organisation manquant');
       return;
     }
     
     // Appel à l'API pour envoyer un rappel
     const token = localStorage.getItem('token');
     await axios.post(`http://192.168.4.131:8000/api/documents/remind/${doc.id}/`, 
-      { organization_name: organizationName },
+      { organization_id: organizationId },
       {
         headers: {
           'Authorization': `Bearer ${token}`

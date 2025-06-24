@@ -42,30 +42,32 @@ class DocumentSignatureViewSet(viewsets.ModelViewSet):
         
         # Filtrage par organisation si spécifié dans les paramètres de requête
         organization_id = self.request.query_params.get('organization_id')
-        if organization_id:
-            queryset = queryset.filter(organization_id=organization_id)
-        
-        # Pour les superadmins, montrer toutes les signatures (avec filtres éventuels)
-        if user.is_authenticated and user.is_superadmin:
-            return queryset
-        
-        # Pour les admins d'organisation, montrer les signatures de leur organisation
-        elif user.is_authenticated and user.is_org_admin and user.organization:
-            if organization_id:
-                # Si un filtre d'organisation est appliqué, vérifier que l'admin a accès à cette organisation
-                if str(user.organization.id) == organization_id:
-                    return queryset
-                else:
-                    return DocumentSignature.objects.none()
-            else:
-                # Sans filtre, montrer uniquement les documents de son organisation
-                return queryset.filter(organization=user.organization)
-        
-        # Pour les utilisateurs normaux, montrer seulement leurs signatures
-        elif user.is_authenticated:
-            return DocumentSignature.objects.filter(owner=user)
         
         # Pour les utilisateurs non authentifiés, aucune signature n'est visible
+        if not user.is_authenticated:
+            return DocumentSignature.objects.none()
+        
+        # Pour les superadmins, montrer toutes les signatures (avec filtres éventuels)
+        if user.is_superadmin:
+            if organization_id:
+                return queryset.filter(organization_id=organization_id)
+            return queryset
+        
+        # Pour tous les autres utilisateurs (admin org, collaborateur, signataire),
+        # filtrer par leur organisation
+        if user.organization:
+            # Si un organization_id est spécifié, vérifier qu'il correspond à l'organisation de l'utilisateur
+            if organization_id:
+                if str(user.organization.id) == organization_id:
+                    return queryset.filter(organization=user.organization)
+                else:
+                    # L'utilisateur demande des données d'une autre organisation
+                    return DocumentSignature.objects.none()
+            else:
+                # Sans filtre spécifique, montrer les documents de l'organisation de l'utilisateur
+                return queryset.filter(organization=user.organization)
+        
+        # Si l'utilisateur n'a pas d'organisation, ne montrer aucun document
         return DocumentSignature.objects.none()
     
     @action(detail=True, methods=['get'])

@@ -39,4 +39,7 @@ urlpatterns = [
     
     # Endpoints pour le signataire - Utilisé via router automatiquement
     # path('signer/pending-documents/', DocumentQRPositionViewSet.as_view({'get': 'pending_for_signer'}), name='signer-pending-documents'),
+    
+    # Endpoint pour le tableau de bord administrateur
+    path('admin/dashboard/', DocumentQRPositionViewSet.as_view({'get': 'admin_dashboard'}), name='admin-dashboard'),
 ]

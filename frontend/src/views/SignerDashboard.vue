@@ -193,10 +193,6 @@
                 <div class="doc-details">
                   <span class="doc-name">{{ doc.document_name || doc.name || 'Document sans nom' }}</span>
                   <span class="doc-meta">Signé le {{ formatDate(doc.signedAt || doc.updated_at) }}</span>
-                  <div class="signature-info">
-                    <i class="bi bi-shield-check-fill"></i>
-                    <span>Signature vérifiée</span>
-                  </div>
                   <div class="signer-info" v-if="doc.organization_name || doc.signer_role">
                     <i class="bi bi-building"></i>
                     <span>{{ doc.organization_name }}{{ doc.signer_role ? ` - ${doc.signer_role}` : '' }}</span>
@@ -208,9 +204,6 @@
                 <div class="doc-actions">
                   <button class="btn-icon" title="Télécharger" @click="downloadSignedDocument(doc)">
                     <i class="bi bi-download"></i>
-                  </button>
-                  <button class="btn-icon" title="Vérifier" @click="verifyDocument(doc)">
-                    <i class="bi bi-shield-check"></i>
                   </button>
                 </div>
               </div>
@@ -1074,12 +1067,6 @@ async function downloadSignedDocument(doc) {
     console.error('Erreur lors du téléchargement du document signé:', error);
     alert('Erreur lors du téléchargement du document. Veuillez réessayer.');
   }
-}
-
-function verifyDocument(doc) {
-  console.log('Vérifier la signature du document:', doc.document_name || doc.name);
-  // Dans une implémentation réelle, on appelerait l'API pour vérifier la signature
-  alert('La signature du document est valide et conforme.');
 }
 
 function handleDrop(event) {

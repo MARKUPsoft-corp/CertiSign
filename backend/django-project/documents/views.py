@@ -544,3 +544,105 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
             'pending_documents': documents_data,
             'stats': stats
         })
+
+    @action(detail=False, methods=['get'])
+    def admin_dashboard(self, request):
+        """
+        Endpoint pour le tableau de bord administrateur.
+        Filtre les données par l'organisation de l'admin connecté.
+        """
+        user = request.user
+        
+        # Vérifier que l'utilisateur a le rôle d'admin
+        if not user.is_org_admin and not user.is_superadmin:
+            return Response(
+                {"error": "Vous n'avez pas les droits d'administrateur"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        # Vérifier que l'utilisateur a une organisation (sauf superadmin)
+        if not user.is_superadmin and not user.organization:
+            return Response(
+                {"error": "Vous n'êtes associé à aucune organisation"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Filtrer par organisation
+        if user.is_superadmin:
+            # Superadmin peut voir toutes les organisations ou filtrer par organization_id
+            organization_id = request.query_params.get('organization_id')
+            if organization_id:
+                try:
+                    from users.models import Organization
+                    organization = Organization.objects.get(id=organization_id)
+                    documents = DocumentQRPosition.objects.filter(organization=organization)
+                except Organization.DoesNotExist:
+                    return Response(
+                        {"error": "Organisation non trouvée"},
+                        status=status.HTTP_404_NOT_FOUND
+                    )
+            else:
+                documents = DocumentQRPosition.objects.all()
+        else:
+            # Admin d'organisation ne voit que les documents de son organisation
+            documents = DocumentQRPosition.objects.filter(organization=user.organization)
+        
+        # Organiser par statut
+        pending_documents = documents.filter(status='pending_signature')
+        signed_documents = documents.filter(status='signed')
+        
+        # Statistiques
+        stats = {
+            'pending': pending_documents.count(),
+            'signed': signed_documents.count(),
+            'members': user.organization.members.count() if user.organization else 0,
+            'today_activity': DocumentActivity.objects.filter(
+                document__organization=user.organization if user.organization else None,
+                created_at__date=datetime.now().date()
+            ).count() if user.organization else 0
+        }
+        
+        # Sérialiser les données
+        pending_data = DocumentQRPositionSerializer(pending_documents, many=True, context={'request': request}).data
+        signed_data = DocumentQRPositionSerializer(signed_documents, many=True, context={'request': request}).data
+        
+        # Récupérer les activités de l'équipe
+        team_activities = DocumentActivity.objects.filter(
+            document__organization=user.organization if user.organization else None
+        ).order_by('-created_at')[:10]
+        
+        team_activities_data = []
+        for activity in team_activities:
+            team_activities_data.append({
+                'id': activity.id,
+                'type': activity.activity_type,
+                'description': activity.description,
+                'user': activity.user.username if activity.user else 'Système',
+                'timestamp': activity.created_at
+            })
+        
+        # Récupérer les membres de l'organisation
+        organization_members_data = []
+        if user.organization:
+            members = user.organization.members.all()
+            for member in members:
+                member_docs_count = DocumentQRPosition.objects.filter(
+                    collaborator=member,
+                    organization=user.organization
+                ).count()
+                
+                organization_members_data.append({
+                    'id': member.id,
+                    'username': member.username,
+                    'role': member.role,
+                    'documents_count': member_docs_count,
+                    'last_activity': member.last_login.strftime('%Y-%m-%d') if member.last_login else 'Jamais'
+                })
+        
+        return Response({
+            'pending_documents': pending_data,
+            'signed_documents': signed_data,
+            'stats': stats,
+            'team_activities': team_activities_data,
+            'organization_members': organization_members_data
+        })
