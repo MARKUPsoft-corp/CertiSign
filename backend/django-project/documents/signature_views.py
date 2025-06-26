@@ -10,6 +10,7 @@ from django.contrib.auth import get_user_model
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.db import models
 import uuid
 import json
 import logging
@@ -67,8 +68,18 @@ class DocumentSignatureViewSet(viewsets.ModelViewSet):
                 # Sans filtre spécifique, montrer les documents de l'organisation de l'utilisateur
                 return queryset.filter(organization=user.organization)
         
-        # Si l'utilisateur n'a pas d'organisation, ne montrer aucun document
-        return DocumentSignature.objects.none()
+        # Si l'utilisateur n'a pas d'organisation, montrer ses propres documents
+        # (utilisateurs individuels sans organisation)
+        if organization_id:
+            # Si un organization_id est demandé mais l'utilisateur n'a pas d'organisation, 
+            # ne rien montrer
+            return DocumentSignature.objects.none()
+        else:
+            # Montrer SEULEMENT les documents dont cet utilisateur est propriétaire
+            # ET qui n'appartiennent à aucune organisation (sécurité)
+            return queryset.filter(
+                models.Q(owner=user) & models.Q(organization__isnull=True)
+            )
     
     @action(detail=True, methods=['get'])
     def download(self, request, document_id=None):

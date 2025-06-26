@@ -134,9 +134,9 @@ if [ ! -d ".venv" ]; then
     exit 1
 fi
 
-# Démarrer Django en arrière-plan
+# Démarrer Django en arrière-plan - Écoute maintenant en local (sécurité Nginx)
 print_info "Activation de l'environnement virtuel Django..."
-nohup bash -c "source .venv/bin/activate && python3 manage.py runserver_plus --cert-file ssl/cert.pem --key-file ssl/key.pem 192.168.4.131:8000 --insecure" > "$PROJECT_ROOT/logs/django.log" 2>&1 &
+nohup bash -c "source .venv/bin/activate && python3 manage.py runserver_plus --cert-file ssl/cert.pem --key-file ssl/key.pem 127.0.0.1:8000 --insecure" > "$PROJECT_ROOT/logs/django.log" 2>&1 &
 
 # Vérifier le démarrage
 check_service 8000 "Django"
@@ -155,9 +155,9 @@ if [ ! -d "../.venv" ]; then
     exit 1
 fi
 
-# Démarrer l'API Gateway en arrière-plan
+# Démarrer l'API Gateway en arrière-plan - Écoute maintenant en local (sécurité Nginx)
 print_info "Activation de l'environnement virtuel FastAPI..."
-nohup bash -c "source ../.venv/bin/activate && uvicorn main:app --ssl-certfile ssl/cert.pem --ssl-keyfile ssl/key.pem --host 192.168.4.131 --port 8001 --reload" > "$PROJECT_ROOT/logs/api_gateway.log" 2>&1 &
+nohup bash -c "source ../.venv/bin/activate && uvicorn main:app --ssl-certfile ssl/cert.pem --ssl-keyfile ssl/key.pem --host 127.0.0.1 --port 8001 --reload" > "$PROJECT_ROOT/logs/api_gateway.log" 2>&1 &
 
 # Vérifier le démarrage
 check_service 8001 "API Gateway"
@@ -170,9 +170,9 @@ print_info "=== ÉTAPE 4: Démarrage du Microservice certificat (port 8002) ==="
 
 cd "$PROJECT_ROOT/backend/fastapi/microservices/lecture_certificat"
 
-# Démarrer le microservice en arrière-plan
+# Démarrer le microservice en arrière-plan - Écoute maintenant en local (sécurité Nginx)
 print_info "Activation de l'environnement virtuel FastAPI..."
-nohup bash -c "source ../../.venv/bin/activate && uvicorn main:app --ssl-certfile ssl/cert.pem --ssl-keyfile ssl/key.pem --host 192.168.4.131 --port 8002 --reload" > "$PROJECT_ROOT/logs/microservice_certificat.log" 2>&1 &
+nohup bash -c "source ../../.venv/bin/activate && uvicorn main:app --ssl-certfile ssl/cert.pem --ssl-keyfile ssl/key.pem --host 127.0.0.1 --port 8002 --reload" > "$PROJECT_ROOT/logs/microservice_certificat.log" 2>&1 &
 
 # Vérifier le démarrage
 check_service 8002 "Microservice certificat"
@@ -185,9 +185,9 @@ print_info "=== ÉTAPE 5: Démarrage du Microservice signature (port 8003) ==="
 
 cd "$PROJECT_ROOT/backend/fastapi/microservices/signature_document"
 
-# Démarrer le microservice en arrière-plan
+# Démarrer le microservice en arrière-plan - Écoute maintenant en local (sécurité Nginx)
 print_info "Activation de l'environnement virtuel FastAPI..."
-nohup bash -c "source ../../.venv/bin/activate && uvicorn main:app --ssl-certfile ssl/cert.pem --ssl-keyfile ssl/key.pem --host 192.168.4.131 --port 8003 --reload" > "$PROJECT_ROOT/logs/microservice_signature.log" 2>&1 &
+nohup bash -c "source ../../.venv/bin/activate && uvicorn main:app --ssl-certfile ssl/cert.pem --ssl-keyfile ssl/key.pem --host 127.0.0.1 --port 8003 --reload" > "$PROJECT_ROOT/logs/microservice_signature.log" 2>&1 &
 
 # Vérifier le démarrage
 check_service 8003 "Microservice signature"
@@ -226,17 +226,24 @@ sleep 3
 
 print_success "=== TOUS LES SERVICES CERTISIGN SONT DÉMARRÉS ==="
 echo
-print_info "📊 État des services :"
-echo "  🟢 Frontend Vue.js    : https://192.168.4.131:8080"
-echo "  🟢 API Gateway        : https://192.168.4.131:8001"
-echo "  🟢 Microservice Cert  : https://192.168.4.131:8002"
-echo "  🟢 Microservice Sign  : https://192.168.4.131:8003"
-echo "  🟢 Backend Django     : https://192.168.4.131:8000"
+print_info "📊 État des services (via Nginx Reverse Proxy) :"
+echo "  🟢 Application Web     : https://192.168.4.131/"
+echo "  🟢 API Django          : https://192.168.4.131/api/"
+echo "  🟢 API Gateway         : https://192.168.4.131/gateway/"
+echo "  🟢 Microservice Cert   : https://192.168.4.131/cert/"
+echo "  🟢 Microservice Sign   : https://192.168.4.131/sign/"
 echo
 print_info "📋 Administration :"
-echo "  📱 Application        : https://192.168.4.131:8080"
-echo "  ⚙️  Django Admin       : https://192.168.4.131:8000/admin/"
-echo "  📖 API Documentation  : https://192.168.4.131:8001/docs"
+echo "  📱 Application          : https://192.168.4.131/"
+echo "  ⚙️  Django Admin        : https://192.168.4.131/admin/"
+echo "  📖 API Documentation    : https://192.168.4.131/gateway/docs"
+echo
+print_info "🔒 Services internes (localhost uniquement) :"
+echo "  🔐 Frontend Vue.js       : https://127.0.0.1:8080"
+echo "  🔐 API Gateway           : https://127.0.0.1:8001"
+echo "  🔐 Microservice Cert     : https://127.0.0.1:8002"
+echo "  🔐 Microservice Sign     : https://127.0.0.1:8003"
+echo "  🔐 Backend Django        : https://127.0.0.1:8000"
 echo
 print_info "📝 Logs disponibles dans le dossier: $PROJECT_ROOT/logs/"
 echo "  - django.log"

@@ -720,8 +720,8 @@ async function submitDocument() {
     // Ajouter le statut
     formData.append('status', 'pending_signature');
     
-    // Ajouter le nom de l'organisation
-    formData.append('organization_name', userInfo.organization.name);
+    // Ajouter l'ID de l'organisation
+    formData.append('organization_id', userInfo.organization.id);
     
       // Ajouter des métadonnées supplémentaires
     const metadata = {
@@ -754,7 +754,7 @@ async function submitDocument() {
     };
       
       // Appel direct à l'API Django
-      const apiUrl = 'https://192.168.4.131:8000/api/documents/qr-positions/';
+      const apiUrl = 'https://192.168.4.131/api/documents/qr-positions/';
     
     // Appel API avec timeout plus long pour les gros fichiers
     const response = await axios.post(apiUrl, formData, {
@@ -937,8 +937,8 @@ async function saveAsDraft() {
     // Ajouter le statut
     formData.append('status', 'draft');
     
-    // Ajouter le nom de l'organisation
-    formData.append('organization_name', userInfo.organization.name);
+    // Ajouter l'ID de l'organisation
+    formData.append('organization_id', userInfo.organization.id);
     
       // Ajouter des métadonnées supplémentaires
     const metadata = {
@@ -971,7 +971,7 @@ async function saveAsDraft() {
     };
       
       // Appel direct à l'API Django
-      const apiUrl = 'https://192.168.4.131:8000/api/documents/qr-positions/';
+      const apiUrl = 'https://192.168.4.131/api/documents/qr-positions/';
     
     // Appel API avec timeout plus long pour les gros fichiers
     const response = await axios.post(apiUrl, formData, {

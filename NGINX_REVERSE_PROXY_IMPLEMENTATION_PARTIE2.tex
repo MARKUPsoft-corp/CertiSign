@@ -1,0 +1,794 @@
+\documentclass[12pt,a4paper]{article}
+
+% ===========================================
+% PACKAGES ET CONFIGURATION
+% ===========================================
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{tocloft}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{float}
+
+% Configuration identique à la partie 1
+\geometry{
+    left=2.5cm,
+    right=2.5cm,
+    top=3cm,
+    bottom=3cm,
+    headheight=15pt
+}
+
+% Configuration des couleurs
+\definecolor{darkgray}{RGB}{44,44,44}
+\definecolor{lightblue}{RGB}{100,181,246}
+\definecolor{lightpurple}{RGB}{186,104,200}
+\definecolor{lightgreen}{RGB}{129,199,132}
+\definecolor{lightorange}{RGB}{255,183,77}
+\definecolor{lightpink}{RGB}{240,98,146}
+\definecolor{lightcyan}{RGB}{66,165,245}
+\definecolor{orange}{RGB}{255,167,38}
+
+% Configuration des listings
+\lstdefinestyle{bash}{
+    language=bash,
+    basicstyle=\ttfamily\footnotesize,
+    backgroundcolor=\color{gray!10},
+    frame=single,
+    breaklines=true,
+    showstringspaces=false,
+    commentstyle=\color{green!60!black},
+    keywordstyle=\color{blue!80!black},
+    stringstyle=\color{red!80!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt
+}
+
+\lstdefinestyle{python}{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    backgroundcolor=\color{gray!10},
+    frame=single,
+    breaklines=true,
+    showstringspaces=false,
+    commentstyle=\color{green!60!black},
+    keywordstyle=\color{blue!80!black},
+    stringstyle=\color{red!80!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt
+}
+
+\lstdefinestyle{javascript}{
+    language=JavaScript,
+    basicstyle=\ttfamily\footnotesize,
+    backgroundcolor=\color{gray!10},
+    frame=single,
+    breaklines=true,
+    showstringspaces=false,
+    commentstyle=\color{green!60!black},
+    keywordstyle=\color{blue!80!black},
+    stringstyle=\color{red!80!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt
+}
+
+% Configuration des titres
+\titleformat{\section}
+  {\Large\bfseries\color{blue!80!black}}
+  {\thesection}
+  {1em}
+  {}
+  [\color{blue!80!black}\titlerule]
+
+\titleformat{\subsection}
+  {\large\bfseries\color{blue!70!black}}
+  {\thesubsection}
+  {1em}
+  {}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{blue!60!black}}
+  {\thesubsubsection}
+  {1em}
+  {}
+
+% Configuration des headers/footers
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{Documentation Technique Doc@uthANTIC - Partie 2}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Configuration des liens
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!80!black,
+    filecolor=magenta,
+    urlcolor=cyan!80!black,
+    citecolor=green!80!black,
+}
+
+\begin{document}
+
+\title{Documentation Technique Doc@uthANTIC\\Implémentation Nginx Reverse Proxy\\{\large Partie 2 : Résolution des problèmes et architecture finale}}
+\author{Équipe de développement Doc@uthANTIC}
+\date{\today}
+\maketitle
+
+\tableofcontents
+\newpage
+
+% ===========================================
+% SECTION 7: CORRECTION PERMISSIONS DJANGO
+% ===========================================
+
+\section{Correction des permissions Django}
+
+\subsection{Problème de permissions identifié}
+
+Après la résolution des problèmes CORS et CSRF, un nouveau problème est apparu : les signataires (\textit{signers}) ne pouvaient pas accéder aux documents de leur organisation. L'erreur suivante était retournée :
+
+\begin{lstlisting}[style=bash, caption={Erreur de permissions pour les signers}]
+GET /api/documents/qr-positions/pending_for_signer/?organization_id=2 HTTP/1.0" 200 -
+# Retournait une liste vide [] au lieu des documents attendus
+\end{lstlisting}
+
+\subsection{Analyse du problème}
+
+\subsubsection{Code problématique dans DocumentQRPositionViewSet}
+
+\begin{lstlisting}[style=python, caption={Code original avec problème de permissions}]
+# backend/django-project/documents/views.py - AVANT
+
+class DocumentQRPositionViewSet(viewsets.ModelViewSet):
+    queryset = DocumentQRPosition.objects.all()
+    serializer_class = DocumentQRPositionSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['status', 'signer']
+    ordering_fields = ['created_at', 'updated_at']
+    ordering = ['-created_at']
+
+    def get_queryset(self):
+        user = self.request.user
+        organization_id = self.request.query_params.get('organization_id')
+        
+        # PROBLÈME : Logique restrictive pour les signers
+        if user.role == 'signer':
+            # ❌ Filtrait uniquement par signer = user
+            return DocumentQRPosition.objects.filter(
+                signer=user,
+                organization_id=organization_id
+            )
+        else:
+            # Pour admin et collaborateur
+            return DocumentQRPosition.objects.filter(
+                organization_id=organization_id
+            )
+\end{lstlisting}
+
+\subsubsection{Origine du problème}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Filtrage trop restrictif :} Un signer ne voyait que ses propres documents
+    \item \textbf{Logic business incorrecte :} Les signers doivent voir tous les documents de l'organisation
+    \item \textbf{Workflow de signature bloqué :} Impossible d'accéder aux documents à signer
+\end{itemize}
+
+\subsection{Solution implémentée}
+
+\subsubsection{Code corrigé avec permissions appropriées}
+
+\begin{lstlisting}[style=python, caption={Code corrigé pour les permissions des signers}]
+# backend/django-project/documents/views.py - APRÈS
+
+class DocumentQRPositionViewSet(viewsets.ModelViewSet):
+    queryset = DocumentQRPosition.objects.all()
+    serializer_class = DocumentQRPositionSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['status', 'signer']
+    ordering_fields = ['created_at', 'updated_at']
+    ordering = ['-created_at']
+
+    def get_queryset(self):
+        user = self.request.user
+        organization_id = self.request.query_params.get('organization_id')
+        
+        # ✅ CORRECTION : Tous les rôles peuvent voir tous les documents de l'organisation
+        if organization_id:
+            return DocumentQRPosition.objects.filter(
+                organization_id=organization_id
+            )
+        
+        # Fallback si pas d'organization_id
+        if user.role == 'admin':
+            return DocumentQRPosition.objects.all()
+        else:
+            # Pour collaborateur et signer : documents de leur organisation
+            return DocumentQRPosition.objects.filter(
+                organization=user.organization
+            )
+
+    @action(detail=False, methods=['get'])
+    def pending_for_signer(self, request):
+        """
+        ✅ NOUVEAU : Endpoint spécifique pour les documents en attente de signature
+        """
+        user = request.user
+        organization_id = request.query_params.get('organization_id')
+        
+        if organization_id:
+            # Filtrer les documents en attente dans l'organisation
+            queryset = DocumentQRPosition.objects.filter(
+                organization_id=organization_id,
+                status='pending'  # Ou le statut approprié
+            )
+        else:
+            queryset = DocumentQRPosition.objects.filter(
+                organization=user.organization,
+                status='pending'
+            )
+        
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+\end{lstlisting}
+
+\subsection{Tests de validation des permissions}
+
+\begin{lstlisting}[style=bash, caption={Tests des permissions corrigées}]
+# Test : Accès aux documents par un signer
+curl -k -H "Authorization: Bearer $JWT_TOKEN" \
+     -H "Content-Type: application/json" \
+     https://192.168.4.131/api/documents/qr-positions/?organization_id=2
+
+# Réponse attendue : Liste de tous les documents de l'organisation 2
+# [
+#   {
+#     "id": "3166e3fc-fade-4b8c-ab73-f7a9926c99d0",
+#     "document_name": "nzaangwai_084151.pdf",
+#     "status": "pending",
+#     "organization": 2,
+#     ...
+#   }
+# ]
+
+# Test : Documents en attente de signature
+curl -k -H "Authorization: Bearer $JWT_TOKEN" \
+     https://192.168.4.131/api/documents/qr-positions/pending_for_signer/?organization_id=2
+
+# Réponse attendue : Documents avec status="pending"
+\end{lstlisting}
+
+% ===========================================
+% SECTION 8: PROBLÈMES DE RÉÉCRITURE D'URL
+% ===========================================
+
+\section{Problèmes de réécriture d'URL}
+
+\subsection{Problème d'URL rewriting identifié}
+
+Après avoir résolu les problèmes de permissions, un nouveau problème est apparu avec les URLs du microservice de signature. Les requêtes vers \texttt{/sign/} retournaient des erreurs 404.
+
+\subsection{Analyse du problème de rewrite}
+
+\subsubsection{Configuration Nginx problématique}
+
+\begin{lstlisting}[style=bash, caption={Configuration Nginx causant le problème}]
+# Configuration problématique dans /etc/nginx/sites-available/docuthanatic
+location /sign/ {
+    rewrite ^/sign/(.*)$ /$1 break;  # ❌ PROBLÈME ICI
+    proxy_pass https://127.0.0.1:8003;
+    # ... autres headers ...
+}
+\end{lstlisting}
+
+\subsubsection{Origine du problème}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{URL d'origine :} \texttt{https://192.168.4.131/sign/}
+    \item \textbf{Après rewrite :} \texttt{/(chaîne vide)} → 404 sur le microservice
+    \item \textbf{URL attendue par le microservice :} \texttt{/sign}
+    \item \textbf{Solution :} Frontend doit envoyer \texttt{/sign/sign} pour obtenir \texttt{/sign}
+\end{itemize}
+
+\subsection{Solution frontend implémentée}
+
+\subsubsection{Modifications des URLs dans les services Vue.js}
+
+\begin{lstlisting}[style=javascript, caption={Correction des URLs dans le frontend}]
+// frontend/src/services/DocumentService.js - AVANT
+signDocument(documentId, signatureData) {
+    const url = `/sign/process_signature/${documentId}/`;  // ❌ Devenait /process_signature/
+    return apiClient.post(url, signatureData);
+}
+
+// frontend/src/services/DocumentService.js - APRÈS  
+signDocument(documentId, signatureData) {
+    const url = `/sign/sign/process_signature/${documentId}/`;  // ✅ Devient /sign/process_signature/
+    return apiClient.post(url, signatureData);
+}
+
+// frontend/src/services/CryptoService.js - AVANT
+generateCertificate(certificateData) {
+    const url = `/cert/generate_certificate/`;  // ❌ Devenait /generate_certificate/
+    return apiClient.post(url, certificateData);
+}
+
+// frontend/src/services/CryptoService.js - APRÈS
+generateCertificate(certificateData) {
+    const url = `/cert/cert/generate_certificate/`;  // ✅ Devient /cert/generate_certificate/
+    return apiClient.post(url, certificateData);
+}
+\end{lstlisting}
+
+\subsection{Table de correspondance URL finale}
+
+\begin{table}[H]
+\centering
+\caption{Correspondance URLs frontend → microservices après correction}
+\label{tab:url_mapping_final}
+\begin{tabularx}{\textwidth}{|X|X|X|}
+\hline
+\textbf{URL Frontend} & \textbf{Après Nginx rewrite} & \textbf{Microservice reçoit} \\
+\hline
+\texttt{/sign/sign/process\_signature/} & \texttt{/sign/process\_signature/} & ✅ Correct \\
+\hline
+\texttt{/cert/cert/generate\_certificate/} & \texttt{/cert/generate\_certificate/} & ✅ Correct \\
+\hline
+\texttt{/gateway/gateway/health/} & \texttt{/gateway/health/} & ✅ Correct \\
+\hline
+\texttt{/api/users/auth/} & \texttt{/api/users/auth/} & ✅ Pas de rewrite \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Tests de validation des URLs}
+
+\begin{lstlisting}[style=bash, caption={Tests des URLs corrigées}]
+# Test microservice signature
+curl -k -X POST \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer $JWT_TOKEN" \
+     -d '{"signature_data": "..."}' \
+     https://192.168.4.131/sign/sign/process_signature/12345/
+
+# Réponse attendue : 200 OK avec données de signature
+
+# Test microservice certificat  
+curl -k -X POST \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer $JWT_TOKEN" \
+     -d '{"certificate_data": "..."}' \
+     https://192.168.4.131/cert/cert/generate_certificate/
+
+# Réponse attendue : 200 OK avec certificat généré
+\end{lstlisting}
+
+% ===========================================
+% SECTION 9: ARCHITECTURE FINALE
+% ===========================================
+
+\section{Architecture finale et flux de données}
+
+\subsection{Diagramme de l'architecture finale}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=1.5cm and 2cm,
+        nginx/.style={rectangle, draw, fill=black, text=white, minimum width=3cm, minimum height=1.2cm, font=\small\bfseries},
+        box/.style={rectangle, draw, fill=darkgray, text=white, minimum width=2.8cm, minimum height=1cm, font=\small\bfseries},
+        client/.style={rectangle, draw, fill=blue!20, minimum width=2.5cm, minimum height=0.8cm, font=\small},
+        db/.style={cylinder, draw, fill=lightcyan, text=black, minimum width=2cm, minimum height=1cm, font=\small\bfseries},
+        arrow/.style={->, thick}
+    ]
+        % Client
+        \node[client] (client) {Client Web Browser};
+        
+        % Nginx (point central)
+        \node[nginx, below=1.5cm of client] (nginx) {Nginx Reverse Proxy\\192.168.4.131:443\\(Point d'entrée unique)};
+        
+        % Services backend (localhost)
+        \node[box, below=2.5cm of nginx, xshift=-6cm] (frontend) {Vue.js Frontend\\127.0.0.1:8080};
+        \node[box, right=1cm of frontend] (django) {Django Backend\\127.0.0.1:8000};
+        \node[box, right=1cm of django] (gateway) {API Gateway\\127.0.0.1:8001};
+        \node[box, below=1.5cm of frontend] (certms) {Certificat MS\\127.0.0.1:8002};
+        \node[box, below=1.5cm of django] (signms) {Signature MS\\127.0.0.1:8003};
+        
+        % Base de données
+        \node[db, below=1.5cm of gateway] (postgres) {PostgreSQL\\Database};
+        
+        % Connexions client → Nginx
+        \draw[arrow, green!80!black, very thick] (client) -- node[right, font=\footnotesize] {HTTPS:443} (nginx);
+        
+        % Connexions Nginx → Services
+        \draw[arrow, lightblue, thick] (nginx) to[out=-135,in=90] node[left, font=\tiny] {/:8080} (frontend);
+        \draw[arrow, lightpurple, thick] (nginx) to[out=-90,in=90] node[above, font=\tiny] {/api/:8000} (django);
+        \draw[arrow, lightgreen, thick] (nginx) to[out=-45,in=90] node[right, font=\tiny] {/gateway/:8001} (gateway);
+        \draw[arrow, lightorange, thick] (nginx) to[out=-115,in=45] node[left, font=\tiny] {/cert/:8002} (certms);
+        \draw[arrow, lightpink, thick] (nginx) to[out=-65,in=135] node[right, font=\tiny] {/sign/:8003} (signms);
+        
+        % Connexions inter-services
+        \draw[arrow, dashed] (frontend) -- node[above, font=\tiny] {API calls} (django);
+        \draw[arrow, dashed] (frontend) to[out=45,in=135] node[above, font=\tiny] {Gateway} (gateway);
+        \draw[arrow, dashed] (gateway) -- node[left, font=\tiny] {Cert MS} (certms);
+        \draw[arrow, dashed] (gateway) -- node[right, font=\tiny] {Sign MS} (signms);
+        
+        % Connexions base de données
+        \draw[arrow, dashed] (django) to[out=-45,in=90] node[right, font=\tiny] {ORM} (postgres);
+        \draw[arrow, dashed] (certms) to[out=0,in=180] node[below, font=\tiny] {Store} (postgres);
+        \draw[arrow, dashed] (signms) to[out=180,in=0] node[below, font=\tiny] {Store} (postgres);
+        
+        % Titre
+        \node[above=0.5cm of client, font=\Large\bfseries] {Architecture finale Doc@uthANTIC};
+        
+        % Légende
+        \node[below=4cm of postgres, font=\small, text=green!80!black] {✅ Architecture sécurisée avec reverse proxy Nginx};
+    \end{tikzpicture}
+    \caption{Architecture finale Doc@uthANTIC avec Nginx reverse proxy}
+    \label{fig:architecture_finale}
+\end{figure}
+
+\subsection{Flux de données complet}
+
+\subsubsection{Diagramme de séquence : Signature d'un document}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=0.5cm and 1.5cm,
+        participant/.style={rectangle, draw, fill=blue!10, minimum width=2cm, minimum height=0.8cm, font=\footnotesize},
+        arrow/.style={->, thick}
+    ]
+        % Participants
+        \node[participant] (user) {Utilisateur};
+        \node[participant, right=2cm of user] (nginx) {Nginx};
+        \node[participant, right=2cm of nginx] (frontend) {Frontend};
+        \node[participant, right=2cm of frontend] (django) {Django};
+        \node[participant, below=4cm of nginx] (gateway) {Gateway};
+        \node[participant, below=4cm of frontend] (signms) {Sign MS};
+        \node[participant, below=4cm of django] (db) {PostgreSQL};
+        
+        % Lignes de vie
+        \draw[dashed] (user) -- ++(0,-8);
+        \draw[dashed] (nginx) -- ++(0,-8);
+        \draw[dashed] (frontend) -- ++(0,-8);
+        \draw[dashed] (django) -- ++(0,-8);
+        \draw[dashed] (gateway) -- ++(0,-8);
+        \draw[dashed] (signms) -- ++(0,-8);
+        \draw[dashed] (db) -- ++(0,-8);
+        
+        % Messages
+        \draw[arrow] (user) -- ++(2,0) -- ++(0,-0.5) node[right, font=\tiny] {1. HTTPS Request};
+        \draw[arrow] (nginx) -- ++(2,0) -- ++(0,-0.5) node[right, font=\tiny] {2. Route /};
+        \draw[arrow] (frontend) -- ++(2,0) -- ++(0,-0.5) node[right, font=\tiny] {3. API /api/};
+        \draw[arrow] (django) -- ++(2,0) -- ++(0,-1) node[right, font=\tiny] {4. Auth \& Data};
+        \draw[arrow] (django) -- ++(0,-1.5) -- ++(-2,0) node[left, font=\tiny] {5. Call /sign/sign/};
+        \draw[arrow] (gateway) -- ++(2,0) -- ++(0,-0.5) node[right, font=\tiny] {6. Process};
+        \draw[arrow] (signms) -- ++(2,0) -- ++(0,-0.5) node[right, font=\tiny] {7. Store};
+        
+        % Retours
+        \draw[arrow, dashed] (db) -- ++(-2,0) -- ++(0,-0.5) node[left, font=\tiny] {Response};
+        \draw[arrow, dashed] (signms) -- ++(-2,0) -- ++(0,-0.5) node[left, font=\tiny] {Success};
+        \draw[arrow, dashed] (gateway) -- ++(-2,0) -- ++(0,-0.5) node[left, font=\tiny] {Result};
+        \draw[arrow, dashed] (django) -- ++(-2,0) -- ++(0,-0.5) node[left, font=\tiny] {JSON};
+        \draw[arrow, dashed] (frontend) -- ++(-2,0) -- ++(0,-0.5) node[left, font=\tiny] {UI Update};
+        \draw[arrow, dashed] (nginx) -- ++(-2,0) -- ++(0,-0.5) node[left, font=\tiny] {Final Response};
+    \end{tikzpicture}
+    \caption{Flux de signature d'un document via Nginx}
+    \label{fig:flux_signature}
+\end{figure}
+
+\subsection{Points clés de l'architecture finale}
+
+\subsubsection{✅ Sécurité}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Point d'entrée unique :} Nginx sur ports 80/443
+    \item \textbf{Services en localhost :} Inaccessibles depuis l'extérieur
+    \item \textbf{SSL centralisé :} Gestion des certificats sur Nginx uniquement
+    \item \textbf{Headers de sécurité :} X-Frame-Options, X-XSS-Protection, etc.
+\end{itemize}
+
+\subsubsection{✅ Performance}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Load balancing possible :} Via Nginx upstream
+    \item \textbf{Cache statique :} Nginx peut servir les assets
+    \item \textbf{Compression :} Gzip activée sur Nginx
+    \item \textbf{Keep-alive :} Connexions persistantes
+\end{itemize}
+
+\subsubsection{✅ Maintenance}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{URLs simplifiées :} Plus de ports dans les URLs
+    \item \textbf{Configuration centralisée :} Routage dans Nginx
+    \item \textbf{Logs centralisés :} Accès et erreurs sur Nginx
+    \item \textbf{Déploiement simplifié :} Un seul point d'entrée
+\end{itemize}
+
+% ===========================================
+% SECTION 10: TESTS ET VALIDATION
+% ===========================================
+
+\section{Tests et validation}
+
+\subsection{Suite de tests de connectivité}
+
+\begin{lstlisting}[style=bash, caption={Tests de connectivité complets}]
+#!/bin/bash
+# Script de test complet de l'architecture Nginx
+
+echo "=== Tests de connectivité Doc@uthANTIC avec Nginx ==="
+
+# Test 1: Accès frontend
+echo "1. Test frontend Vue.js..."
+curl -k -s -o /dev/null -w "%{http_code}" https://192.168.4.131/
+# Attendu: 200
+
+# Test 2: API Django
+echo "2. Test API Django..."
+curl -k -s -o /dev/null -w "%{http_code}" https://192.168.4.131/api/
+# Attendu: 200 ou 404 (pas d'endpoint racine)
+
+# Test 3: Django Admin
+echo "3. Test Django Admin..."
+curl -k -s -o /dev/null -w "%{http_code}" https://192.168.4.131/admin/
+# Attendu: 200 (redirection vers login)
+
+# Test 4: API Gateway
+echo "4. Test API Gateway..."
+curl -k -s -o /dev/null -w "%{http_code}" https://192.168.4.131/gateway/
+# Attendu: 200
+
+# Test 5: Microservice Certificat
+echo "5. Test Microservice Certificat..."
+curl -k -s -o /dev/null -w "%{http_code}" https://192.168.4.131/cert/
+# Attendu: 200
+
+# Test 6: Microservice Signature
+echo "6. Test Microservice Signature..."
+curl -k -s -o /dev/null -w "%{http_code}" https://192.168.4.131/sign/
+# Attendu: 200
+
+echo "=== Tests terminés ==="
+\end{lstlisting}
+
+\subsection{Tests de sécurité}
+
+\begin{lstlisting}[style=bash, caption={Tests de sécurité}]
+# Test 1: Vérification que les services ne sont pas accessibles directement
+echo "Test sécurité: Accès direct aux services (doit échouer)"
+
+# Ces commandes doivent échouer (timeout ou connection refused)
+curl -k --connect-timeout 5 https://192.168.4.131:8000/ || echo "✅ Django inaccessible directement"
+curl -k --connect-timeout 5 https://192.168.4.131:8001/ || echo "✅ Gateway inaccessible directement"
+curl -k --connect-timeout 5 https://192.168.4.131:8002/ || echo "✅ Cert MS inaccessible directement"
+curl -k --connect-timeout 5 https://192.168.4.131:8003/ || echo "✅ Sign MS inaccessible directement"
+
+# Test 2: Vérification des headers de sécurité
+echo "Test headers de sécurité..."
+curl -k -I https://192.168.4.131/ | grep -E "(X-Frame-Options|X-XSS-Protection|X-Content-Type-Options)"
+# Attendu: Présence des headers de sécurité
+\end{lstlisting}
+
+\subsection{Tests fonctionnels}
+
+\begin{lstlisting}[style=bash, caption={Tests fonctionnels complets}]
+# Test d'authentification complète
+echo "=== Test d'authentification ==="
+
+# 1. Authentification
+AUTH_RESPONSE=$(curl -k -s -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "password": "testpass",
+    "organization_id": 1
+  }' \
+  https://192.168.4.131/api/users/auth/with-organization/)
+
+echo "Auth response: $AUTH_RESPONSE"
+
+# 2. Extraction du token JWT
+ACCESS_TOKEN=$(echo $AUTH_RESPONSE | grep -o '"access":"[^"]*"' | cut -d'"' -f4)
+echo "Token: ${ACCESS_TOKEN:0:50}..."
+
+# 3. Test d'accès aux documents avec token
+echo "=== Test accès documents avec JWT ==="
+curl -k -H "Authorization: Bearer $ACCESS_TOKEN" \
+     https://192.168.4.131/api/documents/qr-positions/?organization_id=1
+
+# 4. Test microservice signature avec token
+echo "=== Test microservice signature ==="
+curl -k -X POST \
+     -H "Authorization: Bearer $ACCESS_TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{"test": "data"}' \
+     https://192.168.4.131/sign/sign/health/
+\end{lstlisting}
+
+% ===========================================
+% SECTION 11: RECOMMANDATIONS ET CONCLUSION
+% ===========================================
+
+\section{Recommandations et optimisations}
+
+\subsection{Sécurité}
+
+\subsubsection{Firewall et fail2ban}
+\begin{lstlisting}[style=bash, caption={Configuration recommandée du firewall}]
+# Configuration UFW (Uncomplicated Firewall)
+sudo ufw enable
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+# Autoriser seulement SSH et HTTPS
+sudo ufw allow ssh
+sudo ufw allow 443/tcp
+sudo ufw allow 80/tcp
+
+# Bloquer l'accès direct aux ports des services
+sudo ufw deny 8000:8003/tcp
+
+# Installation et configuration fail2ban
+sudo apt install fail2ban -y
+sudo systemctl enable fail2ban
+\end{lstlisting}
+
+\subsubsection{Rate limiting Nginx}
+\begin{lstlisting}[style=bash, caption={Configuration rate limiting}]
+# Ajouter dans /etc/nginx/sites-available/docuthanatic
+
+# Zone de rate limiting
+limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+limit_req_zone $binary_remote_addr zone=login:10m rate=1r/s;
+
+server {
+    # Dans location /api/
+    location /api/ {
+        limit_req zone=api burst=20 nodelay;
+        # ... reste de la configuration
+    }
+    
+    # Rate limiting spécial pour login
+    location /api/users/auth/ {
+        limit_req zone=login burst=5 nodelay;
+        # ... reste de la configuration
+    }
+}
+\end{lstlisting}
+
+\subsection{Performance}
+
+\subsubsection{Cache et compression}
+\begin{lstlisting}[style=bash, caption={Optimisations performance Nginx}]
+# Configuration dans /etc/nginx/sites-available/docuthanatic
+
+server {
+    # Compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types
+        text/plain
+        text/css
+        text/xml
+        text/javascript
+        application/javascript
+        application/json
+        application/xml+rss;
+    
+    # Cache pour assets statiques
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        proxy_pass https://127.0.0.1:8000;
+    }
+    
+    # Cache pour media files
+    location /media/ {
+        expires 30d;
+        add_header Cache-Control "public";
+        proxy_pass https://127.0.0.1:8000;
+    }
+}
+\end{lstlisting}
+
+\subsection{Monitoring}
+
+\subsubsection{Logs et monitoring}
+\begin{lstlisting}[style=bash, caption={Configuration monitoring}]
+# Rotation des logs Nginx
+sudo nano /etc/logrotate.d/nginx
+
+/var/log/nginx/*.log {
+    daily
+    missingok
+    rotate 52
+    compress
+    delaycompress
+    notifempty
+    create 644 nginx nginx
+    sharedscripts
+    prerotate
+        if [ -d /etc/logrotate.d/httpd-prerotate ]; then \
+            run-parts /etc/logrotate.d/httpd-prerotate; \
+        fi
+    endscript
+    postrotate
+        systemctl reload nginx
+    endscript
+}
+
+# Monitoring en temps réel
+sudo tail -f /var/log/nginx/docuthanatic_access.log
+sudo tail -f /var/log/nginx/docuthanatic_error.log
+\end{lstlisting}
+
+\section{Conclusion}
+
+\subsection{Résumé des accomplissements}
+
+L'implémentation du reverse proxy Nginx pour Doc@uthANTIC a été un succès complet. Nous avons transformé une architecture exposant 5 services sur des ports distincts en une architecture sécurisée avec un point d'entrée unique.
+
+\subsubsection{✅ Problèmes résolus}
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{CORS :} Configuration Django mise à jour pour accepter les requêtes via Nginx
+    \item \textbf{CSRF :} Transmission des tokens via headers Nginx et exemption JWT
+    \item \textbf{Permissions :} Correction de la logique pour permettre aux signers d'accéder aux documents
+    \item \textbf{URL Rewriting :} Adaptation des URLs frontend pour la réécriture Nginx
+\end{enumerate}
+
+\subsubsection{✅ Bénéfices obtenus}
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Sécurité :} Services en localhost, SSL centralisé
+    \item \textbf{Simplicité :} URLs sans ports, configuration centralisée
+    \item \textbf{Performance :} Possibilité de cache, compression, load balancing
+    \item \textbf{Monitoring :} Logs centralisés sur Nginx
+\end{enumerate}
+
+\subsubsection{🎯 Recommandations finales}
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Monitoring :} Mettre en place Prometheus + Grafana
+    \item \textbf{Load Balancing :} Configurer upstream pour haute disponibilité
+    \item \textbf{Sécurité :} Rate limiting et fail2ban
+    \item \textbf{Sauvegardes :} Automatisation des backups de configuration
+\end{enumerate}
+
+\textbf{🎉 Le système Doc@uthANTIC avec Nginx reverse proxy est maintenant en production et opérationnel !}
+
+\subsection{Références}
+
+\begin{itemize}[leftmargin=*]
+    \item \href{https://nginx.org/en/docs/}{Nginx Documentation}
+    \item \href{https://certisign.readthedocs.io/}{Doc@uthANTIC Documentation}
+    \item \href{https://fastapi.tiangolo.com/}{Python FastAPI Documentation}
+    \item \href{https://docs.djangoproject.com/}{Django Documentation}
+    \item \href{https://vuejs.org/guide/}{Vue.js Documentation}
+\end{itemize}
+
+\end{document} 

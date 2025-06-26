@@ -129,8 +129,8 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@certisign.com
 # Super Admin Email pour les notifications
 SUPER_ADMIN_EMAIL = config('SUPER_ADMIN_EMAIL', default='emmanuelyakam1@gmail.com')
 
-# URL de base pour les liens dans les emails
-BASE_URL = config('BASE_URL', default='https://192.168.4.131:8000')
+# URL de base pour les liens dans les emails - Maintenant via Nginx
+BASE_URL = config('BASE_URL', default='https://192.168.4.131')
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -158,10 +158,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS configuration
+# CORS configuration - Mise à jour pour Nginx
 CORS_ALLOWED_ORIGINS = [
-    "https://192.168.4.131:8080",
-    "http://192.168.4.131:5173", # Vite.js dev server
+    "https://192.168.4.131",        # Frontend via Nginx
+    "https://127.0.0.1",           # Nginx local
+    "http://127.0.0.1",            # Nginx local HTTP
 ]
 
 CORS_ALLOW_CREDENTIALS = True

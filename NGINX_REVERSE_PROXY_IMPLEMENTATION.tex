@@ -1,0 +1,809 @@
+\documentclass[12pt,a4paper]{article}
+
+% ===========================================
+% PACKAGES ET CONFIGURATION
+% ===========================================
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{tocloft}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{float}
+
+% Configuration de la géométrie
+\geometry{
+    left=2.5cm,
+    right=2.5cm,
+    top=3cm,
+    bottom=3cm,
+    headheight=15pt
+}
+
+% Configuration des couleurs
+\definecolor{darkgray}{RGB}{44,44,44}
+\definecolor{lightblue}{RGB}{100,181,246}
+\definecolor{lightpurple}{RGB}{186,104,200}
+\definecolor{lightgreen}{RGB}{129,199,132}
+\definecolor{lightorange}{RGB}{255,183,77}
+\definecolor{lightpink}{RGB}{240,98,146}
+\definecolor{lightcyan}{RGB}{66,165,245}
+\definecolor{orange}{RGB}{255,167,38}
+
+% Configuration des listings (code)
+\lstdefinestyle{bash}{
+    language=bash,
+    basicstyle=\ttfamily\footnotesize,
+    backgroundcolor=\color{gray!10},
+    frame=single,
+    breaklines=true,
+    showstringspaces=false,
+    commentstyle=\color{green!60!black},
+    keywordstyle=\color{blue!80!black},
+    stringstyle=\color{red!80!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt
+}
+
+\lstdefinestyle{nginx}{
+    language=,
+    basicstyle=\ttfamily\footnotesize,
+    backgroundcolor=\color{gray!10},
+    frame=single,
+    breaklines=true,
+    showstringspaces=false,
+    commentstyle=\color{green!60!black},
+    keywordstyle=\color{blue!80!black},
+    stringstyle=\color{red!80!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt
+}
+
+\lstdefinestyle{python}{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    backgroundcolor=\color{gray!10},
+    frame=single,
+    breaklines=true,
+    showstringspaces=false,
+    commentstyle=\color{green!60!black},
+    keywordstyle=\color{blue!80!black},
+    stringstyle=\color{red!80!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt
+}
+
+\lstdefinestyle{javascript}{
+    language=JavaScript,
+    basicstyle=\ttfamily\footnotesize,
+    backgroundcolor=\color{gray!10},
+    frame=single,
+    breaklines=true,
+    showstringspaces=false,
+    commentstyle=\color{green!60!black},
+    keywordstyle=\color{blue!80!black},
+    stringstyle=\color{red!80!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt
+}
+
+% Configuration des titres
+\titleformat{\section}
+  {\Large\bfseries\color{blue!80!black}}
+  {\thesection}
+  {1em}
+  {}
+  [\color{blue!80!black}\titlerule]
+
+\titleformat{\subsection}
+  {\large\bfseries\color{blue!70!black}}
+  {\thesubsection}
+  {1em}
+  {}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{blue!60!black}}
+  {\thesubsubsection}
+  {1em}
+  {}
+
+% Configuration des headers/footers
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{Documentation Technique Doc@uthANTIC}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Configuration des liens
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!80!black,
+    filecolor=magenta,
+    urlcolor=cyan!80!black,
+    citecolor=green!80!black,
+    pdftitle={Documentation Technique : Implémentation Nginx Reverse Proxy pour Doc@uthANTIC},
+    pdfauthor={Équipe de développement Doc@uthANTIC},
+    pdfsubject={Configuration Nginx et Architecture Microservices},
+    pdfkeywords={Nginx, Reverse Proxy, Doc@uthANTIC, Microservices, Django, Vue.js}
+}
+
+% Configuration de la table des matières
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+% ===========================================
+% DÉBUT DU DOCUMENT
+% ===========================================
+
+\begin{document}
+
+% Page de titre
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\Huge\bfseries Documentation Technique}\\[0.5cm]
+    {\LARGE Implémentation Nginx Reverse Proxy}\\[0.3cm]
+    {\LARGE pour Doc@uthANTIC}\\[2cm]
+    
+    \begin{tikzpicture}[scale=0.8]
+        % Logo symbolique avec TikZ
+        \draw[thick, blue!80!black] (0,0) rectangle (6,4);
+        \node[align=center, font=\Large\bfseries] at (3,2) {Doc@uthANTIC\\Nginx\\Proxy};
+        \draw[thick, orange] (-1,1.5) rectangle (0,2.5);
+        \draw[thick, orange] (6,1.5) rectangle (7,2.5);
+        \node[font=\small] at (-0.5,2) {Client};
+        \node[font=\small] at (6.5,2) {Services};
+        \draw[->, thick, orange] (0,2) -- (1,2);
+        \draw[->, thick, orange] (5,2) -- (6,2);
+    \end{tikzpicture}\\[2cm]
+    
+    {\large De l'installation à la production}\\[1cm]
+    {\large Résolution des problèmes CORS, CSRF et permissions}\\[3cm]
+    
+    {\large\textbf{Équipe de développement Doc@uthANTIC}}\\[0.5cm]
+    {\large\today}
+\end{titlepage}
+
+% Table des matières
+\tableofcontents
+\newpage
+
+% ===========================================
+% SECTION 1: VUE D'ENSEMBLE
+% ===========================================
+
+\section{Vue d'ensemble du projet}
+
+\subsection{Objectif principal}
+
+Transformer l'architecture Doc@uthANTIC d'un système exposant directement les ports des services vers une architecture sécurisée utilisant un reverse proxy Nginx, éliminant l'exposition des ports explicites dans les URLs.
+
+\subsection{Problématique initiale}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{URLs exposant les ports :} \texttt{https://192.168.4.131:8000}, \texttt{https://192.168.4.131:8001}, etc.
+    \item \textbf{Services accessibles directement :} Risques de sécurité
+    \item \textbf{Configuration CORS complexe :} Gestion manuelle pour chaque service
+    \item \textbf{Maintenance difficile :} Changement d'URL implique modification du code
+\end{itemize}
+
+\subsection{Solution implémentée}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Reverse proxy Nginx :} Point d'entrée unique sur les ports 80/443
+    \item \textbf{Services en localhost :} Sécurisation par isolation réseau
+    \item \textbf{URLs simplifiées :} \texttt{https://192.168.4.131/api/}, \texttt{https://192.168.4.131/gateway/}, etc.
+    \item \textbf{SSL centralisé :} Gestion des certificats uniquement sur Nginx
+\end{itemize}
+
+% ===========================================
+% SECTION 2: ARCHITECTURE INITIALE
+% ===========================================
+
+\section{Architecture initiale}
+
+\subsection{Diagramme de l'architecture avant Nginx}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=1.5cm and 2cm,
+        box/.style={rectangle, draw, fill=darkgray, text=white, minimum width=2.5cm, minimum height=1cm, font=\small\bfseries},
+        client/.style={rectangle, draw, fill=blue!20, minimum width=2cm, minimum height=0.8cm, font=\small},
+        arrow/.style={->, thick}
+    ]
+        % Client
+        \node[client] (client) {Client Web Browser};
+        
+        % Services avant Nginx
+        \node[box, below=2cm of client, xshift=-4cm] (frontend) {Vue.js Frontend\\:8080};
+        \node[box, right=of frontend] (django) {Django Backend\\:8000};
+        \node[box, right=of django] (gateway) {API Gateway\\:8001};
+        \node[box, below=of frontend] (certms) {Certificat MS\\:8002};
+        \node[box, below=of django] (signms) {Signature MS\\:8003};
+        
+        % Connexions directes (problématiques)
+        \draw[arrow, red] (client) to[out=-135,in=90] node[left, font=\tiny] {:8080} (frontend);
+        \draw[arrow, red] (client) to[out=-90,in=90] node[above, font=\tiny] {:8000} (django);
+        \draw[arrow, red] (client) to[out=-45,in=90] node[right, font=\tiny] {:8001} (gateway);
+        
+        % Connexions inter-services
+        \draw[arrow] (frontend) -- node[above, font=\tiny] {:8000} (django);
+        \draw[arrow] (frontend) to[out=0,in=180] node[above, font=\tiny] {:8001} (gateway);
+        \draw[arrow] (gateway) -- node[left, font=\tiny] {:8002} (certms);
+        \draw[arrow] (gateway) -- node[right, font=\tiny] {:8003} (signms);
+        
+        % Titre
+        \node[above=0.5cm of client, font=\Large\bfseries] {Services Doc@uthANTIC (AVANT)};
+        
+        % Légende
+        \node[below=3cm of signms, font=\small, text=red] {❌ Exposition directe des services - Risques de sécurité};
+    \end{tikzpicture}
+    \caption{Architecture avant l'implémentation du reverse proxy Nginx}
+    \label{fig:architecture_avant}
+\end{figure}
+
+\subsection{Services et ports initiaux}
+
+\begin{table}[H]
+\centering
+\caption{Configuration des services avant Nginx}
+\label{tab:services_initiaux}
+\begin{tabularx}{\textwidth}{|l|c|X|X|}
+\hline
+\textbf{Service} & \textbf{Port} & \textbf{URL d'accès} & \textbf{Fonction} \\
+\hline
+Frontend Vue.js & 8080 & \texttt{https://192.168.4.131:8080} & Interface utilisateur \\
+\hline
+Backend Django & 8000 & \texttt{https://192.168.4.131:8000} & API REST, Admin \\
+\hline
+API Gateway & 8001 & \texttt{https://192.168.4.131:8001} & Routage vers microservices \\
+\hline
+Microservice Certificat & 8002 & \texttt{https://192.168.4.131:8002} & Traitement certificats \\
+\hline
+Microservice Signature & 8003 & \texttt{https://192.168.4.131:8003} & Signature documents \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Problèmes identifiés}
+
+\subsubsection{🔴 Sécurité}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Exposition directe des services :} Chaque service accessible depuis l'extérieur
+    \item \textbf{Gestion SSL multiple :} Certificats sur chaque service
+    \item \textbf{Attaques directes possibles :} Contournement du frontend
+\end{itemize}
+
+\subsubsection{🔴 Maintenance}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{URLs hardcodées :} Ports dans le code frontend
+    \item \textbf{Configuration CORS répétée :} Sur chaque service
+    \item \textbf{Déploiement complexe :} Gestion de 5 services distincts
+\end{itemize}
+
+\subsubsection{🔴 Évolutivité}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Ajout de services difficile :} Nouveau port à exposer
+    \item \textbf{Load balancing impossible :} Pas de point central
+    \item \textbf{Monitoring dispersé :} Logs sur chaque service
+\end{itemize}
+
+% ===========================================
+% SECTION 3: INSTALLATION NGINX
+% ===========================================
+
+\section{Installation et configuration Nginx}
+
+\subsection{Installation sur Ubuntu}
+
+La première étape consistait à installer Nginx sur le système Ubuntu :
+
+\begin{lstlisting}[style=bash, caption={Installation de Nginx sur Ubuntu}]
+# Mise à jour des paquets
+sudo apt update
+
+# Installation de Nginx
+sudo apt install nginx -y
+
+# Vérification de l'installation
+nginx -v
+# nginx version: nginx/1.18.0 (Ubuntu)
+
+# Démarrage et activation automatique
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
+# Vérification du statut
+sudo systemctl status nginx
+\end{lstlisting}
+
+\subsection{Création des certificats SSL}
+
+Pour sécuriser les communications, nous avons réutilisé les certificats existants du projet :
+
+\begin{lstlisting}[style=bash, caption={Configuration des certificats SSL}]
+# Création du répertoire SSL pour Nginx
+sudo mkdir -p /etc/nginx/ssl/docuthanatic/
+
+# Copie des certificats existants
+sudo cp backend/django-project/ssl/cert.pem /etc/nginx/ssl/docuthanatic/
+sudo cp backend/django-project/ssl/key.pem /etc/nginx/ssl/docuthanatic/
+
+# Vérification des permissions
+sudo chown root:root /etc/nginx/ssl/docuthanatic/*
+sudo chmod 600 /etc/nginx/ssl/docuthanatic/key.pem
+sudo chmod 644 /etc/nginx/ssl/docuthanatic/cert.pem
+\end{lstlisting}
+
+\subsection{Configuration initiale Nginx}
+
+Création du fichier de configuration principal \texttt{/etc/nginx/sites-available/docuthanatic} :
+
+\begin{lstlisting}[style=nginx, caption={Configuration Nginx pour Doc@uthANTIC}, label={lst:nginx_config}]
+# Configuration Nginx pour Doc@uthANTIC
+# Ce fichier dit à Nginx comment rediriger les requêtes vers nos services
+
+server {
+    # Écouter sur le port 80 (HTTP) et 443 (HTTPS)
+    listen 80;
+    listen 443 ssl;
+    
+    # Nom du serveur (votre adresse IP)
+    server_name 192.168.4.131;
+    
+    # Configuration SSL (certificats pour HTTPS)
+    ssl_certificate /etc/nginx/ssl/docuthanatic/cert.pem;
+    ssl_certificate_key /etc/nginx/ssl/docuthanatic/key.pem;
+    
+    # Redirection automatique HTTP vers HTTPS
+    if ($scheme = http) {
+        return 301 https://$server_name$request_uri;
+    }
+    
+    # Configuration SSL sécurisée
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    
+    # Headers de sécurité
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+    
+    # Gestion des gros fichiers (pour les PDFs)
+    client_max_body_size 50M;
+    
+    # ROUTE PRINCIPALE : Frontend Vue.js
+    location / {
+        proxy_pass https://127.0.0.1:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # Support WebSocket (si besoin)
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+    
+    # ROUTE API : Django Backend
+    location /api/ {
+        proxy_pass https://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # ROUTE ADMIN : Django Admin
+    location /admin/ {
+        proxy_pass https://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # ROUTE GATEWAY : API Gateway FastAPI
+    location /gateway/ {
+        rewrite ^/gateway/(.*)$ /$1 break;
+        proxy_pass https://127.0.0.1:8001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # ROUTE CERTIFICATS : Microservice Certificats
+    location /cert/ {
+        rewrite ^/cert/(.*)$ /$1 break;
+        proxy_pass https://127.0.0.1:8002;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # ROUTE SIGNATURE : Microservice Signature
+    location /sign/ {
+        rewrite ^/sign/(.*)$ /$1 break;
+        proxy_pass https://127.0.0.1:8003;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # ROUTE MEDIA : Fichiers uploadés (PDFs, images)
+    location /media/ {
+        proxy_pass https://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # ROUTE STATIC : Fichiers statiques (CSS, JS, images)
+    location /static/ {
+        proxy_pass https://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # Logs pour debug
+    access_log /var/log/nginx/docuthanatic_access.log;
+    error_log /var/log/nginx/docuthanatic_error.log;
+}
+\end{lstlisting}
+
+\subsection{Activation de la configuration}
+
+\begin{lstlisting}[style=bash, caption={Activation du site Nginx}]
+# Création du lien symbolique pour activer le site
+sudo ln -s /etc/nginx/sites-available/docuthanatic /etc/nginx/sites-enabled/
+
+# Désactivation du site par défaut
+sudo rm /etc/nginx/sites-enabled/default
+
+# Test de la configuration
+sudo nginx -t
+
+# Rechargement de Nginx
+sudo systemctl reload nginx
+\end{lstlisting}
+
+\subsection{Routage mis en place}
+
+Le nouveau routage Nginx transforme les URLs comme suit :
+
+\begin{table}[H]
+\centering
+\caption{Transformation des URLs par Nginx}
+\label{tab:routage_nginx}
+\begin{tabularx}{\textwidth}{|X|X|X|}
+\hline
+\textbf{URL d'entrée} & \textbf{Service de destination} & \textbf{Fonction} \\
+\hline
+\texttt{https://192.168.4.131/} & \texttt{https://127.0.0.1:8080} & Frontend Vue.js \\
+\hline
+\texttt{https://192.168.4.131/api/} & \texttt{https://127.0.0.1:8000/api/} & API Django \\
+\hline
+\texttt{https://192.168.4.131/admin/} & \texttt{https://127.0.0.1:8000/admin/} & Django Admin \\
+\hline
+\texttt{https://192.168.4.131/gateway/} & \texttt{https://127.0.0.1:8001/} & API Gateway \\
+\hline
+\texttt{https://192.168.4.131/cert/} & \texttt{https://127.0.0.1:8002/} & Microservice Certificats \\
+\hline
+\texttt{https://192.168.4.131/sign/} & \texttt{https://127.0.0.1:8003/} & Microservice Signature \\
+\hline
+\texttt{https://192.168.4.131/media/} & \texttt{https://127.0.0.1:8000/media/} & Fichiers média \\
+\hline
+\texttt{https://192.168.4.131/static/} & \texttt{https://127.0.0.1:8000/static/} & Fichiers statiques \\
+\hline
+\end{tabularx}
+\end{table}
+
+% ===========================================
+% SECTION 4: CONFIGURATION SERVICES LOCALHOST
+% ===========================================
+
+\section{Configuration des services pour localhost}
+
+\subsection{Objectif de sécurisation}
+
+Une fois Nginx configuré, il fallait modifier tous les services backend pour qu'ils n'écoutent plus que sur localhost (\texttt{127.0.0.1}) au lieu de l'adresse IP publique, garantissant ainsi qu'ils ne soient accessibles que via le reverse proxy.
+
+\subsection{Diagramme de l'architecture réseau modifiée}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=1.5cm and 2cm,
+        nginx/.style={rectangle, draw, fill=orange, minimum width=2.5cm, minimum height=1cm, font=\small\bfseries},
+        box/.style={rectangle, draw, fill=darkgray, text=white, minimum width=2.5cm, minimum height=1cm, font=\small\bfseries},
+        client/.style={rectangle, draw, fill=blue!20, minimum width=2cm, minimum height=0.8cm, font=\small},
+        arrow/.style={->, thick}
+    ]
+        % Client
+        \node[client] (client) {Client Web Browser};
+        
+        % Nginx (nouveau)
+        \node[nginx, below=1.5cm of client] (nginx) {Nginx Reverse Proxy\\:80/:443};
+        
+        % Services après Nginx (localhost)
+        \node[box, below=2cm of nginx, xshift=-4cm] (frontend) {Vue.js Frontend\\127.0.0.1:8080};
+        \node[box, right=of frontend] (django) {Django Backend\\127.0.0.1:8000};
+        \node[box, right=of django] (gateway) {API Gateway\\127.0.0.1:8001};
+        \node[box, below=of frontend] (certms) {Certificat MS\\127.0.0.1:8002};
+        \node[box, below=of django] (signms) {Signature MS\\127.0.0.1:8003};
+        
+        % Connexions via Nginx (sécurisées)
+        \draw[arrow, green!80!black] (client) -- node[right, font=\tiny] {:443} (nginx);
+        \draw[arrow, blue] (nginx) to[out=-135,in=90] node[left, font=\tiny] {:8080} (frontend);
+        \draw[arrow, blue] (nginx) to[out=-90,in=90] node[above, font=\tiny] {:8000} (django);
+        \draw[arrow, blue] (nginx) to[out=-45,in=90] node[right, font=\tiny] {:8001} (gateway);
+        
+        % Connexions inter-services (localhost)
+        \draw[arrow] (frontend) -- node[above, font=\tiny] {:8000} (django);
+        \draw[arrow] (frontend) to[out=0,in=180] node[above, font=\tiny] {:8001} (gateway);
+        \draw[arrow] (gateway) -- node[left, font=\tiny] {:8002} (certms);
+        \draw[arrow] (gateway) -- node[right, font=\tiny] {:8003} (signms);
+        
+        % Titre
+        \node[above=0.5cm of client, font=\Large\bfseries] {Services Doc@uthANTIC (APRÈS)};
+        
+        % Légende
+        \node[below=3cm of signms, font=\small, text=green!80!black] {✅ Point d'entrée unique - Sécurité renforcée};
+    \end{tikzpicture}
+    \caption{Architecture après implémentation du reverse proxy Nginx}
+    \label{fig:architecture_apres}
+\end{figure}
+
+\subsection{Modifications des scripts de démarrage}
+
+Les scripts de démarrage des services ont été modifiés pour utiliser \texttt{127.0.0.1} :
+
+\begin{lstlisting}[style=bash, caption={Modifications des scripts de démarrage}]
+# Django Backend - AVANT
+python3 manage.py runserver_plus --cert-file ssl/cert.pem \
+    --key-file ssl/key.pem 192.168.4.131:8000 --insecure
+
+# Django Backend - APRÈS  
+python3 manage.py runserver_plus --cert-file ssl/cert.pem \
+    --key-file ssl/key.pem 127.0.0.1:8000 --insecure
+
+# API Gateway FastAPI - AVANT
+uvicorn main:app --host 192.168.4.131 --port 8001 \
+    --ssl-keyfile ssl/key.pem --ssl-certfile ssl/cert.pem
+
+# API Gateway FastAPI - APRÈS
+uvicorn main:app --host 127.0.0.1 --port 8001 \
+    --ssl-keyfile ssl/key.pem --ssl-certfile ssl/cert.pem
+
+# Frontend Vue.js - AVANT
+npm run serve -- --host 192.168.4.131 --port 8080 --https
+
+# Frontend Vue.js - APRÈS
+npm run serve -- --host 127.0.0.1 --port 8080 --https
+\end{lstlisting}
+
+% ===========================================
+% SECTION 5: RÉSOLUTION PROBLÈMES CORS
+% ===========================================
+
+\section{Résolution des problèmes CORS}
+
+\subsection{Problème CORS identifié}
+
+Après la configuration initiale d'Nginx, les requêtes depuis le frontend Vue.js vers l'API Django étaient bloquées par les politiques CORS. Le navigateur affichait cette erreur :
+
+\begin{lstlisting}[style=bash, caption={Erreur CORS dans la console du navigateur}]
+Access to XMLHttpRequest at 'https://192.168.4.131/api/users/auth/with-organization/' 
+from origin 'https://192.168.4.131' has been blocked by CORS policy: 
+No 'Access-Control-Allow-Origin' header is present on the requested resource.
+\end{lstlisting}
+
+\subsection{Analyse du problème}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Origine des requêtes :} Frontend sur \texttt{https://192.168.4.131}
+    \item \textbf{Destination :} API Django via \texttt{https://192.168.4.131/api/}
+    \item \textbf{Problème :} Django configuré pour \texttt{127.0.0.1:8000}, pas \texttt{192.168.4.131}
+    \item \textbf{Solution :} Ajouter \texttt{https://192.168.4.131} aux origins CORS autorisées
+\end{itemize}
+
+\subsection{Configuration Django CORS}
+
+\subsubsection{Modification du fichier settings.py}
+
+\begin{lstlisting}[style=python, caption={Configuration CORS Django}, label={lst:django_cors}]
+# backend/django-project/certisign_project/settings.py
+
+# Configuration CORS mise à jour pour Nginx
+CORS_ALLOWED_ORIGINS = [
+    "https://127.0.0.1:8080",  # Frontend direct (développement)
+    "https://192.168.4.131",   # Nginx reverse proxy (production)
+    "https://192.168.4.131:8080",  # Frontend avec port (fallback)
+]
+
+# Autoriser les cookies et headers d'authentification
+CORS_ALLOW_CREDENTIALS = True
+
+# Headers autorisés pour CORS
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'x-forwarded-for',
+    'x-forwarded-proto',
+    'x-real-ip',
+]
+
+# Méthodes HTTP autorisées
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+\end{lstlisting}
+
+\subsection{Tests de validation CORS}
+
+\begin{lstlisting}[style=bash, caption={Tests de connectivité CORS}]
+# Test d'accès à l'API via Nginx
+curl -k -H "Origin: https://192.168.4.131" \
+     -H "Access-Control-Request-Method: GET" \
+     -H "Access-Control-Request-Headers: authorization" \
+     -X OPTIONS \
+     https://192.168.4.131/api/users/organizations/
+
+# Réponse attendue avec headers CORS
+# Access-Control-Allow-Origin: https://192.168.4.131
+# Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
+# Access-Control-Allow-Headers: authorization, content-type, ...
+\end{lstlisting}
+
+% ===========================================
+% SECTION 6: RÉSOLUTION PROBLÈMES CSRF
+% ===========================================
+
+\section{Résolution des problèmes CSRF}
+
+\subsection{Problème CSRF identifié}
+
+Après la résolution des problèmes CORS, un nouveau problème est apparu : les requêtes d'authentification échouaient avec une erreur CSRF :
+
+\begin{lstlisting}[style=bash, caption={Erreur CSRF dans l'API Django}]
+POST /api/users/auth/with-organization/ HTTP/1.1" 403 58
+{"detail": "CSRF Failed: CSRF token missing or incorrect."}
+\end{lstlisting}
+
+\subsection{Analyse du problème CSRF}
+
+Le problème venait du fait que les tokens CSRF générés par Django n'étaient pas correctement transmis à travers le reverse proxy Nginx.
+
+\subsubsection{Origine du problème}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Token CSRF généré par Django :} Sur \texttt{127.0.0.1:8000}
+    \item \textbf{Requêtes envoyées via Nginx :} Sur \texttt{192.168.4.131}
+    \item \textbf{Headers CSRF manquants :} Nginx ne transmettait pas les tokens
+    \item \textbf{Cookies de domaine :} Incompatibilité entre les domaines
+\end{itemize}
+
+\subsection{Solution 1 : Configuration Nginx pour CSRF}
+
+\subsubsection{Modification de : \texttt{/etc/nginx/sites-available/docuthanatic}}
+
+\textbf{Section API Django mise à jour :}
+
+\begin{lstlisting}[style=nginx, caption={Configuration Nginx pour transmission CSRF}]
+# ROUTE API : Django Backend avec support CSRF
+location /api/ {
+    proxy_pass https://127.0.0.1:8000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    
+    # IMPORTANT : Transmission des tokens CSRF
+    proxy_set_header X-CSRFToken $cookie_csrftoken;
+    proxy_set_header Referer $scheme://$host$request_uri;
+    
+    # Support des cookies de session et CSRF
+    proxy_cookie_domain 127.0.0.1 $host;
+    proxy_cookie_path / /;
+}
+\end{lstlisting}
+
+\subsection{Solution 2 : Exemption CSRF pour l'endpoint JWT}
+
+\subsubsection{Modification de views\_auth.py}
+
+Puisque l'endpoint d'authentification utilise JWT (qui est stateless), nous avons ajouté l'exemption CSRF :
+
+\begin{lstlisting}[style=python, caption={Exemption CSRF pour l'authentification JWT}]
+# backend/django-project/users/views_auth.py
+
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
+@method_decorator(csrf_exempt, name='dispatch')
+class AuthWithOrganizationView(APIView):
+    """
+    Authentification avec organisation spécifique
+    Exempt de CSRF car utilise JWT (stateless)
+    """
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        organization_id = request.data.get('organization_id')
+        
+        # Logique d'authentification...
+        # ...reste du code inchangé...
+\end{lstlisting}
+
+\subsection{Tests de validation CSRF}
+
+\begin{lstlisting}[style=bash, caption={Tests d'authentification après résolution CSRF}]
+# Test d'authentification via Nginx
+curl -k -X POST \
+     -H "Content-Type: application/json" \
+     -H "Origin: https://192.168.4.131" \
+     -d '{
+       "email": "test@example.com",
+       "password": "testpass",
+       "organization_id": 1
+     }' \
+     https://192.168.4.131/api/users/auth/with-organization/
+
+# Réponse attendue avec JWT token
+# {
+#   "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+#   "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+#   "user": {...},
+#   "organization": {...}
+# }
+\end{lstlisting}
+\end{document} 

@@ -1,46 +1,20 @@
 INFO:     Will watch for changes in these directories: ['/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/api_gateway']
-INFO:     Uvicorn running on https://192.168.4.131:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [382181] using StatReload
-INFO:     Started server process [382201]
+INFO:     Uvicorn running on https://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [474792] using StatReload
+INFO:     Started server process [474802]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     192.168.4.131:46778 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:53184 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:53194 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:42604 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.5.49:54342 - "OPTIONS /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.5.49:54342 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:35072 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:46148 - "OPTIONS /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:46148 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.5.49:54382 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:52432 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:53292 - "OPTIONS /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:53292 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:55738 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:52088 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:55322 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:45416 - "OPTIONS /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:45416 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:35190 - "OPTIONS /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:35190 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:55562 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:48440 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:40626 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:41828 - "OPTIONS /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:41828 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:36084 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:37772 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:58294 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.5.49:55510 - "OPTIONS /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.5.49:55510 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.5.49:55522 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.5.49:55531 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:35198 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.5.49:55602 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.5.49:55602 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.5.49:55602 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.5.49:55602 - "POST /gateway/sign/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:34720 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:57270 - "POST /dh-exchange/ HTTP/1.1" 200 OK
-INFO:     192.168.4.131:56542 - "POST /dh-exchange/ HTTP/1.1" 200 OK
+INFO:     192.168.4.131:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     192.168.4.131:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     192.168.5.128:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     192.168.4.131:0 - "GET / HTTP/1.0" 404 Not Found
+INFO:     192.168.4.131:0 - "GET /sign/ HTTP/1.0" 404 Not Found
+INFO:     192.168.4.131:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     192.168.4.131:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     192.168.4.131:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     192.168.4.131:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     192.168.4.131:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK

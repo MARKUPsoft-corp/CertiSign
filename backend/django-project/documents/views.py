@@ -355,7 +355,8 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """
         Filtrer les documents en fonction de l'utilisateur connecté.
-        - Les administrateurs voient tous les documents
+        - Les administrateurs voient tous les documents de leur organisation
+        - Les signataires voient tous les documents de leur organisation 
         - Les collaborateurs ne voient que leurs propres documents
         """
         user = self.request.user
@@ -367,6 +368,14 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
             else:
                 # Super admin voit tout
                 return DocumentQRPosition.objects.all()
+        
+        if user.is_signer:
+            # Signataire voit tous les documents de son organisation
+            if user.organization:
+                return DocumentQRPosition.objects.filter(organization=user.organization)
+            else:
+                # Signataire sans organisation ne voit rien
+                return DocumentQRPosition.objects.none()
         
         # Collaborateur ne voit que ses propres documents
         return DocumentQRPosition.objects.filter(collaborator=user)

@@ -8,7 +8,7 @@ import axios from 'axios';
 
 class UserService {
   constructor() {
-    this.baseUrl = 'https://192.168.4.131:8000';
+    this.baseUrl = 'https://192.168.4.131';
   }
 
   /**
@@ -245,9 +245,9 @@ class UserService {
     try {
       console.log('Utilisation de l\'endpoint non chiffré pour l\'authentification par certificat');
       
-      // Envoyer les données d'authentification directement à l'API Gateway sans chiffrement
+      // Envoyer les données d'authentification directement à l'API Gateway sans chiffrement - Via Nginx
       const response = await axios.post(
-        'https://192.168.4.131:8001/unencrypted/auth/certificate/',
+        'https://192.168.4.131/gateway/unencrypted/auth/certificate/',
         authData,
         {
           headers: {
@@ -362,9 +362,9 @@ class UserService {
     try {
       console.log('Vérification du certificat administrateur...');
       
-      // Appel à l'API de vérification
+      // Appel à l'API de vérification - Via Nginx
       const response = await axios.post(
-        'https://192.168.4.131:8000/api/users/auth-org-admin/verify/',
+        'https://192.168.4.131/api/users/auth-org-admin/verify/',
         certData,
         {
           headers: {
@@ -411,9 +411,9 @@ class UserService {
     try {
       console.log('Authentification administrateur d\'organisation...');
       
-      // Appel à l'API d'authentification des admins d'organisation
+      // Appel à l'API d'authentification des admins d'organisation - Via Nginx
       const response = await axios.post(
-        'https://192.168.4.131:8000/api/users/auth-org-admin/authenticate/',
+        'https://192.168.4.131/api/users/auth-org-admin/authenticate/',
         authData,
         {
           headers: {

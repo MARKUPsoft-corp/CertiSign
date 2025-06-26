@@ -1,8 +1,8 @@
 import axios from 'axios';
 import AuthService from './AuthService';
 
-// URL de l'API définie globalement pour le service
-const API_URL = process.env.VUE_APP_API_URL || 'https://192.168.4.131:8000';
+// URL de l'API définie globalement pour le service - Via Nginx
+const API_URL = process.env.VUE_APP_API_URL || 'https://192.168.4.131';
 
 class DocumentService {
   /**

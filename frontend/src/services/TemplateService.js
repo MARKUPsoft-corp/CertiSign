@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AuthService from './AuthService';
 
-const API_URL = process.env.VUE_APP_API_URL || 'https://192.168.4.131:8000/api';
+const API_URL = process.env.VUE_APP_API_URL || 'https://192.168.4.131/api';
 
 class TemplateService {
   /**

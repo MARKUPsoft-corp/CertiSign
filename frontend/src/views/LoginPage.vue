@@ -563,7 +563,7 @@ async function initSecureConnection() {
     }).substring(0, 100) + "...");
     
     try {
-      const response = await axios.post("/dh-exchange/", {
+      const response = await axios.post("/gateway/dh-exchange/", {
         client_id: clientId.value,
         public_key: publicKeyPem
       }, {

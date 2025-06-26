@@ -6,6 +6,7 @@ import logging
 import requests
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
@@ -47,6 +48,7 @@ def get_active_organizations(request):
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
+@csrf_exempt
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def authenticate_with_organization(request):
@@ -75,8 +77,8 @@ def authenticate_with_organization(request):
     
     # Extraire les informations du certificat via le microservice
     try:
-        # Utiliser l'API Gateway pour extraire les informations du certificat
-        gateway_url = "https://192.168.4.131:8002/extract-cert-info-base64/"
+        # Utiliser l'API Gateway pour extraire les informations du certificat - Via Nginx
+        gateway_url = "https://192.168.4.131/cert/extract-cert-info-base64/"
         gateway_response = requests.post(
             gateway_url,
             json={

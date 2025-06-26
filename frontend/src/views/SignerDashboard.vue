@@ -614,7 +614,7 @@ async function submitSignature() {
     
     // Récupérer les informations complètes du document depuis l'API
     const documentDetailsResponse = await axios.get(
-      `https://192.168.4.131:8000/api/documents/qr-positions/${currentDocument.value.id}/`,
+      `https://192.168.4.131/api/documents/qr-positions/${currentDocument.value.id}/`,
       {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -713,9 +713,9 @@ async function submitSignature() {
           let imageUrl = documentDetails.signature_image;
           // Construire l'URL absolue si nécessaire
           if (imageUrl.startsWith('/')) {
-            imageUrl = `https://192.168.4.131:8000${imageUrl}`;
+            imageUrl = `https://192.168.4.131${imageUrl}`;
           } else if (!imageUrl.startsWith('https')) {
-            imageUrl = `https://192.168.4.131:8000/${imageUrl}`;
+            imageUrl = `https://192.168.4.131/${imageUrl}`;
           }
           
           console.log('Récupération de l\'image de signature depuis:', imageUrl);
@@ -797,10 +797,10 @@ async function submitSignature() {
     let fileUrl = documentDetails.document_file;
     // Si l'URL commence par un slash, on le traite comme un chemin relatif au backend
     if (fileUrl.startsWith('/')) {
-      fileUrl = `https://192.168.4.131:8000${fileUrl}`;
+      fileUrl = `https://192.168.4.131${fileUrl}`;
     } else if (!fileUrl.startsWith('https')) {
       // Si l'URL ne commence pas par https, on ajoute le préfixe
-      fileUrl = `https://192.168.4.131:8000/${fileUrl}`;
+      fileUrl = `https://192.168.4.131/${fileUrl}`;
     }
     
     console.log('Récupération du document à l\'URL:', fileUrl);
@@ -864,7 +864,7 @@ async function submitSignature() {
     
     // Envoyer la requête au microservice de signature via l'API gateway
     const signResponse = await axios.post(
-      'https://192.168.4.131:8001/gateway/sign/',
+      'https://192.168.4.131/sign/sign',
       formData,
       {
         headers: {
@@ -977,10 +977,10 @@ function previewDocument(doc) {
       
       // Si l'URL commence par un slash, on le traite comme un chemin relatif au backend
       if (fileUrl.startsWith('/')) {
-        fileUrl = `https://192.168.4.131:8000${fileUrl}`;
+        fileUrl = `https://192.168.4.131${fileUrl}`;
       } else if (!fileUrl.startsWith('https')) {
         // Si l'URL ne commence pas par https, on ajoute le préfixe
-        fileUrl = `https://192.168.4.131:8000/${fileUrl}`;
+        fileUrl = `https://192.168.4.131/${fileUrl}`;
       }
       
       // Ajouter l'ID de l'organisation comme paramètre de requête
@@ -1030,7 +1030,7 @@ async function downloadSignedDocument(doc) {
     }
 
     // Utiliser l'endpoint de téléchargement de DocumentSignature
-    const downloadUrl = `https://192.168.4.131:8000/api/documents/signatures/${doc.document_id || doc.id}/download/`;
+    const downloadUrl = `https://192.168.4.131/api/documents/signatures/${doc.document_id || doc.id}/download/`;
     
     const response = await axios.get(downloadUrl, {
       headers: {
@@ -1121,7 +1121,7 @@ async function fetchPendingDocuments() {
       return;
     }
 
-    // Récupérer l'ID de l'organisation actuelle depuis le localStorage ou state
+    // Récupérer l'ID de l'organisation actuelle
     const currentUser = AuthService.getCurrentUser();
     const organizationId = currentUser?.organization?.id;
     
@@ -1135,11 +1135,11 @@ async function fetchPendingDocuments() {
         'Authorization': `Bearer ${token}`
       },
       params: {
-        organization_id: organizationId  // Ajouter l'ID de l'organisation à la requête
-      } 
+        organization_id: organizationId
+      }
     };  
 
-    const response = await axios.get('https://192.168.4.131:8000/api/documents/qr-positions/pending_for_signer/', config);
+    const response = await axios.get('https://192.168.4.131/api/documents/qr-positions/pending_for_signer/', config);
     if (response.data) {
       pendingDocuments.value = response.data.pending_documents || [];
       
@@ -1183,7 +1183,7 @@ async function fetchSignedDocuments() {
     };  
 
     // Récupérer les documents signés depuis l'API DocumentSignature
-    const response = await axios.get('https://192.168.4.131:8000/api/documents/signatures/', config);
+    const response = await axios.get('https://192.168.4.131/api/documents/signatures/', config);
     if (response.data && response.data.results) {
       signedDocuments.value = response.data.results.map(doc => ({
         ...doc,
@@ -1224,7 +1224,7 @@ async function updateDocumentStatus(documentId, newStatus) {
     formData.append('status', newStatus);
     
     const response = await axios.patch(
-      `https://192.168.4.131:8000/api/documents/qr-positions/${documentId}/`,
+      `https://192.168.4.131/api/documents/qr-positions/${documentId}/`,
       formData,
       {
         headers: {

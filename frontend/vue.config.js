@@ -29,32 +29,21 @@ module.exports = defineConfig({
   // Configuration du serveur de développement
   devServer: {
     port: 8080,
-    host: '0.0.0.0', // Écouter sur toutes les interfaces
+    host: '127.0.0.1', // Écouter SEULEMENT en local (sécurité)
     allowedHosts: 'all', // Permettre l'accès via l'IP
     
     // Configuration HTTPS conditionnelle
     https: getHttpsConfig(),
     
-    // Configuration du proxy
+    // Configuration du proxy - Plus besoin car Nginx s'en charge
+    // Les proxies sont désactivés car Nginx fait le routage maintenant
     proxy: {
-      '/api': {
-        target: 'https://192.168.4.131:8000',
-        changeOrigin: true,
-        secure: false,
-        logLevel: 'debug' // Ajout de logs pour le débogage
-      },
-      '/dh-exchange': {
-        target: 'https://192.168.4.131:8001', // API Gateway
-        changeOrigin: true,
-        secure: false,
-        logLevel: 'debug'
-      },
-      '/gateway': {
-        target: 'https://192.168.4.131:8001', // API Gateway
-        changeOrigin: true,
-        secure: false,
-        logLevel: 'debug'
-      }
+      // '/api': {
+      //   target: 'https://127.0.0.1:8000',
+      //   changeOrigin: true,
+      //   secure: false,
+      //   logLevel: 'debug'
+      // }
     },
     
     // Ajout d'options pour éviter les blocages

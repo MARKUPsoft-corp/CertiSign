@@ -120,6 +120,17 @@ const routes = [
     }
   },
   
+  {
+    path: '/edit-document/:id',
+    name: 'edit-document',
+    component: () => import('@/views/EditDocument.vue'),
+    meta: {
+      requiresAuth: true,
+      requiresCollaborator: true,
+      title: 'Édition de brouillon - CertiSign'
+    }
+  },
+  
   // Route de redirection par défaut
   {
     path: '/:pathMatch(.*)*',

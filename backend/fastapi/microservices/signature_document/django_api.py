@@ -23,8 +23,8 @@ if not logger.handlers:
     logger.addHandler(handler)
 
 # URL de base de l'API Django (peut être configurée par variable d'environnement)
-# Utiliser directement l'URL complète sans passer par les routes API
-DJANGO_API_BASE_URL = os.environ.get("DJANGO_API_URL", "https://192.168.4.131:8000") 
+# Utiliser directement l'URL complète sans passer par les routes API - Via Nginx
+DJANGO_API_BASE_URL = os.environ.get("DJANGO_API_URL", "https://192.168.4.131") 
 
 # Clé API simple pour l'authentification entre services
 # Doit correspondre à la clé configurée dans le backend Django

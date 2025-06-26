@@ -733,7 +733,7 @@ async function startSigningProcess() {
     }
     
     // URL de l'API gateway (port 8001)
-    const apiUrl = 'https://192.168.4.131:8001/gateway/sign/';
+    const apiUrl = 'https://192.168.4.131/sign/sign';
     
     processingStep.value = 2; // Signature en cours
     
