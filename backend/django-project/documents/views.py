@@ -607,7 +607,7 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
             'members': user.organization.members.count() if user.organization else 0,
             'today_activity': DocumentActivity.objects.filter(
                 document__organization=user.organization if user.organization else None,
-                created_at__date=datetime.now().date()
+                timestamp__date=datetime.now().date()
             ).count() if user.organization else 0
         }
         
@@ -618,7 +618,7 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
         # Récupérer les activités de l'équipe
         team_activities = DocumentActivity.objects.filter(
             document__organization=user.organization if user.organization else None
-        ).order_by('-created_at')[:10]
+        ).order_by('-timestamp')[:10]
         
         team_activities_data = []
         for activity in team_activities:
@@ -627,7 +627,7 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
                 'type': activity.activity_type,
                 'description': activity.description,
                 'user': activity.user.username if activity.user else 'Système',
-                'timestamp': activity.created_at
+                'timestamp': activity.timestamp
             })
         
         # Récupérer les membres de l'organisation

@@ -19,11 +19,11 @@
       <div class="header-content">
         <div class="logo-container">
           <div class="logo-icon-text">
-            <div class="logo-icon">
-              <i class="bi bi-shield-lock-fill"></i>
-            </div>
+            <img src="@/assets/doc.png" alt="Doc@uthANTIC Logo" class="header-logo-img">
             <h1 class="logo-text">
-              <span class="text-primary">Certi</span><span class="text-accent">Sign</span>
+              <span class="text-green">Doc</span>
+              <span class="text-red">@uth</span>
+              <span class="text-yellow">ANTIC</span>
             </h1>
           </div>
           <span class="role-badge admin top-right-of-logo">Administrateur</span>
@@ -502,7 +502,7 @@ function logout() {
 
 // Initialisation
 onMounted(() => {
-  document.title = 'Administration - CertiSign';
+      document.title = 'Administration - Doc@uthANTIC';
   
   const user = AuthService.getCurrentUser();
   if (user) {
@@ -1339,5 +1339,24 @@ onMounted(() => {
 .welcome-card .btn-primary {
   margin: 0 auto;
   display: inline-flex;
+}
+
+/* Styles pour le logo Doc@uthANTIC */
+.header-logo-img {
+  width: 40px;
+  height: 40px;
+  margin-right: 0.75rem;
+}
+
+.text-green {
+  color: #28a745;
+}
+
+.text-red {
+  color: #dc3545;
+}
+
+.text-yellow {
+  color: #ffc107;
 }
 </style> 

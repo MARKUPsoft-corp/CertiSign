@@ -113,8 +113,8 @@
           <!-- Colonne gauche pour la bannière -->
           <div class="banner-column animated fadeInUp">
             <div class="banner-container fullheight">
-              <img src="@/assets/banniere.jpeg" alt="Bannière CertiSign" class="banner-image">
-          </div>
+              <img src="@/assets/banniere.jpeg" alt="Bannière Doc@uthANTIC" class="banner-image">
+            </div>
           </div>
           
           <!-- Colonne droite pour le message de chargement -->
@@ -131,7 +131,7 @@
           <!-- Colonne gauche pour la bannière -->
           <div class="banner-column animated fadeInUp">
             <div class="banner-container fullheight">
-              <img src="@/assets/banniere.jpeg" alt="Bannière CertiSign" class="banner-image">
+              <img src="@/assets/banniere.jpeg" alt="Bannière Doc@uthANTIC" class="banner-image">
             </div>
         </div>
 

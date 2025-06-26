@@ -10,7 +10,7 @@ defineOptions({
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <!-- Logo ou nom du site -->
-            <a class="navbar-brand" href="#">CertiSign</a>
+            <a class="navbar-brand" href="#">Doc@uthANTIC</a>
 
             <!-- Bouton pour le menu déroulant en mode mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 

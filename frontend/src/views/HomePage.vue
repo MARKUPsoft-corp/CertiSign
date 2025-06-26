@@ -18,7 +18,7 @@
     <!-- En-tête avec logo et navigation -->
     <header class="header">
       <div class="logo-container">
-        <img src="@/assets/doc.png" alt="CertiSign Logo" class="header-logo-img">
+        <img src="@/assets/doc.png" alt="Doc@uthANTIC Logo" class="header-logo-img">
         <h1 class="logo-text">
           <span class="text-green">Doc</span>
           <span class="text-red">@uth</span>
@@ -223,7 +223,7 @@
             <div class="faq-answer">
               <p>Vous pouvez obtenir un certificat numérique auprès de l'Agence National des Technologies de l'Information et de la Communication (ANTIC),
                 plus précisément auprès de son organe spécialisé le Centre National de Cryptographie et de Certification Electronique situé à la Poste centrale. 
-                CertiSign vous accompagne dans ce processus et vous aide à choisir le certificat adapté à vos besoins.</p>
+                Doc@uthANTIC vous accompagne dans ce processus et vous aide à choisir le certificat adapté à vos besoins.</p>
             </div>
           </div>
         </div>
@@ -248,7 +248,7 @@
       <div class="footer-content">
         <div class="footer-brand" data-animate="fade-in-left">
           <div class="footer-logo">
-            <img src="@/assets/doc.png" alt="CertiSign Logo" class="footer-logo-img">
+            <img src="@/assets/doc.png" alt="Doc@uthANTIC Logo" class="footer-logo-img">
             <div class="footer-logo-text">
               <span class="text-green">Doc</span>
               <span class="text-red">@uth</span>

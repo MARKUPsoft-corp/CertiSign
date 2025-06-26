@@ -450,7 +450,7 @@ function closeEdit() {
 
 // Initialisation
 onMounted(() => {
-  document.title = 'Édition de brouillon - CertiSign';
+      document.title = 'Édition de brouillon - Doc@uthANTIC';
   loadDocumentPreview();
 });
 </script>
