@@ -32,7 +32,7 @@ const routes = [
     component: LoginPage,
     meta: {
       requiresAuth: false,
-      title: 'Connexion - CertiSign'
+      title: 'Connexion - Doc@uthANTIC'
     }
   },
   {
@@ -41,7 +41,7 @@ const routes = [
     component: HomePage,
     meta: {
       requiresAuth: false,
-      title: 'Accueil - CertiSign'
+      title: 'Accueil - Doc@uthANTIC'
     }
   },
   
@@ -51,7 +51,7 @@ const routes = [
     component: NewDashboard,
     meta: {
       requiresAuth: true,
-      title: 'Tableau de bord - CertiSign'
+      title: 'Tableau de bord - Doc@uthANTIC'
     }
   },
   
@@ -63,7 +63,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       requiresAdmin: true,
-      title: 'Administration d\'organisation - CertiSign'
+      title: 'Administration d\'organisation - Doc@uthANTIC'
     }
   },
   
@@ -74,7 +74,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       requiresCollaborator: true,
-      title: 'Préparation de documents - CertiSign'
+      title: 'Préparation de documents - Doc@uthANTIC'
     }
   },
   
@@ -85,7 +85,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       requiresSigner: true,
-      title: 'Signature de documents - CertiSign'
+      title: 'Signature de documents - Doc@uthANTIC'
     }
   },
   
@@ -95,7 +95,7 @@ const routes = [
     component: UserHistory,
     meta: {
       requiresAuth: true,
-      title: 'Historique des activités - CertiSign'
+      title: 'Historique des activités - Doc@uthANTIC'
     }
   },
 
@@ -105,7 +105,7 @@ const routes = [
     component: SignDocument,
     meta: {
       requiresAuth: true,
-      title: 'Signer un document - CertiSign'
+      title: 'Signer un document - Doc@uthANTIC'
     }
   },
   
@@ -116,7 +116,7 @@ const routes = [
     component: () => import('@/views/MyDocuments.vue'),
     meta: {
       requiresAuth: true,
-      title: 'Mes Documents - CertiSign'
+      title: 'Mes Documents - Doc@uthANTIC'
     }
   },
   
@@ -127,7 +127,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       requiresCollaborator: true,
-      title: 'Édition de brouillon - CertiSign'
+      title: 'Édition de brouillon - Doc@uthANTIC'
     }
   },
   
@@ -167,7 +167,7 @@ function getDashboardByRole(role) {
 router.beforeEach(async (to, from, next) => {
   console.log(`Navigation de ${from.fullPath} vers ${to.fullPath}`);
   // Définir le titre de la page
-  document.title = to.meta.title || 'CertiSign - Sécurité des signatures numériques';
+  document.title = to.meta.title || 'Doc@uthANTIC - Sécurité des signatures numériques';
   
   // Afficher les informations d'authentification actuelles pour débogage
   console.log('Auth dans le routeur:', {

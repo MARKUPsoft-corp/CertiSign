@@ -4,11 +4,22 @@
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 459-608-254
-127.0.0.1 - - [26/Jun/2025 11:55:23] "GET /api/users/organizations/ HTTP/1.0" 200 -
-127.0.0.1 - - [26/Jun/2025 11:55:23] "GET /api/users/organizations/ HTTP/1.0" 200 -
-Forbidden: /api/users/auth/with-organization/
-127.0.0.1 - - [26/Jun/2025 11:55:35] "[31m[1mPOST /api/users/auth/with-organization/ HTTP/1.0[0m" 403 -
-Forbidden: /api/users/auth/with-organization/
-127.0.0.1 - - [26/Jun/2025 11:58:08] "[31m[1mPOST /api/users/auth/with-organization/ HTTP/1.0[0m" 403 -
-
-📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+127.0.0.1 - - [03/Jul/2025 07:58:37] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:58:42] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:58:53] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:58:59] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:59:08] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:59:08] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:59:08] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:59:08] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [03/Jul/2025 07:59:08] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:59:08] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:59:08] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:59:08] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:59:08] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:59:08] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:59:16] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [03/Jul/2025 07:59:16] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 07:59:16] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [03/Jul/2025 07:59:16] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [03/Jul/2025 08:02:17] "GET /api/users/organizations/ HTTP/1.0" 200 -

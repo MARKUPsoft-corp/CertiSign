@@ -26,6 +26,14 @@ function getHttpsConfig() {
 module.exports = defineConfig({
   transpileDependencies: true,
   
+  // Configuration du titre de l'application
+  pages: {
+    index: {
+      entry: 'src/main.js',
+      title: 'Doc@uthANTIC'
+    }
+  },
+  
   // Configuration du serveur de développement
   devServer: {
     port: 8080,
