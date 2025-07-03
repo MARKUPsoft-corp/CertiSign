@@ -1738,7 +1738,15 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
+  position: sticky;
+  top: 0;
+  background: linear-gradient(135deg, 
+    rgba(0, 166, 81, 0.95), 
+    rgba(76, 175, 80, 0.95)
+  );
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(6, 255, 165, 0.2);
 }
 
 .preparation-choice-modal .modal-header::after {
@@ -1748,36 +1756,39 @@ onMounted(() => {
   left: 2.5rem;
   width: 80px;
   height: 3px;
-  background: linear-gradient(90deg, var(--accent-color, #06ffa5), #39ffb4);
+  background: linear-gradient(90deg, #00a651, #4CAF50);
   border-radius: 3px;
 }
 
 .preparation-choice-modal .modal-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--text-color, #333);
+  color: white;
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .preparation-choice-modal .modal-title i {
-  color: var(--accent-color, #06ffa5);
+  color: #00a651;
   font-size: 2rem;
-  background: rgba(6, 255, 165, 0.1);
+  background: rgba(0, 166, 81, 0.2);
   width: 50px;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 166, 81, 0.3);
 }
 
 .preparation-choice-modal .close-button {
-  background: rgba(255, 255, 255, 0.7);
-  border: 2px solid rgba(6, 255, 165, 0.2);
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   font-size: 1.2rem;
-  color: var(--text-muted, #6c757d);
+  color: white;
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -1786,14 +1797,15 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 .preparation-choice-modal .close-button:hover {
-  background: var(--accent-color, #06ffa5);
-  border-color: var(--accent-color, #06ffa5);
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(6, 255, 165, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
 }
 
 .preparation-choice-modal .modal-body {
@@ -2005,7 +2017,15 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
+  position: sticky;
+  top: 0;
+  background: linear-gradient(135deg, 
+    rgba(0, 166, 81, 0.95), 
+    rgba(76, 175, 80, 0.95)
+  );
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(6, 255, 165, 0.2);
 }
 
 .template-preparation-modal .modal-header::after {
@@ -2015,36 +2035,39 @@ onMounted(() => {
   left: 2.5rem;
   width: 80px;
   height: 3px;
-  background: linear-gradient(90deg, #e91e63, #ff5722);
+  background: linear-gradient(90deg, #00a651, #4CAF50);
   border-radius: 3px;
 }
 
 .template-preparation-modal .modal-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--text-color, #333);
+  color: white;
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .template-preparation-modal .modal-title i {
-  color: #e91e63;
+  color: #00a651;
   font-size: 2rem;
-  background: rgba(233, 30, 99, 0.1);
+  background: rgba(0, 166, 81, 0.2);
   width: 50px;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 166, 81, 0.3);
 }
 
 .template-preparation-modal .close-button {
-  background: rgba(255, 255, 255, 0.7);
-  border: 2px solid rgba(233, 30, 99, 0.2);
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   font-size: 1.2rem;
-  color: var(--text-muted, #6c757d);
+  color: white;
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -2053,14 +2076,15 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 .template-preparation-modal .close-button:hover {
-  background: #e91e63;
-  border-color: #e91e63;
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
 }
 
 .template-preparation-modal .modal-body {

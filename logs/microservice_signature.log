@@ -193,3 +193,8 @@ INFO:django_api:Données de signature stockées avec succès pour le document ed
 INFO:main:Données de signature stockées avec succès pour le document eda1f8ae-5dfc-4fc9-8d52-7ab979411d70
 INFO:main:Signature terminée en 0.69 secondes
 INFO:     192.168.4.131:0 - "POST /sign HTTP/1.0" 200 OK
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for connections to close. (CTRL+C to force quit)
+INFO:main:Fichier temporaire supprimé: /tmp/acte_signed_20250703111930.pdf
+INFO:main:Fichier temporaire supprimé: /tmp/acte_signed_20250703112041.pdf
