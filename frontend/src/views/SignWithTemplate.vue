@@ -318,7 +318,8 @@ onMounted(() => {
       },
       signature: props.templateData.signatureImage || props.templateData.signature_image ? {
         image: props.templateData.signatureImage || props.templateData.signature_image,
-        positions: props.templateData.signaturePositions || props.templateData.signature_positions || []
+        positions: props.templateData.signaturePositions || props.templateData.signature_positions || [],
+        size: props.templateData.signatureSize || props.templateData.signature_size || 50  // Ajouter la taille de signature
       } : null
     };
     
@@ -726,7 +727,8 @@ async function startSigningProcess() {
       
       userMetadata.signature_position = {
         positions: signaturePositions,
-        signature_image: signatureImage
+        signature_image: signatureImage,
+        signature_size: templateSettings.value.signature?.size || 50  // Ajouter la taille de signature
       };
     }
     

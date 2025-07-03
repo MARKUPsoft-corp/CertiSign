@@ -678,7 +678,8 @@ function handleIndividualPositionConfirmed(positionData) {
   if (positionData.signature) {
     documentPositions.value[activePositioningIndex.value].signature = {
       image: uploadedSignatureImage.value,
-      positions: positionData.signature.positions
+      positions: positionData.signature.positions,
+      size: positionData.signature.size  // Ajouter la taille de signature
     };
   }
   
@@ -875,7 +876,8 @@ async function startSigningProcess() {
         
         userMetadata.signature_position = {
           positions: signaturePositions,
-          signature_image: signatureImage
+          signature_image: signatureImage,
+          signature_size: documentPosition.signature?.size || 50  // Ajouter la taille de signature
         };
         
         console.log('DEBUG SIGNATURE FINAL - Données finales pour document', i, ':', {

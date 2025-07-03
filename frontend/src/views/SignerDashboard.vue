@@ -745,6 +745,15 @@ async function submitSignature() {
         }
       }
       
+      // Ajouter la taille de signature si disponible
+      if (documentDetails.signature_size) {
+        signaturePosition.signature_size = documentDetails.signature_size;
+        console.log('Taille de signature récupérée:', documentDetails.signature_size);
+      } else {
+        signaturePosition.signature_size = 50; // Valeur par défaut
+        console.log('Aucune taille de signature spécifiée, utilisation de la valeur par défaut: 50%');
+      }
+      
       // Ajouter les positions de signature si disponibles
       if (documentDetails.signature_positions) {
         try {

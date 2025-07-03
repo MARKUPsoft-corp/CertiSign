@@ -273,7 +273,7 @@ def add_simple_qr_code_to_pdf(pdf_data: bytes, document_id: str, qr_position: di
         logger.error(f"Erreur lors de l'ajout du QR code au PDF: {str(e)}", exc_info=True)
         raise
 
-def embed_signature_in_pdf(pdf_data: bytes, signature: bytes, public_key_pem: str, document_id: str) -> bytes:
+def embed_signature_in_pdf(pdf_data: bytes, signature: bytes, public_key_pem: str, document_id: str, qr_position: dict = None) -> bytes:
     """
     Intègre la signature numérique dans les métadonnées du PDF et ajoute un QR code visible 
     avec l'ID du document dans le coin inférieur droit.
@@ -283,6 +283,7 @@ def embed_signature_in_pdf(pdf_data: bytes, signature: bytes, public_key_pem: st
         signature (bytes): Signature à intégrer
         public_key_pem (str): Clé publique au format PEM
         document_id (str): ID unique du document à encoder dans le QR code
+        qr_position (dict): Position et taille du QR code (facultatif)
         
     Returns:
         bytes: PDF avec signature et QR code
@@ -331,9 +332,22 @@ def embed_signature_in_pdf(pdf_data: bytes, signature: bytes, public_key_pem: st
             pdf_reader = PdfReader(BytesIO(pdf_data))
             pdf_writer = PdfWriter()
             
-            # Augmenter la taille du QR code (était 0.50)
-            qr_size = 0.8 * inch
-            logger.info(f"Taille du QR code: {qr_size} pouces")
+            # Utiliser la taille du QR code spécifiée dans qr_position, sinon valeur par défaut
+            qr_sizes = {
+                'small': 0.6 * inch,   # 0.6 inch
+                'medium': 0.8 * inch,  # 0.8 inch  
+                'large': 1.0 * inch    # 1.0 inch
+            }
+            
+            qr_size_setting = 'medium'  # Valeur par défaut
+            if qr_position and 'size' in qr_position:
+                qr_size_setting = qr_position['size']
+                logger.info(f"Taille du QR code spécifiée dans les métadonnées: {qr_size_setting}")
+            else:
+                logger.info("Aucune taille de QR code spécifiée, utilisation de la taille par défaut: medium")
+            
+            qr_size = qr_sizes.get(qr_size_setting, qr_sizes['medium'])
+            logger.info(f"Taille du QR code: {qr_size} pouces ({qr_size_setting})")
             
             # Parcourir chaque page du PDF et ajouter le QR code
             logger.info(f"Traitement des {len(pdf_reader.pages)} pages du PDF")
@@ -524,7 +538,7 @@ def extract_signature_from_pdf(pdf_data: bytes) -> Dict[str, Any]:
     # Lever une exception indiquant que l'extraction des métadonnées a échoué
     raise ValueError("Impossible d'extraire les données de signature depuis les métadonnées du PDF.")
 
-def add_signature_image_to_pdf(pdf_data: bytes, signature_image_data: str, signature_positions: list) -> bytes:
+def add_signature_image_to_pdf(pdf_data: bytes, signature_image_data: str, signature_positions: list, signature_size: int = 50) -> bytes:
     """
     Ajoute une image de signature au PDF aux positions spécifiées.
     
@@ -533,12 +547,20 @@ def add_signature_image_to_pdf(pdf_data: bytes, signature_image_data: str, signa
         signature_image_data (str): Image de signature en base64
         signature_positions (list): Liste des positions où ajouter la signature
                                    [{page: int, x: float, y: float, width: float, height: float}, ...]
+        signature_size (int): Taille de la signature en pourcentage (par défaut: 50)
         
     Returns:
         bytes: PDF modifié avec l'image de signature
     """
     try:
-        logger.info("Début du processus d'ajout de l'image de signature au PDF")
+        logger.info(f"=== DÉBUT add_signature_image_to_pdf ===")
+        logger.info(f"Taille de signature reçue: {signature_size}%")
+        logger.info(f"Nombre de positions: {len(signature_positions)}")
+        logger.info(f"Positions détaillées: {signature_positions}")
+        
+        if not signature_image_data or not signature_positions:
+            logger.warning("Image de signature ou positions manquantes")
+            return pdf_data
         
         # Vérifier que les données d'image sont valides
         if not signature_image_data:
@@ -558,24 +580,48 @@ def add_signature_image_to_pdf(pdf_data: bytes, signature_image_data: str, signa
         logger.info(f"DEBUG MICROSERVICE - Positions de signature reçues: {signature_positions}")
         for i, pos in enumerate(signature_positions):
             logger.info(f"DEBUG MICROSERVICE - Position {i+1}: page={pos.get('page')}, x={pos.get('x')}, y={pos.get('y')}, width={pos.get('width')}, height={pos.get('height')}")
-            
-        # Extraire les données binaires de l'image depuis le base64
+        
+        # Décoder l'image base64
         try:
-            # Gérer différents formats possibles de données base64
+            # Supprimer le préfixe data:image si présent
             if signature_image_data.startswith('data:image'):
-                # Format attendu: data:image/png;base64,iVBORw0KGgo...
-                image_format = signature_image_data.split(';')[0].split('/')[1]
-                image_data = signature_image_data.split(',')[1]
+                # Trouver la virgule qui sépare les métadonnées des données
+                comma_index = signature_image_data.find(',')
+                if comma_index != -1:
+                    # Extraire le type d'image
+                    header = signature_image_data[:comma_index]
+                    logger.info(f"En-tête de l'image détecté: {header}")
+                    
+                    # Extraire le format d'image
+                    image_format = "png"  # Par défaut
+                    if "jpeg" in header or "jpg" in header:
+                        image_format = "jpg"
+                    elif "png" in header:
+                        image_format = "png"
+                    elif "gif" in header:
+                        image_format = "gif"
+                    elif "webp" in header:
+                        image_format = "webp"
+                    
+                    logger.info(f"Format d'image détecté: {image_format}")
+                    
+                    # Extraire les données base64 pures
+                    image_data = signature_image_data[comma_index + 1:]
+                else:
+                    logger.warning("Format data URI invalide, utilisation des données telles quelles")
+                    image_data = signature_image_data
+                    image_format = "png"
             else:
-                # Essayer de traiter comme du base64 brut
+                # Si pas de préfixe, traiter comme du base64 pur
                 image_data = signature_image_data
-                # Détecter le format en examinant les premiers octets
-                image_format = "png"  # Format par défaut
+                image_format = "png"
+                
+            logger.info(f"Données base64 pures extraites, longueur: {len(image_data)}")
             
+            # Décoder les données base64
             try:
-                # Décoder les données base64
                 image_bytes = base64.b64decode(image_data)
-                logger.info(f"Image de signature décodée, format: {image_format}, taille: {len(image_bytes)} octets")
+                logger.info(f"Image décodée avec succès, taille: {len(image_bytes)} octets")
                 
                 # Vérifier que les données décodées sont une image valide
                 try:
@@ -650,11 +696,22 @@ def add_signature_image_to_pdf(pdf_data: bytes, signature_image_data: str, signa
                     
                     # Ajouter chaque signature à la page
                     for pos in signatures_for_page:
-                        # Obtenir les coordonnées en pourcentage et les convertir en points
+                        # Obtenir les coordonnées en pourcentage
                         x_percent = float(pos.get('x', 50))
                         y_percent = float(pos.get('y', 50))
-                        width_percent = float(pos.get('width', 20))
-                        height_percent = float(pos.get('height', 10))
+                        
+                        # Toujours utiliser la taille spécifiée par le frontend (signature_size)
+                        # Calculer les dimensions basées sur le pourcentage de signature_size
+                        # Ratio d'aspect fixe pour les signatures (environ 2:1)
+                        width_percent = signature_size * 0.6   # Largeur basée sur signature_size
+                        height_percent = signature_size * 0.3  # Hauteur basée sur signature_size
+                        
+                        logger.info(f"=== CALCUL DIMENSIONS SIGNATURE ===")
+                        logger.info(f"signature_size reçu: {signature_size}%")
+                        logger.info(f"Calcul: width_percent = {signature_size} * 0.6 = {width_percent}%")
+                        logger.info(f"Calcul: height_percent = {signature_size} * 0.3 = {height_percent}%")
+                        
+                        logger.info(f"Utilisation de la taille de signature {signature_size}%: largeur={width_percent}%, hauteur={height_percent}%")
                         
                         logger.info(f"Position de signature: x={x_percent}%, y={y_percent}%, "
                                    f"largeur={width_percent}%, hauteur={height_percent}%")
@@ -668,6 +725,11 @@ def add_signature_image_to_pdf(pdf_data: bytes, signature_image_data: str, signa
                         # Calculer la largeur et hauteur en points
                         width_points = (width_percent / 100) * page_width
                         height_points = (height_percent / 100) * page_height
+                        
+                        logger.info(f"=== CONVERSION EN COORDONNÉES ABSOLUES ===")
+                        logger.info(f"Page dimensions: {page_width} x {page_height} points")
+                        logger.info(f"Position absolue: x={x_position}, y={y_position}")
+                        logger.info(f"Dimensions absolues: largeur={width_points}, hauteur={height_points} points")
                         
                         # Ajuster la position pour centrer l'image à la position spécifiée
                         x_position = x_position - (width_points / 2)
@@ -870,6 +932,7 @@ async def sign_document(
         qr_position = None
         signature_image = None
         signature_positions = None
+        signature_size = 50  # Taille par défaut de la signature en pourcentage
         organization_id_meta = None
         organization_name_meta = None
         signer_role_meta = None
@@ -902,6 +965,13 @@ async def sign_document(
                         logger.info(f"Positions de signature trouvées: {len(signature_positions)} position(s). Détails: {signature_positions}")
                     else:
                         logger.warning("Aucune position de signature trouvée dans signature_position")
+                    
+                    # Extraire la taille de signature si disponible
+                    if 'signature_size' in signature_data:
+                        signature_size = int(signature_data['signature_size'])
+                        logger.info(f"Taille de signature extraite des métadonnées: {signature_size}%")
+                    else:
+                        logger.info(f"Aucune taille de signature spécifiée, utilisation de la valeur par défaut: {signature_size}%")
                 else:
                     logger.warning("Aucune section signature_position trouvée dans les métadonnées")
                 
@@ -940,8 +1010,8 @@ async def sign_document(
         # Étape 1: Ajouter l'image de signature si disponible
         processed_pdf = document_data
         if signature_image and signature_positions:
-            logger.info("Ajout de l'image de signature au document")
-            processed_pdf = add_signature_image_to_pdf(document_data, signature_image, signature_positions)
+            logger.info(f"Ajout de l'image de signature au document avec taille {signature_size}%")
+            processed_pdf = add_signature_image_to_pdf(document_data, signature_image, signature_positions, signature_size)
         else:
             logger.info("Aucune image de signature à ajouter")
         

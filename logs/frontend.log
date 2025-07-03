@@ -3,7 +3,7 @@
 > vue-cli-service serve
 
  INFO  Starting development server...
-(node:684006) [DEP_WEBPACK_DEV_SERVER_HTTPS] DeprecationWarning: 'https' option is deprecated. Please use the 'server' option.
+(node:690480) [DEP_WEBPACK_DEV_SERVER_HTTPS] DeprecationWarning: 'https' option is deprecated. Please use the 'server' option.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 [3%] setup (watch run)
 [2K[1A[2K[G[3%] setup (watch run vue-loader-plugin)
@@ -95,36 +95,39 @@
 [2K[1A[2K[G[10%] building (0/3 modules)
 [2K[1A[2K[G[24%] building (1/4 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/index.js)
-[2K[1A[2K[G[24%] building (3/18 modules)
+[2K[1A[2K[G[24%] building (4/20 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/pitcher.js)
 [2K[1A[2K[G[24%] building (7/38 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/templateLoader.js)
 [2K[1A[2K[G[24%] building (7/38 modules)
+[2K[1A[2K[G[24%] building (7/46 modules)
 [2K[1A[2K[G[24%] building (import loader vue-style-loader/index.js)
 [2K[1A[2K[G[24%] building (import loader css-loader/dist/cjs.js)
 [2K[1A[2K[G[24%] building (import loader postcss-loader/dist/cjs.js)
-[2K[1A[2K[G[24%] building (7/51 modules)
+[2K[1A[2K[G[24%] building (7/52 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/stylePostLoader.js)
-[2K[1A[2K[G[24%] building (12/146 modules)
-[2K[1A[2K[G[38%] building (34/253 modules)
-[2K[1A[2K[G[38%] building (37/313 modules)
+[2K[1A[2K[G[24%] building (14/147 modules)
+[2K[1A[2K[G[38%] building (32/215 modules)
+[2K[1A[2K[G[38%] building (36/241 modules)
+[2K[1A[2K[G[38%] building (39/281 modules)
+[2K[1A[2K[G[38%] building (77/365 modules)
 [1m[33m[@vue/compiler-sfc][0m[33m `defineEmits` is a compiler macro and no longer needs to be imported.[0m
 
-[2K[1A[2K[G[38%] building (92/400 modules)
-[2K[1A[2K[G[38%] building (276/433 modules)
+[2K[1A[2K[G[38%] building (118/370 modules)
+[2K[1A[2K[G[38%] building (200/416 modules)
 [1m[33m[@vue/compiler-sfc][0m[33m `defineProps` is a compiler macro and no longer needs to be imported.[0m
 
-[2K[1A[2K[G[38%] building (334/494 modules)
-[2K[1A[2K[G[51%] building (364/514 modules)
-[2K[1A[2K[G[51%] building (379/580 modules)
-[2K[1A[2K[G[51%] building (393/909 modules)
-[2K[1A[2K[G[51%] building (396/1136 modules)
-[2K[1A[2K[G[51%] building (398/1275 modules)
-[2K[1A[2K[G[51%] building (414/1382 modules)
-[2K[1A[2K[G[51%] building (602/1388 modules)
-[2K[1A[2K[G[51%] building (700/1485 modules)
-[2K[1A[2K[G[51%] building (991/1491 modules)
-[2K[1A[2K[G[51%] building (1413/1593 modules)
+[2K[1A[2K[G[38%] building (308/493 modules)
+[2K[1A[2K[G[51%] building (366/514 modules)
+[2K[1A[2K[G[51%] building (381/580 modules)
+[2K[1A[2K[G[51%] building (394/897 modules)
+[2K[1A[2K[G[51%] building (395/909 modules)
+[2K[1A[2K[G[51%] building (395/1157 modules)
+[2K[1A[2K[G[51%] building (400/1271 modules)
+[2K[1A[2K[G[51%] building (435/1383 modules)
+[2K[1A[2K[G[51%] building (639/1481 modules)
+[2K[1A[2K[G[51%] building (964/1491 modules)
+[2K[1A[2K[G[51%] building (1400/1590 modules)
 [2K[1A[2K[G[65%] building (1630/1630 modules)
 [2K[1A[2K[G[65%] building 
 [2K[1A[2K[G[69%] building (finish)
@@ -207,10 +210,10 @@ onPlugin)
 [2K[1A[2K[G[94%] sealing (after seal)
 [2K[1A[2K[G[95%] emitting (emit)
 [2K[1A[2K[G[98%] emitting (after emit)
-[2K[1A[2K[GBuild finished at 10:30:20 by 0.000s
-[2K[1A[2K[GBuild finished at 10:30:20 by 0.000s
-[2K[1A[2K[GBuild finished at 10:30:20 by 0.000s
-[2K[1A[2K[G WARNING  Compiled with 3 warnings10:30:20
+[2K[1A[2K[GBuild finished at 11:18:22 by 0.000s
+[2K[1A[2K[GBuild finished at 11:18:22 by 0.000s
+[2K[1A[2K[GBuild finished at 11:18:22 by 0.000s
+[2K[1A[2K[G WARNING  Compiled with 3 warnings11:18:22
 
  warning  in ./src/views/SignSimple.vue?vue&type=template&id=7dd6a7ee&scoped=true
 
@@ -242,7 +245,7 @@ Module Warning (from ./node_modules/vue-loader/dist/templateLoader.js):
 
 export 'BootstrapVue3' (imported as 'BootstrapVue3') was not found in 'bootstrap-vue-next' (possible exports: BAccordion, BAccordionItem, BAlert, BAvatar, BAvatarGroup, BBadge, BBreadcrumb, BBreadcrumbItem, BButton, BButtonGroup, BButtonToolbar, BCard, BCardBody, BCardFooter, BCardGroup, BCardHeader, BCardImg, BCardSubtitle, BCardText, BCardTitle, BCarousel, BCarouselSlide, BCloseButton, BCol, BCollapse, BContainer, BDropdown, BDropdownDivider, BDropdownForm, BDropdownGroup, BDropdownHeader, BDropdownItem, BDropdownItemButton, BDropdownText, BForm, BFormCheckbox, BFormCheckboxGroup, BFormDatalist, BFormFile, BFormFloatingLabel, BFormGroup, BFormInput, BFormInvalidFeedback, BFormRadio, BFormRadioGroup, BFormRow, BFormSelect, BFormSelectOption, BFormSelectOptionGroup, BFormSpinbutton, BFormTag, BFormTags, BFormText, BFormTextarea, BFormValidFeedback, BImg, BInput, BInputGroup, BInputGroupText, BLink, BListGroup, BListGroupItem, BModal, BModalOrchestrator, BNav, BNavForm, BNavItem, BNavItemDropdown, BNavText, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle, BOffcanvas, BOverlay, BPagination, BPlaceholder, BPlaceholderButton, BPlaceholderCard, BPlaceholderTable, BPlaceholderWrapper, BPopover, BPopoverOrchestrator, BProgress, BProgressBar, BRow, BSpinner, BTab, BTable, BTableLite, BTableSimple, BTabs, BTbody, BTd, BTfoot, BTh, BThead, BToast, BToastOrchestrator, BTooltip, BTr, BootstrapVueNextResolver, BvCarouselEvent, BvEvent, BvTriggerableEvent, Components, Composables, Directives, Plugins, Resolvers, Types, Utils, bootstrapPlugin, breadcrumbPlugin, componentNames, componentsWithExternalPath, composableNames, composablesWithExternalPath, createBootstrap, directiveNames, directivesWithExternalPath, modalControllerPlugin, modalManagerPlugin, popoverPlugin, rtlPlugin, toastPlugin, useBreadcrumb, useColorMode, useModal, useModalController, usePopoverController, useScrollspy, useToastController, vBColorMode, vBModal, vBPopover, vBScrollspy, vBToggle, vBTooltip)
 
-Build finished at 10:30:20 by 0.000s
+Build finished at 11:18:22 by 0.000s
 [2K[1A[2K[G
   App running at:
   - Local:   https://127.0.0.1:8080/ 
@@ -251,12 +254,12 @@ Build finished at 10:30:20 by 0.000s
   Note that the development build is not optimized.
   To create a production build, run npm run build.
 
-Build finished at 10:30:20 by 0.000s
-[2K[1A[2K[GBuild finished at 10:30:20 by 0.000s
-[2K[1A[2K[GBuild finished at 10:30:20 by 0.000s
-[2K[1A[2K[GBuild finished at 10:30:20 by 0.000s
-[2K[1A[2K[GBuild finished at 10:30:20 by 0.000s
-[2K[1A[2K[GBuild finished at 10:30:20 by 0.000s
-[2K[1A[2K[GBuild finished at 10:30:20 by 0.000s
-[2K[1A[2K[GBuild finished at 10:30:20 by 0.000s
+Build finished at 11:18:22 by 0.000s
+[2K[1A[2K[GBuild finished at 11:18:22 by 0.000s
+[2K[1A[2K[GBuild finished at 11:18:22 by 0.000s
+[2K[1A[2K[GBuild finished at 11:18:22 by 0.000s
+[2K[1A[2K[GBuild finished at 11:18:22 by 0.000s
+[2K[1A[2K[GBuild finished at 11:18:22 by 0.000s
+[2K[1A[2K[GBuild finished at 11:18:22 by 0.000s
+[2K[1A[2K[GBuild finished at 11:18:22 by 0.000s
 [2K[1A[2K[G

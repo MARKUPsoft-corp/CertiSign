@@ -509,7 +509,8 @@ async function loadTemplateDetails(templateId) {
       },
       signature: templateDetails.signature_image ? {
         image: templateDetails.signature_image,
-        positions: templateDetails.signature_positions || []
+        positions: templateDetails.signature_positions || [],
+        size: templateDetails.signature_size || 50  // Ajouter la taille de signature
       } : null
     };
     
@@ -890,7 +891,8 @@ async function startSigningProcess() {
         
         userMetadata.signature_position = {
           positions: signaturePositions,
-          signature_image: signatureImage
+          signature_image: signatureImage,
+          signature_size: templateSettings.value.signature?.size || 50  // Ajouter la taille de signature
         };
         
         console.log('DEBUG SIGNATURE FINAL - Données finales:', {

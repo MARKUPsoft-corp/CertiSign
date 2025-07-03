@@ -1,6 +1,12 @@
 INFO:     Will watch for changes in these directories: ['/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/microservices/lecture_certificat']
 INFO:     Uvicorn running on https://127.0.0.1:8002 (Press CTRL+C to quit)
-INFO:     Started reloader process [683947] using StatReload
-INFO:     Started server process [683970]
+INFO:     Started reloader process [690417] using StatReload
+INFO:     Started server process [690433]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
+Réception des données: certificat (longueur: 11340) et mot de passe
+Décodage base64 réussi, taille des données: 8505 octets
+Tentative de chargement du certificat PKCS#12...
+Chargement du certificat PKCS#12 réussi
+Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
+INFO:     192.168.4.131:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
