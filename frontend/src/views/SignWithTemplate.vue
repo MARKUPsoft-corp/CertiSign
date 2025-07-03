@@ -624,7 +624,10 @@ async function startSigningProcess() {
                 qrY = firstPosition.y || 90;
                 console.log(`Position QR extraite de la page ${firstPageKey}: x=${qrX}, y=${qrY}`);
               }
-              qrPages = Object.keys(templateSettings.value.qr_position.positions).map(k => parseInt(k));
+              // Convertir les clés en entiers, en excluant les clés non numériques
+              qrPages = Object.keys(templateSettings.value.qr_position.positions)
+                .filter(k => !isNaN(parseInt(k)))
+                .map(k => parseInt(k));
               qrPositions = templateSettings.value.qr_position.positions;
             }
           } else if (Array.isArray(templateSettings.value.qr_position.positions) && 
@@ -685,23 +688,18 @@ async function startSigningProcess() {
           // Convertir en tableau d'objets avec page, x, y
           Object.entries(templateSettings.value.signature.positions).forEach(([pageKey, position]) => {
             if (pageKey === 'default') {
-              // Pour les positions par défaut (mode "all"), générer une position pour chaque page du document
-              console.log('Mode "all" détecté, génération des positions pour toutes les pages');
+              // Pour les positions par défaut (mode "all"), envoyer une seule position avec page: "all"
+              console.log('Mode "all" détecté, envoi d\'une position avec page: "all"');
               
-              // On va générer les positions pour toutes les pages du document
-              const totalPages = pdfTotalPages.value || 1; // Utiliser le nombre de pages détecté
+              signaturePositions.push({
+                page: "all",
+                x: position.x,
+                y: position.y,
+                width: 20,  // Valeurs par défaut pour la largeur et hauteur
+                height: 10
+              });
               
-              for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-                signaturePositions.push({
-                  page: pageNum,
-                  x: position.x,
-                  y: position.y,
-                  width: 20,  // Valeurs par défaut pour la largeur et hauteur
-                  height: 10
-                });
-              }
-              
-              console.log(`Positions générées pour ${totalPages} pages en mode "all"`);
+              console.log('Position avec mode "all" générée');
             } else {
               // Positions individuelles par page
               const pageNumber = parseInt(pageKey);

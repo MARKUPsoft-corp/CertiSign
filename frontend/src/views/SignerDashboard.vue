@@ -759,15 +759,34 @@ async function submitSignature() {
           const signaturePositionsArray = [];
           
           if (positions && typeof positions === 'object') {
-            Object.entries(positions).forEach(([pageNum, position]) => {
-              if (position && typeof position === 'object' && position.x !== undefined && position.y !== undefined) {
+            Object.entries(positions).forEach(([pageKey, position]) => {
+              if (pageKey === 'default') {
+                // Pour les positions par défaut (mode "all"), envoyer une seule position avec page: "all"
+                console.log('Mode "all" détecté pour signature, envoi d\'une position avec page: "all"');
+                
                 signaturePositionsArray.push({
-                  page: parseInt(pageNum),
+                  page: "all",
                   x: position.x,
                   y: position.y,
                   width: 20, // Largeur par défaut
                   height: 10 // Hauteur par défaut
                 });
+                
+                console.log('Position de signature avec mode "all" générée');
+              } else if (position && typeof position === 'object' && position.x !== undefined && position.y !== undefined) {
+                // Positions individuelles par page
+                const pageNumber = parseInt(pageKey);
+                
+                // Vérifier que pageNumber est valide
+                if (!isNaN(pageNumber)) {
+                  signaturePositionsArray.push({
+                    page: pageNumber,
+                    x: position.x,
+                    y: position.y,
+                    width: 20, // Largeur par défaut
+                    height: 10 // Hauteur par défaut
+                  });
+                }
               }
             });
           }

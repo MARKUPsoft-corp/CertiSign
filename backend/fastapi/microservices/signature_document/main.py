@@ -95,11 +95,11 @@ def add_simple_qr_code_to_pdf(pdf_data: bytes, document_id: str, qr_position: di
         if qr_position is None:
             qr_position = {'x': 85, 'y': 10, 'size': 'medium', 'pages': 'all'}
         
-        # Tailles disponibles pour le QR code
+        # Tailles disponibles pour le QR code (augmentées)
         qr_sizes = {
-            'small': 0.4 * inch,   # 0.4 inch
-            'medium': 0.5 * inch,  # 0.5 inch
-            'large': 0.6 * inch    # 0.6 inch
+            'small': 0.6 * inch,   # 0.6 inch (était 0.4)
+            'medium': 0.8 * inch,  # 0.8 inch (était 0.5)
+            'large': 1.0 * inch    # 1.0 inch (était 0.6)
         }
         
         # Récupérer la taille du QR code
@@ -200,46 +200,39 @@ def add_simple_qr_code_to_pdf(pdf_data: bytes, document_id: str, qr_position: di
                     x_position = (x_percent / 100) * page_width
                     y_position = ((100 - y_percent) / 100) * page_height
                     
-                    # Taille du QR code et du cadre
-                    qr_size_with_margin = qr_size + 0.05*inch
-                    qr_frame_height = qr_size_with_margin + 0.1*inch
+                    # Cadre blanc épousant parfaitement la taille du QR code
+                    qr_frame_size = qr_size  # Le cadre épouse parfaitement le QR code
                     
                     # Centrer le QR code à la position calculée
-                    x_position = x_position - qr_size_with_margin / 2
-                    y_position = y_position - qr_frame_height / 2
+                    x_position = x_position - qr_frame_size / 2
+                    y_position = y_position - qr_frame_size / 2
                     
                     # S'assurer que le QR code et son cadre s'intègrent complètement dans la page
                     margin = 20  # Marge de sécurité
-                    x_position = max(margin, min(page_width - qr_size_with_margin - margin, x_position))
-                    y_position = max(margin, min(page_height - qr_frame_height - margin, y_position))
+                    x_position = max(margin, min(page_width - qr_frame_size - margin, x_position))
+                    y_position = max(margin, min(page_height - qr_frame_size - margin, y_position))
                     
-                    # Dessiner un rectangle blanc sous le QR code
+                    # Dessiner un rectangle blanc sous le QR code avec bordure
                     qr_canvas.setFillColorRGB(1, 1, 1)  # Blanc
+                    qr_canvas.setStrokeColorRGB(0, 0, 0)  # Bordure noire
+                    qr_canvas.setLineWidth(1)  # Épaisseur de bordure
                     qr_canvas.rect(
                         x_position, 
                         y_position,
-                        qr_size_with_margin,
-                        qr_frame_height,
-                        fill=True
+                        qr_frame_size,
+                        qr_frame_size,
+                        fill=True,
+                        stroke=True
                     )
                     
-                    # Ajouter le texte "ANTIC" et la date au-dessus du QR code
-                    qr_canvas.setFillColorRGB(0, 0, 0)  # Noir
-                    qr_canvas.setFont("Helvetica", 6)  # Police petite (6pt)
-                    current_date = datetime.now().strftime("%d/%m/%Y %H:%M")
-                    qr_canvas.drawString(
-                        x_position + 0.02*inch,
-                        y_position + qr_size + 0.08*inch,
-                        f"ANTIC {current_date}"
-                    )
-                    
-                    # Dessiner le QR code
+                    # Dessiner le QR code au centre du cadre blanc
                     qr_canvas.drawImage(temp_qr_path, 
-                                       x_position + 0.025*inch,
-                                       y_position + 0.025*inch,
+                                       x_position,
+                                       y_position,
                                        width=qr_size, 
                                        height=qr_size, 
                                        preserveAspectRatio=True)
+                    
                     qr_canvas.save()
                     
                     # Réinitialiser le buffer pour lecture
@@ -338,8 +331,8 @@ def embed_signature_in_pdf(pdf_data: bytes, signature: bytes, public_key_pem: st
             pdf_reader = PdfReader(BytesIO(pdf_data))
             pdf_writer = PdfWriter()
             
-            # Réduire la taille du QR code à une valeur fixe (en pouces)
-            qr_size = 0.50 * inch
+            # Augmenter la taille du QR code (était 0.50)
+            qr_size = 0.8 * inch
             logger.info(f"Taille du QR code: {qr_size} pouces")
             
             # Parcourir chaque page du PDF et ajouter le QR code
@@ -360,12 +353,11 @@ def embed_signature_in_pdf(pdf_data: bytes, signature: bytes, public_key_pem: st
                 # Calculer les marges (en points) - augmenter la marge à 50 points (environ 0.7 inch)
                 margin = 50
                 
-                # Taille du QR code et du cadre
-                qr_size_with_margin = qr_size + 0.05*inch  # Réduire la marge de 0.2 à 0.05 inch
-                qr_frame_height = qr_size_with_margin + 0.1*inch  # Réduire l'espace pour le texte de 0.15 à 0.1 inch
+                # Cadre blanc épousant parfaitement la taille du QR code
+                qr_frame_size = qr_size  # Le cadre épouse parfaitement le QR code
                 
                 # Position X: côté droit de la page avec une marge
-                x_position = page_width - margin - qr_size_with_margin
+                x_position = page_width - margin - qr_frame_size
                 
                 # Position Y: bas de la page avec une marge plus grande pour éviter la troncature
                 y_position = margin
@@ -374,33 +366,26 @@ def embed_signature_in_pdf(pdf_data: bytes, signature: bytes, public_key_pem: st
                 if x_position < 0:
                     x_position = 10  # Si la page est trop étroite, placer le QR code près du bord gauche
                 
-                if y_position + qr_frame_height > page_height:
-                    y_position = page_height - qr_frame_height - 10  # Si la page est trop petite, ajuster la position Y
+                if y_position + qr_frame_size > page_height:
+                    y_position = page_height - qr_frame_size - 10  # Si la page est trop petite, ajuster la position Y
                 
-                # Dessiner un rectangle blanc sous le QR code
+                # Dessiner un rectangle blanc sous le QR code avec bordure
                 qr_canvas.setFillColorRGB(1, 1, 1)  # Blanc
+                qr_canvas.setStrokeColorRGB(0, 0, 0)  # Bordure noire
+                qr_canvas.setLineWidth(1)  # Épaisseur de bordure
                 qr_canvas.rect(
                     x_position, 
                     y_position,
-                    qr_size_with_margin,
-                    qr_frame_height,
-                    fill=True
+                    qr_frame_size,
+                    qr_frame_size,
+                    fill=True,
+                    stroke=True
                 )
                 
-                # Ajouter le texte "ANTIC" et la date au-dessus du QR code
-                qr_canvas.setFillColorRGB(0, 0, 0)  # Noir
-                qr_canvas.setFont("Helvetica", 6)  # Police petite (6pt)
-                current_date = datetime.now().strftime("%d/%m/%Y %H:%M")
-                qr_canvas.drawString(
-                    x_position + 0.02*inch,  # Réduire la marge de 0.05 à 0.02 inch
-                    y_position + qr_size + 0.08*inch,  # Réduire la marge de 0.15 à 0.08 inch
-                    f"ANTIC {current_date}"
-                )
-                
-                # Dessiner le QR code avec moins d'espace autour
+                # Dessiner le QR code au centre du cadre blanc
                 qr_canvas.drawImage(temp_qr_path, 
-                                   x_position + 0.025*inch,  # Réduire la marge de 0.1 à 0.025 inch
-                                   y_position + 0.025*inch,  # Réduire la marge de 0.1 à 0.025 inch
+                                   x_position,
+                                   y_position,
                                    width=qr_size, 
                                    height=qr_size, 
                                    preserveAspectRatio=True)
@@ -640,9 +625,21 @@ def add_signature_image_to_pdf(pdf_data: bytes, signature_image_data: str, signa
                 page_height = float(page.mediabox.height)
                 
                 # Vérifier si une signature doit être ajoutée sur cette page
-                # Accepter à la fois les numéros de page sous forme de chaîne et d'entier
-                signatures_for_page = [pos for pos in signature_positions 
-                                      if str(pos.get('page', 1)) == str(page_number)]
+                # Support du mode "all": si une position a page="all", l'appliquer sur toutes les pages
+                signatures_for_page = []
+                
+                for pos in signature_positions:
+                    pos_page = pos.get('page', 1)
+                    
+                    # Mode "all": si page="all", appliquer sur toutes les pages
+                    if str(pos_page).lower() == 'all':
+                        signatures_for_page.append(pos)
+                        logger.info(f"Mode 'all' détecté - signature appliquée sur la page {page_number}")
+                    
+                    # Mode spécifique: appliquer seulement sur la page correspondante
+                    elif str(pos_page) == str(page_number):
+                        signatures_for_page.append(pos)
+                        logger.info(f"Mode spécifique - signature appliquée sur la page {page_number}")
                 
                 if signatures_for_page:
                     logger.info(f"Ajout de {len(signatures_for_page)} signature(s) sur la page {page_number}")

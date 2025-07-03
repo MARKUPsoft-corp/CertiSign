@@ -834,16 +834,38 @@ async function startSigningProcess() {
               !Array.isArray(documentPosition.signature.positions)) {
             
             console.log('Conversion des positions de signature du format objet au format tableau');
-            Object.entries(documentPosition.signature.positions).forEach(([pageNum, position]) => {
-              const convertedPosition = {
-                page: parseInt(pageNum),
-                x: position.x,
-                y: position.y,
-                width: 20,
-                height: 10
-              };
-              signaturePositions.push(convertedPosition);
-              console.log(`Position signature page ${pageNum}:`, convertedPosition);
+            Object.entries(documentPosition.signature.positions).forEach(([pageKey, position]) => {
+              if (pageKey === 'default') {
+                // Pour les positions par défaut (mode "all"), envoyer une seule position avec page: "all"
+                console.log('Mode "all" détecté, envoi d\'une position avec page: "all"');
+                
+                const convertedPosition = {
+                  page: "all",
+                  x: position.x,
+                  y: position.y,
+                  width: 20,
+                  height: 10
+                };
+                signaturePositions.push(convertedPosition);
+                
+                console.log('Position avec mode "all" générée');
+              } else {
+                // Positions individuelles par page
+                const pageNumber = parseInt(pageKey);
+                
+                // Vérifier que pageNumber est valide
+                if (!isNaN(pageNumber)) {
+                  const convertedPosition = {
+                    page: pageNumber,
+                    x: position.x,
+                    y: position.y,
+                    width: 20,
+                    height: 10
+                  };
+                  signaturePositions.push(convertedPosition);
+                  console.log(`Position signature page ${pageNumber}:`, convertedPosition);
+                }
+              }
             });
           } else if (Array.isArray(documentPosition.signature.positions)) {
             signaturePositions = documentPosition.signature.positions;
