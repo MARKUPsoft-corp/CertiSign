@@ -596,19 +596,36 @@ async function startSigningProcess() {
       qr_position: (() => {
         let qrX = 85; // valeur par défaut
         let qrY = 90; // valeur par défaut
+        let qrPages = 'all'; // valeur par défaut
+        let qrPositions = {};
+        let qrMode = templateSettings.value.qr_position?.mode || 'all';
         
         if (templateSettings.value.qr_position?.positions) {
           // Vérifier si positions est un objet avec des clés numériques (format {1: {x, y}, 2: {x, y}})
           if (typeof templateSettings.value.qr_position.positions === 'object' && 
               !Array.isArray(templateSettings.value.qr_position.positions)) {
             
-            console.log('Positions QR sous format objet, extraction de la première position');
-            const firstPageKey = Object.keys(templateSettings.value.qr_position.positions)[0];
-            if (firstPageKey && templateSettings.value.qr_position.positions[firstPageKey]) {
-              const firstPosition = templateSettings.value.qr_position.positions[firstPageKey];
-              qrX = firstPosition.x || 85;
-              qrY = firstPosition.y || 90;
-              console.log(`Position QR extraite de la page ${firstPageKey}: x=${qrX}, y=${qrY}`);
+            console.log('Positions QR sous format objet, extraction des positions');
+            
+            // Si la clé est "default", c'est pour le mode "all"
+            if (templateSettings.value.qr_position.positions.default) {
+              const defaultPosition = templateSettings.value.qr_position.positions.default;
+              qrX = defaultPosition.x || 85;
+              qrY = defaultPosition.y || 90;
+              qrPages = 'all';
+              qrPositions = templateSettings.value.qr_position.positions;
+              console.log(`Position QR par défaut extraite: x=${qrX}, y=${qrY}`);
+            } else {
+              // Sinon, c'est des positions individuelles par page
+              const firstPageKey = Object.keys(templateSettings.value.qr_position.positions)[0];
+              if (firstPageKey && templateSettings.value.qr_position.positions[firstPageKey]) {
+                const firstPosition = templateSettings.value.qr_position.positions[firstPageKey];
+                qrX = firstPosition.x || 85;
+                qrY = firstPosition.y || 90;
+                console.log(`Position QR extraite de la page ${firstPageKey}: x=${qrX}, y=${qrY}`);
+              }
+              qrPages = Object.keys(templateSettings.value.qr_position.positions).map(k => parseInt(k));
+              qrPositions = templateSettings.value.qr_position.positions;
             }
           } else if (Array.isArray(templateSettings.value.qr_position.positions) && 
                      templateSettings.value.qr_position.positions.length > 0) {
@@ -618,6 +635,7 @@ async function startSigningProcess() {
             qrX = firstPosition.x || 85;
             qrY = firstPosition.y || 90;
             console.log(`Position QR extraite du tableau: x=${qrX}, y=${qrY}`);
+            qrPositions = templateSettings.value.qr_position.positions;
           }
         }
         
@@ -625,9 +643,9 @@ async function startSigningProcess() {
           x: qrX,
           y: qrY,
           size: templateSettings.value.qr_position?.size || 'medium',
-          pages: templateSettings.value.qr_position?.pages || 'all',
-          positions: templateSettings.value.qr_position?.positions || [],
-          mode: templateSettings.value.qr_position?.mode || 'all'
+          pages: qrPages,
+          positions: qrPositions,
+          mode: qrMode
         };
       })(),
       signature_position: null
@@ -658,21 +676,47 @@ async function startSigningProcess() {
       // Convertir les positions de signature en format attendu par le microservice
       let signaturePositions = [];
       if (templateSettings.value.signature.positions) {
-        // Vérifier si positions est un objet avec des clés numériques (format {1: {x, y}, 2: {x, y}})
+        // Vérifier si positions est un objet avec des clés numériques ou "default"
         if (typeof templateSettings.value.signature.positions === 'object' && 
             !Array.isArray(templateSettings.value.signature.positions)) {
           
           console.log('Conversion des positions de signature du format objet au format tableau');
           
           // Convertir en tableau d'objets avec page, x, y
-          Object.entries(templateSettings.value.signature.positions).forEach(([pageNum, position]) => {
-            signaturePositions.push({
-              page: parseInt(pageNum),
-              x: position.x,
-              y: position.y,
-              width: 20,  // Valeurs par défaut pour la largeur et hauteur
-              height: 10
-            });
+          Object.entries(templateSettings.value.signature.positions).forEach(([pageKey, position]) => {
+            if (pageKey === 'default') {
+              // Pour les positions par défaut (mode "all"), générer une position pour chaque page du document
+              console.log('Mode "all" détecté, génération des positions pour toutes les pages');
+              
+              // On va générer les positions pour toutes les pages du document
+              const totalPages = pdfTotalPages.value || 1; // Utiliser le nombre de pages détecté
+              
+              for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+                signaturePositions.push({
+                  page: pageNum,
+                  x: position.x,
+                  y: position.y,
+                  width: 20,  // Valeurs par défaut pour la largeur et hauteur
+                  height: 10
+                });
+              }
+              
+              console.log(`Positions générées pour ${totalPages} pages en mode "all"`);
+            } else {
+              // Positions individuelles par page
+              const pageNumber = parseInt(pageKey);
+              
+              // Vérifier que pageNumber est valide
+              if (!isNaN(pageNumber)) {
+                signaturePositions.push({
+                  page: pageNumber,
+                  x: position.x,
+                  y: position.y,
+                  width: 20,  // Valeurs par défaut pour la largeur et hauteur
+                  height: 10
+                });
+              }
+            }
           });
           
           console.log('Positions de signature converties:', signaturePositions);

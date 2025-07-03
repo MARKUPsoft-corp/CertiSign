@@ -15,7 +15,7 @@
         <input 
           type="file" 
           id="signature-upload" 
-          accept="image/*" 
+          accept="image/png,image/jpeg,image/jpg,image/gif,image/bmp,image/webp,image/svg+xml" 
           @change="handleSignatureUpload" 
           class="file-input"
         >
@@ -427,13 +427,27 @@ const previewContainer = ref(null);
 function handleSignatureUpload(event) {
   const file = event.target.files[0];
   if (file && file.type.startsWith('image/')) {
-    signatureImage.value = file;
-    signatureImageUrl.value = URL.createObjectURL(file);
+    // Vérifier que c'est un format d'image supporté
+    const supportedFormats = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/bmp', 'image/webp', 'image/svg+xml'];
     
-    // Émettre un événement pour informer le composant parent de l'image de signature
-    emit('signature-uploaded', file);
+    if (supportedFormats.some(format => file.type.includes(format.split('/')[1]))) {
+      signatureImage.value = file;
+      signatureImageUrl.value = URL.createObjectURL(file);
+      
+      console.log('Image de signature chargée:', {
+        name: file.name,
+        type: file.type,
+        size: file.size
+      });
+      
+      // Émettre un événement pour informer le composant parent de l'image de signature
+      emit('signature-uploaded', file);
+    } else {
+      alert('Format d\'image non supporté. Formats acceptés: PNG, JPEG, JPG, GIF, BMP, WEBP, SVG.');
+      event.target.value = null;
+    }
   } else {
-    alert('Veuillez sélectionner une image valide.');
+    alert('Veuillez sélectionner un fichier image valide.');
     event.target.value = null;
   }
 }
@@ -943,20 +957,71 @@ async function generateModifiedPdf() {
         const signatureImageBytes = await fetch(signatureImageUrl.value).then(res => res.arrayBuffer());
         let signatureEmbed;
         
-        // Détecter le type d'image et l'intégrer correctement
-        const isJpg = signatureImageUrl.value.includes('jpeg') || signatureImageUrl.value.includes('jpg');
-        const isPng = signatureImageUrl.value.includes('png');
+        // Détecter le type d'image en utilisant le type MIME du fichier original
+        const mimeType = signatureImage.value.type || 'image/png';
+        console.log('Type MIME de l\'image de signature:', mimeType);
         
-        if (isJpg) {
-          signatureEmbed = await pdfDoc.embedJpg(signatureImageBytes);
-        } else if (isPng) {
-          signatureEmbed = await pdfDoc.embedPng(signatureImageBytes);
-        } else {
-          // Fallback - essayer comme PNG
-          try {
+        try {
+          if (mimeType.includes('jpeg') || mimeType.includes('jpg')) {
+            signatureEmbed = await pdfDoc.embedJpg(signatureImageBytes);
+          } else if (mimeType.includes('png')) {
             signatureEmbed = await pdfDoc.embedPng(signatureImageBytes);
-          } catch (e) {
-            console.error('Format d\'image non supporté', e);
+          } else {
+            // Pour les autres formats (GIF, BMP, WEBP, etc.), convertir en PNG via canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            // Charger l'image dans un canvas et la convertir en PNG
+            await new Promise((resolve, reject) => {
+              img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob(async (blob) => {
+                  if (blob) {
+                    const pngBytes = await blob.arrayBuffer();
+                    signatureEmbed = await pdfDoc.embedPng(pngBytes);
+                    resolve();
+                  } else {
+                    reject(new Error('Échec de la conversion en PNG'));
+                  }
+                }, 'image/png');
+              };
+              img.onerror = reject;
+              img.src = signatureImageUrl.value;
+            });
+          }
+        } catch (e) {
+          console.error('Erreur lors de l\'intégration de l\'image de signature:', e);
+          console.log('Tentative de fallback avec conversion PNG...');
+          
+          // Dernier recours : convertir via canvas
+          try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            await new Promise((resolve, reject) => {
+              img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob(async (blob) => {
+                  if (blob) {
+                    const pngBytes = await blob.arrayBuffer();
+                    signatureEmbed = await pdfDoc.embedPng(pngBytes);
+                    resolve();
+                  } else {
+                    reject(new Error('Échec de la conversion en PNG'));
+                  }
+                }, 'image/png');
+              };
+              img.onerror = reject;
+              img.src = signatureImageUrl.value;
+            });
+          } catch (fallbackError) {
+            console.error('Impossible d\'intégrer l\'image de signature:', fallbackError);
             continue; // Passer à la page suivante
           }
         }
