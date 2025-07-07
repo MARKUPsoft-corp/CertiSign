@@ -90,7 +90,7 @@ class DocumentPreviewUtils {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
-                  FontAwesomeIcons.shieldCheck,
+                  FontAwesomeIcons.shield,
                   size: 16,
                   color: Colors.green.shade700,
                 ),

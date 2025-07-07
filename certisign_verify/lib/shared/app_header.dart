@@ -53,31 +53,34 @@ class AppHeader extends StatelessWidget {
         children: [
           // Bouton retour OU Logo Doc@uthANTIC
           if (showBackButton)
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                  onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
-                ),
-                if (title != null) ...[
-                  const SizedBox(width: 8),
-                  Flexible(
-                    child: Text(
-                      title!,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+            Expanded(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 24,
                     ),
+                    onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
                   ),
+                  if (title != null) ...[
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        title!,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             )
           else
             // Logo Doc@uthANTIC
