@@ -187,3 +187,26 @@ Not Found: /api/public/get_signature/
 127.0.0.1 - - [07/Jul/2025 09:49:34] "[33mGET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=12345678-1234-5678-9abc-123456789012 HTTP/1.0[0m" 404 -
 Not Found: /api/public/get_signature/
 127.0.0.1 - - [07/Jul/2025 09:50:58] "[33mGET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=00000000-0000-0000-0000-000000000000 HTTP/1.0[0m" 404 -
+127.0.0.1 - - [07/Jul/2025 09:56:42] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 09:56:42] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 09:56:42] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [07/Jul/2025 09:56:43] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 09:56:43] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 09:56:43] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 09:56:43] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 09:56:43] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 09:56:43] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+Unauthorized: /api/users/token-verify/
+127.0.0.1 - - [07/Jul/2025 10:18:20] "[31m[1mPOST /api/users/token-verify/ HTTP/1.0[0m" 401 -
+127.0.0.1 - - [07/Jul/2025 10:18:20] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [07/Jul/2025 10:18:20] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:18:31] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:18:32] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:18:32] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:18:32] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [07/Jul/2025 10:18:32] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:18:32] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:18:32] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:18:32] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:18:32] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:18:32] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -12,8 +13,37 @@ import 'features/history/history_screen.dart';
 import 'features/scan/scan_screen.dart';
 import 'shared/theme_provider.dart';
 
+/// Configuration SSL personnalisée pour les certificats ANTIC
+class AnticHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) {
+        // Accepter les certificats de ppd.camgovca.cm
+        if (host == 'ppd.camgovca.cm') {
+          print('🔒 Validation certificat pour $host');
+          print('📋 Émetteur: ${cert.issuer}');
+          
+          // Vérifier que c'est un certificat ANTIC ou en mode debug
+          if (cert.issuer.contains('ANTIC') || 
+              cert.issuer.contains('National Agency for Information') ||
+              const bool.fromEnvironment('dart.vm.product') == false) {
+            print('✅ Certificat accepté pour $host');
+            return true;
+          }
+        }
+        
+        return false;
+      };
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Configuration SSL globale pour accepter les certificats ANTIC
+  HttpOverrides.global = AnticHttpOverrides();
+  print('🔒 Configuration SSL ANTIC activée');
   
   // Optimisations de performance
   await _performAppOptimizations();

@@ -36,8 +36,10 @@ class SignatureService {
       final url = Uri.parse('$_apiGatewayUrl$_verifyEndpoint');
       
       print('ℹ️ Envoi de la requête à $url');
+      print('🔒 Utilisation de la configuration SSL globale ANTIC');
       
       // Envoyer la requête avec l'ID du document et l'option de retour du document original
+      // La configuration SSL globale gère automatiquement les certificats ANTIC
       final response = await http.post(
         url,
         headers: {
