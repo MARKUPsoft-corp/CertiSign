@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/theme.dart';
+import '../../shared/app_header.dart';
 import 'verification_history.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -85,73 +86,86 @@ class _HistoryScreenState extends State<HistoryScreen> {
     final primaryColor = Theme.of(context).colorScheme.primary;
     
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: Text(
-          'HISTORIQUE',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-            color: primaryColor,
-          ),
-        ),
-        actions: [
-          if (_historyEntries.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: IconButton(
-                icon: Icon(
-                  Icons.delete_outline,
-                  color: AppTheme.dangerColor.withOpacity(0.8),
-                ),
-                onPressed: _clearHistory,
-                tooltip: 'Effacer l\'historique',
-              ),
-            ),
-        ],
-      ),
-      body: Stack(
+      body: Column(
         children: [
-          // Cercles de décoration
-          Positioned(
-            top: -50,
-            right: -50,
-            child: Container(
-              width: 150,
-              height: 150,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isDarkMode 
-                    ? AppTheme.darkPrimaryColor.withOpacity(0.1) 
-                    : AppTheme.primaryColor.withOpacity(0.1),
-              ),
-            ),
-          ),
-          
-          Positioned(
-            bottom: -80,
-            left: -60,
-            child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isDarkMode 
-                    ? AppTheme.darkAccentColor.withOpacity(0.1) 
-                    : AppTheme.accentColor.withOpacity(0.1),
-              ),
-            ),
+          // En-tête sombre uniforme
+          AppHeader(
+            title: 'HISTORIQUE',
+            showBackButton: false,
           ),
           
           // Contenu principal
-          SafeArea(
-            child: _isLoading
-                ? _buildLoadingState()
-                : _historyEntries.isEmpty
-                    ? _buildEmptyState(context)
-                    : _buildHistoryList(context),
+          Expanded(
+            child: Stack(
+              children: [
+                // Cercles de décoration
+                Positioned(
+                  top: -50,
+                  right: -50,
+                  child: Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isDarkMode 
+                          ? AppTheme.darkPrimaryColor.withOpacity(0.1) 
+                          : AppTheme.primaryColor.withOpacity(0.1),
+                    ),
+                  ),
+                ),
+                
+                Positioned(
+                  bottom: -80,
+                  left: -60,
+                  child: Container(
+                    width: 200,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isDarkMode 
+                          ? AppTheme.darkAccentColor.withOpacity(0.1) 
+                          : AppTheme.accentColor.withOpacity(0.1),
+                    ),
+                  ),
+                ),
+                
+                // Contenu principal avec bouton d'effacer en haut à droite
+                Column(
+                  children: [
+                    // Barre d'actions
+                    if (_historyEntries.isNotEmpty)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: _clearHistory,
+                              icon: const Icon(Icons.delete_outline, size: 18),
+                              label: const Text('Effacer'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppTheme.dangerColor.withOpacity(0.1),
+                                foregroundColor: AppTheme.dangerColor,
+                                elevation: 0,
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    
+                    // Contenu principal
+                    Expanded(
+                      child: _isLoading
+                          ? _buildLoadingState()
+                          : _historyEntries.isEmpty
+                              ? _buildEmptyState(context)
+                              : _buildHistoryList(context),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -4,9 +4,10 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../../shared/app_header.dart';
+import '../../utils/document_preview_utils.dart';
 import '../history/verification_history.dart';
 import '../../shared/animated_particles.dart';
-import '../../utils/document_preview_utils.dart';
 
 // Extension pour faciliter l'accès aux animations
 extension AnimateWidgetExtension on Widget {
@@ -243,61 +244,58 @@ class _VerifyScreenState extends State<VerifyScreen> {
     final primaryColor = Theme.of(context).colorScheme.primary;
     
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: Text(
-          'VÉRIFICATION',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-            color: primaryColor,
-          ),
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: primaryColor,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: Stack(
+      body: Column(
         children: [
-          // Fond avec particules animées
-          const Positioned.fill(
-            child: AnimatedParticles(
-              particleCount: 6,
-              opacity: 0.15,
-              maxSize: 3,
-            ),
+          // En-tête sombre uniforme avec bouton retour
+          AppHeader(
+            title: 'VÉRIFICATION',
+            showBackButton: true,
           ),
-
-          // Fond avec gradient subtil
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Theme.of(context).colorScheme.surface,
-                    Theme.of(context).colorScheme.surface.withOpacity(0.8),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
+          
           // Contenu principal
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: _isVerifying
-                  ? _buildVerificationInProgress(isDarkMode)
-                  : _buildVerificationResult(isDarkMode),
+          Expanded(
+            child: Stack(
+              children: [
+                // Fond avec particules pour cohérence visuelle
+                const Positioned.fill(
+                  child: AnimatedParticles(
+                    particleCount: 6,
+                    opacity: 0.15,
+                    maxSize: 3,
+                  ),
+                ),
+
+                // Fond avec gradient
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Theme.of(context).colorScheme.surface,
+                          Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Contenu scrollable
+                SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      children: [
+                        _isVerifying
+                            ? _buildVerificationInProgress(isDarkMode)
+                            : _buildVerificationResult(isDarkMode),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

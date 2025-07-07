@@ -5,6 +5,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../core/theme.dart';
 import '../../services/signature_service.dart';
+import '../../shared/app_header.dart';
 import '../verify/verify_screen.dart';
 
 class ScanScreen extends StatefulWidget {

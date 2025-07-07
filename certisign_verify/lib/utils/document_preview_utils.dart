@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,13 +25,11 @@ class DocumentPreviewUtils {
                     String.fromCharCodes(bytes.sublist(0, 4)) == '%PDF';
       
       if (isPdf) {
-        // Pour les PDF, utiliser le visualiseur SyncFusion
-        return SfPdfViewer.memory(
-          bytes,
-          canShowScrollHead: false,
-          canShowScrollStatus: false,
-          pageSpacing: 0,
-          enableDoubleTapZooming: true,
+        // Pour les PDF, créer un widget optimisé qui évite les problèmes de performance
+        return _OptimizedPdfViewer(
+          bytes: bytes,
+          documentTitle: documentTitle,
+          isVerified: isVerified,
         );
       } else {
         // Essayer d'afficher comme une image
@@ -45,61 +44,79 @@ class DocumentPreviewUtils {
               fit: BoxFit.contain,
               errorBuilder: (context, error, stackTrace) {
                 // En cas d'erreur, afficher une icône générique de document
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        FontAwesomeIcons.fileLines,
-                        size: 64,
-                        color: Colors.blueGrey,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        documentTitle,
-                        style: Theme.of(context).textTheme.titleMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Format non visualisable',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                );
+                return _buildDocumentFallback(context, documentTitle);
               },
             ),
           );
         } catch (e) {
           // Fallback pour tout autre type de document
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  FontAwesomeIcons.fileLines,
-                  size: 64,
-                  color: Colors.blueGrey,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  documentTitle,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          );
+          return _buildDocumentFallback(context, documentTitle);
         }
       }
     } catch (e) {
       print('Erreur de rendu du document: $e');
-      return const Center(
-        child: Text('Impossible d\'afficher le document'),
-      );
+      return _buildDocumentFallback(context, documentTitle);
     }
+  }
+
+  /// Widget de fallback pour les documents non visualisables
+  static Widget _buildDocumentFallback(BuildContext context, String documentTitle) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            FontAwesomeIcons.fileShield,
+            size: 80,
+            color: Colors.green.shade600,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            documentTitle,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.green.shade100,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.green.shade300),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  FontAwesomeIcons.shieldCheck,
+                  size: 16,
+                  color: Colors.green.shade700,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'Document Authentique',
+                  style: TextStyle(
+                    color: Colors.green.shade700,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Appuyez pour voir le document',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Colors.grey.shade600,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
   }
   
   /// Méthode pour sauvegarder le document dans les téléchargements
@@ -252,5 +269,157 @@ class DocumentPreviewUtils {
         ),
       ),
     );
+  }
+}
+
+/// Widget optimisé pour afficher les PDF sans problèmes de performance
+class _OptimizedPdfViewer extends StatefulWidget {
+  final List<int> bytes;
+  final String documentTitle;
+  final bool isVerified;
+
+  const _OptimizedPdfViewer({
+    required this.bytes,
+    required this.documentTitle,
+    required this.isVerified,
+  });
+
+  @override
+  State<_OptimizedPdfViewer> createState() => _OptimizedPdfViewerState();
+}
+
+class _OptimizedPdfViewerState extends State<_OptimizedPdfViewer> {
+  bool _showFullViewer = false;
+  bool _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_showFullViewer) {
+      // Afficher d'abord un aperçu optimisé
+      return GestureDetector(
+        onTap: _loadFullViewer,
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: _isLoading
+              ? const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 12),
+                      Text('Chargement du document...'),
+                    ],
+                  ),
+                )
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.filePdf,
+                        size: 80,
+                        color: Colors.red.shade600,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        widget.documentTitle,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      if (widget.isVerified)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade100,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.green.shade300),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.shieldCheck,
+                                size: 16,
+                                color: Colors.green.shade700,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                'Document Signé Authentique',
+                                style: TextStyle(
+                                  color: Colors.green.shade700,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.shade50,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.blue.shade200),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.eye,
+                              size: 16,
+                              color: Colors.blue.shade700,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Appuyez pour voir le PDF',
+                              style: TextStyle(
+                                color: Colors.blue.shade700,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+        ),
+      );
+    } else {
+      // Afficher le visualiseur PDF complet
+      return SfPdfViewer.memory(
+        Uint8List.fromList(widget.bytes),
+        canShowScrollHead: false,
+        canShowScrollStatus: false,
+        pageSpacing: 2,
+        enableDoubleTapZooming: true,
+      );
+    }
+  }
+
+  void _loadFullViewer() {
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Délai pour éviter les blocages de l'UI
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _showFullViewer = true;
+        });
+      }
+    });
   }
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart'; // Added for SystemChrome
 
 import '../../core/theme.dart';
 import '../../shared/animated_particles.dart';
 import '../../shared/theme_provider.dart';
+import '../../shared/app_header.dart';
 import '../scan/scan_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,19 +15,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Configurer la barre d'état pour qu'elle soit transparente avec du contenu clair
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent, // Transparent pour laisser voir l'en-tête
-      statusBarIconBrightness: Brightness.light, // Icônes claires sur fond sombre
-      statusBarBrightness: Brightness.dark, // Pour iOS
-    ));
-
     return Scaffold(
       // Retirer extendBodyBehindAppBar pour éviter les conflits
       body: Column(
         children: [
           // En-tête sombre qui s'étend jusqu'à la status bar
-          _buildHeader(context),
+          const AppHeader(),
           
           // Contenu principal avec scroll
           Expanded(
@@ -80,110 +74,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
-    return Container(
-      // Étendre jusqu'à la status bar
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: MediaQuery.of(context).padding.top + 12, // Padding du top + status bar
-        bottom: 12,
-      ),
-      decoration: BoxDecoration(
-        // Toujours sombre peu importe le thème
-        color: const Color(0xFF1A1A1A), // Fond toujours sombre
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 8,
-            spreadRadius: 0,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Logo Doc@uthANTIC
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 4,
-                      spreadRadius: 0,
-                    ),
-                  ],
-                ),
-                child: Image.asset(
-                  'assets/images/doc.png',
-                  width: 24,
-                  height: 24,
-                ),
-              ),
-              const SizedBox(width: 8),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Doc',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF00A651), // Vert (toujours visible sur fond sombre)
-                      ),
-                    ),
-                    TextSpan(
-                      text: '@uth',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFFE74C3C), // Rouge (toujours visible sur fond sombre)
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'ANTIC',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFFF1C40F), // Jaune (toujours visible sur fond sombre)
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          // Basculer le thème - toujours en couleur claire pour être visible sur fond sombre
-          IconButton(
-            icon: Icon(
-              isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,
-              color: isDarkMode
-                  ? Colors.amber.shade300 // Couleur dorée en mode sombre
-                  : Colors.white, // Blanc en mode clair pour contraster avec le fond sombre
-              size: 24,
-            ),
-            onPressed: () {
-              final themeProvider = Provider.of<ThemeProvider>(
-                context,
-                listen: false,
-              );
-              themeProvider.toggleTheme();
-            },
           ),
         ],
       ),
