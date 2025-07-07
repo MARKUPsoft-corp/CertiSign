@@ -15,13 +15,13 @@ import 'package:pointycastle/asn1.dart';
 
 /// Service pour vérifier les signatures numériques
 class SignatureService {
-  // L'URL de l'API Gateway - Utilisation du tunnel adb
-  // Grâce à 'adb reverse tcp:8001 tcp:8001', on peut utiliser 192.168.4.131
-  // qui est redirigé vers la machine hôte via le tunnel adb
-  final String _apiGatewayUrl = 'http://192.168.4.131:8001';
+  // L'URL de l'API Gateway - Nouveau domaine officiel
+  // Utilisation du domaine ppd.camgovca.cm avec HTTPS via Nginx reverse proxy
+  // Plus besoin de tunnel adb, connexion directe sécurisée
+  final String _apiGatewayUrl = 'https://ppd.camgovca.cm';
   
-  // L'endpoint de vérification par ID dans l'API Gateway (nouveau chemin simplifié)
-  final String _verifyEndpoint = '/gateway/verify/';
+  // L'endpoint de vérification par ID via Nginx reverse proxy
+  final String _verifyEndpoint = '/sign/verify';
   
   /// Vérifie la signature d'un document en utilisant l'API Gateway
   /// 

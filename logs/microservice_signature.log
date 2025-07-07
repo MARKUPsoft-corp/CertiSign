@@ -100,3 +100,67 @@ INFO:django_api:Données de signature stockées avec succès pour le document a6
 INFO:main:Données de signature stockées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
 INFO:main:Signature terminée en 0.56 secondes
 INFO:     192.168.5.49:0 - "POST /sign HTTP/1.0" 200 OK
+INFO:main:Fichier temporaire supprimé: /tmp/COPIE-DACTE-DE-NAISSANCE-1_signed_20250707101126.pdf
+INFO:     127.0.0.1:0 - "POST /verify/ HTTP/1.0" 307 Temporary Redirect
+INFO:     127.0.0.1:0 - "POST /verify/ HTTP/1.0" 307 Temporary Redirect
+INFO:     127.0.0.1:38768 - "GET / HTTP/1.1" 404 Not Found
+INFO:main:[b640306d-0b03-490e-822b-f5b1913d6ed6] Nouvelle demande de vérification par ID: test-uuid-12345
+INFO:main:[b640306d-0b03-490e-822b-f5b1913d6ed6] Récupération des données de signature pour le document ID: test-uuid-12345
+[INFO] ID du document nettoyé: 'test-uuid-12345'
+INFO:django_api:ID du document nettoyé: 'test-uuid-12345'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=test-uuid-12345
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=test-uuid-12345
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document test-uuid-12345
+INFO:django_api:Récupération des données de signature pour le document test-uuid-12345
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=test-uuid-12345 "HTTP/1.1 400 Bad Request"
+[ERROR] Erreur lors de la récupération des données de signature: 400 - {"error": "Format d'identifiant de document invalide: test-uuid-12345. Un UUID est requis."}
+ERROR:django_api:Erreur lors de la récupération des données de signature: 400 - {"error": "Format d'identifiant de document invalide: test-uuid-12345. Un UUID est requis."}
+ERROR:main:[b640306d-0b03-490e-822b-f5b1913d6ed6] Erreur lors de la récupération des données de signature: Erreur 400: {"error": "Format d'identifiant de document invalide: test-uuid-12345. Un UUID est requis."}
+INFO:     127.0.0.1:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[3a888a7e-1164-4eda-8acb-46dc6004e945] Nouvelle demande de vérification par ID: test-uuid-12345
+INFO:main:[3a888a7e-1164-4eda-8acb-46dc6004e945] Récupération des données de signature pour le document ID: test-uuid-12345
+[INFO] ID du document nettoyé: 'test-uuid-12345'
+INFO:django_api:ID du document nettoyé: 'test-uuid-12345'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=test-uuid-12345
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=test-uuid-12345
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document test-uuid-12345
+INFO:django_api:Récupération des données de signature pour le document test-uuid-12345
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=test-uuid-12345 "HTTP/1.1 400 Bad Request"
+[ERROR] Erreur lors de la récupération des données de signature: 400 - {"error": "Format d'identifiant de document invalide: test-uuid-12345. Un UUID est requis."}
+ERROR:django_api:Erreur lors de la récupération des données de signature: 400 - {"error": "Format d'identifiant de document invalide: test-uuid-12345. Un UUID est requis."}
+ERROR:main:[3a888a7e-1164-4eda-8acb-46dc6004e945] Erreur lors de la récupération des données de signature: Erreur 400: {"error": "Format d'identifiant de document invalide: test-uuid-12345. Un UUID est requis."}
+INFO:     127.0.0.1:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[9a2e2647-cfe7-466b-b7a2-65aab57f6c49] Nouvelle demande de vérification par ID: 12345678-1234-5678-9abc-123456789012
+INFO:main:[9a2e2647-cfe7-466b-b7a2-65aab57f6c49] Récupération des données de signature pour le document ID: 12345678-1234-5678-9abc-123456789012
+[INFO] ID du document nettoyé: '12345678-1234-5678-9abc-123456789012'
+INFO:django_api:ID du document nettoyé: '12345678-1234-5678-9abc-123456789012'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=12345678-1234-5678-9abc-123456789012
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=12345678-1234-5678-9abc-123456789012
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document 12345678-1234-5678-9abc-123456789012
+INFO:django_api:Récupération des données de signature pour le document 12345678-1234-5678-9abc-123456789012
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=12345678-1234-5678-9abc-123456789012 "HTTP/1.1 404 Not Found"
+[ERROR] Erreur lors de la récupération des données de signature: 404 - {"error": "Aucune signature trouv\u00e9e pour le document ID: 12345678-1234-5678-9abc-123456789012"}
+ERROR:django_api:Erreur lors de la récupération des données de signature: 404 - {"error": "Aucune signature trouv\u00e9e pour le document ID: 12345678-1234-5678-9abc-123456789012"}
+ERROR:main:[9a2e2647-cfe7-466b-b7a2-65aab57f6c49] Erreur lors de la récupération des données de signature: Erreur 404: {"error": "Aucune signature trouv\u00e9e pour le document ID: 12345678-1234-5678-9abc-123456789012"}
+INFO:     127.0.0.1:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[ecbcf2bf-1d1c-4e27-8d0d-40c4a17cfffa] Nouvelle demande de vérification par ID: 00000000-0000-0000-0000-000000000000
+INFO:main:[ecbcf2bf-1d1c-4e27-8d0d-40c4a17cfffa] Récupération des données de signature pour le document ID: 00000000-0000-0000-0000-000000000000
+[INFO] ID du document nettoyé: '00000000-0000-0000-0000-000000000000'
+INFO:django_api:ID du document nettoyé: '00000000-0000-0000-0000-000000000000'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=00000000-0000-0000-0000-000000000000
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=00000000-0000-0000-0000-000000000000
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document 00000000-0000-0000-0000-000000000000
+INFO:django_api:Récupération des données de signature pour le document 00000000-0000-0000-0000-000000000000
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=00000000-0000-0000-0000-000000000000 "HTTP/1.1 404 Not Found"
+[ERROR] Erreur lors de la récupération des données de signature: 404 - {"error": "Aucune signature trouv\u00e9e pour le document ID: 00000000-0000-0000-0000-000000000000"}
+ERROR:django_api:Erreur lors de la récupération des données de signature: 404 - {"error": "Aucune signature trouv\u00e9e pour le document ID: 00000000-0000-0000-0000-000000000000"}
+ERROR:main:[ecbcf2bf-1d1c-4e27-8d0d-40c4a17cfffa] Erreur lors de la récupération des données de signature: Erreur 404: {"error": "Aucune signature trouv\u00e9e pour le document ID: 00000000-0000-0000-0000-000000000000"}
+INFO:     127.0.0.1:0 - "POST /verify HTTP/1.0" 200 OK
