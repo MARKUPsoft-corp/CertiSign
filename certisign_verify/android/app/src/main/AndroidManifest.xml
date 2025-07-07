@@ -6,9 +6,9 @@
     <!-- Permission Internet (nécessaire pour communiquer avec l'API Gateway) -->
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="certisign_verify"
+        android:label="Doc@uthANTIC"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"

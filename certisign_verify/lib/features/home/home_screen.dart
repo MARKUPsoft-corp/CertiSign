@@ -875,7 +875,7 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Chez CertiSign, nous prenons la sécurité de vos documents très au sérieux. Notre application mobile utilise des algorithmes cryptographiques avancés pour garantir l\'authenticité des signatures électroniques.',
+                  'Chez Doc@uthANTIC, nous prenons la sécurité de vos documents très au sérieux. Notre application mobile utilise des algorithmes cryptographiques avancés pour garantir l\'authenticité des signatures électroniques.',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     height: 1.5,
                     letterSpacing: 0.2,
