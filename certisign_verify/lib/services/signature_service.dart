@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:convert';
 import 'dart:math';
+//pour me rassurer que le pull a été bien fait
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
