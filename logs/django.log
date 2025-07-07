@@ -269,3 +269,6 @@ Unauthorized: /api/users/token-verify/
 127.0.0.1 - - [07/Jul/2025 12:24:33] "[31m[1mPOST /api/users/token-verify/ HTTP/1.0[0m" 401 -
 127.0.0.1 - - [07/Jul/2025 12:24:33] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
 127.0.0.1 - - [07/Jul/2025 12:24:33] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 12:38:28] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 12:39:42] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 12:43:28] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -

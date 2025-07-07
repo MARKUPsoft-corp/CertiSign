@@ -272,3 +272,213 @@ INFO:django_api:Données de signature récupérées avec succès pour le documen
 INFO:main:[b8d16ad2-8cc3-4e45-b4e9-4cbed2c7582c] Ajout des informations du signataire à la réponse
 INFO:main:[b8d16ad2-8cc3-4e45-b4e9-4cbed2c7582c] Vérification terminée en 0.07 secondes
 INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[afebe9b5-cb62-40b3-8355-8e38518ecaee] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[afebe9b5-cb62-40b3-8355-8e38518ecaee] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[afebe9b5-cb62-40b3-8355-8e38518ecaee] Ajout des informations du signataire à la réponse
+INFO:main:[afebe9b5-cb62-40b3-8355-8e38518ecaee] Vérification terminée en 0.06 secondes
+INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[ff512417-a359-4bba-b450-f25c5cd2970b] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[ff512417-a359-4bba-b450-f25c5cd2970b] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[ff512417-a359-4bba-b450-f25c5cd2970b] Ajout des informations du signataire à la réponse
+INFO:main:[ff512417-a359-4bba-b450-f25c5cd2970b] Vérification terminée en 0.05 secondes
+INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[992829f8-aa69-4324-b78f-daf958a9f1ad] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[992829f8-aa69-4324-b78f-daf958a9f1ad] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[992829f8-aa69-4324-b78f-daf958a9f1ad] Ajout des informations du signataire à la réponse
+INFO:main:[992829f8-aa69-4324-b78f-daf958a9f1ad] Vérification terminée en 0.05 secondes
+INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [800483]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [804942]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [804942]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [804944]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [804944]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [804994]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [804994]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [804997]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [804997]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [805032]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [805032]
+Process SpawnProcess-9:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 70, in serve
+    await self._serve(sockets)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
+    config.load()
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1017, in get_code
+  File "<frozen importlib._bootstrap_external>", line 947, in source_to_code
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/microservices/signature_document/main.py", line 1186
+    original_document_data = response.content
+    ^^^^^^^^^^^^^^^^^^^^^^
+IndentationError: expected an indented block after 'if' statement on line 1185
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+Process SpawnProcess-10:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 70, in serve
+    await self._serve(sockets)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
+    config.load()
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1017, in get_code
+  File "<frozen importlib._bootstrap_external>", line 947, in source_to_code
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/microservices/signature_document/main.py", line 1193
+    original_document_data = response.content
+    ^^^^^^^^^^^^^^^^^^^^^^
+IndentationError: expected an indented block after 'if' statement on line 1192
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [805219]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [805219]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [805225]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [805225]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [805261]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.

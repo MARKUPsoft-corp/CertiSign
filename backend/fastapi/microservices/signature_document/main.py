@@ -1147,8 +1147,18 @@ async def verify_document(
                 
                 logger.info(f"[{correlation_id}] Téléchargement du document signé depuis {signed_file_url}")
                 
-                # Télécharger le document signé
-                async with httpx.AsyncClient(timeout=30.0) as client:
+                # Configuration SSL pour ANTIC (accepter certificats auto-signés)
+                ssl_context = None
+                if 'ppd.camgovca.cm' in signed_file_url or 'antic' in signed_file_url.lower():
+                    # Pour les domaines ANTIC, utiliser une configuration SSL permissive
+                    import ssl
+                    ssl_context = ssl.create_default_context()
+                    ssl_context.check_hostname = False
+                    ssl_context.verify_mode = ssl.CERT_NONE
+                    logger.info(f"[{correlation_id}] Configuration SSL permissive activée pour domaine ANTIC")
+                
+                # Télécharger le document signé avec configuration SSL appropriée
+                async with httpx.AsyncClient(timeout=30.0, verify=ssl_context) as client:
                     response = await client.get(signed_file_url)
                     
                     if response.status_code == 200:
@@ -1176,16 +1186,18 @@ async def verify_document(
                             
                             logger.info(f"[{correlation_id}] Fallback: Téléchargement du document original depuis {original_file_url}")
                             
-                            response = await client.get(original_file_url)
-                            if response.status_code == 200:
-                                original_document_data = response.content
-                                original_filename = signature_data.get('title', f"document_original_{document_id}.pdf")
-                                
-                                original_document_b64 = base64.b64encode(original_document_data).decode('utf-8')
-                                response_data["original_document"] = original_document_b64
-                                response_data["original_filename"] = original_filename
-                                
-                                logger.info(f"[{correlation_id}] Document original ajouté en fallback (taille: {len(original_document_data)} octets)")
+                            # Utiliser le même certificat SSL pour le fallback
+                            async with httpx.AsyncClient(timeout=30.0, verify=ssl_context) as fallback_client:
+                                response = await fallback_client.get(original_file_url)
+                                if response.status_code == 200:
+                                    original_document_data = response.content
+                                    original_filename = signature_data.get('title', f"document_original_{document_id}.pdf")
+                                    
+                                    original_document_b64 = base64.b64encode(original_document_data).decode('utf-8')
+                                    response_data["original_document"] = original_document_b64
+                                    response_data["original_filename"] = original_filename
+                                    
+                                    logger.info(f"[{correlation_id}] Document original ajouté en fallback (taille: {len(original_document_data)} octets)")
             except Exception as e:
                 logger.error(f"[{correlation_id}] Erreur lors de la récupération du document signé: {str(e)}")
         
