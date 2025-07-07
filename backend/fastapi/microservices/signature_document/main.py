@@ -1137,7 +1137,14 @@ async def verify_document(
             logger.info(f"[{correlation_id}] Ajout des informations du signataire à la réponse")
             response_data["signer_info"] = signature_data['signer_info']
         
-        # Si la vérification est réussie, récupérer le document signé si demandé
+        # DEBUG: Afficher toutes les clés des données de signature
+        logger.info(f"[{correlation_id}] DEBUG - Clés des données de signature: {list(signature_data.keys())}")
+        logger.info(f"[{correlation_id}] DEBUG - return_original_document: {return_original_document}")
+        logger.info(f"[{correlation_id}] DEBUG - signed_file_url présent: {'signed_file_url' in signature_data}")
+        if 'signed_file_url' in signature_data:
+            logger.info(f"[{correlation_id}] DEBUG - signed_file_url valeur: {signature_data['signed_file_url']}")
+        
+        # TÉLÉCHARGER UNIQUEMENT LE DOCUMENT SIGNÉ (pas d'original)
         if return_original_document and 'signed_file_url' in signature_data and signature_data['signed_file_url']:
             try:
                 # Obtenir l'URL complète du document signé
@@ -1145,61 +1152,47 @@ async def verify_document(
                 if not signed_file_url.startswith('http'):
                     signed_file_url = f"{DJANGO_API_BASE_URL}{signed_file_url}"
                 
-                logger.info(f"[{correlation_id}] Téléchargement du document signé depuis {signed_file_url}")
+                logger.info(f"[{correlation_id}] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: {signed_file_url}")
+                logger.info(f"[{correlation_id}] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement")
                 
-                # Configuration SSL pour ANTIC (accepter certificats auto-signés)
-                ssl_context = None
-                if 'ppd.camgovca.cm' in signed_file_url or 'antic' in signed_file_url.lower():
-                    # Pour les domaines ANTIC, utiliser une configuration SSL permissive
-                    import ssl
-                    ssl_context = ssl.create_default_context()
-                    ssl_context.check_hostname = False
-                    ssl_context.verify_mode = ssl.CERT_NONE
-                    logger.info(f"[{correlation_id}] Configuration SSL permissive activée pour domaine ANTIC")
-                
-                # Télécharger le document signé avec configuration SSL appropriée
-                async with httpx.AsyncClient(timeout=30.0, verify=ssl_context) as client:
+                # Télécharger avec SSL complètement désactivé
+                async with httpx.AsyncClient(timeout=60.0, verify=False) as client:
+                    logger.info(f"[{correlation_id}] 📥 Envoi de la requête HTTP pour le document SIGNÉ...")
                     response = await client.get(signed_file_url)
+                    logger.info(f"[{correlation_id}] 📊 Réponse HTTP reçue - Status: {response.status_code}")
                     
                     if response.status_code == 200:
                         signed_document_data = response.content
-                        signed_filename = signature_data.get('title', f"document_signed_{document_id}.pdf")
+                        signed_filename = signature_data.get('title', f"document_signé_{document_id}.pdf")
                         
                         # S'assurer que le nom de fichier indique que c'est signé
-                        if not 'signed' in signed_filename.lower():
+                        if not 'signé' in signed_filename.lower() and not 'signed' in signed_filename.lower():
                             name_parts = os.path.splitext(signed_filename)
-                            signed_filename = f"{name_parts[0]}_signed{name_parts[1]}"
+                            signed_filename = f"{name_parts[0]}_signé{name_parts[1]}"
                         
                         # Encoder en base64 pour l'inclure dans la réponse JSON
                         signed_document_b64 = base64.b64encode(signed_document_data).decode('utf-8')
                         response_data["original_document"] = signed_document_b64
                         response_data["original_filename"] = signed_filename
                         
-                        logger.info(f"[{correlation_id}] Document signé ajouté à la réponse (taille: {len(signed_document_data)} octets)")
+                        logger.info(f"[{correlation_id}] ✅ Document SIGNÉ ajouté à la réponse (taille: {len(signed_document_data)} octets)")
+                        logger.info(f"[{correlation_id}] 📄 Nom du fichier signé: {signed_filename}")
+                        logger.info(f"[{correlation_id}] 🔗 Base64 longueur: {len(signed_document_b64)} caractères")
                     else:
-                        logger.error(f"[{correlation_id}] Impossible de télécharger le document signé: {response.status_code}")
-                        # Fallback vers le document original
-                        if 'original_file_url' in signature_data and signature_data['original_file_url']:
-                            original_file_url = signature_data['original_file_url']
-                            if not original_file_url.startswith('http'):
-                                original_file_url = f"{DJANGO_API_BASE_URL}{original_file_url}"
-                            
-                            logger.info(f"[{correlation_id}] Fallback: Téléchargement du document original depuis {original_file_url}")
-                            
-                            # Utiliser le même certificat SSL pour le fallback
-                            async with httpx.AsyncClient(timeout=30.0, verify=ssl_context) as fallback_client:
-                                response = await fallback_client.get(original_file_url)
-                                if response.status_code == 200:
-                                    original_document_data = response.content
-                                    original_filename = signature_data.get('title', f"document_original_{document_id}.pdf")
-                                    
-                                    original_document_b64 = base64.b64encode(original_document_data).decode('utf-8')
-                                    response_data["original_document"] = original_document_b64
-                                    response_data["original_filename"] = original_filename
-                                    
-                                    logger.info(f"[{correlation_id}] Document original ajouté en fallback (taille: {len(original_document_data)} octets)")
+                        logger.error(f"[{correlation_id}] ❌ ERREUR HTTP {response.status_code} lors du téléchargement du document SIGNÉ")
+                        logger.error(f"[{correlation_id}] 📝 Contenu de l'erreur: {response.text[:500]}")
+                        logger.error(f"[{correlation_id}] ⚠️ AUCUN DOCUMENT ne sera retourné (pas de fallback vers l'original)")
+            
             except Exception as e:
-                logger.error(f"[{correlation_id}] Erreur lors de la récupération du document signé: {str(e)}")
+                logger.error(f"[{correlation_id}] 💥 EXCEPTION lors du téléchargement du document SIGNÉ: {str(e)}")
+                logger.error(f"[{correlation_id}] 📍 Exception détaillée:", exc_info=True)
+                logger.error(f"[{correlation_id}] ⚠️ AUCUN DOCUMENT ne sera retourné (pas de fallback)")
+        
+        elif return_original_document:
+            logger.warning(f"[{correlation_id}] ⚠️ AUCUN document signé trouvé - signed_file_url manquant ou vide")
+            logger.warning(f"[{correlation_id}] 🚫 AUCUN DOCUMENT ne sera retourné (politique: SIGNÉ UNIQUEMENT)")
+        else:
+            logger.info(f"[{correlation_id}] ℹ️ return_original_document=False, téléchargement non demandé")
         
         # Calculer le temps d'exécution
         execution_time = time.time() - start_time

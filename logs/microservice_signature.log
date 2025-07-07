@@ -482,3 +482,302 @@ WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: 
 INFO:     Started server process [805261]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [805261]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [805525]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:main:[f9f742ef-bec5-41cc-9900-8a25cd282ad4] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[f9f742ef-bec5-41cc-9900-8a25cd282ad4] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[f9f742ef-bec5-41cc-9900-8a25cd282ad4] Ajout des informations du signataire à la réponse
+INFO:main:[f9f742ef-bec5-41cc-9900-8a25cd282ad4] Vérification terminée en 0.07 secondes
+INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[ed7baae2-ff51-4b83-8002-416405b43d87] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[ed7baae2-ff51-4b83-8002-416405b43d87] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[ed7baae2-ff51-4b83-8002-416405b43d87] Ajout des informations du signataire à la réponse
+INFO:main:[ed7baae2-ff51-4b83-8002-416405b43d87] Vérification terminée en 0.05 secondes
+INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [805525]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [806659]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [806659]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [806745]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] Ajout des informations du signataire à la réponse
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path']
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] DEBUG - return_original_document: True
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] DEBUG - signed_file_url présent: False
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] FALLBACK ORIGINAL - URL trouvée: /media/signatures/original/original_CK6F53r.pdf
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] 🔄 TÉLÉCHARGEMENT FORCÉ du document original depuis: https://ppd.camgovca.cm/media/signatures/original/original_CK6F53r.pdf
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] 📥 Envoi de la requête HTTP...
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/original/original_CK6F53r.pdf "HTTP/1.1 200 OK"
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] 📊 Réponse HTTP reçue - Status: 200
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] ✅ Document original ajouté à la réponse (taille: 414967 octets)
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] 📄 Nom du fichier: COPIE-DACTE-DE-NAISSANCE-1.pdf
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] 🔗 Base64 longueur: 553292 caractères
+INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] Vérification terminée en 0.13 secondes
+INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [806745]
+Process SpawnProcess-17:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 70, in serve
+    await self._serve(sockets)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
+    config.load()
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1017, in get_code
+  File "<frozen importlib._bootstrap_external>", line 947, in source_to_code
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/microservices/signature_document/main.py", line 1186
+    except Exception as e:
+    ^^^^^^
+SyntaxError: invalid syntax
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+Process SpawnProcess-18:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 70, in serve
+    await self._serve(sockets)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
+    config.load()
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1017, in get_code
+  File "<frozen importlib._bootstrap_external>", line 947, in source_to_code
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/microservices/signature_document/main.py", line 1186
+    except Exception as e:
+    ^^^^^^
+SyntaxError: invalid syntax
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [807407]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [807407]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [807408]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [807408]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [807443]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [807443]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [807488]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] Ajout des informations du signataire à la réponse
+INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path']
+INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] DEBUG - return_original_document: True
+INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] DEBUG - signed_file_url présent: False
+WARNING:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] ⚠️ AUCUN document signé trouvé - signed_file_url manquant ou vide
+WARNING:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] 🚫 AUCUN DOCUMENT ne sera retourné (politique: SIGNÉ UNIQUEMENT)
+INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] Vérification terminée en 0.06 secondes
+INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [807488]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [807829]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] Ajout des informations du signataire à la réponse
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] DEBUG - return_original_document: True
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] DEBUG - signed_file_url présent: True
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_VTYurYW.pdf
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf "HTTP/1.1 200 OK"
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] 📊 Réponse HTTP reçue - Status: 200
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] ✅ Document SIGNÉ ajouté à la réponse (taille: 569767 octets)
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] 📄 Nom du fichier signé: COPIE-DACTE-DE-NAISSANCE-1_signé.pdf
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] 🔗 Base64 longueur: 759692 caractères
+INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] Vérification terminée en 0.10 secondes
+INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] Ajout des informations du signataire à la réponse
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] DEBUG - return_original_document: True
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] DEBUG - signed_file_url présent: True
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_VTYurYW.pdf
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf "HTTP/1.1 200 OK"
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] 📊 Réponse HTTP reçue - Status: 200
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] ✅ Document SIGNÉ ajouté à la réponse (taille: 569767 octets)
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] 📄 Nom du fichier signé: COPIE-DACTE-DE-NAISSANCE-1_signé.pdf
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] 🔗 Base64 longueur: 759692 caractères
+INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] Vérification terminée en 0.06 secondes
+INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK

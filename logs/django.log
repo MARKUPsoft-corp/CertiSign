@@ -272,3 +272,55 @@ Unauthorized: /api/users/token-verify/
 127.0.0.1 - - [07/Jul/2025 12:38:28] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
 127.0.0.1 - - [07/Jul/2025 12:39:42] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
 127.0.0.1 - - [07/Jul/2025 12:43:28] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:02:06] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:05:01] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:12:48] "[32mGET /admin/configs.php HTTP/1.0[0m" 302 -
+127.0.0.1 - - [07/Jul/2025 13:22:03] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:22:17] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:22:18] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:22:18] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:22:18] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [07/Jul/2025 13:22:18] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:22:18] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:22:18] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:22:18] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:22:18] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:22:18] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:22:22] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:22:27] "[35m[1mPOST /api/documents/activities/record_activity/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [07/Jul/2025 13:22:27] "GET /api/documents/signatures/a6399a48-4675-4f45-a06e-629f48015d5c/download/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:22:34] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:22:34] "GET /media/signatures/original/original_CK6F53r.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:28:49] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/signature_views.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://127.0.0.1:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/signature_views.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://127.0.0.1:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+127.0.0.1 - - [07/Jul/2025 13:32:08] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:32:08] "GET /media/signatures/signed/signed_VTYurYW.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:33:06] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:33:06] "GET /media/signatures/signed/signed_VTYurYW.pdf HTTP/1.0" 200 -

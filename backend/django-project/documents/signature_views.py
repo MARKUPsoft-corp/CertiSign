@@ -619,7 +619,21 @@ def standard_get_signature_public(request):
             except Exception as e:
                 logger.warning(f"Impossible de récupérer l'URL du fichier original: {str(e)}")
         
-        # Renvoyer les données de signature
+        # 🎯 AJOUT : Récupérer l'URL du fichier SIGNÉ
+        signed_file_url = None
+        signed_file_path = None
+        if signature.signed_file:
+            try:
+                signed_file_url = signature.signed_file.url
+                signed_file_path = signature.signed_file.path
+                logger.info(f"✅ URL du fichier SIGNÉ trouvée: {signed_file_url}")
+                logger.info(f"✅ Chemin du fichier SIGNÉ: {signed_file_path}")
+            except Exception as e:
+                logger.warning(f"❌ Impossible de récupérer l'URL du fichier signé: {str(e)}")
+        else:
+            logger.warning(f"⚠️ Aucun fichier signé trouvé pour le document {document_id}")
+        
+        # Renvoyer les données de signature avec le fichier signé
         return JsonResponse({
             "document_id": str(signature.document_id),
             "original_hash": signature.original_hash,
@@ -629,7 +643,9 @@ def standard_get_signature_public(request):
             "title": signature.title,
             "signer_info": signer_info,
             "original_file_url": original_file_url,
-            "original_file_path": original_file_path
+            "original_file_path": original_file_path,
+            "signed_file_url": signed_file_url,  # 🎯 NOUVEAU !
+            "signed_file_path": signed_file_path  # 🎯 NOUVEAU !
         })
         
     except Exception as e:

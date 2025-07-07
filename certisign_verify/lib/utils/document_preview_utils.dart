@@ -248,7 +248,7 @@ class DocumentPreviewUtils {
                                 child: Transform.rotate(
                                   angle: -0.3,
                                   child: Text(
-                                    'CertiSign, Authentique',
+                                    'DOC@UTHANTIC VÉRIFIÉ',
                                     style: TextStyle(
                                       fontSize: 36,
                                       fontWeight: FontWeight.bold,
@@ -289,137 +289,29 @@ class _OptimizedPdfViewer extends StatefulWidget {
 }
 
 class _OptimizedPdfViewerState extends State<_OptimizedPdfViewer> {
-  bool _showFullViewer = false;
-  bool _isLoading = false;
-
   @override
   Widget build(BuildContext context) {
-    if (!_showFullViewer) {
-      // Afficher d'abord un aperçu optimisé
-      return GestureDetector(
-        onTap: _loadFullViewer,
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey.shade300),
-          ),
-          child: _isLoading
-              ? const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 12),
-                      Text('Chargement du document...'),
-                    ],
-                  ),
-                )
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.filePdf,
-                        size: 80,
-                        color: Colors.red.shade600,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        widget.documentTitle,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 8),
-                      if (widget.isVerified)
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Colors.green.shade100,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.green.shade300),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.shieldCheck,
-                                size: 16,
-                                color: Colors.green.shade700,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                'Document Signé Authentique',
-                                style: TextStyle(
-                                  color: Colors.green.shade700,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      const SizedBox(height: 16),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.shade50,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.blue.shade200),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              FontAwesomeIcons.eye,
-                              size: 16,
-                              color: Colors.blue.shade700,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Appuyez pour voir le PDF',
-                              style: TextStyle(
-                                color: Colors.blue.shade700,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+    // Afficher directement le visualiseur PDF (sans interface intermédiaire)
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: SfPdfViewer.memory(
+          Uint8List.fromList(widget.bytes),
+          canShowScrollHead: false,
+          canShowScrollStatus: false,
+          pageSpacing: 2,
+          enableDoubleTapZooming: true,
+          canShowPaginationDialog: false,
+          scrollDirection: PdfScrollDirection.vertical,
         ),
-      );
-    } else {
-      // Afficher le visualiseur PDF complet
-      return SfPdfViewer.memory(
-        Uint8List.fromList(widget.bytes),
-        canShowScrollHead: false,
-        canShowScrollStatus: false,
-        pageSpacing: 2,
-        enableDoubleTapZooming: true,
-      );
-    }
-  }
-
-  void _loadFullViewer() {
-    setState(() {
-      _isLoading = true;
-    });
-
-    // Délai pour éviter les blocages de l'UI
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _showFullViewer = true;
-        });
-      }
-    });
+      ),
+    );
   }
 }
