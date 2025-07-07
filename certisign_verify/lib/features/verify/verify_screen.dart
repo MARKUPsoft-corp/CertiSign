@@ -441,7 +441,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
             if (_originalDocumentBase64 != null) ...[              
               const SizedBox(height: 32),
               
-              // Titre de la section aperçu du document
+              // Titre de la section aperçu du document signé
               Animate(
                 effects: [
                   FadeEffect(
@@ -460,12 +460,12 @@ class _VerifyScreenState extends State<VerifyScreen> {
                   ),
                   child: Row(
                     children: [
-                      Icon(FontAwesomeIcons.fileImage, 
+                      Icon(FontAwesomeIcons.fileShield, 
                            color: colorScheme.primary, 
                            size: 20),
                       const SizedBox(width: 10),
                       Text(
-                        'APERÇU DU DOCUMENT',
+                        'DOCUMENT SIGNÉ AUTHENTIQUE',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -1089,7 +1089,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
     return '${text.substring(0, previewLength)}...';
   }
   
-  /// Construit un aperçu du document original à partir des données base64
+  /// Construit un aperçu du document signé à partir des données base64
   Widget _buildDocumentPreview(bool isDarkMode) {
     final colorScheme = Theme.of(context).colorScheme;
     
@@ -1101,7 +1101,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
           children: [
             Expanded(
               child: Text(
-                'Aperçu du document original',
+                'Document signé certifié',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: colorScheme.primary,
@@ -1148,7 +1148,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                // Si un aperçu du document est disponible, l'afficher avec notre utilitaire
+                // Si un aperçu du document signé est disponible, l'afficher avec notre utilitaire
                 if (_originalDocumentBase64 != null)
                   DocumentPreviewUtils.renderDocumentPreview(
                     context, 
@@ -1185,7 +1185,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                       child: Transform.rotate(
                         angle: -0.2,
                         child: Text(
-                          'CERTISIGN VÉRIFIÉ',
+                          'DOC@UTHANTIC VÉRIFIÉ',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -1196,7 +1196,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     ),
                   ),
                 
-                // Bouton pour télécharger le document
+                // Bouton pour télécharger le document signé
                 Positioned(
                   bottom: 16,
                   right: 16,
@@ -1230,7 +1230,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Document original non disponible'),
+                              content: Text('Document signé non disponible'),
                               duration: Duration(seconds: 2),
                               backgroundColor: Colors.orange,
                             ),
@@ -1241,7 +1241,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                   ),
                 ),
                 
-                // Bouton pour voir le document en plein écran
+                // Bouton pour voir le document signé en plein écran
                 Positioned(
                   bottom: 16,
                   left: 0,
@@ -1249,11 +1249,11 @@ class _VerifyScreenState extends State<VerifyScreen> {
                   child: Center(
                     child: TextButton.icon(
                       onPressed: () => _showFullDocumentPreview(),
-                      icon: const Icon(FontAwesomeIcons.filePdf, size: 18),
-                      label: const Text('Voir le document'),
+                      icon: const Icon(FontAwesomeIcons.fileShield, size: 18),
+                      label: const Text('Voir le document signé'),
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.white.withOpacity(0.9),
-                        foregroundColor: Colors.redAccent,
+                        foregroundColor: Colors.green.shade700,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 10,

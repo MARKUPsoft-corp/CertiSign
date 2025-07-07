@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart'; // Added for SystemChrome
 
 import '../../core/theme.dart';
 import '../../shared/animated_particles.dart';
@@ -13,58 +14,67 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Configurer la barre d'état pour qu'elle soit transparente avec du contenu clair
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent, // Transparent pour laisser voir l'en-tête
+      statusBarIconBrightness: Brightness.light, // Icônes claires sur fond sombre
+      statusBarBrightness: Brightness.dark, // Pour iOS
+    ));
+
     return Scaffold(
-      body: Stack(
+      // Retirer extendBodyBehindAppBar pour éviter les conflits
+      body: Column(
         children: [
-          // Fond avec particules animées optimisées
-          const Positioned.fill(
-            child: AnimatedParticles(
-              particleCount: 6, // Encore réduit pour optimiser le démarrage
-              opacity: 0.15, // Moins visible = moins coûteux en rendu
-              maxSize: 3, // Taille réduite pour meilleure performance
-            ),
-          ),
-
-          // Fond avec gradient subtil
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Theme.of(context).colorScheme.surface,
-                    Theme.of(context).colorScheme.surface.withOpacity(0.8),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          // Contenu principal
-          SafeArea(
-            child: Column(
+          // En-tête sombre qui s'étend jusqu'à la status bar
+          _buildHeader(context),
+          
+          // Contenu principal avec scroll
+          Expanded(
+            child: Stack(
               children: [
-                _buildHeader(context),
-                Expanded(
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const SizedBox(height: 20),
-                          _buildHeroSection(context),
-                          const SizedBox(height: 40),
-                          _buildFeaturesHighlightSection(context),
-                          const SizedBox(height: 40),
-                          _buildFeatureSection(context),
-                          const SizedBox(height: 40),
-                          _buildSecuritySection(context),
-                          const SizedBox(height: 40),
+                // Fond avec particules animées optimisées
+                const Positioned.fill(
+                  child: AnimatedParticles(
+                    particleCount: 6, // Encore réduit pour optimiser le démarrage
+                    opacity: 0.15, // Moins visible = moins coûteux en rendu
+                    maxSize: 3, // Taille réduite pour meilleure performance
+                  ),
+                ),
+
+                // Fond avec gradient subtil
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Theme.of(context).colorScheme.surface,
+                          Theme.of(context).colorScheme.surface.withOpacity(0.8),
                         ],
                       ),
+                    ),
+                  ),
+                ),
+
+                // Contenu principal scrollable
+                SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: 20),
+                        _buildHeroSection(context),
+                        const SizedBox(height: 40),
+                        _buildFeaturesHighlightSection(context),
+                        const SizedBox(height: 40),
+                        _buildFeatureSection(context),
+                        const SizedBox(height: 40),
+                        _buildSecuritySection(context),
+                        const SizedBox(height: 40),
+                      ],
                     ),
                   ),
                 ),
@@ -80,30 +90,48 @@ class HomeScreen extends StatelessWidget {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      // Étendre jusqu'à la status bar
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: MediaQuery.of(context).padding.top + 12, // Padding du top + status bar
+        bottom: 12,
+      ),
       decoration: BoxDecoration(
-        color: Theme.of(context).appBarTheme.backgroundColor,
-        boxShadow: isDarkMode ? AppTheme.darkLightShadow : AppTheme.lightShadow,
+        // Toujours sombre peu importe le thème
+        color: const Color(0xFF1A1A1A), // Fond toujours sombre
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 8,
+            spreadRadius: 0,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Logo
+          // Logo Doc@uthANTIC
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color:
-                      isDarkMode
-                          ? AppTheme.darkPrimaryColor
-                          : AppTheme.primaryColor,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 4,
+                      spreadRadius: 0,
+                    ),
+                  ],
                 ),
-                child: Icon(
-                  FontAwesomeIcons.shieldHalved,
-                  color: AppTheme.textLightColor,
-                  size: 16,
+                child: Image.asset(
+                  'assets/images/doc.png',
+                  width: 24,
+                  height: 24,
                 ),
               ),
               const SizedBox(width: 8),
@@ -111,36 +139,27 @@ class HomeScreen extends StatelessWidget {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Certi',
+                      text: 'Doc',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color:
-                            isDarkMode
-                                ? AppTheme.darkPrimaryColor
-                                : AppTheme.primaryColor,
-                      ),
-                    ),
-                    TextSpan(text: ' ', style: const TextStyle(fontSize: 20)),
-                    WidgetSpan(
-                      child: Icon(
-                        FontAwesomeIcons.check,
-                        size: 14,
-                        color:
-                            isDarkMode
-                                ? AppTheme.darkAccentColor
-                                : AppTheme.accentColor,
+                        color: const Color(0xFF00A651), // Vert (toujours visible sur fond sombre)
                       ),
                     ),
                     TextSpan(
-                      text: 'Sign',
+                      text: '@uth',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color:
-                            isDarkMode
-                                ? AppTheme.darkAccentColor
-                                : AppTheme.accentColor,
+                        color: const Color(0xFFE74C3C), // Rouge (toujours visible sur fond sombre)
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'ANTIC',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFFF1C40F), // Jaune (toujours visible sur fond sombre)
                       ),
                     ),
                   ],
@@ -149,14 +168,14 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
 
-          // Basculer le thème
+          // Basculer le thème - toujours en couleur claire pour être visible sur fond sombre
           IconButton(
             icon: Icon(
               isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,
-              color:
-                  isDarkMode
-                      ? AppTheme.darkPrimaryColor
-                      : AppTheme.primaryColor,
+              color: isDarkMode
+                  ? Colors.amber.shade300 // Couleur dorée en mode sombre
+                  : Colors.white, // Blanc en mode clair pour contraster avec le fond sombre
+              size: 24,
             ),
             onPressed: () {
               final themeProvider = Provider.of<ThemeProvider>(

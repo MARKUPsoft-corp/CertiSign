@@ -1137,34 +1137,57 @@ async def verify_document(
             logger.info(f"[{correlation_id}] Ajout des informations du signataire à la réponse")
             response_data["signer_info"] = signature_data['signer_info']
         
-        # Si la vérification est réussie, récupérer le document original si demandé
-        if return_original_document and 'original_file_url' in signature_data and signature_data['original_file_url']:
+        # Si la vérification est réussie, récupérer le document signé si demandé
+        if return_original_document and 'signed_file_url' in signature_data and signature_data['signed_file_url']:
             try:
-                # Obtenir l'URL complète du document original
-                original_file_url = signature_data['original_file_url']
-                if not original_file_url.startswith('http'):
-                    original_file_url = f"{DJANGO_API_BASE_URL}{original_file_url}"
+                # Obtenir l'URL complète du document signé
+                signed_file_url = signature_data['signed_file_url']
+                if not signed_file_url.startswith('http'):
+                    signed_file_url = f"{DJANGO_API_BASE_URL}{signed_file_url}"
                 
-                logger.info(f"[{correlation_id}] Téléchargement du document original depuis {original_file_url}")
+                logger.info(f"[{correlation_id}] Téléchargement du document signé depuis {signed_file_url}")
                 
-                # Télécharger le document original
+                # Télécharger le document signé
                 async with httpx.AsyncClient(timeout=30.0) as client:
-                    response = await client.get(original_file_url)
+                    response = await client.get(signed_file_url)
                     
                     if response.status_code == 200:
-                        original_document_data = response.content
-                        original_filename = signature_data.get('title', f"document_original_{document_id}.pdf")
+                        signed_document_data = response.content
+                        signed_filename = signature_data.get('title', f"document_signed_{document_id}.pdf")
+                        
+                        # S'assurer que le nom de fichier indique que c'est signé
+                        if not 'signed' in signed_filename.lower():
+                            name_parts = os.path.splitext(signed_filename)
+                            signed_filename = f"{name_parts[0]}_signed{name_parts[1]}"
                         
                         # Encoder en base64 pour l'inclure dans la réponse JSON
-                        original_document_b64 = base64.b64encode(original_document_data).decode('utf-8')
-                        response_data["original_document"] = original_document_b64
-                        response_data["original_filename"] = original_filename
+                        signed_document_b64 = base64.b64encode(signed_document_data).decode('utf-8')
+                        response_data["original_document"] = signed_document_b64
+                        response_data["original_filename"] = signed_filename
                         
-                        logger.info(f"[{correlation_id}] Document original ajouté à la réponse (taille: {len(original_document_data)} octets)")
+                        logger.info(f"[{correlation_id}] Document signé ajouté à la réponse (taille: {len(signed_document_data)} octets)")
                     else:
-                        logger.error(f"[{correlation_id}] Impossible de télécharger le document original: {response.status_code}")
+                        logger.error(f"[{correlation_id}] Impossible de télécharger le document signé: {response.status_code}")
+                        # Fallback vers le document original
+                        if 'original_file_url' in signature_data and signature_data['original_file_url']:
+                            original_file_url = signature_data['original_file_url']
+                            if not original_file_url.startswith('http'):
+                                original_file_url = f"{DJANGO_API_BASE_URL}{original_file_url}"
+                            
+                            logger.info(f"[{correlation_id}] Fallback: Téléchargement du document original depuis {original_file_url}")
+                            
+                            response = await client.get(original_file_url)
+                            if response.status_code == 200:
+                                original_document_data = response.content
+                                original_filename = signature_data.get('title', f"document_original_{document_id}.pdf")
+                                
+                                original_document_b64 = base64.b64encode(original_document_data).decode('utf-8')
+                                response_data["original_document"] = original_document_b64
+                                response_data["original_filename"] = original_filename
+                                
+                                logger.info(f"[{correlation_id}] Document original ajouté en fallback (taille: {len(original_document_data)} octets)")
             except Exception as e:
-                logger.error(f"[{correlation_id}] Erreur lors de la récupération du document original: {str(e)}")
+                logger.error(f"[{correlation_id}] Erreur lors de la récupération du document signé: {str(e)}")
         
         # Calculer le temps d'exécution
         execution_time = time.time() - start_time

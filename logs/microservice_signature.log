@@ -164,3 +164,95 @@ INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?a
 ERROR:django_api:Erreur lors de la récupération des données de signature: 404 - {"error": "Aucune signature trouv\u00e9e pour le document ID: 00000000-0000-0000-0000-000000000000"}
 ERROR:main:[ecbcf2bf-1d1c-4e27-8d0d-40c4a17cfffa] Erreur lors de la récupération des données de signature: Erreur 404: {"error": "Aucune signature trouv\u00e9e pour le document ID: 00000000-0000-0000-0000-000000000000"}
 INFO:     127.0.0.1:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[2759209c-15ca-4e55-bd10-7d1e3fc3eab1] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[2759209c-15ca-4e55-bd10-7d1e3fc3eab1] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[2759209c-15ca-4e55-bd10-7d1e3fc3eab1] Ajout des informations du signataire à la réponse
+INFO:main:[2759209c-15ca-4e55-bd10-7d1e3fc3eab1] Téléchargement du document original depuis https://ppd.camgovca.cm/media/signatures/original/original_CK6F53r.pdf
+ERROR:main:[2759209c-15ca-4e55-bd10-7d1e3fc3eab1] Erreur lors de la récupération du document original: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1007)
+INFO:main:[2759209c-15ca-4e55-bd10-7d1e3fc3eab1] Vérification terminée en 0.10 secondes
+INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[ae970e75-7e9a-48d4-9389-96ac10580be4] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[ae970e75-7e9a-48d4-9389-96ac10580be4] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[ae970e75-7e9a-48d4-9389-96ac10580be4] Ajout des informations du signataire à la réponse
+INFO:main:[ae970e75-7e9a-48d4-9389-96ac10580be4] Vérification terminée en 0.05 secondes
+INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[6743cf1e-676e-43af-b851-d2bee3e25345] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[6743cf1e-676e-43af-b851-d2bee3e25345] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[6743cf1e-676e-43af-b851-d2bee3e25345] Ajout des informations du signataire à la réponse
+INFO:main:[6743cf1e-676e-43af-b851-d2bee3e25345] Téléchargement du document original depuis https://ppd.camgovca.cm/media/signatures/original/original_CK6F53r.pdf
+ERROR:main:[6743cf1e-676e-43af-b851-d2bee3e25345] Erreur lors de la récupération du document original: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1007)
+INFO:main:[6743cf1e-676e-43af-b851-d2bee3e25345] Vérification terminée en 0.10 secondes
+INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[8da9976a-4fb1-4fdc-bad1-25403ba9a068] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[8da9976a-4fb1-4fdc-bad1-25403ba9a068] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[8da9976a-4fb1-4fdc-bad1-25403ba9a068] Ajout des informations du signataire à la réponse
+INFO:main:[8da9976a-4fb1-4fdc-bad1-25403ba9a068] Téléchargement du document original depuis https://ppd.camgovca.cm/media/signatures/original/original_CK6F53r.pdf
+ERROR:main:[8da9976a-4fb1-4fdc-bad1-25403ba9a068] Erreur lors de la récupération du document original: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1007)
+INFO:main:[8da9976a-4fb1-4fdc-bad1-25403ba9a068] Vérification terminée en 0.12 secondes
+INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [791361]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [799780]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [799780]
+WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
+WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
+WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
+INFO:     Started server process [800483]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.

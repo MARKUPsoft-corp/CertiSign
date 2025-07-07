@@ -60,7 +60,7 @@ void main() async {
   // Attendre que les initialisations essentielles soient terminées
   await Future.wait([historyInit, orientationInit]);
   
-  runApp(const CertiSignVerifyApp());
+  runApp(const DocuthAnticApp());
 }
 
 /// Optimisations de performance pour l'application
@@ -84,8 +84,8 @@ Future<void> _performAppOptimizations() async {
   }
 }
 
-class CertiSignVerifyApp extends StatelessWidget {
-  const CertiSignVerifyApp({super.key});
+class DocuthAnticApp extends StatelessWidget {
+  const DocuthAnticApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +95,7 @@ class CertiSignVerifyApp extends StatelessWidget {
         builder: (context, themeProvider, _) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'CertiSign Verify',
+            title: 'Doc@uthANTIC',
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: themeProvider.themeMode,

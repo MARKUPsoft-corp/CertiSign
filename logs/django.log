@@ -210,3 +210,43 @@ Unauthorized: /api/users/token-verify/
 127.0.0.1 - - [07/Jul/2025 10:18:32] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
 127.0.0.1 - - [07/Jul/2025 10:18:32] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
 127.0.0.1 - - [07/Jul/2025 10:18:32] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:26:39] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:32:00] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+Unauthorized: /api/users/token-verify/
+127.0.0.1 - - [07/Jul/2025 10:33:25] "[31m[1mPOST /api/users/token-verify/ HTTP/1.0[0m" 401 -
+Unauthorized: /api/users/activity-log/
+127.0.0.1 - - [07/Jul/2025 10:33:25] "[31m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 401 -
+127.0.0.1 - - [07/Jul/2025 10:33:25] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:33:42] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:33:43] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:33:43] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:33:43] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [07/Jul/2025 10:33:43] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:33:43] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:33:43] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:33:43] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:33:43] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:33:43] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:33:47] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:37:24] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:44:32] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:48:24] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+Unauthorized: /api/users/token-verify/
+127.0.0.1 - - [07/Jul/2025 10:57:21] "[31m[1mPOST /api/users/token-verify/ HTTP/1.0[0m" 401 -
+Unauthorized: /api/users/activity-log/
+127.0.0.1 - - [07/Jul/2025 10:57:22] "[31m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 401 -
+127.0.0.1 - - [07/Jul/2025 10:57:23] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:57:40] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:57:41] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:57:41] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:57:42] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [07/Jul/2025 10:57:42] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:57:42] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:57:42] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:57:43] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:57:43] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:57:43] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:57:57] "GET /api/users/me/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:57:58] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:57:58] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 10:57:58] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
