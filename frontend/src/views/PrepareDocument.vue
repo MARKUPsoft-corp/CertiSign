@@ -754,7 +754,7 @@ async function submitDocument() {
     };
       
       // Appel direct à l'API Django
-      const apiUrl = 'https://192.168.4.131/api/documents/qr-positions/';
+      const apiUrl = 'https://ppd.camgovca.cm/api/documents/qr-positions/';
     
     // Appel API avec timeout plus long pour les gros fichiers
     const response = await axios.post(apiUrl, formData, {
@@ -971,7 +971,7 @@ async function saveAsDraft() {
     };
       
       // Appel direct à l'API Django
-      const apiUrl = 'https://192.168.4.131/api/documents/qr-positions/';
+      const apiUrl = 'https://ppd.camgovca.cm/api/documents/qr-positions/';
     
     // Appel API avec timeout plus long pour les gros fichiers
     const response = await axios.post(apiUrl, formData, {

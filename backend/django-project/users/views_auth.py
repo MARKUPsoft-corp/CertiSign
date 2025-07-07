@@ -78,7 +78,7 @@ def authenticate_with_organization(request):
     # Extraire les informations du certificat via le microservice
     try:
         # Utiliser l'API Gateway pour extraire les informations du certificat - Via Nginx
-        gateway_url = "https://192.168.4.131/cert/extract-cert-info-base64/"
+        gateway_url = "https://ppd.camgovca.cm/cert/extract-cert-info-base64/"
         gateway_response = requests.post(
             gateway_url,
             json={

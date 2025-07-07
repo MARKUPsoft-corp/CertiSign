@@ -553,7 +553,7 @@ def verify_admin_certificate(request):
     # Envoyer d'abord le certificat au microservice pour extraire les informations
     try:
         # Utiliser l'API Gateway pour extraire les informations du certificat - Via Nginx
-        gateway_url = "https://192.168.4.131/cert/extract-cert-info-base64/"
+        gateway_url = "https://ppd.camgovca.cm/cert/extract-cert-info-base64/"
         gateway_response = requests.post(
             gateway_url,
             json={
@@ -707,7 +707,7 @@ def authenticate_org_admin(request):
     # Envoyer d'abord le certificat au microservice pour extraire les informations
     try:
         # Utiliser l'API Gateway pour extraire les informations du certificat - Via Nginx
-        gateway_url = "https://192.168.4.131/cert/extract-cert-info-base64/"
+        gateway_url = "https://ppd.camgovca.cm/cert/extract-cert-info-base64/"
         gateway_response = requests.post(
             gateway_url,
             json={

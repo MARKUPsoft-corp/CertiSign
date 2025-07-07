@@ -905,7 +905,7 @@ async function startSigningProcess() {
       console.log('Envoi de la requête de signature pour:', file.name);
       
       // URL de l'API gateway
-      const apiUrl = 'https://192.168.4.131/sign/sign';
+      const apiUrl = 'https://ppd.camgovca.cm/sign/sign';
       
       // Appel à l'API gateway
       const response = await fetch(apiUrl, {

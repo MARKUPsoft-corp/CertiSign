@@ -243,7 +243,7 @@ const fetchUserProfile = async () => {
     try {
       console.log('Récupération des données détaillées du profil depuis l\'API...');
       const token = AuthService.getToken();
-      const apiUrl = DocumentService.API_URL || 'https://192.168.4.131';
+      const apiUrl = DocumentService.API_URL || 'https://ppd.camgovca.cm';
       
       const profileResponse = await axios.get(`${apiUrl}/api/users/me/`, {
         headers: { 'Authorization': `Bearer ${token}` }

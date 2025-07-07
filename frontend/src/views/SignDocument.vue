@@ -457,7 +457,7 @@ async function startSigningProcess() {
     setTimeout(() => { processingStep.value = 1; }, 1000); // Préparation
     
     // Appel au microservice de signature via l'API Gateway
-    const apiUrl = 'https://192.168.4.131/sign/sign';
+    const apiUrl = 'https://ppd.camgovca.cm/sign/sign';
     setTimeout(() => { processingStep.value = 2; }, 2000); // Signature
     
     // Configuration de la requête avec axios

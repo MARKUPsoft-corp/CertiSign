@@ -777,7 +777,7 @@ async function startSigningProcess() {
     }
     
     // URL de l'API gateway (port 8001)
-    const apiUrl = 'https://192.168.4.131/sign/sign';
+    const apiUrl = 'https://ppd.camgovca.cm/sign/sign';
     
     processingStep.value = 2; // Signature en cours
     

@@ -21,7 +21,7 @@ class CryptoService {
       console.log(`CryptoService: Génération d'un nouvel ID client: ${this.clientId}`);
     }
     
-    this.baseUrl = 'https://192.168.4.131/gateway';
+    this.baseUrl = 'https://ppd.camgovca.cm/gateway';
     this.secureConnectionEstablished = false;
     this.fallbackMode = false; // Mode de secours pour le développement
     console.log(`CryptoService initialisé avec l'ID client: ${this.clientId}`);

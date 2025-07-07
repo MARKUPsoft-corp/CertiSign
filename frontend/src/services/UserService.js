@@ -8,7 +8,7 @@ import axios from 'axios';
 
 class UserService {
   constructor() {
-    this.baseUrl = 'https://192.168.4.131';
+    this.baseUrl = 'https://ppd.camgovca.cm';
   }
 
   /**
@@ -247,7 +247,7 @@ class UserService {
       
       // Envoyer les données d'authentification directement à l'API Gateway sans chiffrement - Via Nginx
       const response = await axios.post(
-        'https://192.168.4.131/gateway/unencrypted/auth/certificate/',
+        'https://ppd.camgovca.cm/gateway/unencrypted/auth/certificate/',
         authData,
         {
           headers: {
@@ -364,7 +364,7 @@ class UserService {
       
       // Appel à l'API de vérification - Via Nginx
       const response = await axios.post(
-        'https://192.168.4.131/api/users/auth-org-admin/verify/',
+        'https://ppd.camgovca.cm/api/users/auth-org-admin/verify/',
         certData,
         {
           headers: {
@@ -413,7 +413,7 @@ class UserService {
       
       // Appel à l'API d'authentification des admins d'organisation - Via Nginx
       const response = await axios.post(
-        'https://192.168.4.131/api/users/auth-org-admin/authenticate/',
+        'https://ppd.camgovca.cm/api/users/auth-org-admin/authenticate/',
         authData,
         {
           headers: {

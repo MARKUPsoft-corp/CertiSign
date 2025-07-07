@@ -436,7 +436,7 @@ async function fetchData() {
     };
 
     // Récupérer les documents et les statistiques
-    const response = await axios.get('https://192.168.4.131/api/admin/dashboard/', config);
+    const response = await axios.get('https://ppd.camgovca.cm/api/admin/dashboard/', config);
     
     if (response.data) {
       // Mettre à jour les documents en attente

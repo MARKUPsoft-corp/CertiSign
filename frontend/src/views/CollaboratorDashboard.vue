@@ -565,7 +565,7 @@ async function fetchDocuments() {
     };
 
     // Utiliser l'endpoint by_collaborator qui retourne les documents par statut
-    const response = await axios.get(`https://192.168.4.131/api/documents/qr-positions/by_collaborator/`, config);
+    const response = await axios.get(`https://ppd.camgovca.cm/api/documents/qr-positions/by_collaborator/`, config);
     
     if (response.data) {
       // Maintenant que le filtrage se fait automatiquement côté backend avec organization_id,
@@ -698,7 +698,7 @@ async function deleteDraft(doc) {
       
       // Appel à l'API pour supprimer le document
       const token = localStorage.getItem('token');
-      await axios.delete(`https://192.168.4.131/api/documents/qr-positions/${doc.id}/`, {
+      await axios.delete(`https://ppd.camgovca.cm/api/documents/qr-positions/${doc.id}/`, {
         headers: {
           'Authorization': `Bearer ${token}`
         },
@@ -733,7 +733,7 @@ async function remindSigner(doc) {
     
     // Appel à l'API pour envoyer un rappel
     const token = localStorage.getItem('token');
-    await axios.post(`https://192.168.4.131/api/documents/remind/${doc.id}/`, 
+    await axios.post(`https://ppd.camgovca.cm/api/documents/remind/${doc.id}/`, 
       { organization_id: organizationId },
       {
         headers: {

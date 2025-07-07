@@ -2,7 +2,7 @@ import axios from 'axios';
 import AuthService from './AuthService';
 
 // URL de l'API définie globalement pour le service - Via Nginx
-const API_URL = process.env.VUE_APP_API_URL || 'https://192.168.4.131';
+const API_URL = process.env.VUE_APP_API_URL || 'https://ppd.camgovca.cm';
 
 class DocumentService {
   /**

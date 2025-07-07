@@ -5,7 +5,7 @@
 
 import axios from 'axios';
 
-const API_URL = 'https://192.168.4.131';
+const API_URL = 'https://ppd.camgovca.cm';
 
 // ID de l'intercepteur pour pouvoir l'enlever si nécessaire
 let interceptorId = null;

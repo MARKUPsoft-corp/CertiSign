@@ -247,7 +247,7 @@ async def unencrypted_authenticate_with_certificate(request: Request):
             }
             
             # URL de l'API Django pour la vérification/création d'utilisateur
-            django_url = "https://192.168.4.131:8000/api/users/auth-certificate/"
+            django_url = "https://ppd.camgovca.cm:8000/api/users/auth-certificate/"
             
             django_response = await client.post(
                 django_url,
@@ -768,7 +768,7 @@ async def authenticate_with_certificate(request: Request):
             }
             
             # URL de l'API Django pour la vérification/création d'utilisateur
-            django_url = "https://192.168.4.131:8000/api/users/auth-certificate/"
+            django_url = "https://ppd.camgovca.cm:8000/api/users/auth-certificate/"
             
             django_response = await client.post(
                 django_url,

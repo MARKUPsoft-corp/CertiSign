@@ -253,7 +253,7 @@ async function loadDocumentData() {
 
     // Charger les données du document
     const response = await axios.get(
-      `https://192.168.4.131/api/documents/qr-positions/${documentId}/`,
+      `https://ppd.camgovca.cm/api/documents/qr-positions/${documentId}/`,
       config
     );
 
@@ -261,7 +261,7 @@ async function loadDocumentData() {
       documentData.value = response.data;
       
       // Construire l'URL du document
-      documentUrl.value = `https://192.168.4.131${response.data.document_file}`;
+      documentUrl.value = `https://ppd.camgovca.cm${response.data.document_file}`;
       
       // Charger les positions existantes
       existingPositions.value = {
@@ -414,7 +414,7 @@ async function updateDocument(status) {
 
     // Mettre à jour le document
     const response = await axios.patch(
-      `https://192.168.4.131/api/documents/qr-positions/${documentId}/`,
+      `https://ppd.camgovca.cm/api/documents/qr-positions/${documentId}/`,
       formData,
       config
     );
