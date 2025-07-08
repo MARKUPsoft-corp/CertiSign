@@ -74,7 +74,7 @@
       </section>
 
       <!-- Contenu normal du dashboard -->
-      <div v-if="!showCreateTemplate && activeSection !== 'prepare-document'">
+      <div v-if="!showCreateTemplate && !showPrepareWithTemplate && activeSection !== 'prepare-document'">
       <!-- Statistiques -->
       <section class="stats-section">
         <div class="stats-container">
@@ -373,6 +373,7 @@
         <div v-if="showCreateTemplate" class="section-content create-template-section">
           <CreateTemplate @close="closeCreateTemplate" @template-created="onTemplateCreated"/>
         </div>
+        
       </section>
 
       <!-- Section par défaut si aucune section active -->
@@ -396,6 +397,16 @@
         <PrepareDocument @close="closePrepareSection" @documentPrepared="onDocumentPreparedAndClose"/>
               </div>
               
+      <!-- Section de préparation de documents avec template -->
+      <div v-if="showPrepareWithTemplate" class="section-content prepare-with-template-section">
+        <PrepareDocumentWithTemplate 
+          :preselectedTemplate="selectedTemplate"
+          @close="closePrepareWithTemplate" 
+          @documentPrepared="onDocumentPreparedWithTemplate"
+          @create-template="openCreateTemplateFromPrepare"
+        />
+      </div>
+      
       <!-- Section de création de template -->
       <div v-if="showCreateTemplate" class="section-content create-template-section">
         <CreateTemplate @close="closeCreateTemplate" @template-created="onTemplateCreated"/>
@@ -576,6 +587,7 @@ import axios from 'axios';
 import AuthService from '@/services/AuthService';
 import PrepareDocument from '@/views/PrepareDocument.vue';
 import CreateTemplate from '@/views/CreateTemplate.vue';
+import PrepareDocumentWithTemplate from '@/views/PrepareDocumentWithTemplate.vue';
 import TemplateService from '@/services/TemplateService.js';
 import QrPositioner from '@/components/QrPositioner.vue';
 
@@ -595,6 +607,7 @@ const isProcessingChoice = ref(false); // Protection contre les clics multiples
 const templates = ref([]);
 const loadingTemplates = ref(false);
 const showCreateTemplate = ref(false);
+const showPrepareWithTemplate = ref(false);
 const showDeleteConfirmModal = ref(false);
 const selectedTemplate = ref(null);
 
@@ -715,14 +728,8 @@ function closePrepareChoice() {
 
 function selectTemplatePreparation() {
   closePrepareChoice();
-  // Rediriger vers la section templates si elle n'est pas déjà active
-  if (templates.value.length > 0) {
-    activeSection.value = 'templates';
-  } else {
-    // Si aucun template, proposer de créer un template d'abord
-    alert('Vous devez créer un template avant de pouvoir l\'utiliser pour préparer un document.');
-    openNewTemplateModal();
-  }
+  // Ouvrir directement la vue de préparation avec template
+  showPrepareWithTemplate.value = true;
 }
 
 function selectDirectPreparation() {
@@ -1221,7 +1228,9 @@ async function updateTemplate() {
 
 function useTemplate(template) {
   console.log('Utilisation du template:', template.name);
-  // TODO: Implémenter l'utilisation de template pour créer un document
+  // Sélectionner le template et ouvrir la vue de préparation avec template
+  selectedTemplate.value = template;
+  showPrepareWithTemplate.value = true;
 }
 
 function confirmDeleteTemplate(template) {
@@ -1376,6 +1385,56 @@ async function viewPendingDocument(doc) {
   }
 }
 
+function closePrepareWithTemplate() {
+  showPrepareWithTemplate.value = false;
+}
+
+function onDocumentPreparedWithTemplate(result) {
+  console.log('Documents préparés avec template:', result);
+  
+  // Fermer la modal
+  closePrepareWithTemplate();
+  
+  // Traiter le résultat selon le type (draft ou submission)
+  if (result.type === 'draft') {
+    // Ajouter aux brouillons
+    for (let i = 0; i < result.count; i++) {
+      drafts.value.unshift({
+        id: Date.now() + i,
+        name: `Document avec ${result.template} - Brouillon.pdf`,
+        createdAt: new Date(),
+        status: 'draft'
+      });
+    }
+    
+    // Afficher la section des brouillons
+    activeSection.value = 'drafts';
+  } else {
+    // Ajouter aux documents en attente
+    for (let i = 0; i < result.count; i++) {
+      pendingDocuments.value.unshift({
+        id: Date.now() + i,
+        name: `Document avec ${result.template}.pdf`,
+        assignedAt: new Date(),
+        assignedTo: 'En attente de signature',
+        status: 'pending'
+      });
+    }
+    
+    // Afficher la section des documents en attente
+    activeSection.value = 'pending';
+  }
+  
+  // Actualiser les données
+  fetchDocuments();
+}
+
+function openCreateTemplateFromPrepare() {
+  // Fermer la vue de préparation
+  closePrepareWithTemplate();
+  // Ouvrir la création de template
+  openNewTemplateModal();
+}
 
 </script>
 
