@@ -402,6 +402,119 @@
                 </div>
     </main>
 
+    <!-- Modal d'aperçu de template -->
+    <div v-if="showPreviewModal" class="modal-overlay" @click.self="closePreviewModal">
+      <div class="preview-modal">
+        <div class="modal-header">
+          <div class="modal-title-section">
+            <div class="modal-icon">
+              <i class="bi bi-eye"></i>
+            </div>
+            <h3 class="modal-title">Aperçu du template : {{ selectedTemplate?.name }}</h3>
+          </div>
+          <button class="modal-close" @click="closePreviewModal">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="modal-body preview-body">
+          <div v-if="loadingPreview" class="loading-preview">
+            <div class="spinner"></div>
+            <p>Chargement de l'aperçu...</p>
+          </div>
+          <iframe v-else-if="previewUrl" :src="previewUrl" class="preview-iframe" title="Aperçu du template"></iframe>
+          <div v-else class="preview-error">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <p>Impossible de charger l'aperçu du template.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de modification de template -->
+    <div v-if="showEditModal" class="modal-overlay" @click.self="closeEditModal">
+      <div class="edit-modal">
+        <div class="modal-header">
+          <div class="modal-title-section">
+            <div class="modal-icon">
+              <i class="bi bi-pencil"></i>
+            </div>
+            <h3 class="modal-title">Modifier le template : {{ editingTemplate?.name }}</h3>
+          </div>
+          <button class="modal-close" @click="closeEditModal">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="template-form">
+            <div class="form-group">
+              <label for="edit-template-name">Nom du template</label>
+              <input 
+                type="text" 
+                id="edit-template-name" 
+                v-model="editingTemplate.name" 
+                placeholder="Saisissez un nom pour ce template" 
+                class="form-control"
+              >
+            </div>
+          </div>
+          
+          <!-- Afficher QR Positioner pour modification -->
+          <div v-if="editingTemplate.file" class="qr-positioner-wrapper">
+            <QrPositioner 
+              :pdfFile="editingTemplate.file"
+              :preloadedPositions="editingTemplate.qrPositions"
+              @position-confirmed="handleEditPositionConfirmed"
+              @signature-uploaded="handleEditSignatureUploaded"
+              @pdf-generated="handleEditPdfGenerated"
+            />
+          </div>
+          <div v-else-if="loadingEditFile" class="loading-edit-file">
+            <div class="spinner"></div>
+            <p>Chargement du fichier PDF original...</p>
+          </div>
+          <div v-else class="edit-file-error">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <p>Impossible de charger le fichier PDF original pour modification.</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" @click="closeEditModal" :disabled="isUpdating">Annuler</button>
+          <button class="btn btn-primary" @click="updateTemplate" :disabled="!canUpdateTemplate || isUpdating">
+            <span v-if="isUpdating"><i class="bi bi-hourglass-split spin"></i> Mise à jour...</span>
+            <span v-else>Mettre à jour</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de confirmation de suppression -->
+    <div v-if="showDeleteConfirmModal" class="modal-overlay" @click.self="closeDeleteConfirmModal">
+      <div class="confirm-modal">
+        <div class="modal-header">
+          <div class="modal-title-section">
+            <div class="modal-icon danger">
+              <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <h3 class="modal-title">Confirmer la suppression</h3>
+          </div>
+          <button class="modal-close" @click="closeDeleteConfirmModal">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Êtes-vous sûr de vouloir supprimer le template <strong>{{ selectedTemplate?.name }}</strong> ?</p>
+          <p class="text-danger">Cette action est irréversible et supprimera définitivement ce modèle.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" @click="closeDeleteConfirmModal" :disabled="isDeleting">Annuler</button>
+          <button class="btn btn-danger" @click="deleteTemplateConfirmed" :disabled="isDeleting">
+            <span v-if="isDeleting"><i class="bi bi-hourglass-split spin"></i> Suppression...</span>
+            <span v-else><i class="bi bi-trash"></i> Supprimer</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal de choix de préparation -->
     <div v-if="showPrepareChoice" class="modal-overlay" @click.self="closePrepareChoice">
       <div class="choice-modal">
@@ -464,6 +577,7 @@ import AuthService from '@/services/AuthService';
 import PrepareDocument from '@/views/PrepareDocument.vue';
 import CreateTemplate from '@/views/CreateTemplate.vue';
 import TemplateService from '@/services/TemplateService.js';
+import QrPositioner from '@/components/QrPositioner.vue';
 
 const router = useRouter();
 
@@ -483,6 +597,36 @@ const loadingTemplates = ref(false);
 const showCreateTemplate = ref(false);
 const showDeleteConfirmModal = ref(false);
 const selectedTemplate = ref(null);
+
+// Variables pour l'aperçu de template
+const showPreviewModal = ref(false);
+const loadingPreview = ref(false);
+const previewUrl = ref(null);
+
+// Variables pour l'édition de template
+const showEditModal = ref(false);
+const editingTemplate = ref({
+  id: null,
+  name: '',
+  file: null,
+  qrPositions: null,
+  signatureImage: null,
+  generatedPdfFile: null,
+  generatedPdfBlob: null,
+  generatedPdfDataUrl: null
+});
+const loadingEditFile = ref(false);
+const isUpdating = ref(false);
+
+// Variables pour la suppression
+const isDeleting = ref(false);
+
+// Computed properties
+const canUpdateTemplate = computed(() => {
+  return editingTemplate.value.name && 
+         editingTemplate.value.file && 
+         editingTemplate.value.qrPositions;
+});
 
 // Statistiques
 const stats = {
@@ -880,15 +1024,199 @@ function onTemplateCreated(templateData) {
   console.log('Template ajouté à la liste avec succès');
 }
 
-function previewTemplate(template) {
-  console.log('Aperçu du template:', template.name);
-  selectedTemplate.value = template;
-  showDeleteConfirmModal.value = true;
+// Fonction pour afficher l'aperçu d'un template
+async function previewTemplate(template) {
+  try {
+    selectedTemplate.value = template;
+    showPreviewModal.value = true;
+    loadingPreview.value = true;
+    
+    // Récupérer le blob du fichier d'aperçu
+    const previewBlob = await TemplateService.downloadPreview(template.id);
+    
+    // Créer une URL pour le blob
+    const url = URL.createObjectURL(previewBlob);
+    previewUrl.value = url;
+    
+  } catch (error) {
+    console.error('Erreur lors du chargement de l\'aperçu:', error);
+    previewUrl.value = null;
+  } finally {
+    loadingPreview.value = false;
+  }
 }
 
-function editTemplate(template) {
-  console.log('Édition du template:', template.name);
-  // TODO: Implémenter l'édition de template
+// Fonction pour fermer la modal d'aperçu
+function closePreviewModal() {
+  showPreviewModal.value = false;
+  
+  // Nettoyer l'URL pour libérer la mémoire
+  if (previewUrl.value) {
+    URL.revokeObjectURL(previewUrl.value);
+    previewUrl.value = null;
+  }
+  
+  selectedTemplate.value = null;
+}
+
+// Fonction pour éditer un template
+async function editTemplate(template) {
+  try {
+    loadingEditFile.value = true;
+    selectedTemplate.value = template;
+    
+    // Récupérer les détails complets du template depuis l'API
+    const templateDetails = await TemplateService.getTemplate(template.id);
+    
+    // Récupérer le fichier PDF original pour l'afficher dans QrPositioner
+    let originalPdfBlob = null;
+    try {
+      originalPdfBlob = await TemplateService.downloadOriginal(template.id);
+    } catch (pdfError) {
+      console.error('Erreur lors du téléchargement du PDF original:', pdfError);
+    }
+    
+    // Créer un File à partir du Blob si disponible
+    let originalFile = null;
+    if (originalPdfBlob) {
+      originalFile = new File([originalPdfBlob], `${templateDetails.name}.pdf`, { 
+        type: 'application/pdf' 
+      });
+    }
+    
+    // Préparer les données pour l'édition
+    editingTemplate.value = {
+      id: templateDetails.id,
+      name: templateDetails.name,
+      file: originalFile,
+      qrPositions: {
+        qr: {
+          size: templateDetails.qr_size,
+          positions: templateDetails.qr_positions,
+          pages: templateDetails.selected_pages && templateDetails.selected_pages.length > 0 ? 
+                 templateDetails.selected_pages : 'all'
+        },
+        mode: templateDetails.page_application,
+        signature: templateDetails.signature_positions ? {
+          positions: templateDetails.signature_positions,
+          size: templateDetails.signature_size || 50
+        } : null
+      },
+      signatureImage: null,
+      generatedPdfFile: null,
+      generatedPdfBlob: null,
+      generatedPdfDataUrl: null
+    };
+    
+    // Ouvrir la modale d'édition
+    showEditModal.value = true;
+  } catch (error) {
+    console.error('Erreur lors de la récupération des détails du template:', error);
+    alert('Une erreur est survenue lors de la récupération des détails du template.');
+  } finally {
+    loadingEditFile.value = false;
+  }
+}
+
+// Fonction pour fermer la modal d'édition
+function closeEditModal() {
+  showEditModal.value = false;
+  editingTemplate.value = {
+    id: null,
+    name: '',
+    file: null,
+    qrPositions: null,
+    signatureImage: null,
+    generatedPdfFile: null,
+    generatedPdfBlob: null,
+    generatedPdfDataUrl: null
+  };
+  selectedTemplate.value = null;
+}
+
+// Fonctions pour gérer les événements du QrPositioner en mode édition
+function handleEditPositionConfirmed(positionData) {
+  editingTemplate.value.qrPositions = positionData;
+}
+
+function handleEditSignatureUploaded(file) {
+  console.log('Signature uploadée pour édition:', file.name);
+  editingTemplate.value.signatureImage = file;
+}
+
+function handleEditPdfGenerated(pdfData) {
+  console.log('PDF généré pour édition:', pdfData.file.name);
+  editingTemplate.value.generatedPdfBlob = pdfData.blob;
+  editingTemplate.value.generatedPdfFile = pdfData.file;
+  editingTemplate.value.generatedPdfDataUrl = pdfData.dataUrl;
+}
+
+// Fonction pour mettre à jour un template
+async function updateTemplate() {
+  if (!canUpdateTemplate.value) return;
+  
+  try {
+    isUpdating.value = true;
+    
+    // Vérifier si nous avons un PDF généré
+    if (!editingTemplate.value.generatedPdfFile) {
+      alert('Veuillez d\'abord générer un aperçu du document et confirmer.');
+      return;
+    }
+    
+    // Préparer les données pour l'API
+    const templateData = {
+      name: editingTemplate.value.name,
+      qr_size: editingTemplate.value.qrPositions.qr.size,
+      page_application: editingTemplate.value.qrPositions.mode,
+      qr_positions: editingTemplate.value.qrPositions.qr.positions,
+      signature_positions: editingTemplate.value.qrPositions.signature ? 
+                          editingTemplate.value.qrPositions.signature.positions : null,
+      signature_size: editingTemplate.value.qrPositions.signature ? 
+                     editingTemplate.value.qrPositions.signature.size : 50,
+      selected_pages: editingTemplate.value.qrPositions.qr.pages !== 'all' ? 
+                     editingTemplate.value.qrPositions.qr.pages : []
+    };
+    
+    // Ajouter les fichiers si disponibles
+    if (editingTemplate.value.file) {
+      templateData.original_document = editingTemplate.value.file;
+    }
+    
+    if (editingTemplate.value.signatureImage) {
+      templateData.signature_image = editingTemplate.value.signatureImage;
+    }
+    
+    if (editingTemplate.value.generatedPdfFile) {
+      templateData.preview_document = editingTemplate.value.generatedPdfFile;
+    }
+    
+    // Mettre à jour le template via l'API
+    await TemplateService.updateTemplate(editingTemplate.value.id, templateData);
+    
+    // Mettre à jour le template dans la liste locale
+    const index = templates.value.findIndex(t => t.id === editingTemplate.value.id);
+    if (index !== -1) {
+      templates.value[index] = {
+        ...templates.value[index],
+        name: templateData.name,
+        qrSize: templateData.qr_size,
+        pageApplication: templateData.page_application,
+      };
+    }
+    
+    // Afficher un message de succès
+    alert('Template mis à jour avec succès !');
+    
+    // Fermer la modale
+    closeEditModal();
+    
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du template:', error);
+    alert('Une erreur est survenue lors de la mise à jour du template.');
+  } finally {
+    isUpdating.value = false;
+  }
 }
 
 function useTemplate(template) {
@@ -900,6 +1228,36 @@ function confirmDeleteTemplate(template) {
   console.log('Confirmation de suppression du template:', template.name);
   selectedTemplate.value = template;
   showDeleteConfirmModal.value = true;
+}
+
+// Fonction pour fermer la modal de suppression
+function closeDeleteConfirmModal() {
+  showDeleteConfirmModal.value = false;
+  selectedTemplate.value = null;
+}
+
+// Fonction pour effectuer la suppression une fois confirmée
+async function deleteTemplateConfirmed() {
+  if (!selectedTemplate.value) return;
+  
+  try {
+    isDeleting.value = true;
+    await TemplateService.deleteTemplate(selectedTemplate.value.id);
+    
+    // Supprimer le template de la liste locale
+    templates.value = templates.value.filter(t => t.id !== selectedTemplate.value.id);
+    
+    // Fermer la modale de confirmation
+    closeDeleteConfirmModal();
+    
+    // Afficher un message de succès
+    alert('Template supprimé avec succès !');
+  } catch (error) {
+    console.error('Erreur lors de la suppression du template:', error);
+    alert('Une erreur est survenue lors de la suppression du template.');
+  } finally {
+    isDeleting.value = false;
+  }
 }
 
 function getQrSizeLabel(size) {
@@ -3464,6 +3822,430 @@ async function viewPendingDocument(doc) {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* =================================
+   STYLES POUR LES MODALES DE TEMPLATES
+   ================================= */
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  overflow-y: auto;
+  padding: 20px;
+  animation: modalOverlayIn 0.3s ease-out;
+}
+
+/* Modal d'aperçu */
+.preview-modal {
+  background-color: var(--bg-light);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 1000px;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  animation: modalSlideIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+/* Modal d'édition */
+.edit-modal {
+  background-color: var(--bg-light);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 1200px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: modalSlideIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+/* Modal de confirmation */
+.confirm-modal {
+  background-color: var(--bg-light);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  animation: modalSlideIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+/* En-têtes de modales */
+.modal-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  color: white;
+  padding: 25px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-title-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.modal-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.modal-icon.danger {
+  background: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 12px;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Corps de modales */
+.modal-body {
+  padding: 30px;
+  flex: 1;
+  overflow-y: auto;
+  background: var(--bg-light);
+}
+
+.preview-body {
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Contenu d'aperçu */
+.loading-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: var(--text-secondary);
+}
+
+.preview-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: #fff;
+}
+
+.preview-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: var(--danger-color);
+}
+
+.preview-error i {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+/* Formulaire de template */
+.template-form {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: var(--text-color);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+}
+
+/* États de chargement et d'erreur pour l'édition */
+.loading-edit-file,
+.edit-file-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.edit-file-error {
+  color: var(--danger-color);
+}
+
+.edit-file-error i {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+/* QR Positioner dans la modale d'édition */
+.qr-positioner-wrapper {
+  margin-top: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Spinner */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+/* Pied de modale */
+.modal-footer {
+  padding: 20px 30px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  background: var(--bg-dark);
+}
+
+/* Boutons de modale */
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.btn-secondary {
+  background: var(--bg-light);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--hover-bg);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-outline-secondary:hover:not(:disabled) {
+  background: var(--bg-light);
+  border-color: var(--text-secondary);
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Texte de danger */
+.text-danger {
+  color: var(--danger-color);
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+/* Animations */
+@keyframes modalOverlayIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(3px);
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Animation pour les icônes de chargement */
+.spin {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 10px;
+  }
+  
+  .preview-modal,
+  .edit-modal {
+    width: 95%;
+    height: 90vh;
+  }
+  
+  .confirm-modal {
+    width: 95%;
+  }
+  
+  .modal-header {
+    padding: 20px;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .modal-title-section {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .modal-body {
+    padding: 20px;
+  }
+  
+  .modal-footer {
+    padding: 15px 20px;
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}
+
+/* Mode sombre */
+:global(.dark-theme) .preview-modal,
+:global(.dark-theme) .edit-modal,
+:global(.dark-theme) .confirm-modal {
+  background-color: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+:global(.dark-theme) .form-control {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+:global(.dark-theme) .form-control:focus {
+  border-color: var(--primary-color);
+  background: rgba(30, 41, 59, 0.9);
 }
 
 </style> 
