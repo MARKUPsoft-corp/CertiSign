@@ -349,10 +349,7 @@
 
         <!-- Section de préparation de document -->
         <div v-if="activeSection === 'prepare-document'" class="section-content prepare-section">
-          <PrepareDocument 
-            @close="closePrepareSection" 
-            @documentPrepared="onDocumentPreparedAndClose"
-          />
+          <PrepareDocument @close="closePrepareSection" @documentPrepared="onDocumentPreparedAndClose"/>
         </div>
       </section>
 
@@ -487,7 +484,7 @@
     <!-- Modal de choix de préparation -->
     <div v-if="showPrepareChoice" class="modal-overlay" @click.self="closePrepareChoice">
       <div class="choice-modal">
-        <div class="modal-header">
+          <div class="modal-header">
           <div class="modal-title-section">
             <div class="modal-icon">
               <i class="bi bi-file-earmark-plus"></i>
@@ -495,11 +492,11 @@
             <h3 class="modal-title">Préparer un nouveau document</h3>
           </div>
           <button class="modal-close" @click="closePrepareChoice">
-            <i class="bi bi-x-lg"></i>
-          </button>
-        </div>
-        
-        <div class="modal-body">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          
+          <div class="modal-body">
           <p class="choice-description">Comment souhaitez-vous préparer votre document ?</p>
           
           <div class="choice-options">
@@ -514,32 +511,25 @@
               <div class="option-arrow">
                 <i class="bi bi-chevron-right"></i>
               </div>
-            </button>
+              </button>
             
-            <button class="choice-option" @click="selectDirectPreparation">
+            <button class="choice-option" @click="selectDirectPreparation" :disabled="isProcessingChoice">
               <div class="option-icon direct">
                 <i class="bi bi-file-earmark"></i>
-              </div>
+            </div>
               <div class="option-content">
                 <h4 class="option-title">Préparation directe</h4>
                 <p class="option-description">Créez et configurez un nouveau document</p>
-              </div>
+          </div>
               <div class="option-arrow">
                 <i class="bi bi-chevron-right"></i>
-              </div>
+        </div>
             </button>
-          </div>
+      </div>
         </div>
       </div>
     </div>
 
-    <!-- Composant de préparation directe de document -->
-    <div v-if="showPrepareDocument" class="modal-overlay prepare-document-overlay">
-      <PrepareDocument 
-        @close="closePrepareDocument" 
-        @documentPrepared="onDocumentPrepared"
-      />
-    </div>
   </div>
 </template>
 
@@ -560,16 +550,14 @@ const organizationStatus = ref('');
 
 // État pour l'affichage des modales
 const showPrepareChoice = ref(false);
-const showTemplatePreparation = ref(false);
+const isProcessingChoice = ref(false); // Protection contre les clics multiples
 
 // Variables pour les templates
 const templates = ref([]);
 const loadingTemplates = ref(false);
 const showNewTemplateModal = ref(false);
-const showPreviewModal = ref(false);
 const showDeleteConfirmModal = ref(false);
 const selectedTemplate = ref(null);
-const previewUrl = ref(null);
 
 // Statistiques
 const stats = {
@@ -680,9 +668,28 @@ function selectTemplatePreparation() {
 }
 
 function selectDirectPreparation() {
+  console.log('selectDirectPreparation appelée', activeSection.value);
+  
+  // Éviter les appels multiples
+  if (activeSection.value === 'prepare-document' || isProcessingChoice.value) {
+    console.log('Section déjà active ou en cours de traitement, ignoring...');
+    return;
+  }
+  
+  // Marquer comme en cours de traitement
+  isProcessingChoice.value = true;
+  
+  // Fermer la modal de choix
   closePrepareChoice();
+  
   // Afficher la section de préparation directe
   activeSection.value = 'prepare-document';
+  console.log('Section activeSection définie à:', activeSection.value);
+  
+  // Réinitialiser le flag après un délai
+  setTimeout(() => {
+    isProcessingChoice.value = false;
+  }, 1000);
 }
 
 function closePrepareSection() {
@@ -697,10 +704,6 @@ function onDocumentPreparedAndClose(document) {
   closePrepareSection();
   // Optionnel : afficher la section des documents en attente
   activeSection.value = 'pending';
-}
-
-function closeTemplatePreparation() {
-  showTemplatePreparation.value = false;
 }
 
 async function fetchDocuments() {
@@ -934,7 +937,7 @@ function openNewTemplateModal() {
 function previewTemplate(template) {
   console.log('Aperçu du template:', template.name);
   selectedTemplate.value = template;
-  showPreviewModal.value = true;
+  showDeleteConfirmModal.value = true;
 }
 
 function editTemplate(template) {
@@ -951,19 +954,6 @@ function confirmDeleteTemplate(template) {
   console.log('Confirmation de suppression du template:', template.name);
   selectedTemplate.value = template;
   showDeleteConfirmModal.value = true;
-}
-
-function deleteTemplate() {
-  if (selectedTemplate.value) {
-    console.log('Suppression du template:', selectedTemplate.value.name);
-    // TODO: Implémenter la suppression
-    const index = templates.value.findIndex(t => t.id === selectedTemplate.value.id);
-    if (index > -1) {
-      templates.value.splice(index, 1);
-    }
-    showDeleteConfirmModal.value = false;
-    selectedTemplate.value = null;
-  }
 }
 
 function getQrSizeLabel(size) {
@@ -3415,5 +3405,87 @@ async function saveTemplate() {
   .prepare-section .prepare-document-container {
     padding: 1.5rem;
   }
+}
+
+/* Styles pour la section de préparation intégrée - SUPPRESSION DE L'EFFET MODAL */
+.prepare-section {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Forcer le composant PrepareDocument à s'afficher comme une section normale */
+.prepare-section :deep(.prepare-document-container) {
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  margin: 0 !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+  padding: 0 !important;
+  border: none !important;
+  position: static !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Forcer les sections internes à avoir un style normal */
+.prepare-section :deep(.section-card) {
+  background: var(--card-bg) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08) !important;
+  padding: 24px !important;
+  margin-bottom: 20px !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+/* Styles pour l'en-tête de la section de préparation */
+.prepare-section :deep(.modal-header) {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 0 20px 0 !important;
+  position: static !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+.prepare-section :deep(.modal-title) {
+  color: var(--text-color) !important;
+  font-size: 1.5rem !important;
+  text-shadow: none !important;
+}
+
+/* Supprimer l'icône de fermeture qui n'est plus nécessaire */
+.prepare-section :deep(.modal-close) {
+  display: none !important;
+}
+
+/* Styles pour le contenu principal */
+.prepare-section :deep(.modal-body) {
+  padding: 0 !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+/* Ajustements pour les formulaires et zones de contenu */
+.prepare-section :deep(.upload-area),
+.prepare-section :deep(.file-upload-zone) {
+  background: var(--bg-light) !important;
+  border: 2px dashed var(--border-color) !important;
+  border-radius: 12px !important;
+}
+
+/* Ajustements pour les boutons */
+.prepare-section :deep(.btn-primary) {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.prepare-section :deep(.btn-secondary) {
+  background-color: var(--secondary-color) !important;
+  border-color: var(--border-color) !important;
 }
 </style> 

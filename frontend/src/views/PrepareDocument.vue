@@ -1,15 +1,19 @@
 <template>
-  <div class="prepare-document-container">
-    <div class="section-card">
-      <div class="section-header">
-        <h3 class="section-title">
-          <i class="bi bi-file-earmark-text"></i> Préparer un document
-        </h3>
-        <button @click="closePreparation" class="close-button">
-          <i class="bi bi-x-lg"></i>
-        </button>
-      </div>
+  <!-- Container principal avec style adaptatif -->
+  <div class="prepare-document-container integrated-mode">
+    <!-- En-tête pour le mode intégré -->
+    <div class="section-header">
+      <h3 class="section-title">
+        <i class="bi bi-file-earmark-plus"></i>
+        Préparer un nouveau document
+      </h3>
+      <button class="btn btn-outline-secondary" @click="closeModal">
+        <i class="bi bi-arrow-left"></i> Retour
+      </button>
+    </div>
       
+    <!-- Section card contenant tout le contenu -->
+    <div class="section-card">
       <!-- Progression des étapes -->
       <div class="steps-progress">
         <div 
@@ -1039,6 +1043,11 @@ function closePreparation() {
   emit('close');
 }
 
+// Alias pour closeModal (compatibilité)
+function closeModal() {
+  closePreparation();
+}
+
 // Nettoyer les ressources lors du démontage du composant (MODIFICATION: nettoyage multi-documents)
 onMounted(() => {
   return () => {
@@ -1053,16 +1062,26 @@ onMounted(() => {
 
 <style scoped>
 .prepare-document-container {
-  background-color: var(--bg-color, #f8f9fa);
+  background-color: transparent;
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
   width: 100%;
   max-width: 100%;
   animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow-y: auto;
-  max-height: 90vh;
-  margin: 0 auto;
+  max-height: 85vh;
+  margin: 0;
+  padding: 0;
+}
+
+.section-card {
+  background-color: var(--card-bg, #ffffff);
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  position: relative;
+  border: 1px solid var(--border-color, #eaeaea);
 }
 
 /* Effet de fond stylisé */
@@ -2023,5 +2042,58 @@ onMounted(() => {
 .submit-button.secondary:hover {
   background-color: rgba(0, 0, 0, 0.05);
   border-color: var(--text-muted, #6c757d);
+}
+
+/* Styles spécifiques pour le mode intégré */
+.prepare-document-container.integrated-mode {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.prepare-document-container.integrated-mode .section-card {
+  background: var(--card-bg) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08) !important;
+  padding: 24px !important;
+  margin-bottom: 20px !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.prepare-document-container.integrated-mode .section-header {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  backdrop-filter: none !important;
+  margin-bottom: 20px !important;
+}
+
+.prepare-document-container.integrated-mode .section-title {
+  color: var(--text-color) !important;
+  font-size: 1.5rem !important;
+}
+
+/* Styles pour les boutons dans le mode intégré */
+.prepare-document-container.integrated-mode .btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+  background: var(--bg-light);
+  color: var(--text-color);
+}
+
+.prepare-document-container.integrated-mode .btn:hover {
+  background: var(--hover-bg);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 </style> 
