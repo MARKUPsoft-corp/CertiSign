@@ -431,18 +431,18 @@ function handleSignatureUpload(event) {
     const supportedFormats = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/bmp', 'image/webp', 'image/svg+xml'];
     
     if (supportedFormats.some(format => file.type.includes(format.split('/')[1]))) {
-      signatureImage.value = file;
-      signatureImageUrl.value = URL.createObjectURL(file);
+    signatureImage.value = file;
+    signatureImageUrl.value = URL.createObjectURL(file);
       
       console.log('Image de signature chargée:', {
         name: file.name,
         type: file.type,
         size: file.size
       });
-      
-      // Émettre un événement pour informer le composant parent de l'image de signature
-      emit('signature-uploaded', file);
-    } else {
+    
+    // Émettre un événement pour informer le composant parent de l'image de signature
+    emit('signature-uploaded', file);
+  } else {
       alert('Format d\'image non supporté. Formats acceptés: PNG, JPEG, JPG, GIF, BMP, WEBP, SVG.');
       event.target.value = null;
     }
@@ -963,10 +963,10 @@ async function generateModifiedPdf() {
         
         try {
           if (mimeType.includes('jpeg') || mimeType.includes('jpg')) {
-            signatureEmbed = await pdfDoc.embedJpg(signatureImageBytes);
+          signatureEmbed = await pdfDoc.embedJpg(signatureImageBytes);
           } else if (mimeType.includes('png')) {
-            signatureEmbed = await pdfDoc.embedPng(signatureImageBytes);
-          } else {
+          signatureEmbed = await pdfDoc.embedPng(signatureImageBytes);
+        } else {
             // Pour les autres formats (GIF, BMP, WEBP, etc.), convertir en PNG via canvas
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
@@ -992,7 +992,7 @@ async function generateModifiedPdf() {
               img.src = signatureImageUrl.value;
             });
           }
-        } catch (e) {
+          } catch (e) {
           console.error('Erreur lors de l\'intégration de l\'image de signature:', e);
           console.log('Tentative de fallback avec conversion PNG...');
           

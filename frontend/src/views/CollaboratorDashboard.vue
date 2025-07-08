@@ -79,42 +79,46 @@
           <div class="stat-card">
             <div class="stat-content">
               <div class="stat-value">{{ stats.thisWeek }}</div>
-              <div class="stat-label">Documents cette semaine</div>
+              <div class="stat-label">Cette semaine</div>
             </div>
             <div class="stat-icon primary">
               <i class="bi bi-calendar-week"></i>
             </div>
           </div>
+          
           <div class="stat-card">
             <div class="stat-content">
               <div class="stat-value">{{ stats.thisMonth }}</div>
-              <div class="stat-label">Documents ce mois</div>
+              <div class="stat-label">Ce mois-ci</div>
             </div>
             <div class="stat-icon accent">
               <i class="bi bi-calendar-month"></i>
             </div>
           </div>
-          <div class="stat-card">
+          
+          <button class="stat-card action-stat" @click="openPrepareDocument">
             <div class="stat-content">
-              <div class="stat-value">{{ stats.avgTime }}</div>
-              <div class="stat-label">Temps moyen de traitement</div>
+              <div class="stat-value">
+                <i class="bi bi-plus-circle"></i>
             </div>
-            <div class="stat-icon warning">
-              <i class="bi bi-clock"></i>
+              <div class="stat-label">Nouveau document</div>
             </div>
+            <div class="stat-icon primary">
+              <i class="bi bi-file-earmark-plus"></i>
           </div>
+          </button>
         </div>
       </section>
 
       <!-- Actions rapides -->
       <section class="quick-actions">
         <div class="actions-grid">
-          <button class="action-card primary" @click="openPrepareDocument">
-            <div class="action-icon">
-              <i class="bi bi-file-earmark-plus"></i>
+          <button class="action-card" @click="activeSection = 'templates'" :class="{ 'active': activeSection === 'templates' }">
+            <div class="action-icon accent">
+              <i class="bi bi-file-earmark-richtext"></i>
             </div>
-            <span class="action-title">Nouveau document</span>
-            <span class="action-description">Préparer un document pour signature</span>
+            <span class="action-title">Templates</span>
+            <span class="action-description">{{ templates.length }} modèles disponibles</span>
           </button>
           <button class="action-card" @click="activeSection = 'drafts'" :class="{ 'active': activeSection === 'drafts' }">
             <div class="action-icon accent">
@@ -185,6 +189,81 @@
               <button class="btn-primary" @click="openPrepareDocument">
                 Créer votre premier document
               </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Templates -->
+        <div v-if="activeSection === 'templates'" class="section-content">
+          <div class="section-header">
+            <h3 class="content-title">
+              <i class="bi bi-file-earmark-richtext"></i>
+              Mes templates d'organisation
+            </h3>
+            <button class="btn-primary" @click="openNewTemplateModal">
+              <i class="bi bi-plus"></i>
+              Nouveau template
+            </button>
+          </div>
+          
+          <div v-if="loadingTemplates" class="loading-state">
+            <div class="spinner"></div>
+            <p>Chargement des templates...</p>
+          </div>
+          
+          <div v-else-if="templates.length === 0" class="empty-state">
+            <i class="bi bi-file-earmark-richtext"></i>
+            <p>Aucun template créé</p>
+            <span class="empty-description">
+              Créez votre premier template pour accélérer la préparation de vos documents
+            </span>
+            <button class="btn-primary" @click="openNewTemplateModal">
+              <i class="bi bi-plus"></i>
+              Créer mon premier template
+            </button>
+          </div>
+          
+          <div v-else class="templates-grid">
+            <div v-for="template in templates" :key="template.id" class="template-card">
+              <div class="template-header">
+                <div class="template-icon">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                </div>
+                <div class="template-status">
+                  <span class="template-badge">Template</span>
+                </div>
+              </div>
+              <div class="template-content">
+                <h4 class="template-title" :title="template.name">{{ template.name }}</h4>
+                <div class="template-meta">
+                  <div class="meta-item">
+                    <i class="bi bi-calendar"></i>
+                    <span>Créé le {{ formatDate(template.createdAt) }}</span>
+                  </div>
+                  <div class="meta-item">
+                    <i class="bi bi-grid"></i>
+                    <span>{{ template.pageApplication === 'all' ? 'Toutes les pages' : 'Pages spécifiques' }}</span>
+                  </div>
+                  <div class="meta-item">
+                    <i class="bi bi-qr-code"></i>
+                    <span>Taille QR: {{ getQrSizeLabel(template.qrSize) }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="template-actions">
+                <button class="btn-icon" title="Aperçu" @click="previewTemplate(template)">
+                  <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn-icon primary" title="Modifier" @click="editTemplate(template)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn-icon success" title="Utiliser ce template" @click="useTemplate(template)">
+                  <i class="bi bi-file-earmark-plus"></i>
+                </button>
+                <button class="btn-icon danger" title="Supprimer" @click="confirmDeleteTemplate(template)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -267,6 +346,14 @@
             </div>
           </div>
         </div>
+
+        <!-- Section de préparation de document -->
+        <div v-if="activeSection === 'prepare-document'" class="section-content prepare-section">
+          <PrepareDocument 
+            @close="closePrepareSection" 
+            @documentPrepared="onDocumentPreparedAndClose"
+          />
+        </div>
       </section>
 
       <!-- Section par défaut si aucune section active -->
@@ -285,140 +372,183 @@
       </section>
     </main>
 
-    <!-- Modal de choix du type de préparation -->
-    <div v-if="showPrepareChoice" class="modal-overlay">
-      <div class="preparation-choice-modal">
-        <div class="modal-content">
+    <!-- Modal de création de template -->
+    <div v-if="showNewTemplateModal" class="modal-overlay" @click.self="closeNewTemplateModal">
+      <div class="template-modal">
           <div class="modal-header">
-            <h3 class="modal-title">
-              <i class="bi bi-file-earmark-plus"></i>
-              Préparer un document
-            </h3>
-            <button @click="closePrepareChoice" class="close-button">
+          <div class="modal-title-section">
+            <div class="modal-icon">
+              <i class="bi bi-file-earmark-richtext"></i>
+            </div>
+            <h3 class="modal-title">Nouveau template</h3>
+          </div>
+          <button class="modal-close" @click="closeNewTemplateModal">
               <i class="bi bi-x-lg"></i>
             </button>
           </div>
           
           <div class="modal-body">
-            <p class="choice-description">
-              Comment souhaitez-vous préparer votre document ?
-            </p>
-            
-            <div class="preparation-options">
-              <!-- Option Template -->
-              <div class="preparation-option" @click="selectTemplatePreparation">
-                <div class="option-icon template">
-                  <i class="bi bi-file-earmark-richtext"></i>
-                </div>
-                <div class="option-content">
-                  <h4 class="option-title">À partir d'un template</h4>
-                  <p class="option-description">
-                    Utiliser un modèle existant avec positions prédéfinies pour QR code et signature
-                  </p>
-                  <div class="option-features">
-                    <span class="feature">
-                      <i class="bi bi-check2"></i>
-                      Positions pré-configurées
-                    </span>
-                    <span class="feature">
-                      <i class="bi bi-check2"></i>
-                      Processus accéléré
-                    </span>
-                    <span class="feature">
-                      <i class="bi bi-check2"></i>
-                      Cohérence organisationnelle
-                    </span>
-                  </div>
-                </div>
-                <div class="option-arrow">
-                  <i class="bi bi-chevron-right"></i>
-                </div>
+          <div class="template-form">
+            <div class="form-section">
+              <div class="form-group">
+                <label for="template-name" class="form-label">
+                  <i class="bi bi-tag"></i>
+                  Nom du template
+                </label>
+                <input 
+                  type="text" 
+                  id="template-name" 
+                  v-model="newTemplate.name" 
+                  placeholder="Ex: Contrat de partenariat, Rapport mensuel..." 
+                  class="form-input"
+                  :class="{ 'error': templateNameError }"
+                  @input="clearTemplateNameError"
+                >
+                <span v-if="templateNameError" class="error-message">{{ templateNameError }}</span>
               </div>
               
-              <!-- Option Directe -->
-              <div class="preparation-option" @click="selectDirectPreparation">
-                <div class="option-icon direct">
-                  <i class="bi bi-file-earmark"></i>
+              <div class="form-group">
+                <label for="template-file" class="form-label">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                  Document PDF
+                </label>
+                <div class="file-upload-area" @click="triggerFileInput" @dragover.prevent @drop.prevent="handleFileDrop">
+                  <input 
+                    type="file" 
+                    id="template-file" 
+                    ref="fileInput"
+                    @change="handleFileSelect" 
+                    accept=".pdf" 
+                    class="file-input"
+                  >
+                  <div v-if="!newTemplate.file" class="upload-placeholder">
+                    <div class="upload-icon">
+                      <i class="bi bi-cloud-upload"></i>
                 </div>
-                <div class="option-content">
-                  <h4 class="option-title">Préparation directe</h4>
-                  <p class="option-description">
-                    Préparer le document manuellement en définissant vous-même les positions
-                  </p>
-                  <div class="option-features">
-                    <span class="feature">
-                      <i class="bi bi-check2"></i>
-                      Contrôle total
-                    </span>
-                    <span class="feature">
-                      <i class="bi bi-check2"></i>
-                      Personnalisation maximale
-                    </span>
-                    <span class="feature">
-                      <i class="bi bi-check2"></i>
-                      Flexibilité complète
-                    </span>
+                    <div class="upload-text">
+                      <span class="upload-title">Glissez votre PDF ici</span>
+                      <span class="upload-subtitle">ou cliquez pour sélectionner</span>
                   </div>
                 </div>
-                <div class="option-arrow">
-                  <i class="bi bi-chevron-right"></i>
+                  <div v-else class="file-selected">
+                    <div class="file-info">
+                      <i class="bi bi-file-earmark-pdf text-danger"></i>
+                      <span class="file-name">{{ newTemplate.file.name }}</span>
+                      <span class="file-size">({{ formatFileSize(newTemplate.file.size) }})</span>
                 </div>
+                    <button type="button" @click.stop="removeFile" class="remove-file">
+                      <i class="bi bi-x-circle"></i>
+                    </button>
               </div>
+                </div>
+                <span v-if="fileError" class="error-message">{{ fileError }}</span>
+                  </div>
+                </div>
+            
+            <div v-if="newTemplate.file" class="form-section qr-section">
+              <div class="section-divider">
+                <span class="divider-text">Configuration des positions</span>
+                </div>
+              
+              <div class="qr-positioner-container">
+                <!-- Placeholder pour QrPositioner -->
+                <div class="qr-placeholder">
+                  <div class="placeholder-icon">
+                    <i class="bi bi-qr-code"></i>
+              </div>
+                  <p>QrPositioner sera intégré ici</p>
+                  <small>Configuration des positions QR et signatures</small>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Modal pour la préparation de document directe -->
-    <div v-if="showPrepareDocument" class="modal-overlay">
-      <prepare-document 
+        <div class="modal-footer">
+          <div class="footer-actions">
+            <button type="button" class="btn-secondary" @click="closeNewTemplateModal" :disabled="isSaving">
+              Annuler
+            </button>
+            <button type="button" class="btn-primary" @click="saveTemplate" :disabled="!canSaveTemplate || isSaving">
+              <span v-if="isSaving">
+                <i class="bi bi-hourglass-split spin"></i>
+                Enregistrement...
+              </span>
+              <span v-else>
+                <i class="bi bi-check-circle"></i>
+                Créer le template
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de choix de préparation -->
+    <div v-if="showPrepareChoice" class="modal-overlay" @click.self="closePrepareChoice">
+      <div class="choice-modal">
+        <div class="modal-header">
+          <div class="modal-title-section">
+            <div class="modal-icon">
+              <i class="bi bi-file-earmark-plus"></i>
+            </div>
+            <h3 class="modal-title">Préparer un nouveau document</h3>
+          </div>
+          <button class="modal-close" @click="closePrepareChoice">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <p class="choice-description">Comment souhaitez-vous préparer votre document ?</p>
+          
+          <div class="choice-options">
+            <button class="choice-option" @click="selectTemplatePreparation">
+              <div class="option-icon template">
+                <i class="bi bi-file-earmark-richtext"></i>
+              </div>
+              <div class="option-content">
+                <h4 class="option-title">Utiliser un template</h4>
+                <p class="option-description">Préparez rapidement avec un modèle existant</p>
+              </div>
+              <div class="option-arrow">
+                <i class="bi bi-chevron-right"></i>
+              </div>
+            </button>
+            
+            <button class="choice-option" @click="selectDirectPreparation">
+              <div class="option-icon direct">
+                <i class="bi bi-file-earmark"></i>
+              </div>
+              <div class="option-content">
+                <h4 class="option-title">Préparation directe</h4>
+                <p class="option-description">Créez et configurez un nouveau document</p>
+              </div>
+              <div class="option-arrow">
+                <i class="bi bi-chevron-right"></i>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Composant de préparation directe de document -->
+    <div v-if="showPrepareDocument" class="modal-overlay prepare-document-overlay">
+      <PrepareDocument 
         @close="closePrepareDocument" 
         @documentPrepared="onDocumentPrepared"
       />
-    </div>
-
-    <!-- Modal pour la préparation avec template -->
-    <div v-if="showTemplatePreparation" class="modal-overlay">
-      <div class="template-preparation-modal">
-        <div class="modal-content large">
-          <div class="modal-header">
-            <h3 class="modal-title">
-              <i class="bi bi-file-earmark-richtext"></i>
-              Préparer avec un template
-            </h3>
-            <button @click="closeTemplatePreparation" class="close-button">
-              <i class="bi bi-x-lg"></i>
-            </button>
-          </div>
-          
-          <div class="modal-body">
-            <p class="template-description">
-              Sélectionnez un template existant pour préparer votre document rapidement.
-            </p>
-            
-            <!-- Ici on intégrera la sélection de templates -->
-            <div class="coming-soon">
-              <i class="bi bi-hourglass-split"></i>
-              <h4>Fonctionnalité en cours de développement</h4>
-              <p>La préparation avec templates sera bientôt disponible.</p>
-              <button @click="selectDirectPreparation" class="btn-primary">
-                Utiliser la préparation directe
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import PrepareDocument from '@/views/PrepareDocument.vue';
 import AuthService from '@/services/AuthService';
+import PrepareDocument from '@/views/PrepareDocument.vue';
 
 const router = useRouter();
 
@@ -430,8 +560,16 @@ const organizationStatus = ref('');
 
 // État pour l'affichage des modales
 const showPrepareChoice = ref(false);
-const showPrepareDocument = ref(false);
 const showTemplatePreparation = ref(false);
+
+// Variables pour les templates
+const templates = ref([]);
+const loadingTemplates = ref(false);
+const showNewTemplateModal = ref(false);
+const showPreviewModal = ref(false);
+const showDeleteConfirmModal = ref(false);
+const selectedTemplate = ref(null);
+const previewUrl = ref(null);
 
 // Statistiques
 const stats = {
@@ -489,6 +627,17 @@ const particlePositions = Array.from({ length: 12 }, () => ({
   delay: Math.random() * 8
 }));
 
+// Variables pour la création de template
+const newTemplate = ref({
+  name: '',
+  file: null,
+  qrPositions: null
+});
+const templateNameError = ref('');
+const fileError = ref('');
+const isSaving = ref(false);
+const fileInput = ref(null);
+
 // Méthodes
 function formatDate(date) {
   return new Intl.DateTimeFormat('fr-FR', {
@@ -520,16 +669,34 @@ function closePrepareChoice() {
 
 function selectTemplatePreparation() {
   closePrepareChoice();
-  showTemplatePreparation.value = true;
+  // Rediriger vers la section templates si elle n'est pas déjà active
+  if (templates.value.length > 0) {
+    activeSection.value = 'templates';
+  } else {
+    // Si aucun template, proposer de créer un template d'abord
+    alert('Vous devez créer un template avant de pouvoir l\'utiliser pour préparer un document.');
+    openNewTemplateModal();
+  }
 }
 
 function selectDirectPreparation() {
   closePrepareChoice();
-  showPrepareDocument.value = true;
+  // Afficher la section de préparation directe
+  activeSection.value = 'prepare-document';
 }
 
-function closePrepareDocument() {
-  showPrepareDocument.value = false;
+function closePrepareSection() {
+  // Fermer la section de préparation et revenir à la vue par défaut
+  activeSection.value = '';
+}
+
+function onDocumentPreparedAndClose(document) {
+  // Appeler la fonction existante pour gérer le document
+  onDocumentPrepared(document);
+  // Fermer la section de préparation
+  closePrepareSection();
+  // Optionnel : afficher la section des documents en attente
+  activeSection.value = 'pending';
 }
 
 function closeTemplatePreparation() {
@@ -758,6 +925,88 @@ function refreshData() {
   fetchDocuments();
 }
 
+// Fonctions pour la gestion des templates
+function openNewTemplateModal() {
+  console.log('Ouverture de la modale de création de template');
+  showNewTemplateModal.value = true;
+}
+
+function previewTemplate(template) {
+  console.log('Aperçu du template:', template.name);
+  selectedTemplate.value = template;
+  showPreviewModal.value = true;
+}
+
+function editTemplate(template) {
+  console.log('Édition du template:', template.name);
+  // TODO: Implémenter l'édition de template
+}
+
+function useTemplate(template) {
+  console.log('Utilisation du template:', template.name);
+  // TODO: Implémenter l'utilisation de template pour créer un document
+}
+
+function confirmDeleteTemplate(template) {
+  console.log('Confirmation de suppression du template:', template.name);
+  selectedTemplate.value = template;
+  showDeleteConfirmModal.value = true;
+}
+
+function deleteTemplate() {
+  if (selectedTemplate.value) {
+    console.log('Suppression du template:', selectedTemplate.value.name);
+    // TODO: Implémenter la suppression
+    const index = templates.value.findIndex(t => t.id === selectedTemplate.value.id);
+    if (index > -1) {
+      templates.value.splice(index, 1);
+    }
+    showDeleteConfirmModal.value = false;
+    selectedTemplate.value = null;
+  }
+}
+
+function getQrSizeLabel(size) {
+  switch(size) {
+    case 'small': return 'Petit';
+    case 'medium': return 'Moyen';
+    case 'large': return 'Grand';
+    default: return 'Moyen';
+  }
+}
+
+async function loadTemplates() {
+  try {
+    loadingTemplates.value = true;
+    
+    // Simuler des données de templates pour le moment
+    // TODO: Remplacer par un appel API réel
+    setTimeout(() => {
+      templates.value = [
+        {
+          id: 1,
+          name: 'Contrat de partenariat standard',
+          createdAt: new Date('2024-01-10'),
+          pageApplication: 'all',
+          qrSize: 'medium'
+        },
+        {
+          id: 2,
+          name: 'Rapport mensuel',
+          createdAt: new Date('2024-01-08'),
+          pageApplication: 'specific',
+          qrSize: 'small'
+        }
+      ];
+      loadingTemplates.value = false;
+    }, 1000);
+    
+  } catch (error) {
+    console.error('Erreur lors du chargement des templates:', error);
+    loadingTemplates.value = false;
+  }
+}
+
 // Initialisation
 onMounted(() => {
   document.title = 'Collaborateur - Doc@uthANTIC';
@@ -778,6 +1027,9 @@ onMounted(() => {
       
       // Récupérer les documents
       fetchDocuments();
+      
+      // Charger les templates
+      loadTemplates();
     } else {
       router.push('/login');
     }
@@ -797,6 +1049,127 @@ onMounted(() => {
     window.removeEventListener('organization-changed', loadUserAndDocuments);
   };
 });
+
+// Fonctions pour la modale de création de template
+function closeNewTemplateModal() {
+  showNewTemplateModal.value = false;
+  resetTemplateForm();
+}
+
+function resetTemplateForm() {
+  newTemplate.value = {
+    name: '',
+    file: null,
+    qrPositions: null
+  };
+  templateNameError.value = '';
+  fileError.value = '';
+  isSaving.value = false;
+}
+
+function clearTemplateNameError() {
+  templateNameError.value = '';
+}
+
+function triggerFileInput() {
+  fileInput.value?.click();
+}
+
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (file) {
+    validateAndSetFile(file);
+  }
+}
+
+function handleFileDrop(event) {
+  const file = event.dataTransfer.files[0];
+  if (file) {
+    validateAndSetFile(file);
+  }
+}
+
+function validateAndSetFile(file) {
+  fileError.value = '';
+  
+  // Vérifier le type de fichier
+  if (file.type !== 'application/pdf') {
+    fileError.value = 'Veuillez sélectionner un fichier PDF valide.';
+    return;
+  }
+  
+  // Vérifier la taille (max 10MB)
+  if (file.size > 10 * 1024 * 1024) {
+    fileError.value = 'Le fichier ne doit pas dépasser 10MB.';
+    return;
+  }
+  
+  newTemplate.value.file = file;
+}
+
+function removeFile() {
+  newTemplate.value.file = null;
+  if (fileInput.value) {
+    fileInput.value.value = '';
+  }
+}
+
+function formatFileSize(bytes) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Computed pour vérifier si on peut sauvegarder
+const canSaveTemplate = computed(() => {
+  return newTemplate.value.name.trim() && 
+         newTemplate.value.file && 
+         !templateNameError.value && 
+         !fileError.value;
+});
+
+async function saveTemplate() {
+  // Validation
+  if (!newTemplate.value.name.trim()) {
+    templateNameError.value = 'Le nom du template est obligatoire.';
+    return;
+  }
+  
+  if (!newTemplate.value.file) {
+    fileError.value = 'Veuillez sélectionner un fichier PDF.';
+    return;
+  }
+  
+  try {
+    isSaving.value = true;
+    
+    // Simuler la sauvegarde (remplacer par un appel API réel plus tard)
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Ajouter le nouveau template à la liste
+    const newTemplateData = {
+      id: Date.now(),
+      name: newTemplate.value.name,
+      createdAt: new Date(),
+      pageApplication: 'all', // Par défaut
+      qrSize: 'medium' // Par défaut
+    };
+    
+    templates.value.unshift(newTemplateData);
+    
+    // Fermer la modale
+    closeNewTemplateModal();
+    
+    console.log('Template créé avec succès:', newTemplateData);
+    
+  } catch (error) {
+    console.error('Erreur lors de la création du template:', error);
+  } finally {
+    isSaving.value = false;
+  }
+}
 </script>
 
 <style scoped>
@@ -1194,6 +1567,7 @@ onMounted(() => {
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 .action-card:hover, .action-card.active {
@@ -1220,15 +1594,31 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  color: white;
 }
 
 .action-card .action-icon {
-  background: linear-gradient(45deg, var(--accent-color, #06ffa5), #39ffb4);
+  background: rgba(6, 255, 165, 0.1);
+  color: var(--accent-color, #06ffa5);
 }
 
 .action-card.primary .action-icon {
-  background: linear-gradient(45deg, var(--primary-color, #3a86ff), #5a95ff);
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--primary-color, #3a86ff);
+}
+
+.action-icon.accent {
+  background: rgba(6, 255, 165, 0.1);
+  color: var(--accent-color, #06ffa5);
+}
+
+.action-icon.warning {
+  background: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
+}
+
+.action-icon.success {
+  background: rgba(40, 167, 69, 0.1);
+  color: #28a745;
 }
 
 .action-title {
@@ -1294,19 +1684,48 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   font-size: 1.25rem;
-  color: white;
 }
 
 .stat-icon.primary {
-  background: linear-gradient(45deg, var(--primary-color, #3a86ff), #5a95ff);
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--primary-color, #3a86ff);
 }
 
 .stat-icon.accent {
-  background: linear-gradient(45deg, var(--accent-color, #06ffa5), #39ffb4);
+  background: rgba(6, 255, 165, 0.1);
+  color: var(--accent-color, #06ffa5);
 }
 
 .stat-icon.warning {
-  background: linear-gradient(45deg, #ff9500, #ffb347);
+  background: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
+}
+
+.stat-card.action-stat {
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.stat-card.action-stat:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(58, 134, 255, 0.2);
+  border-color: var(--primary-color, #3a86ff);
+  background: rgba(255, 255, 255, 1);
+}
+
+.stat-card.action-stat .stat-value {
+  color: var(--primary-color, #3a86ff);
+  font-size: 2.5rem;
+}
+
+.stat-card.action-stat .stat-label {
+  color: var(--primary-color, #3a86ff);
+  font-weight: 600;
+}
+
+.stat-card.action-stat .stat-icon {
+  transform: scale(1.1);
 }
 
 /* Section de contenu */
@@ -1475,22 +1894,15 @@ onMounted(() => {
 
 /* Boutons */
 .btn-primary {
-  background: linear-gradient(45deg, var(--primary-color, #3a86ff), #5a95ff);
+  background: var(--accent-color, #06ffa5);
   color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(6, 255, 165, 0.3);
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(58, 134, 255, 0.3);
+  box-shadow: 0 6px 20px rgba(6, 255, 165, 0.4);
+  background: #05e394;
 }
 
 .empty-state .btn-primary {
@@ -1498,20 +1910,22 @@ onMounted(() => {
 }
 
 .btn-icon {
-  background: none;
-  border: 1.5px solid;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 0.6rem;
+  border-radius: 0.75rem;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1rem;
+  backdrop-filter: blur(10px);
 }
 
 .btn-icon.primary {
-  border-color: var(--primary-color, #3a86ff);
+  background: rgba(58, 134, 255, 0.1);
+  border-color: rgba(58, 134, 255, 0.15);
   color: var(--primary-color, #3a86ff);
 }
 
@@ -1519,11 +1933,12 @@ onMounted(() => {
   background: var(--primary-color, #3a86ff);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(58, 134, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(58, 134, 255, 0.3);
 }
 
 .btn-icon.success {
-  border-color: #28a745;
+  background: rgba(40, 167, 69, 0.1);
+  border-color: rgba(40, 167, 69, 0.15);
   color: #28a745;
 }
 
@@ -1531,11 +1946,12 @@ onMounted(() => {
   background: #28a745;
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
 }
 
 .btn-icon.danger {
-  border-color: #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+  border-color: rgba(220, 53, 69, 0.15);
   color: #dc3545;
 }
 
@@ -1543,23 +1959,25 @@ onMounted(() => {
   background: #dc3545;
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
 }
 
 .btn-icon.warning {
-  border-color: #ffc107;
-  color: #f57c00;
+  background: rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.15);
+  color: #ffc107;
 }
 
 .btn-icon.warning:hover {
   background: #ffc107;
   color: #212529;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
 }
 
 .btn-icon:not(.primary):not(.success):not(.danger):not(.warning) {
-  border-color: var(--accent-color, #06ffa5);
+  background: rgba(6, 255, 165, 0.1);
+  border-color: rgba(6, 255, 165, 0.15);
   color: var(--accent-color, #06ffa5);
 }
 
@@ -1567,7 +1985,7 @@ onMounted(() => {
   background: var(--accent-color, #06ffa5);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(6, 255, 165, 0.2);
+  box-shadow: 0 4px 15px rgba(6, 255, 165, 0.3);
 }
 
 /* État vide */
@@ -1620,12 +2038,12 @@ onMounted(() => {
   width: 5rem;
   height: 5rem;
   border-radius: 1rem;
-  background: linear-gradient(45deg, var(--accent-color, #06ffa5), #39ffb4);
+  background: rgba(6, 255, 165, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
-  color: white;
+  color: var(--accent-color, #06ffa5);
   margin: 0 auto 1.5rem;
 }
 
@@ -2223,6 +2641,779 @@ onMounted(() => {
   
   .option-features {
     justify-content: center;
+  }
+}
+
+/* Styles pour les templates */
+.action-icon.template {
+  background: linear-gradient(45deg, #e91e63, #ff5722);
+}
+
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.template-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(6, 255, 165, 0.1);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.template-card:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(6, 255, 165, 0.15);
+  border-color: var(--accent-color, #06ffa5);
+}
+
+.template-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.template-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(233, 30, 99, 0.1);
+  color: #e91e63;
+  font-size: 1.5rem;
+}
+
+.template-status {
+  background: rgba(233, 30, 99, 0.1);
+  color: #e91e63;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.template-content {
+  flex: 1;
+}
+
+.template-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.template-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted, #6c757d);
+}
+
+.meta-item i {
+  color: var(--accent-color, #06ffa5);
+  width: 16px;
+}
+
+.template-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.empty-description {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--text-muted, #6c757d);
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+/* États de chargement et spinners */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(6, 255, 165, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--accent-color, #06ffa5);
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive pour templates */
+@media (max-width: 768px) {
+  .templates-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .template-actions {
+    justify-content: center;
+  }
+}
+
+/* Styles pour la modale de création de template */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.template-modal {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(6, 255, 165, 0.2);
+  animation: modalIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-header {
+  padding: 2rem 2.5rem 1.5rem;
+  border-bottom: 1px solid rgba(6, 255, 165, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(6, 255, 165, 0.05), rgba(58, 134, 255, 0.05));
+}
+
+.modal-title-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.modal-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #e91e63, #ff5722);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color, #333);
+  margin: 0;
+}
+
+.modal-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-muted, #6c757d);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.modal-close:hover {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  transform: scale(1.1);
+}
+
+.modal-body {
+  padding: 2rem 2.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.template-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+  font-size: 0.95rem;
+}
+
+.form-label i {
+  color: var(--accent-color, #06ffa5);
+  font-size: 1.1rem;
+}
+
+.form-input {
+  padding: 1rem 1.25rem;
+  border: 2px solid rgba(6, 255, 165, 0.2);
+  border-radius: 12px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--accent-color, #06ffa5);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 4px rgba(6, 255, 165, 0.1);
+}
+
+.form-input.error {
+  border-color: #dc3545;
+  background: rgba(220, 53, 69, 0.05);
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.file-upload-area {
+  border: 2px dashed rgba(6, 255, 165, 0.3);
+  border-radius: 12px;
+  padding: 2rem;
+  background: rgba(6, 255, 165, 0.02);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.file-upload-area:hover {
+  border-color: var(--accent-color, #06ffa5);
+  background: rgba(6, 255, 165, 0.05);
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.upload-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  background: rgba(6, 255, 165, 0.1);
+  color: var(--accent-color, #06ffa5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+
+.upload-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.upload-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+}
+
+.upload-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted, #6c757d);
+}
+
+.file-selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 1rem;
+  border: 1px solid rgba(6, 255, 165, 0.2);
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.file-info i {
+  font-size: 1.5rem;
+}
+
+.file-name {
+  font-weight: 600;
+  color: var(--text-color, #333);
+}
+
+.file-size {
+  color: var(--text-muted, #6c757d);
+  font-size: 0.9rem;
+}
+
+.remove-file {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.remove-file:hover {
+  background: rgba(220, 53, 69, 0.1);
+  transform: scale(1.1);
+}
+
+.section-divider {
+  position: relative;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.section-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(6, 255, 165, 0.3), transparent);
+}
+
+.divider-text {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0 1rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+  font-size: 0.9rem;
+}
+
+.qr-positioner-container {
+  border: 1px solid rgba(6, 255, 165, 0.2);
+  border-radius: 12px;
+  background: rgba(6, 255, 165, 0.02);
+  padding: 2rem;
+}
+
+.qr-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.placeholder-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--primary-color, #3a86ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.qr-placeholder p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+  margin: 0;
+}
+
+.qr-placeholder small {
+  color: var(--text-muted, #6c757d);
+}
+
+.modal-footer {
+  padding: 1.5rem 2.5rem 2rem;
+  border-top: 1px solid rgba(6, 255, 165, 0.1);
+  background: rgba(6, 255, 165, 0.02);
+}
+
+.footer-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.btn-secondary, .btn-primary {
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 0.95rem;
+}
+
+.btn-secondary {
+  background: rgba(108, 117, 125, 0.1);
+  color: var(--text-muted, #6c757d);
+  border: 1px solid rgba(108, 117, 125, 0.2);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(108, 117, 125, 0.2);
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--accent-color, #06ffa5);
+  color: white;
+  box-shadow: 0 4px 15px rgba(6, 255, 165, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(6, 255, 165, 0.4);
+  background: #05e394;
+}
+
+.btn-primary:disabled, .btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Responsive pour la modale */
+@media (max-width: 768px) {
+  .template-modal {
+    margin: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+  
+  .modal-header {
+    padding: 1.5rem 2rem 1rem;
+  }
+  
+  .modal-body {
+    padding: 1.5rem 2rem;
+  }
+  
+  .modal-footer {
+    padding: 1rem 2rem 1.5rem;
+  }
+  
+  .footer-actions {
+    flex-direction: column;
+  }
+  
+  .btn-secondary, .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-header {
+    padding: 1rem 1.5rem 0.75rem;
+  }
+  
+  .modal-body {
+    padding: 1rem 1.5rem;
+  }
+  
+  .modal-footer {
+    padding: 0.75rem 1.5rem 1rem;
+  }
+  
+  .upload-placeholder {
+    padding: 1rem;
+  }
+  
+  .upload-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+}
+
+/* Styles pour la modale de choix */
+.choice-modal {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 600px;
+  animation: modalIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.choice-description {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--text-muted, #6c757d);
+  margin-bottom: 2rem;
+}
+
+.choice-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.choice-option {
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(6, 255, 165, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.choice-option:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: var(--accent-color, #06ffa5);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(6, 255, 165, 0.2);
+}
+
+.choice-option .option-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  transition: all 0.3s ease;
+}
+
+.choice-option .option-icon.template {
+  background: rgba(6, 255, 165, 0.1);
+  color: var(--accent-color, #06ffa5);
+}
+
+.choice-option .option-icon.direct {
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--primary-color, #3a86ff);
+}
+
+.choice-option:hover .option-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.choice-option .option-content {
+  flex: 1;
+}
+
+.choice-option .option-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+  margin: 0 0 0.5rem 0;
+}
+
+.choice-option .option-description {
+  font-size: 0.95rem;
+  color: var(--text-muted, #6c757d);
+  margin: 0;
+}
+
+.choice-option .option-arrow {
+  font-size: 1.5rem;
+  color: var(--text-muted, #6c757d);
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.choice-option:hover .option-arrow {
+  opacity: 1;
+  color: var(--accent-color, #06ffa5);
+  transform: translateX(5px);
+}
+
+@media (max-width: 768px) {
+  .choice-modal {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .choice-option {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .choice-option .option-arrow {
+    transform: rotate(90deg);
+  }
+  
+  .choice-option:hover .option-arrow {
+    transform: rotate(90deg) translateY(5px);
+  }
+}
+
+/* Styles pour la modale de préparation de document */
+.prepare-document-overlay {
+  z-index: 10001;
+}
+
+.prepare-document-overlay .prepare-document-container {
+  width: 95%;
+  max-width: 1200px;
+  max-height: 90vh;
+  margin: 2rem auto;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .choice-modal {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .choice-option {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .choice-option .option-arrow {
+    transform: rotate(90deg);
+  }
+  
+  .choice-option:hover .option-arrow {
+    transform: rotate(90deg) translateY(5px);
+  }
+}
+
+/* Styles pour la section de préparation de document */
+.prepare-section {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
+
+.prepare-section .prepare-document-container {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 1.25rem;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(6, 255, 165, 0.1);
+  border: 1px solid rgba(6, 255, 165, 0.08);
+  transition: all 0.3s ease;
+}
+
+.prepare-section .section-card {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .prepare-section .prepare-document-container {
+    padding: 1.5rem;
   }
 }
 </style> 

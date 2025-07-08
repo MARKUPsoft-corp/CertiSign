@@ -324,3 +324,321 @@ Quit the server with CONTROL-C.
 127.0.0.1 - - [07/Jul/2025 13:32:08] "GET /media/signatures/signed/signed_VTYurYW.pdf HTTP/1.0" 200 -
 127.0.0.1 - - [07/Jul/2025 13:33:06] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
 127.0.0.1 - - [07/Jul/2025 13:33:06] "GET /media/signatures/signed/signed_VTYurYW.pdf HTTP/1.0" 200 -
+Unauthorized: /api/users/token-verify/
+127.0.0.1 - - [07/Jul/2025 13:42:27] "[31m[1mPOST /api/users/token-verify/ HTTP/1.0[0m" 401 -
+Unauthorized: /api/users/activity-log/
+127.0.0.1 - - [07/Jul/2025 13:42:27] "[31m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 401 -
+127.0.0.1 - - [07/Jul/2025 13:42:27] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:40] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:40] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:40] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:41] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [07/Jul/2025 13:42:41] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:41] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:41] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:41] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:41] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:41] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:45] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:54] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:54] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:54] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [07/Jul/2025 13:42:54] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:54] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:54] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:54] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:54] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:42:54] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:45:32] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.0[0m" 201 -
+127.0.0.1 - - [07/Jul/2025 13:45:32] "[35m[1mPOST /api/public/store_signature/?api_key=certisign_microservice_key_2025 HTTP/1.0[0m" 201 -
+127.0.0.1 - - [07/Jul/2025 13:47:22] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:47:22] "GET /media/signatures/signed/signed_2fPq6GW.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:49:45] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:49:45] "GET /media/signatures/signed/signed_2fPq6GW.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:50:14] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:50:14] "GET /media/signatures/signed/signed_luLKusp.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:52:08] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:52:08] "GET /media/signatures/signed/signed_luLKusp.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:52:18] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:52:18] "GET /media/signatures/signed/signed_2fPq6GW.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:53:02] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 13:53:02] "GET /media/signatures/signed/signed_2fPq6GW.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:05:11] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:05:11] "GET /media/signatures/signed/signed_2fPq6GW.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:10:30] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:10:30] "GET /media/signatures/signed/signed_2fPq6GW.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:15:48] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:15:48] "GET /media/signatures/signed/signed_2fPq6GW.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:20:30] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:20:33] "[35m[1mPOST /api/documents/activities/record_activity/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [07/Jul/2025 14:20:33] "GET /api/documents/signatures/a6399a48-4675-4f45-a06e-629f48015d5c/download/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:24:16] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:24:16] "GET /media/signatures/signed/signed_VTYurYW.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:45:07] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:45:07] "GET /media/signatures/signed/signed_VTYurYW.pdf HTTP/1.0" 200 -
+Unauthorized: /api/users/token-verify/
+127.0.0.1 - - [07/Jul/2025 14:52:36] "[31m[1mPOST /api/users/token-verify/ HTTP/1.0[0m" 401 -
+Unauthorized: /api/users/activity-log/
+127.0.0.1 - - [07/Jul/2025 14:52:37] "[31m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 401 -
+127.0.0.1 - - [07/Jul/2025 14:52:37] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:52:49] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:52:50] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:52:50] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:52:50] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [07/Jul/2025 14:52:50] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:52:50] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:52:50] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:52:50] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:52:50] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:52:50] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:52:54] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 14:53:02] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 15:04:02] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 15:04:02] "GET /media/signatures/signed/signed_luLKusp.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 15:06:05] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 15:06:05] "GET /media/signatures/signed/signed_luLKusp.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 16:03:43] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [07/Jul/2025 16:04:56] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 00:00:14] "[32mGET /admin/assets/css/jquery-ui.css HTTP/1.0[0m" 302 -
+Not Found: /api/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+127.0.0.1 - - [08/Jul/2025 03:50:31] "[33mGET /api/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+127.0.0.1 - - [08/Jul/2025 07:04:19] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:08:09] "[32mGET /admin/assets/js/pbxlib.js HTTP/1.0[0m" 302 -
+127.0.0.1 - - [08/Jul/2025 07:34:43] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:39:22] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:39:37] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:39:37] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:39:37] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:39:37] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [08/Jul/2025 07:39:37] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:39:38] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:39:38] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:39:38] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:39:38] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:39:38] "GET /api/documents/activities/my_activities/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:39:43] "GET /api/documents/signatures/?page=1 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:39:46] "[35m[1mPOST /api/documents/activities/record_activity/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [08/Jul/2025 07:39:46] "GET /api/documents/signatures/caf8dd31-e3e6-4465-a76b-a0a72aee8940/download/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:40:00] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:40:00] "GET /media/signatures/signed/signed_2fPq6GW.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:44:11] "[35m[1mPOST /api/documents/activities/record_activity/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [08/Jul/2025 07:44:11] "GET /api/documents/signatures/0a334cc0-db55-4c33-9d10-ea9abe101b5e/download/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:44:31] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:44:31] "GET /media/signatures/signed/signed_luLKusp.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:46:25] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:46:25] "GET /media/signatures/signed/signed_luLKusp.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:46:36] "GET /api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 07:46:36] "GET /media/signatures/signed/signed_luLKusp.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:12] "[32mGET /admin/ HTTP/1.0[0m" 302 -
+127.0.0.1 - - [08/Jul/2025 09:25:12] "GET /admin/login/?next=/admin/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:12] "GET /static/admin/css/base.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:12] "GET /static/admin/css/dark_mode.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:12] "GET /static/admin/js/theme.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:12] "GET /static/admin/css/nav_sidebar.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:12] "GET /static/admin/css/responsive.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:12] "GET /static/admin/js/nav_sidebar.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:12] "GET /static/admin/css/login.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:20] "[32mPOST /admin/login/?next=/admin/ HTTP/1.0[0m" 302 -
+127.0.0.1 - - [08/Jul/2025 09:25:20] "GET /admin/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:20] "GET /static/admin/css/dashboard.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:20] "GET /static/admin/img/icon-addlink.svg HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:20] "GET /static/admin/img/icon-changelink.svg HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:20] "GET /static/admin/img/icon-viewlink.svg HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:20] "GET /static/admin/img/icon-deletelink.svg HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /admin/users/customuser/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /static/admin/css/changelists.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /static/admin/js/core.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /static/admin/js/jquery.init.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /static/admin/js/actions.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /static/admin/js/urlify.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /static/admin/js/prepopulate.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /static/admin/js/filters.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /static/admin/img/search.svg HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /static/admin/img/tooltag-add.svg HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:31] "GET /static/admin/img/sorting-icons.svg HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:33] "GET /admin/users/customuser/8/change/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:33] "GET /static/admin/css/forms.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:33] "GET /static/admin/js/change_form.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:33] "GET /static/admin/js/prepopulate_init.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:33] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:33] "GET /static/admin/css/widgets.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:45] "[32mPOST /admin/users/customuser/8/change/ HTTP/1.0[0m" 302 -
+127.0.0.1 - - [08/Jul/2025 09:25:45] "GET /admin/users/customuser/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:46] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:25:46] "GET /static/admin/img/icon-yes.svg HTTP/1.0" 200 -
+Unauthorized: /api/users/activity-log/
+127.0.0.1 - - [08/Jul/2025 09:25:55] "[31m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 401 -
+Unauthorized: /api/users/token-verify/
+127.0.0.1 - - [08/Jul/2025 09:25:55] "[31m[1mPOST /api/users/token-verify/ HTTP/1.0[0m" 401 -
+127.0.0.1 - - [08/Jul/2025 09:25:55] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [08/Jul/2025 09:25:56] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:26:14] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:26:14] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 09:26:14.984009) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 09:26:14.991330) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 09:26:15] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:26:53] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 09:26:53.564619) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 09:26:53.568262) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 09:26:53] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 09:29:49.090919) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 09:29:49.092568) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 09:29:49] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:35:59] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 09:35:59.903556) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 09:35:59.905042) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 09:35:59] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+Unauthorized: /api/users/activity-log/
+127.0.0.1 - - [08/Jul/2025 09:37:59] "[31m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 401 -
+127.0.0.1 - - [08/Jul/2025 09:37:59] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [08/Jul/2025 09:37:59] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:38:12] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:38:12] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 09:38:13.004277) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 09:38:13.006064) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 09:38:13] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:38:19] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 09:38:19.093394) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 09:38:19.094952) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 09:38:19] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:47:24] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 09:47:24.676106) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 09:47:24.679851) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 09:47:24] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:49:29] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 09:49:29.229156) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 09:49:29.232207) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 09:49:29] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:53:50] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 09:53:50.970470) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 09:53:50.972211) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 09:53:50] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:57:25] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 09:57:25.490363) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 09:57:25.511303) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 09:57:25] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 09:58:57] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 09:58:58.054705) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 09:58:58.056645) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 09:58:58] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:02:42] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:02:42.543863) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:02:42.548191) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:02:42] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:03:20] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:03:21.160020) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:03:21.163725) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:03:21] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:06:47] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:06:47.454046) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:06:47.457783) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:06:47] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:07:00] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:07:00.466544) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:07:00.477633) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:07:00] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:10:17] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:10:17.743635) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:10:17.748512) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:10:17] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:13:55] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:13:55.906970) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:13:55.908588) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:13:55] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:14:20] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:14:20.284172) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:14:20.287232) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:14:20] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:14:42] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:14:42.855427) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:14:42.862263) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:14:42] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:17:30] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:17:30.441925) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:17:30.443389) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:17:30] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:20:20] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:20:21.071032) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:20:21.072537) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:20:21] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:22:08] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:22:08.928031) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:22:08.933214) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:22:08] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:25:20] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:25:21.088996) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:25:21.093222) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:25:21] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+Unauthorized: /api/users/token-verify/
+127.0.0.1 - - [08/Jul/2025 10:34:41] "[31m[1mPOST /api/users/token-verify/ HTTP/1.0[0m" 401 -
+127.0.0.1 - - [08/Jul/2025 10:34:41] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [08/Jul/2025 10:34:41] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:34:55] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:34:56] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:34:56.686436) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:34:56.688919) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:34:56] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:37:13] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:37:14.011608) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:37:14.013509) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:37:14] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 10:38:03] "[35m[1mPOST /api/documents/qr-positions/ HTTP/1.0[0m" 201 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 10:38:03.425331) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 10:38:03.428290) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 10:38:03] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
