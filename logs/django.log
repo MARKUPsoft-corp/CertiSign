@@ -839,3 +839,472 @@ Unauthorized: /api/users/token-verify/
 /home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:23:28.425837) while time zone support is active.
   warnings.warn(
 127.0.0.1 - - [08/Jul/2025 12:23:28] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:25:32] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 12:25:32.238345) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:25:32.239778) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 12:25:32] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:27:07] "[35m[1mPOST /api/documents/qr-positions/ HTTP/1.0[0m" 201 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 12:27:07.481097) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:27:07.487494) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 12:27:07] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+Not Found: /api/documents/remind/3e702bdc-248c-4a2c-9398-149374056538/
+127.0.0.1 - - [08/Jul/2025 12:27:16] "[33mPOST /api/documents/remind/3e702bdc-248c-4a2c-9398-149374056538/ HTTP/1.0[0m" 404 -
+127.0.0.1 - - [08/Jul/2025 12:28:53] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 12:28:54.219320) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:28:54.223426) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 12:28:54] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:32:06] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 12:32:07.083249) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:32:07.086115) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 12:32:07] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:33:48] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 12:33:49.000501) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:33:49.001923) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 12:33:49] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:34:39] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 12:34:39.426412) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:34:39.428545) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 12:34:39] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:35:24] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 12:35:24.632016) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:35:24.633505) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 12:35:24] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 12:36:05.750157) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:36:05.751675) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 12:36:05] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 12:36:07.405512) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:36:07.406928) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 12:36:07] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:36:39] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:36:44] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:37:31] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 12:37:31.846006) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:37:31.853273) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 12:37:31] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:37:58] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 12:37:58.442216) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:37:58.448856) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 12:37:58] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:34] "GET /admin/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:34] "GET /static/admin/css/base.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:34] "GET /static/admin/css/dark_mode.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:34] "GET /static/admin/css/nav_sidebar.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:34] "GET /static/admin/css/dashboard.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:34] "GET /static/admin/css/responsive.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:34] "GET /static/admin/img/icon-changelink.svg HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:34] "GET /static/admin/img/icon-addlink.svg HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:36] "GET /admin/documents/documentqrposition/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:36] "GET /static/admin/img/icon-no.svg HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:36] "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:36] "GET /static/admin/js/core.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:36] "GET /static/admin/js/urlify.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:36] "GET /static/admin/js/jquery.init.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:36] "GET /static/admin/js/actions.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:36] "GET /static/admin/js/prepopulate.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:36] "GET /static/admin/js/filters.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:36] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:36] "GET /static/admin/img/search.svg HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:36] "GET /static/admin/img/tooltag-add.svg HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:46] "GET /admin/documents/documentqrposition/3e702bdc-248c-4a2c-9398-149374056538/change/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:46] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:46] "GET /static/admin/js/change_form.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:42:46] "GET /static/admin/js/prepopulate_init.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:43:10] "GET /media/documents/prepared/Plan_de_mémoire___Authentification_TLS_avec_ZKP_via_Fiat-Shamir_signe_O4m6F0W.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:43:17] "GET /admin/documents/documentqrposition/3e702bdc-248c-4a2c-9398-149374056538/change/ HTTP/1.0" 200 -
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/models.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://127.0.0.1:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+Données reçues: <QueryDict: {'document_name': ['Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signed.pdf'], 'qr_x_position': ['54.957983193277315'], 'qr_y_position': ['87.67221047589445'], 'qr_size': ['medium'], 'qr_pages': ['1'], 'qr_positions': ['{"1":{"x":54.957983193277315,"y":87.67221047589445}}'], 'qr_mode': ['standard'], 'status': ['pending_signature'], 'organization_id': ['2'], 'metadata': ['{"prepared_by":{"user_id":8,"username":"MARKUPsafe","email":"emmanuelyakam@gmail.com","full_name":""},"organization":{"id":2,"name":"CNCCE","serial_number":""},"browser_info":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0","batch_info":{"document_index":1,"total_documents":1,"batch_id":"1751971083196"}}'], 'document_file': [<InMemoryUploadedFile: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signed.pdf (application/pdf)>]}>
+Clés et types:
+  - document_name: <class 'str'>
+  - qr_x_position: <class 'str'>
+    Valeur: 54.957983193277315...
+  - qr_y_position: <class 'str'>
+    Valeur: 87.67221047589445...
+  - qr_size: <class 'str'>
+    Valeur: medium...
+  - qr_pages: <class 'str'>
+    Valeur: 1...
+  - qr_positions: <class 'str'>
+    Valeur: {"1":{"x":54.957983193277315,"y":87.67221047589445}}...
+  - qr_mode: <class 'str'>
+  - status: <class 'str'>
+  - organization_id: <class 'str'>
+    Valeur: 2...
+  - metadata: <class 'str'>
+    Valeur: {"prepared_by":{"user_id":8,"username":"MARKUPsafe","email":"emmanuelyakam@gmail.com","full_name":""...
+  - document_file: <class 'django.core.files.uploadedfile.InMemoryUploadedFile'>
+Données reçues: <QueryDict: {'document_name': ['Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signed.pdf'], 'qr_x_position': ['55.714285714285715'], 'qr_y_position': ['82.91765878999034'], 'qr_size': ['medium'], 'qr_pages': ['all'], 'qr_positions': ['{"default":{"x":55.714285714285715,"y":82.91765878999034}}'], 'qr_mode': ['standard'], 'status': ['pending_signature'], 'organization_id': ['2'], 'metadata': ['{"prepared_by":{"user_id":8,"username":"MARKUPsafe","email":"emmanuelyakam@gmail.com","full_name":""},"organization":{"id":2,"name":"CNCCE","serial_number":""},"browser_info":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0","batch_info":{"document_index":1,"total_documents":1,"batch_id":"1751977627205"}}'], 'document_file': [<InMemoryUploadedFile: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signed.pdf (application/pdf)>]}>
+Clés et types:
+  - document_name: <class 'str'>
+  - qr_x_position: <class 'str'>
+    Valeur: 55.714285714285715...
+  - qr_y_position: <class 'str'>
+    Valeur: 82.91765878999034...
+  - qr_size: <class 'str'>
+    Valeur: medium...
+  - qr_pages: <class 'str'>
+    Valeur: all...
+  - qr_positions: <class 'str'>
+    Valeur: {"default":{"x":55.714285714285715,"y":82.91765878999034}}...
+  - qr_mode: <class 'str'>
+  - status: <class 'str'>
+  - organization_id: <class 'str'>
+    Valeur: 2...
+  - metadata: <class 'str'>
+    Valeur: {"prepared_by":{"user_id":8,"username":"MARKUPsafe","email":"emmanuelyakam@gmail.com","full_name":""...
+  - document_file: <class 'django.core.files.uploadedfile.InMemoryUploadedFile'>
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/migrations/0005_add_generated_pdf.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://127.0.0.1:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/admin.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 1 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): documents.
+Run 'python manage.py migrate' to apply them.
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://127.0.0.1:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/migrations/0005_add_generated_pdf.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 1 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): documents.
+Run 'python manage.py migrate' to apply them.
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://127.0.0.1:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/serializers.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 1 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): documents.
+Run 'python manage.py migrate' to apply them.
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://127.0.0.1:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/serializers.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 1 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): documents.
+Run 'python manage.py migrate' to apply them.
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://127.0.0.1:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+127.0.0.1 - - [08/Jul/2025 12:48:22] "[35m[1mGET /admin/documents/documentqrposition/3e702bdc-248c-4a2c-9398-149374056538/change/ HTTP/1.0[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+psycopg2.errors.UndefinedColumn: column documents_documentqrposition.generated_pdf does not exist
+LINE 1: ..., "documents_documentqrposition"."document_name", "documents...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/contrib/staticfiles/handlers.py", line 80, in __call__
+    return self.application(environ, start_response)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/core/handlers/wsgi.py", line 124, in __call__
+    response = self.get_response(request)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 140, in get_response
+    response = self._middleware_chain(request)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 57, in inner
+    response = response_for_exception(request, exc)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 141, in response_for_exception
+    response = handle_uncaught_exception(
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 182, in handle_uncaught_exception
+    return debug.technical_500_response(request, *exc_info)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django_extensions/management/technical_response.py", line 41, in null_technical_500_response
+    raise exc_value.with_traceback(tb)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 719, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 246, in inner
+    return view(request, *args, **kwargs)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1987, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1840, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 1863, in _changeform_view
+    obj = self.get_object(request, unquote(object_id), to_field)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 897, in get_object
+    return queryset.get(**{field.name: object_id})
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/query.py", line 629, in get
+    num = len(clone)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/query.py", line 366, in __len__
+    self._fetch_all()
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+django.db.utils.ProgrammingError: column documents_documentqrposition.generated_pdf does not exist
+LINE 1: ..., "documents_documentqrposition"."document_name", "documents...
+                                                             ^
+
+127.0.0.1 - - [08/Jul/2025 12:48:22] "GET /admin/documents/documentqrposition/3e702bdc-248c-4a2c-9398-149374056538/change/?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:48:22] "GET /admin/documents/documentqrposition/3e702bdc-248c-4a2c-9398-149374056538/change/?__debugger__=yes&cmd=resource&f=style.css HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:48:22] "GET /admin/documents/documentqrposition/3e702bdc-248c-4a2c-9398-149374056538/change/?__debugger__=yes&cmd=resource&f=console.png HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:49:40] "GET /admin/documents/documentqrposition/3e702bdc-248c-4a2c-9398-149374056538/change/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:49:40] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/admin.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 1 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): documents.
+Run 'python manage.py migrate' to apply them.
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://127.0.0.1:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+ * Detected change in '/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/documents/models.py', reloading
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 5.2.3, using settings 'certisign_project.settings'
+Development server is running at https://127.0.0.1:8000/
+Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
+Quit the server with CONTROL-C.
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 459-608-254
+127.0.0.1 - - [08/Jul/2025 12:51:27] "GET /admin/documents/documentqrposition/3e702bdc-248c-4a2c-9398-149374056538/change/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:51:27] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:52:21] "[35m[1mPOST /api/documents/qr-positions/ HTTP/1.0[0m" 201 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 12:52:21.589581) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:52:21.596277) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 12:52:21] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:52:27] "GET /admin/documents/documentqrposition/3e702bdc-248c-4a2c-9398-149374056538/change/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:52:27] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:52:29] "GET /admin/documents/documentqrposition/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:52:29] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:52:39] "GET /admin/documents/documentqrposition/375cb6c1-4cbb-4171-ae1b-bc1353cd86ce/change/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:52:39] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:52:39] "GET /media/signatures/images/signature_161eSoZ.png HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:52:42] "GET /admin/documents/documentqrposition/375cb6c1-4cbb-4171-ae1b-bc1353cd86ce/change/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:52:43] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:52:43] "[36mGET /media/signatures/images/signature_161eSoZ.png HTTP/1.0[0m" 304 -
+127.0.0.1 - - [08/Jul/2025 12:54:31] "GET /admin/documents/documentqrposition/375cb6c1-4cbb-4171-ae1b-bc1353cd86ce/change/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:54:31] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 12:54:31] "[36mGET /media/signatures/images/signature_161eSoZ.png HTTP/1.0[0m" 304 -
+127.0.0.1 - - [08/Jul/2025 12:59:42] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 12:59:42.837025) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 12:59:42.839754) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 12:59:42] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:00:42] "[35m[1mPOST /api/documents/qr-positions/ HTTP/1.0[0m" 201 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 13:00:42.995033) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 13:00:43.001219) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 13:00:43] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:00:47] "GET /admin/documents/documentqrposition/375cb6c1-4cbb-4171-ae1b-bc1353cd86ce/change/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:00:47] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:00:47] "[36mGET /media/signatures/images/signature_161eSoZ.png HTTP/1.0[0m" 304 -
+127.0.0.1 - - [08/Jul/2025 13:00:52] "GET /admin/documents/documentqrposition/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:00:53] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:00:55] "GET /admin/documents/documentqrposition/9531e3cf-8bd2-43f5-9c0b-a1dca1524931/change/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:00:55] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:00:55] "GET /media/signatures/images/signature_cO54KfX.png HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:00:58] "GET /media/documents/generated/b7813175-8_5l2zmDJ.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT_modifié.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:01:12] "GET /admin/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:01:14] "GET /admin/documents/documentqrposition/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:01:14] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:04:07] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 13:04:07.208938) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 13:04:07.214870) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 13:04:07] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+Unauthorized: /api/users/token-verify/
+127.0.0.1 - - [08/Jul/2025 13:07:23] "[31m[1mPOST /api/users/token-verify/ HTTP/1.0[0m" 401 -
+127.0.0.1 - - [08/Jul/2025 13:07:23] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [08/Jul/2025 13:07:24] "GET /api/users/organizations/ HTTP/1.0" 200 -
+Bad Request: /api/users/auth/with-organization/
+127.0.0.1 - - [08/Jul/2025 13:07:34] "[31m[1mPOST /api/users/auth/with-organization/ HTTP/1.0[0m" 400 -
+127.0.0.1 - - [08/Jul/2025 13:07:39] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:07:40] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 13:07:40.623044) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 13:07:40.628286) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 13:07:40] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:07:44] "GET /api/documents/qr-positions/9531e3cf-8bd2-43f5-9c0b-a1dca1524931/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:07:44] "[36mGET /media/documents/generated/b7813175-8_5l2zmDJ.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT_modifié.pdf HTTP/1.0[0m" 304 -
+127.0.0.1 - - [08/Jul/2025 13:08:09] "GET /api/documents/qr-positions/9531e3cf-8bd2-43f5-9c0b-a1dca1524931/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:10:00] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 13:10:00.684834) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 13:10:00.689230) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 13:10:00] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:10:06] "GET /api/documents/qr-positions/375cb6c1-4cbb-4171-ae1b-bc1353cd86ce/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:10:06] "GET /media/documents/prepared/acte_uok4801.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:10:18] "GET /api/documents/qr-positions/9531e3cf-8bd2-43f5-9c0b-a1dca1524931/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:10:18] "[36mGET /media/documents/generated/b7813175-8_5l2zmDJ.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT_modifié.pdf HTTP/1.0[0m" 304 -
+127.0.0.1 - - [08/Jul/2025 13:12:25] "[35m[1mDELETE /api/documents/qr-positions/375cb6c1-4cbb-4171-ae1b-bc1353cd86ce/?organization_id=2 HTTP/1.0[0m" 204 -
+127.0.0.1 - - [08/Jul/2025 13:12:29] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 13:12:29.757594) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 13:12:29.763230) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 13:12:29] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:12:33] "GET /admin/documents/documentqrposition/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:12:33] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:12:42] "GET /api/documents/qr-positions/3e702bdc-248c-4a2c-9398-149374056538/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:12:43] "[36mGET /media/documents/prepared/Plan_de_mémoire___Authentification_TLS_avec_ZKP_via_Fiat-Shamir_signe_O4m6F0W.pdf HTTP/1.0[0m" 304 -
+127.0.0.1 - - [08/Jul/2025 13:12:51] "GET /api/documents/qr-positions/9531e3cf-8bd2-43f5-9c0b-a1dca1524931/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:12:52] "[36mGET /media/documents/generated/b7813175-8_5l2zmDJ.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT_modifié.pdf HTTP/1.0[0m" 304 -
+127.0.0.1 - - [08/Jul/2025 13:14:55] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 13:14:55.445499) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 13:14:55.449719) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 13:14:55] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:14:59] "GET /api/documents/qr-positions/9531e3cf-8bd2-43f5-9c0b-a1dca1524931/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:15:00] "[36mGET /media/documents/generated/b7813175-8_5l2zmDJ.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT_modifié.pdf HTTP/1.0[0m" 304 -
+127.0.0.1 - - [08/Jul/2025 13:18:05] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 13:18:05.612704) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 13:18:05.614356) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 13:18:05] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:18:10] "GET /api/documents/qr-positions/9531e3cf-8bd2-43f5-9c0b-a1dca1524931/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:18:10] "[36mGET /media/documents/generated/b7813175-8_5l2zmDJ.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT_modifié.pdf HTTP/1.0[0m" 304 -
+127.0.0.1 - - [08/Jul/2025 13:20:56] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 13:20:56.249049) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 13:20:56.265246) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 13:20:56] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:21:01] "[35m[1mDELETE /api/documents/qr-positions/69263949-c515-4629-822b-0c5410fedd95/ HTTP/1.0[0m" 204 -
+127.0.0.1 - - [08/Jul/2025 13:21:14] "GET /admin/documents/documentqrposition/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:21:14] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:24:50] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 13:24:51.046737) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 13:24:51.050829) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 13:24:51] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:25:00] "GET /api/documents/qr-positions/9531e3cf-8bd2-43f5-9c0b-a1dca1524931/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:25:00] "[36mGET /media/documents/generated/b7813175-8_5l2zmDJ.1689868536.608448.ATTESTATION_20_20_20DE_20_20DOT_modifié.pdf HTTP/1.0[0m" 304 -

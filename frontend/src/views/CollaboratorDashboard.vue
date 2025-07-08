@@ -162,7 +162,9 @@
           <div class="documents-list">
             <div v-for="doc in drafts" :key="doc.id" class="document-item">
               <div class="doc-info">
-                <i class="bi bi-file-earmark"></i>
+                <div class="action-icon accent">
+                  <i class="bi bi-file-earmark-text"></i>
+                </div>
                 <div class="doc-details">
                   <span class="doc-name">{{ doc.name }}</span>
                   <span class="doc-meta">Créé le {{ formatDate(doc.createdAt) }}</span>
@@ -270,15 +272,23 @@
 
         <!-- Documents en attente -->
         <div v-if="activeSection === 'pending'" class="section-content">
-          <h3 class="content-title">
-            <i class="bi bi-hourglass-split"></i>
-            Documents en attente de signature
-          </h3>
+          <div class="section-header">
+            <h3 class="content-title">
+              <i class="bi bi-hourglass-split"></i>
+              Documents en attente de signature
+            </h3>
+            <button class="btn-primary" @click="refreshData">
+              <i class="bi bi-arrow-clockwise"></i>
+              Actualiser
+            </button>
+          </div>
           
           <div class="documents-list">
             <div v-for="doc in pendingDocuments" :key="doc.id" class="document-item">
               <div class="doc-info">
-                <i class="bi bi-file-earmark-clock"></i>
+                <div class="action-icon warning">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                </div>
                 <div class="doc-details">
                   <span class="doc-name">{{ doc.name }}</span>
                   <span class="doc-meta">Assigné à {{ doc.assignedTo }} le {{ formatDate(doc.assignedAt) }}</span>
@@ -290,14 +300,11 @@
                   <span class="status-badge pending">En attente</span>
                 </div>
                 <div class="doc-actions">
-                  <button class="btn-icon" title="Voir détails">
+                  <button class="btn-icon" title="Voir détails" @click="viewPendingDocument(doc)">
                     <i class="bi bi-eye"></i>
                   </button>
-                  <button class="btn-icon warning" title="Relancer" @click="remindSigner(doc)">
-                    <i class="bi bi-bell"></i>
-                  </button>
-                  <button class="btn-icon" title="Réassigner">
-                    <i class="bi bi-arrow-repeat"></i>
+                  <button class="btn-icon danger" title="Supprimer" @click="deletePendingDocument(doc)">
+                    <i class="bi bi-trash"></i>
                   </button>
                 </div>
               </div>
@@ -311,15 +318,23 @@
 
         <!-- Documents terminés -->
         <div v-if="activeSection === 'completed'" class="section-content">
-          <h3 class="content-title">
-            <i class="bi bi-file-check"></i>
-            Documents signés
-          </h3>
+          <div class="section-header">
+            <h3 class="content-title">
+              <i class="bi bi-file-check"></i>
+              Documents signés
+            </h3>
+            <button class="btn-primary" @click="refreshData">
+              <i class="bi bi-arrow-clockwise"></i>
+              Actualiser
+            </button>
+          </div>
           
           <div class="documents-list">
             <div v-for="doc in completedDocuments" :key="doc.id" class="document-item">
               <div class="doc-info">
-                <i class="bi bi-file-earmark-check"></i>
+                <div class="action-icon success">
+                  <i class="bi bi-file-check"></i>
+                </div>
                 <div class="doc-details">
                   <span class="doc-name">{{ doc.name }}</span>
                   <span class="doc-meta">Signé par {{ doc.signedBy }} le {{ formatDate(doc.signedAt) }}</span>
@@ -530,6 +545,8 @@
       </div>
     </div>
 
+
+
   </div>
 </template>
 
@@ -625,6 +642,8 @@ const templateNameError = ref('');
 const fileError = ref('');
 const isSaving = ref(false);
 const fileInput = ref(null);
+
+
 
 // Méthodes
 function formatDate(date) {
@@ -888,8 +907,8 @@ async function deleteDraft(doc) {
   }
 }
 
-async function remindSigner(doc) {
-  console.log('Relancer le signataire pour:', doc.name);
+async function deletePendingDocument(doc) {
+  console.log('Supprimer le document en attente:', doc.name);
   
   try {
     // Récupérer l'ID de l'organisation actuelle
@@ -901,10 +920,9 @@ async function remindSigner(doc) {
       return;
     }
     
-    // Appel à l'API pour envoyer un rappel
+    // Appel à l'API pour supprimer le document
     const token = localStorage.getItem('token');
-    await axios.post(`https://ppd.camgovca.cm/api/documents/remind/${doc.id}/`, 
-      { organization_id: organizationId },
+    await axios.delete(`https://ppd.camgovca.cm/api/documents/qr-positions/${doc.id}/`, 
       {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -912,10 +930,13 @@ async function remindSigner(doc) {
       }
     );
     
-    alert('Un rappel a été envoyé au signataire.');
+    // Supprimer le document de la liste locale
+    pendingDocuments.value = pendingDocuments.value.filter(d => d.id !== doc.id);
+    
+    alert('Document supprimé avec succès.');
   } catch (error) {
-    console.error('Erreur lors de l\'envoi du rappel:', error);
-    alert('Erreur lors de l\'envoi du rappel.');
+    console.error('Erreur lors de la suppression du document:', error);
+    alert('Erreur lors de la suppression du document.');
   }
 }
 
@@ -1160,6 +1181,42 @@ async function saveTemplate() {
     isSaving.value = false;
   }
 }
+
+async function viewPendingDocument(doc) {
+  console.log('Voir détails du document en attente:', doc.name);
+  
+  try {
+    // Récupérer le token d'authentification
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('Token d\'authentification manquant');
+    }
+    
+    // Appeler l'API pour récupérer les détails du document avec le PDF généré
+    const response = await axios.get(`https://ppd.camgovca.cm/api/documents/qr-positions/${doc.id}/`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (response.data && response.data.generated_pdf) {
+      // Le PDF généré existe, l'ouvrir dans un nouvel onglet
+      console.log('PDF généré trouvé:', response.data.generated_pdf);
+      window.open(response.data.generated_pdf, '_blank');
+    } else if (response.data && response.data.document_file) {
+      // Fallback: utiliser le document original
+      console.log('Utilisation du document original:', response.data.document_file);
+      window.open(response.data.document_file, '_blank');
+    } else {
+      throw new Error('Aucun fichier PDF disponible pour ce document');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la récupération du PDF:', error);
+    alert(error.response?.data?.detail || error.message || 'Erreur lors du chargement du document');
+  }
+}
+
+
 </script>
 
 <style scoped>
@@ -2739,27 +2796,55 @@ async function saveTemplate() {
 
 /* États de chargement et spinners */
 .loading-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem;
   text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted, #6c757d);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 1rem;
+  border: 1px dashed rgba(6, 255, 165, 0.2);
 }
 
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(6, 255, 165, 0.3);
+.loading-state .spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(6, 255, 165, 0.2);
   border-radius: 50%;
   border-top-color: var(--accent-color, #06ffa5);
   animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
+  margin: 0 auto 1.5rem;
+}
+
+.loading-state p {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-color, #333);
 }
 
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.error-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted, #6c757d);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 1rem;
+  border: 1px dashed rgba(6, 255, 165, 0.2);
+}
+
+.error-state i {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  color: rgba(6, 255, 165, 0.3);
+}
+
+.error-state p {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  color: var(--text-color, #333);
 }
 
 /* Responsive pour templates */
@@ -3488,4 +3573,5 @@ async function saveTemplate() {
   background-color: var(--secondary-color) !important;
   border-color: var(--border-color) !important;
 }
+
 </style> 

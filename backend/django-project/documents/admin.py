@@ -157,16 +157,22 @@ class DocumentQRPositionAdmin(admin.ModelAdmin):
     """
     Administration des positions de QR code sur les documents.
     """
-    list_display = ('document_name', 'collaborator', 'organization', 'status', 'has_signature', 'created_at')
+    list_display = ('document_name', 'collaborator', 'organization', 'status', 'has_signature', 'has_generated_pdf', 'created_at')
     list_filter = ('status', 'collaborator', 'organization', 'created_at')
     search_fields = ('document_name', 'collaborator__username', 'organization__name')
-    readonly_fields = ('id', 'created_at', 'updated_at', 'signature_preview')
+    readonly_fields = ('id', 'created_at', 'updated_at', 'signature_preview', 'generated_pdf_preview')
     
     def has_signature(self, obj):
         """Indique si le document a une signature associée."""
         return bool(obj.signature_image)
     has_signature.boolean = True
     has_signature.short_description = _('Signature')
+    
+    def has_generated_pdf(self, obj):
+        """Indique si le document a un PDF généré."""
+        return bool(obj.generated_pdf)
+    has_generated_pdf.boolean = True
+    has_generated_pdf.short_description = _('PDF Généré')
     
     def signature_preview(self, obj):
         """Affiche un aperçu de l'image de signature."""
@@ -175,9 +181,35 @@ class DocumentQRPositionAdmin(admin.ModelAdmin):
         return "Aucune signature"
     signature_preview.short_description = _('Aperçu signature')
     
+    def generated_pdf_preview(self, obj):
+        """Affiche un lien vers le PDF généré avec QR et signature intégrés."""
+        if obj.generated_pdf:
+            return format_html(
+                '<div style="display: flex; align-items: center; gap: 10px;">'
+                '<a href="{}" target="_blank" style="color: #007cba; text-decoration: none;">'
+                '<i class="fas fa-file-pdf" style="font-size: 24px; color: #d32f2f;"></i> '
+                'Voir le PDF généré'
+                '</a>'
+                '<span style="color: #666; font-size: 12px;">({:.1f} KB)</span>'
+                '</div>',
+                obj.generated_pdf.url,
+                obj.generated_pdf.size / 1024 if obj.generated_pdf.size else 0
+            )
+        return format_html(
+            '<span style="color: #999; font-style: italic;">'
+            '<i class="fas fa-exclamation-triangle" style="color: #ff9800;"></i> '
+            'PDF non généré'
+            '</span>'
+        )
+    generated_pdf_preview.short_description = _('PDF avec QR et signature')
+    
     fieldsets = (
         ('Document', {
             'fields': ('id', 'document_name', 'document_file', 'status')
+        }),
+        ('PDF Généré', {
+            'fields': ('generated_pdf', 'generated_pdf_preview'),
+            'description': 'Le PDF généré contient le QR code et la signature manuscrite intégrés'
         }),
         ('Positionnement QR', {
             'fields': ('qr_x_position', 'qr_y_position', 'qr_size', 'qr_pages', 'qr_positions', 'qr_mode')

@@ -1148,7 +1148,7 @@ async function confirmAndClosePreview() {
   }
 
   // Confirmer la position et fermer la modale
-  confirmPosition();
+  await confirmPosition();
   closePreviewModal();
 }
 
@@ -1261,7 +1261,40 @@ function getPositionData() {
   };
 }
 
-function confirmPosition() {
+async function confirmPosition() {
+  // Si on n'a pas encore de PDF généré, le générer automatiquement
+  if (!generatedPdfBlob.value) {
+    console.log('Aucun PDF généré trouvé, génération automatique...');
+    try {
+      await generateModifiedPdf();
+      
+      // Créer un File object pour l'émission
+      if (generatedPdfBlob.value) {
+        let fileName = 'document_modifié.pdf';
+        if (props.pdfFile && props.pdfFile.name) {
+          const originalName = props.pdfFile.name.replace(/\.pdf$/i, '');
+          fileName = `${originalName}_modifié.pdf`;
+        }
+        
+        const pdfFile = new File([generatedPdfBlob.value], fileName, { type: 'application/pdf' });
+
+        // Émettre l'événement pdf-generated
+        emit('pdf-generated', {
+          file: pdfFile,
+          dataUrl: generatedPdfDataUrl.value,
+          blob: generatedPdfBlob.value
+        });
+        
+        console.log('PDF généré automatiquement et émis');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la génération automatique du PDF:', error);
+      // Continuer quand même avec la confirmation
+    }
+  } else {
+    console.log('PDF déjà généré, pas besoin de le régénérer');
+  }
+  
   emit('position-confirmed', getPositionData());
 }
 

@@ -144,6 +144,7 @@
               :total-pages="documentPreviews[activePositioningIndex]?.totalPages || 1"
               @position-changed="onQrPositionChanged"
               @position-confirmed="onQrPositionConfirmed"
+              @pdf-generated="onPdfGenerated"
             ></qr-positioner>
           </div>
           
@@ -586,6 +587,27 @@ function onQrPositionConfirmed(position) {
   }
 }
 
+// Nouvelle fonction pour gérer le PDF généré par QrPositioner
+function onPdfGenerated(pdfData) {
+  console.log('PDF généré reçu pour le document', activePositioningIndex.value, ':', pdfData);
+  console.log('PDF file size:', pdfData.file?.size, 'bytes');
+  console.log('PDF file name:', pdfData.file?.name);
+  
+  // Stocker le PDF généré pour le document actuel
+  if (!documentPositions.value[activePositioningIndex.value]) {
+    documentPositions.value[activePositioningIndex.value] = {};
+  }
+  
+  documentPositions.value[activePositioningIndex.value].generatedPdf = {
+    file: pdfData.file,
+    dataUrl: pdfData.dataUrl,
+    blob: pdfData.blob
+  };
+  
+  console.log('PDF généré stocké pour le document', activePositioningIndex.value);
+  console.log('Toutes les positions:', Object.keys(documentPositions.value));
+}
+
 // Soumettre tous les documents pour signature (MODIFICATION: support multi-documents)
 async function submitDocument() {
   submissionStatus.value = 'loading';
@@ -723,6 +745,17 @@ async function submitDocument() {
     
     // Ajouter le statut
     formData.append('status', 'pending_signature');
+    
+    // NOUVEAU: Ajouter le PDF généré s'il existe
+    if (documentPosition.generatedPdf && documentPosition.generatedPdf.file) {
+      console.log('DEBUG - Ajout du PDF généré pour le document', i, ':', documentPosition.generatedPdf.file.name);
+      console.log('DEBUG - Taille du PDF généré:', documentPosition.generatedPdf.file.size, 'bytes');
+      formData.append('generated_pdf', documentPosition.generatedPdf.file, documentPosition.generatedPdf.file.name);
+    } else {
+      console.log('DEBUG - Aucun PDF généré disponible pour le document', i);
+      console.log('DEBUG - documentPosition.generatedPdf:', !!documentPosition.generatedPdf);
+      console.log('DEBUG - documentPosition.generatedPdf.file:', !!documentPosition.generatedPdf?.file);
+    }
     
     // Ajouter l'ID de l'organisation
     formData.append('organization_id', userInfo.organization.id);
@@ -940,6 +973,14 @@ async function saveAsDraft() {
     
     // Ajouter le statut
     formData.append('status', 'draft');
+    
+    // NOUVEAU: Ajouter le PDF généré s'il existe
+    if (documentPosition.generatedPdf && documentPosition.generatedPdf.file) {
+      console.log('DEBUG - Ajout du PDF généré pour le brouillon', i, ':', documentPosition.generatedPdf.file.name);
+      formData.append('generated_pdf', documentPosition.generatedPdf.file, documentPosition.generatedPdf.file.name);
+    } else {
+      console.log('DEBUG - Aucun PDF généré disponible pour le brouillon', i);
+    }
     
     // Ajouter l'ID de l'organisation
     formData.append('organization_id', userInfo.organization.id);

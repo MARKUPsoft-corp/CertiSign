@@ -48,7 +48,7 @@ class DocumentQRPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DocumentQRPosition
         fields = [
-            'id', 'document_name', 'document_file', 
+            'id', 'document_name', 'document_file', 'generated_pdf',
             'qr_x_position', 'qr_y_position', 'qr_size',
             'qr_pages', 'qr_positions', 'qr_mode',
             'signature_image', 'signature_positions', 'signature_size',

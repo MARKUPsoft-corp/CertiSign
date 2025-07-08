@@ -150,6 +150,9 @@ class DocumentQRPosition(models.Model):
     document_file = models.FileField(_('Fichier document'), upload_to='documents/prepared/')
     document_name = models.CharField(_('Nom du document'), max_length=255)
     
+    # NOUVEAU: Fichier PDF généré avec QR code et signature intégrés
+    generated_pdf = models.FileField(_('PDF généré avec QR'), upload_to='documents/generated/', null=True, blank=True)
+    
     # Informations de positionnement du QR code
     qr_x_position = models.FloatField(_('Position X du QR code'))
     qr_y_position = models.FloatField(_('Position Y du QR code'))
