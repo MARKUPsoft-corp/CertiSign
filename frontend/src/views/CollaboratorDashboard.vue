@@ -73,79 +73,81 @@
         </div>
       </section>
 
-      <!-- Statistiques -->
-      <section class="stats-section">
-        <div class="stats-container">
-          <div class="stat-card">
-            <div class="stat-content">
-              <div class="stat-value">{{ stats.thisWeek }}</div>
-              <div class="stat-label">Cette semaine</div>
+      <!-- Contenu normal du dashboard -->
+      <div v-if="!showCreateTemplate && activeSection !== 'prepare-document'">
+        <!-- Statistiques -->
+        <section class="stats-section">
+          <div class="stats-container">
+            <div class="stat-card">
+              <div class="stat-content">
+                <div class="stat-value">{{ stats.thisWeek }}</div>
+                <div class="stat-label">Cette semaine</div>
+              </div>
+              <div class="stat-icon primary">
+                <i class="bi bi-calendar-week"></i>
+              </div>
             </div>
-            <div class="stat-icon primary">
-              <i class="bi bi-calendar-week"></i>
+            
+            <div class="stat-card">
+              <div class="stat-content">
+                <div class="stat-value">{{ stats.thisMonth }}</div>
+                <div class="stat-label">Ce mois-ci</div>
+              </div>
+              <div class="stat-icon accent">
+                <i class="bi bi-calendar-month"></i>
+              </div>
             </div>
+            
+            <button class="stat-card action-stat" @click="openPrepareDocument">
+              <div class="stat-content">
+                <div class="stat-value">
+                  <i class="bi bi-plus-circle"></i>
+              </div>
+                <div class="stat-label">Nouveau document</div>
+              </div>
+              <div class="stat-icon primary">
+                <i class="bi bi-file-earmark-plus"></i>
+            </div>
+            </button>
           </div>
-          
-          <div class="stat-card">
-            <div class="stat-content">
-              <div class="stat-value">{{ stats.thisMonth }}</div>
-              <div class="stat-label">Ce mois-ci</div>
-            </div>
-            <div class="stat-icon accent">
-              <i class="bi bi-calendar-month"></i>
-            </div>
-          </div>
-          
-          <button class="stat-card action-stat" @click="openPrepareDocument">
-            <div class="stat-content">
-              <div class="stat-value">
-                <i class="bi bi-plus-circle"></i>
-            </div>
-              <div class="stat-label">Nouveau document</div>
-            </div>
-            <div class="stat-icon primary">
-              <i class="bi bi-file-earmark-plus"></i>
-          </div>
-          </button>
-        </div>
-      </section>
+        </section>
 
-      <!-- Actions rapides -->
-      <section class="quick-actions">
-        <div class="actions-grid">
-          <button class="action-card" @click="activeSection = 'templates'" :class="{ 'active': activeSection === 'templates' }">
-            <div class="action-icon accent">
-              <i class="bi bi-file-earmark-richtext"></i>
-            </div>
-            <span class="action-title">Templates</span>
-            <span class="action-description">{{ templates.length }} modèles disponibles</span>
-          </button>
-          <button class="action-card" @click="activeSection = 'drafts'" :class="{ 'active': activeSection === 'drafts' }">
-            <div class="action-icon accent">
-              <i class="bi bi-file-earmark-text"></i>
-            </div>
-            <span class="action-title">Brouillons</span>
-            <span class="action-description">{{ drafts.length }} documents en préparation</span>
-          </button>
-          <button class="action-card" @click="activeSection = 'pending'" :class="{ 'active': activeSection === 'pending' }">
-            <div class="action-icon warning">
-              <i class="bi bi-hourglass-split"></i>
-            </div>
-            <span class="action-title">En attente</span>
-            <span class="action-description">{{ pendingDocuments.length }} documents assignés</span>
-          </button>
-          <button class="action-card" @click="activeSection = 'completed'" :class="{ 'active': activeSection === 'completed' }">
-            <div class="action-icon success">
-              <i class="bi bi-file-check"></i>
-            </div>
-            <span class="action-title">Terminés</span>
-            <span class="action-description">{{ completedDocuments.length }} documents signés</span>
-          </button>
-        </div>
-      </section>
+        <!-- Actions rapides -->
+        <section class="quick-actions">
+          <div class="actions-grid">
+            <button class="action-card" @click="activeSection = 'templates'" :class="{ 'active': activeSection === 'templates' }">
+              <div class="action-icon accent">
+                <i class="bi bi-file-earmark-richtext"></i>
+              </div>
+              <span class="action-title">Templates</span>
+              <span class="action-description">{{ templates.length }} modèles disponibles</span>
+            </button>
+            <button class="action-card" @click="activeSection = 'drafts'" :class="{ 'active': activeSection === 'drafts' }">
+              <div class="action-icon accent">
+                <i class="bi bi-file-earmark-text"></i>
+              </div>
+              <span class="action-title">Brouillons</span>
+              <span class="action-description">{{ drafts.length }} documents en préparation</span>
+            </button>
+            <button class="action-card" @click="activeSection = 'pending'" :class="{ 'active': activeSection === 'pending' }">
+              <div class="action-icon warning">
+                <i class="bi bi-hourglass-split"></i>
+              </div>
+              <span class="action-title">En attente</span>
+              <span class="action-description">{{ pendingDocuments.length }} documents assignés</span>
+            </button>
+            <button class="action-card" @click="activeSection = 'completed'" :class="{ 'active': activeSection === 'completed' }">
+              <div class="action-icon success">
+                <i class="bi bi-file-check"></i>
+              </div>
+              <span class="action-title">Terminés</span>
+              <span class="action-description">{{ completedDocuments.length }} documents signés</span>
+            </button>
+          </div>
+        </section>
 
-      <!-- Contenu dynamique selon la section active -->
-      <section class="content-section" v-if="activeSection">
+        <!-- Contenu dynamique selon la section active -->
+        <section class="content-section" v-if="activeSection">
         <!-- Brouillons -->
         <div v-if="activeSection === 'drafts'" class="section-content">
           <div class="section-header">
@@ -366,135 +368,39 @@
         <div v-if="activeSection === 'prepare-document'" class="section-content prepare-section">
           <PrepareDocument @close="closePrepareSection" @documentPrepared="onDocumentPreparedAndClose"/>
         </div>
-      </section>
 
-      <!-- Section par défaut si aucune section active -->
-      <section v-if="!activeSection" class="default-content">
-        <div class="welcome-card">
-          <div class="welcome-icon">
-            <i class="bi bi-person-workspace"></i>
-          </div>
-          <h3>Bienvenue dans votre espace de travail</h3>
-          <p>Gérez vos documents et suivez leur progression de signature</p>
-          <button class="btn-primary" @click="openPrepareDocument">
-            <i class="bi bi-file-earmark-plus"></i>
-            Commencer maintenant
-          </button>
+        <!-- Section de création de template -->
+        <div v-if="showCreateTemplate" class="section-content create-template-section">
+          <CreateTemplate @close="closeCreateTemplate" @template-created="onTemplateCreated"/>
         </div>
       </section>
+
+        <!-- Section par défaut si aucune section active -->
+        <section v-if="!activeSection" class="default-content">
+          <div class="welcome-card">
+            <div class="welcome-icon">
+              <i class="bi bi-person-workspace"></i>
+            </div>
+            <h3>Bienvenue dans votre espace de travail</h3>
+            <p>Gérez vos documents et suivez leur progression de signature</p>
+            <button class="btn-primary" @click="openPrepareDocument">
+              <i class="bi bi-file-earmark-plus"></i>
+              Commencer maintenant
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <!-- Section de préparation de document -->
+      <div v-if="activeSection === 'prepare-document'" class="section-content prepare-section">
+        <PrepareDocument @close="closePrepareSection" @documentPrepared="onDocumentPreparedAndClose"/>
+      </div>
+
+      <!-- Section de création de template -->
+      <div v-if="showCreateTemplate" class="section-content create-template-section">
+        <CreateTemplate @close="closeCreateTemplate" @template-created="onTemplateCreated"/>
+      </div>
     </main>
-
-    <!-- Modal de création de template -->
-    <div v-if="showNewTemplateModal" class="modal-overlay" @click.self="closeNewTemplateModal">
-      <div class="template-modal">
-          <div class="modal-header">
-          <div class="modal-title-section">
-            <div class="modal-icon">
-              <i class="bi bi-file-earmark-richtext"></i>
-            </div>
-            <h3 class="modal-title">Nouveau template</h3>
-          </div>
-          <button class="modal-close" @click="closeNewTemplateModal">
-              <i class="bi bi-x-lg"></i>
-            </button>
-          </div>
-          
-          <div class="modal-body">
-          <div class="template-form">
-            <div class="form-section">
-              <div class="form-group">
-                <label for="template-name" class="form-label">
-                  <i class="bi bi-tag"></i>
-                  Nom du template
-                </label>
-                <input 
-                  type="text" 
-                  id="template-name" 
-                  v-model="newTemplate.name" 
-                  placeholder="Ex: Contrat de partenariat, Rapport mensuel..." 
-                  class="form-input"
-                  :class="{ 'error': templateNameError }"
-                  @input="clearTemplateNameError"
-                >
-                <span v-if="templateNameError" class="error-message">{{ templateNameError }}</span>
-              </div>
-              
-              <div class="form-group">
-                <label for="template-file" class="form-label">
-                  <i class="bi bi-file-earmark-pdf"></i>
-                  Document PDF
-                </label>
-                <div class="file-upload-area" @click="triggerFileInput" @dragover.prevent @drop.prevent="handleFileDrop">
-                  <input 
-                    type="file" 
-                    id="template-file" 
-                    ref="fileInput"
-                    @change="handleFileSelect" 
-                    accept=".pdf" 
-                    class="file-input"
-                  >
-                  <div v-if="!newTemplate.file" class="upload-placeholder">
-                    <div class="upload-icon">
-                      <i class="bi bi-cloud-upload"></i>
-                </div>
-                    <div class="upload-text">
-                      <span class="upload-title">Glissez votre PDF ici</span>
-                      <span class="upload-subtitle">ou cliquez pour sélectionner</span>
-                  </div>
-                </div>
-                  <div v-else class="file-selected">
-                    <div class="file-info">
-                      <i class="bi bi-file-earmark-pdf text-danger"></i>
-                      <span class="file-name">{{ newTemplate.file.name }}</span>
-                      <span class="file-size">({{ formatFileSize(newTemplate.file.size) }})</span>
-                </div>
-                    <button type="button" @click.stop="removeFile" class="remove-file">
-                      <i class="bi bi-x-circle"></i>
-                    </button>
-              </div>
-                </div>
-                <span v-if="fileError" class="error-message">{{ fileError }}</span>
-                  </div>
-                </div>
-            
-            <div v-if="newTemplate.file" class="form-section qr-section">
-              <div class="section-divider">
-                <span class="divider-text">Configuration des positions</span>
-                </div>
-              
-              <div class="qr-positioner-container">
-                <!-- Placeholder pour QrPositioner -->
-                <div class="qr-placeholder">
-                  <div class="placeholder-icon">
-                    <i class="bi bi-qr-code"></i>
-              </div>
-                  <p>QrPositioner sera intégré ici</p>
-                  <small>Configuration des positions QR et signatures</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-        <div class="modal-footer">
-          <div class="footer-actions">
-            <button type="button" class="btn-secondary" @click="closeNewTemplateModal" :disabled="isSaving">
-              Annuler
-            </button>
-            <button type="button" class="btn-primary" @click="saveTemplate" :disabled="!canSaveTemplate || isSaving">
-              <span v-if="isSaving">
-                <i class="bi bi-hourglass-split spin"></i>
-                Enregistrement...
-              </span>
-              <span v-else>
-                <i class="bi bi-check-circle"></i>
-                Créer le template
-              </span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- Modal de choix de préparation -->
     <div v-if="showPrepareChoice" class="modal-overlay" @click.self="closePrepareChoice">
@@ -556,6 +462,8 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import AuthService from '@/services/AuthService';
 import PrepareDocument from '@/views/PrepareDocument.vue';
+import CreateTemplate from '@/views/CreateTemplate.vue';
+import TemplateService from '@/services/TemplateService.js';
 
 const router = useRouter();
 
@@ -572,7 +480,7 @@ const isProcessingChoice = ref(false); // Protection contre les clics multiples
 // Variables pour les templates
 const templates = ref([]);
 const loadingTemplates = ref(false);
-const showNewTemplateModal = ref(false);
+const showCreateTemplate = ref(false);
 const showDeleteConfirmModal = ref(false);
 const selectedTemplate = ref(null);
 
@@ -623,7 +531,7 @@ const completedDocuments = ref([
   }
 ]);
 
-// Positionnement des particules
+// Positions des particules
 const particlePositions = Array.from({ length: 12 }, () => ({
   top: `${Math.random() * 100}%`,
   left: `${Math.random() * 100}%`,
@@ -631,19 +539,6 @@ const particlePositions = Array.from({ length: 12 }, () => ({
   duration: Math.random() * 25 + 20,
   delay: Math.random() * 8
 }));
-
-// Variables pour la création de template
-const newTemplate = ref({
-  name: '',
-  file: null,
-  qrPositions: null
-});
-const templateNameError = ref('');
-const fileError = ref('');
-const isSaving = ref(false);
-const fileInput = ref(null);
-
-
 
 // Méthodes
 function formatDate(date) {
@@ -951,8 +846,38 @@ function refreshData() {
 
 // Fonctions pour la gestion des templates
 function openNewTemplateModal() {
-  console.log('Ouverture de la modale de création de template');
-  showNewTemplateModal.value = true;
+  console.log('Ouverture de la vue de création de template');
+  showCreateTemplate.value = true;
+}
+
+function closeCreateTemplate() {
+  console.log('Fermeture de la vue de création de template');
+  showCreateTemplate.value = false;
+}
+
+function onTemplateCreated(templateData) {
+  console.log('Template créé avec succès:', templateData);
+  
+  // Ajouter le nouveau template à la liste locale
+  const newTemplateForList = {
+    id: templateData.id,
+    name: templateData.name,
+    createdAt: new Date(templateData.createdAt),
+    pageApplication: templateData.pageApplication,
+    qrSize: templateData.qrSize,
+    hasSignature: templateData.hasSignature
+  };
+  
+  templates.value.unshift(newTemplateForList);
+  
+  // Fermer la vue de création
+  closeCreateTemplate();
+  
+  // Passer à la section templates pour voir le nouveau template
+  activeSection.value = 'templates';
+  
+  // Optionnel: afficher un message de succès
+  console.log('Template ajouté à la liste avec succès');
 }
 
 function previewTemplate(template) {
@@ -989,31 +914,29 @@ function getQrSizeLabel(size) {
 async function loadTemplates() {
   try {
     loadingTemplates.value = true;
+    console.log('Chargement des templates depuis l\'API...');
     
-    // Simuler des données de templates pour le moment
-    // TODO: Remplacer par un appel API réel
-    setTimeout(() => {
-      templates.value = [
-        {
-          id: 1,
-          name: 'Contrat de partenariat standard',
-          createdAt: new Date('2024-01-10'),
-          pageApplication: 'all',
-          qrSize: 'medium'
-        },
-        {
-          id: 2,
-          name: 'Rapport mensuel',
-          createdAt: new Date('2024-01-08'),
-          pageApplication: 'specific',
-          qrSize: 'small'
-        }
-      ];
-      loadingTemplates.value = false;
-    }, 1000);
+    // Appel à l'API pour récupérer les templates
+    const response = await TemplateService.getTemplates();
+    console.log('Réponse API templates:', response);
+    
+    // Transformer les données de l'API pour le format local
+    templates.value = response.results.map(template => ({
+      id: template.id,
+      name: template.name,
+      createdAt: new Date(template.created_at),
+      pageApplication: template.page_application,
+      qrSize: template.qr_size,
+      hasSignature: !!template.signature_image
+    }));
+    
+    console.log('Templates chargés:', templates.value.length);
     
   } catch (error) {
     console.error('Erreur lors du chargement des templates:', error);
+    // En cas d'erreur, ne pas afficher d'erreur brutale, juste loguer
+    templates.value = [];
+  } finally {
     loadingTemplates.value = false;
   }
 }
@@ -3572,6 +3495,96 @@ async function viewPendingDocument(doc) {
 .prepare-section :deep(.btn-secondary) {
   background-color: var(--secondary-color) !important;
   border-color: var(--border-color) !important;
+}
+
+/* Styles pour la section de création de template - Cohérent avec prepare-section */
+.create-template-section {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Forcer le composant CreateTemplate à s'afficher comme une section normale */
+.create-template-section :deep(.create-template-container) {
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  margin: 0 !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+  padding: 0 !important;
+  border: none !important;
+  position: static !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Forcer les sections internes à avoir un style normal */
+.create-template-section :deep(.section-card) {
+  background: var(--card-bg) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08) !important;
+  padding: 24px !important;
+  margin-bottom: 20px !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+/* Styles pour l'en-tête de la section de création */
+.create-template-section :deep(.section-header) {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  padding: 24px 32px !important;
+  margin-bottom: 24px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Ajustements pour les formulaires et zones de contenu */
+.create-template-section :deep(.upload-area),
+.create-template-section :deep(.file-upload-area) {
+  background: var(--bg-light) !important;
+  border: 2px dashed var(--border-color) !important;
+  border-radius: 16px !important;
+}
+
+.create-template-section :deep(.upload-area:hover) {
+  border-color: var(--primary-color) !important;
+  background: rgba(var(--primary-color-rgb), 0.02) !important;
+}
+
+/* Ajustements pour les boutons */
+.create-template-section :deep(.btn-primary) {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.create-template-section :deep(.btn-secondary) {
+  background-color: var(--bg-light) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+/* QrPositioner dans CreateTemplate */
+.create-template-section :deep(.qr-positioner-container) {
+  background: var(--bg-light) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+}
+
+/* Animation d'entrée pour la création de template */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 </style> 
