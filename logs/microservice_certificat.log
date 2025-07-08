@@ -144,3 +144,15 @@ Tentative de chargement du certificat PKCS#12...
 Chargement du certificat PKCS#12 réussi
 Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
 INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
+Réception des données: certificat (longueur: 11340) et mot de passe
+Décodage base64 réussi, taille des données: 8505 octets
+Tentative de chargement du certificat PKCS#12...
+Chargement du certificat PKCS#12 réussi
+Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
+INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
+Réception des données: certificat (longueur: 11340) et mot de passe
+Décodage base64 réussi, taille des données: 8505 octets
+Tentative de chargement du certificat PKCS#12...
+Chargement du certificat PKCS#12 réussi
+Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
+INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK

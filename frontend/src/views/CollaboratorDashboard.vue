@@ -75,79 +75,79 @@
 
       <!-- Contenu normal du dashboard -->
       <div v-if="!showCreateTemplate && activeSection !== 'prepare-document'">
-        <!-- Statistiques -->
-        <section class="stats-section">
-          <div class="stats-container">
-            <div class="stat-card">
-              <div class="stat-content">
-                <div class="stat-value">{{ stats.thisWeek }}</div>
-                <div class="stat-label">Cette semaine</div>
-              </div>
-              <div class="stat-icon primary">
-                <i class="bi bi-calendar-week"></i>
-              </div>
+      <!-- Statistiques -->
+      <section class="stats-section">
+        <div class="stats-container">
+          <div class="stat-card">
+            <div class="stat-content">
+              <div class="stat-value">{{ stats.thisWeek }}</div>
+              <div class="stat-label">Cette semaine</div>
             </div>
-            
-            <div class="stat-card">
-              <div class="stat-content">
-                <div class="stat-value">{{ stats.thisMonth }}</div>
-                <div class="stat-label">Ce mois-ci</div>
-              </div>
-              <div class="stat-icon accent">
-                <i class="bi bi-calendar-month"></i>
-              </div>
+            <div class="stat-icon primary">
+              <i class="bi bi-calendar-week"></i>
             </div>
-            
-            <button class="stat-card action-stat" @click="openPrepareDocument">
-              <div class="stat-content">
-                <div class="stat-value">
-                  <i class="bi bi-plus-circle"></i>
-              </div>
-                <div class="stat-label">Nouveau document</div>
-              </div>
-              <div class="stat-icon primary">
-                <i class="bi bi-file-earmark-plus"></i>
-            </div>
-            </button>
           </div>
-        </section>
-
-        <!-- Actions rapides -->
-        <section class="quick-actions">
-          <div class="actions-grid">
-            <button class="action-card" @click="activeSection = 'templates'" :class="{ 'active': activeSection === 'templates' }">
-              <div class="action-icon accent">
-                <i class="bi bi-file-earmark-richtext"></i>
-              </div>
-              <span class="action-title">Templates</span>
-              <span class="action-description">{{ templates.length }} modèles disponibles</span>
-            </button>
-            <button class="action-card" @click="activeSection = 'drafts'" :class="{ 'active': activeSection === 'drafts' }">
-              <div class="action-icon accent">
-                <i class="bi bi-file-earmark-text"></i>
-              </div>
-              <span class="action-title">Brouillons</span>
-              <span class="action-description">{{ drafts.length }} documents en préparation</span>
-            </button>
-            <button class="action-card" @click="activeSection = 'pending'" :class="{ 'active': activeSection === 'pending' }">
-              <div class="action-icon warning">
-                <i class="bi bi-hourglass-split"></i>
-              </div>
-              <span class="action-title">En attente</span>
-              <span class="action-description">{{ pendingDocuments.length }} documents assignés</span>
-            </button>
-            <button class="action-card" @click="activeSection = 'completed'" :class="{ 'active': activeSection === 'completed' }">
-              <div class="action-icon success">
-                <i class="bi bi-file-check"></i>
-              </div>
-              <span class="action-title">Terminés</span>
-              <span class="action-description">{{ completedDocuments.length }} documents signés</span>
-            </button>
+          
+          <div class="stat-card">
+            <div class="stat-content">
+              <div class="stat-value">{{ stats.thisMonth }}</div>
+              <div class="stat-label">Ce mois-ci</div>
+            </div>
+            <div class="stat-icon accent">
+              <i class="bi bi-calendar-month"></i>
+            </div>
           </div>
-        </section>
+          
+          <button class="stat-card action-stat" @click="openPrepareDocument">
+            <div class="stat-content">
+              <div class="stat-value">
+                <i class="bi bi-plus-circle"></i>
+            </div>
+              <div class="stat-label">Nouveau document</div>
+            </div>
+            <div class="stat-icon primary">
+              <i class="bi bi-file-earmark-plus"></i>
+          </div>
+          </button>
+        </div>
+      </section>
 
-        <!-- Contenu dynamique selon la section active -->
-        <section class="content-section" v-if="activeSection">
+      <!-- Actions rapides -->
+      <section class="quick-actions">
+        <div class="actions-grid">
+          <button class="action-card" @click="activeSection = 'templates'" :class="{ 'active': activeSection === 'templates' }">
+            <div class="action-icon accent">
+              <i class="bi bi-file-earmark-richtext"></i>
+            </div>
+            <span class="action-title">Templates</span>
+            <span class="action-description">{{ templates.length }} modèles disponibles</span>
+          </button>
+          <button class="action-card" @click="activeSection = 'drafts'" :class="{ 'active': activeSection === 'drafts' }">
+            <div class="action-icon accent">
+              <i class="bi bi-file-earmark-text"></i>
+            </div>
+            <span class="action-title">Brouillons</span>
+            <span class="action-description">{{ drafts.length }} documents en préparation</span>
+          </button>
+          <button class="action-card" @click="activeSection = 'pending'" :class="{ 'active': activeSection === 'pending' }">
+            <div class="action-icon warning">
+              <i class="bi bi-hourglass-split"></i>
+            </div>
+            <span class="action-title">En attente</span>
+            <span class="action-description">{{ pendingDocuments.length }} documents assignés</span>
+          </button>
+          <button class="action-card" @click="activeSection = 'completed'" :class="{ 'active': activeSection === 'completed' }">
+            <div class="action-icon success">
+              <i class="bi bi-file-check"></i>
+            </div>
+            <span class="action-title">Terminés</span>
+            <span class="action-description">{{ completedDocuments.length }} documents signés</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Contenu dynamique selon la section active -->
+      <section class="content-section" v-if="activeSection">
         <!-- Brouillons -->
         <div v-if="activeSection === 'drafts'" class="section-content">
           <div class="section-header">
@@ -275,10 +275,10 @@
         <!-- Documents en attente -->
         <div v-if="activeSection === 'pending'" class="section-content">
           <div class="section-header">
-            <h3 class="content-title">
-              <i class="bi bi-hourglass-split"></i>
-              Documents en attente de signature
-            </h3>
+          <h3 class="content-title">
+            <i class="bi bi-hourglass-split"></i>
+            Documents en attente de signature
+          </h3>
             <button class="btn-primary" @click="refreshData">
               <i class="bi bi-arrow-clockwise"></i>
               Actualiser
@@ -321,10 +321,10 @@
         <!-- Documents terminés -->
         <div v-if="activeSection === 'completed'" class="section-content">
           <div class="section-header">
-            <h3 class="content-title">
-              <i class="bi bi-file-check"></i>
-              Documents signés
-            </h3>
+          <h3 class="content-title">
+            <i class="bi bi-file-check"></i>
+            Documents signés
+          </h3>
             <button class="btn-primary" @click="refreshData">
               <i class="bi bi-arrow-clockwise"></i>
               Actualiser
@@ -375,31 +375,31 @@
         </div>
       </section>
 
-        <!-- Section par défaut si aucune section active -->
-        <section v-if="!activeSection" class="default-content">
-          <div class="welcome-card">
-            <div class="welcome-icon">
-              <i class="bi bi-person-workspace"></i>
-            </div>
-            <h3>Bienvenue dans votre espace de travail</h3>
-            <p>Gérez vos documents et suivez leur progression de signature</p>
-            <button class="btn-primary" @click="openPrepareDocument">
-              <i class="bi bi-file-earmark-plus"></i>
-              Commencer maintenant
-            </button>
+      <!-- Section par défaut si aucune section active -->
+      <section v-if="!activeSection" class="default-content">
+        <div class="welcome-card">
+          <div class="welcome-icon">
+            <i class="bi bi-person-workspace"></i>
           </div>
-        </section>
-      </div>
-
+          <h3>Bienvenue dans votre espace de travail</h3>
+          <p>Gérez vos documents et suivez leur progression de signature</p>
+          <button class="btn-primary" @click="openPrepareDocument">
+            <i class="bi bi-file-earmark-plus"></i>
+            Commencer maintenant
+          </button>
+        </div>
+      </section>
+          </div>
+          
       <!-- Section de préparation de document -->
       <div v-if="activeSection === 'prepare-document'" class="section-content prepare-section">
         <PrepareDocument @close="closePrepareSection" @documentPrepared="onDocumentPreparedAndClose"/>
-      </div>
-
+              </div>
+              
       <!-- Section de création de template -->
       <div v-if="showCreateTemplate" class="section-content create-template-section">
         <CreateTemplate @close="closeCreateTemplate" @template-created="onTemplateCreated"/>
-      </div>
+                </div>
     </main>
 
     <!-- Modal de choix de préparation -->
@@ -983,127 +983,6 @@ onMounted(() => {
     window.removeEventListener('organization-changed', loadUserAndDocuments);
   };
 });
-
-// Fonctions pour la modale de création de template
-function closeNewTemplateModal() {
-  showNewTemplateModal.value = false;
-  resetTemplateForm();
-}
-
-function resetTemplateForm() {
-  newTemplate.value = {
-    name: '',
-    file: null,
-    qrPositions: null
-  };
-  templateNameError.value = '';
-  fileError.value = '';
-  isSaving.value = false;
-}
-
-function clearTemplateNameError() {
-  templateNameError.value = '';
-}
-
-function triggerFileInput() {
-  fileInput.value?.click();
-}
-
-function handleFileSelect(event) {
-  const file = event.target.files[0];
-  if (file) {
-    validateAndSetFile(file);
-  }
-}
-
-function handleFileDrop(event) {
-  const file = event.dataTransfer.files[0];
-  if (file) {
-    validateAndSetFile(file);
-  }
-}
-
-function validateAndSetFile(file) {
-  fileError.value = '';
-  
-  // Vérifier le type de fichier
-  if (file.type !== 'application/pdf') {
-    fileError.value = 'Veuillez sélectionner un fichier PDF valide.';
-    return;
-  }
-  
-  // Vérifier la taille (max 10MB)
-  if (file.size > 10 * 1024 * 1024) {
-    fileError.value = 'Le fichier ne doit pas dépasser 10MB.';
-    return;
-  }
-  
-  newTemplate.value.file = file;
-}
-
-function removeFile() {
-  newTemplate.value.file = null;
-  if (fileInput.value) {
-    fileInput.value.value = '';
-  }
-}
-
-function formatFileSize(bytes) {
-  if (bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
-
-// Computed pour vérifier si on peut sauvegarder
-const canSaveTemplate = computed(() => {
-  return newTemplate.value.name.trim() && 
-         newTemplate.value.file && 
-         !templateNameError.value && 
-         !fileError.value;
-});
-
-async function saveTemplate() {
-  // Validation
-  if (!newTemplate.value.name.trim()) {
-    templateNameError.value = 'Le nom du template est obligatoire.';
-    return;
-  }
-  
-  if (!newTemplate.value.file) {
-    fileError.value = 'Veuillez sélectionner un fichier PDF.';
-    return;
-  }
-  
-  try {
-    isSaving.value = true;
-    
-    // Simuler la sauvegarde (remplacer par un appel API réel plus tard)
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Ajouter le nouveau template à la liste
-    const newTemplateData = {
-      id: Date.now(),
-      name: newTemplate.value.name,
-      createdAt: new Date(),
-      pageApplication: 'all', // Par défaut
-      qrSize: 'medium' // Par défaut
-    };
-    
-    templates.value.unshift(newTemplateData);
-    
-    // Fermer la modale
-    closeNewTemplateModal();
-    
-    console.log('Template créé avec succès:', newTemplateData);
-    
-  } catch (error) {
-    console.error('Erreur lors de la création du template:', error);
-  } finally {
-    isSaving.value = false;
-  }
-}
 
 async function viewPendingDocument(doc) {
   console.log('Voir détails du document en attente:', doc.name);

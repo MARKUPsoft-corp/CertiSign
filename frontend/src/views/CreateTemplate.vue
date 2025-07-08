@@ -1,20 +1,19 @@
 <template>
-  <!-- Container principal avec style du collaborateur -->
   <div class="create-template-container">
-    <!-- En-tête avec bouton retour -->
+    <!-- En-tête -->
     <div class="section-header">
       <h3 class="section-title">
         <i class="bi bi-file-earmark-richtext"></i>
         Créer un nouveau template
       </h3>
-      <button class="btn btn-outline-secondary" @click="closeModal">
+      <button class="btn btn-outline-secondary" @click="$emit('close')">
         <i class="bi bi-arrow-left"></i> Retour
       </button>
     </div>
-      
+
     <!-- Section card contenant tout le contenu -->
     <div class="section-card">
-      <!-- Progression des étapes -->
+      <!-- Progression des étapes - Plus étalée -->
       <div class="steps-progress">
         <div 
           v-for="(step, index) in steps" 
@@ -33,239 +32,208 @@
       <div class="step-content">
         <!-- Étape 1: Informations du template -->
         <div v-if="currentStep === 0" class="step-body">
-          <div class="template-info-form">
+          <div class="form-section">
             <div class="form-group">
-              <label for="template-name" class="form-label">
-                <i class="bi bi-tag"></i>
-                Nom du template
+              <label for="templateName" class="form-label">
+                <i class="bi bi-tag"></i> Nom du template
               </label>
               <input 
                 type="text" 
-                id="template-name" 
+                id="templateName"
                 v-model="templateData.name" 
-                placeholder="Ex: Contrat de partenariat, Rapport mensuel, Facture type..." 
-                class="form-input"
-                :class="{ 'error': templateNameError }"
-                @input="clearTemplateNameError"
-              >
-              <span v-if="templateNameError" class="error-message">{{ templateNameError }}</span>
+                class="form-control"
+                placeholder="Ex: Contrat de partenariat, Rapport mensuel..."
+                :class="{ 'is-invalid': templateNameError }"
+                @blur="validateTemplateName"
+              />
+              <div v-if="templateNameError" class="invalid-feedback">
+                {{ templateNameError }}
+              </div>
             </div>
-            
+
             <div class="form-group">
-              <label class="form-label">
-                <i class="bi bi-file-earmark-text"></i>
-                Description (optionnelle)
+              <label for="templateDescription" class="form-label">
+                <i class="bi bi-file-text"></i> Description (optionnelle)
               </label>
               <textarea 
+                id="templateDescription"
                 v-model="templateData.description" 
+                class="form-control"
+                rows="4"
                 placeholder="Décrivez brièvement l'usage de ce template..."
-                class="form-textarea"
-                rows="3"
               ></textarea>
             </div>
           </div>
         </div>
 
-        <!-- Étape 2: Upload du document PDF -->
+        <!-- Étape 2: Document PDF -->
         <div v-if="currentStep === 1" class="step-body">
-          <div class="upload-section">
-            <div class="upload-area" 
-                 @click="triggerFileInput" 
-                 @dragover.prevent 
-                 @drop.prevent="handleFileDrop"
-                 :class="{ 'has-file': templateData.file }">
-              <input 
-                type="file" 
-                ref="fileInput" 
-                accept=".pdf" 
-                @change="handleFileSelection" 
-                class="file-input"
-              >
-              
-              <div v-if="!templateData.file" class="upload-placeholder">
-                <div class="upload-icon">
-                  <i class="bi bi-cloud-upload"></i>
-                </div>
-                <div class="upload-text">
-                  <span class="upload-title">Glissez votre PDF ici</span>
-                  <span class="upload-subtitle">ou cliquez pour sélectionner</span>
-                  <span class="upload-hint">Format accepté: PDF (max 10MB)</span>
-                </div>
-              </div>
-              
-              <div v-else class="file-selected">
-                <div class="file-info">
-                  <i class="bi bi-file-earmark-pdf text-danger"></i>
-                  <div class="file-details">
-                    <span class="file-name">{{ templateData.file.name }}</span>
-                    <span class="file-size">({{ formatFileSize(templateData.file.size) }})</span>
-                    <span v-if="pdfPreview.totalPages" class="file-pages">
-                      {{ pdfPreview.totalPages }} page(s)
-                    </span>
-                  </div>
-                </div>
-                <button type="button" @click.stop="removeFile" class="remove-file">
-                  <i class="bi bi-x-circle"></i>
-                </button>
-              </div>
-            </div>
-            
-            <span v-if="fileError" class="error-message">{{ fileError }}</span>
+          <div v-if="!templateData.file" class="upload-area" @click="triggerFileInput" @dragover.prevent @drop.prevent="handleFileDrop">
+            <i class="bi bi-cloud-arrow-up-fill"></i>
+            <p>Déposez votre fichier PDF ici ou cliquez pour sélectionner</p>
+            <span class="upload-hint">Format accepté: .pdf (max 10MB)</span>
+            <input type="file" ref="fileInput" accept=".pdf" @change="handleFileSelection" class="file-input">
           </div>
 
-          <!-- Prévisualisation du PDF -->
-          <div class="pdf-preview-section" v-if="templateData.file">
-            <h4>
-              <i class="bi bi-eye"></i>
-              Aperçu du document
-            </h4>
-            
-            <div class="pdf-preview-container">
-              <div v-if="pdfPreview.loading" class="pdf-loading">
-                <i class="bi bi-arrow-repeat spinning"></i>
-                <p>Chargement de la prévisualisation...</p>
+          <div v-else class="document-info">
+            <div class="document-icon">
+              <i class="bi bi-file-earmark-pdf"></i>
+            </div>
+            <div class="document-details">
+              <div class="document-name">{{ templateData.file.name }}</div>
+              <div class="document-size">{{ formatFileSize(templateData.file.size) }}</div>
+              <div class="document-pages" v-if="totalPages">
+                {{ totalPages }} page(s)
               </div>
-              <div v-else-if="pdfPreview.error" class="pdf-error">
-                <i class="bi bi-exclamation-triangle"></i>
-                <p>Impossible de charger la prévisualisation. {{ pdfPreview.error }}</p>
-              </div>
-              <iframe v-else :src="pdfPreview.url" class="pdf-preview"></iframe>
+            </div>
+            <button @click="removeFile" class="remove-file-btn">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+
+          <!-- Prévisualisation PDF -->
+          <div v-if="templateData.file" class="pdf-preview-container">
+            <div v-if="pdfPreview?.error" class="pdf-error">
+              <i class="bi bi-exclamation-triangle"></i>
+              <p>Impossible de charger la prévisualisation. {{ pdfPreview?.error }}</p>
+            </div>
+            <iframe 
+              v-else-if="pdfPreview?.url" 
+              class="pdf-preview" 
+              :src="pdfPreview.url"
+              width="100%"
+              height="600"
+              frameborder="0"
+              @load="onIframeLoad"
+              @error="onIframeError">
+            </iframe>
+            <div v-else class="pdf-loading">
+              <i class="bi bi-arrow-repeat spinning"></i>
+              <p>Préparation de la prévisualisation...</p>
             </div>
           </div>
         </div>
 
-        <!-- Étape 3: Configuration QR et signature -->
+        <!-- Étape 3: Configuration -->
         <div v-if="currentStep === 2" class="step-body">
-          <div class="positioning-section">
-            <h4>
-              <i class="bi bi-crosshair"></i>
-              Configuration du QR code et de la signature
-            </h4>
-            <p class="positioning-hint">
-              Configurez la position du QR code et ajoutez une signature manuscrite si nécessaire.
-              Cette configuration sera réutilisable pour tous les documents utilisant ce template.
-            </p>
-
-            <!-- Composant QrPositioner -->
-            <div class="qr-positioner-container" v-if="templateData.file">
-              <QrPositioner
-                :pdf-file="templateData.file"
-                :total-pages="pdfPreview.totalPages || 1"
-                :preloaded-positions="templateData.qrPositions"
-                @position-changed="onPositionChanged"
-                @position-confirmed="onPositionConfirmed"
-                @signature-uploaded="onSignatureUploaded"
-                @pdf-generated="onPdfGenerated"
-              />
-            </div>
+          <div v-if="templateData.file" class="qr-position-container">
+            <qr-positioner
+              :pdf-file="templateData.file"
+              :total-pages="totalPages"
+              @position-changed="onPositionChanged"
+              @position-confirmed="onPositionConfirmed"
+              @signature-uploaded="onSignatureUploaded"
+              @pdf-generated="onPdfGenerated"
+            ></qr-positioner>
           </div>
         </div>
 
-        <!-- Étape 4: Confirmation et sauvegarde -->
+        <!-- Étape 4: Confirmation -->
         <div v-if="currentStep === 3" class="step-body">
-          <div class="confirmation-section">
-            <div v-if="saveStatus === 'saving'" class="saving-state">
-              <div class="saving-icon">
-                <i class="bi bi-hourglass-split spinning"></i>
-              </div>
-              <h4>Enregistrement du template en cours...</h4>
-              <p>Veuillez patienter pendant la sauvegarde de votre template.</p>
-            </div>
+          <div v-if="saving" class="saving-state">
+            <div class="spinner"></div>
+            <h4>Création du template en cours...</h4>
+            <p>Veuillez patienter pendant que nous sauvegardons votre template.</p>
+          </div>
+
+          <div v-else-if="saveError" class="error-state">
+            <i class="bi bi-exclamation-triangle"></i>
+            <h4>Erreur lors de la création</h4>
+            <p>{{ saveError }}</p>
+            <button @click="prevStep" class="btn-retry">
+              <i class="bi bi-arrow-clockwise"></i> Retenter
+            </button>
+          </div>
+
+          <div v-else-if="saveSuccess" class="success-state">
+            <i class="bi bi-check-circle"></i>
+            <h4>Template créé avec succès !</h4>
+            <p>Votre template "{{ templateData.name }}" a été créé et est maintenant disponible.</p>
+            <button @click="$emit('close')" class="btn-primary">
+              <i class="bi bi-check"></i> Terminer
+            </button>
+          </div>
+
+          <div v-else class="confirmation-state">
+            <h4><i class="bi bi-check-circle"></i> Résumé du template</h4>
             
-            <div v-else-if="saveStatus === 'success'" class="success-state">
-              <div class="success-icon">
-                <i class="bi bi-check-circle-fill text-success"></i>
+            <div class="template-summary">
+              <div class="summary-item">
+                <span class="summary-label">Nom:</span>
+                <span class="summary-value">{{ templateData.name }}</span>
               </div>
-              <h4>Template créé avec succès !</h4>
-              <p>Votre template "<strong>{{ templateData.name }}</strong>" a été enregistré et est maintenant disponible dans votre liste de templates.</p>
               
-              <div class="template-summary">
-                <div class="summary-item">
-                  <i class="bi bi-file-earmark-pdf"></i>
-                  <span>Document: {{ templateData.file?.name }}</span>
-                </div>
-                <div class="summary-item">
-                  <i class="bi bi-qr-code"></i>
-                  <span>QR configuré: {{ getQrConfigurationSummary() }}</span>
-                </div>
-                <div class="summary-item" v-if="templateData.hasSignature">
-                  <i class="bi bi-vector-pen"></i>
-                  <span>Avec signature manuscrite</span>
-                </div>
+              <div class="summary-item" v-if="templateData.description">
+                <span class="summary-label">Description:</span>
+                <span class="summary-value">{{ templateData.description }}</span>
+              </div>
+              
+              <div class="summary-item">
+                <span class="summary-label">Document:</span>
+                <span class="summary-value">{{ templateData.file?.name }}</span>
+              </div>
+              
+              <div class="summary-item" v-if="positionData">
+                <span class="summary-label">Configuration QR:</span>
+                <span class="summary-value">
+                  Taille {{ getQrSizeLabel(positionData.qr?.size) }} - 
+                  {{ getPageApplicationLabel(positionData.mode) }}
+                </span>
+              </div>
+
+              <div class="summary-item" v-if="positionData?.signature">
+                <span class="summary-label">Signature:</span>
+                <span class="summary-value">
+                  Incluse (taille {{ positionData.signature.size }}%)
+                </span>
               </div>
             </div>
-            
-            <div v-else-if="saveStatus === 'error'" class="error-state">
-              <div class="error-icon">
-                <i class="bi bi-exclamation-triangle-fill text-danger"></i>
-              </div>
-              <h4>Erreur lors de la sauvegarde</h4>
-              <p>{{ saveError }}</p>
-              <button class="btn-primary" @click="retrySave">
-                <i class="bi bi-arrow-clockwise"></i>
-                Réessayer
+
+            <div class="confirmation-actions">
+              <button @click="saveTemplate" class="btn-primary" :disabled="saving">
+                <i class="bi bi-save"></i> Créer le template
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Navigation entre les étapes -->
+      <!-- Boutons de navigation entre les étapes - Comme PrepareDocument -->
       <div class="step-navigation">
-        <div class="nav-left">
-          <button 
-            v-if="currentStep > 0 && saveStatus !== 'saving'" 
-            @click="prevStep" 
-            class="btn-secondary"
-          >
-            <i class="bi bi-chevron-left"></i>
-            Précédent
-          </button>
-        </div>
+        <button 
+          v-if="currentStep > 0 && currentStep < 3" 
+          @click="prevStep" 
+          class="nav-button secondary"
+        >
+          <i class="bi bi-arrow-left"></i> Précédent
+        </button>
         
-        <div class="nav-right">
-          <button 
-            v-if="currentStep < 2" 
-            @click="nextStep" 
-            class="btn-primary"
-            :disabled="!canProceedToNextStep"
-          >
-            Suivant
-            <i class="bi bi-chevron-right"></i>
-          </button>
-          
-          <button 
-            v-else-if="currentStep === 2" 
-            @click="saveTemplate" 
-            class="btn-primary"
-            :disabled="!canSaveTemplate || saveStatus === 'saving'"
-          >
-            <span v-if="saveStatus === 'saving'">
-              <i class="bi bi-hourglass-split spinning"></i>
-              Enregistrement...
-            </span>
-            <span v-else>
-              <i class="bi bi-check-circle"></i>
-              Créer le template
-            </span>
-          </button>
-          
-          <button 
-            v-else-if="currentStep === 3 && saveStatus === 'success'" 
-            @click="closeModal" 
-            class="btn-primary"
-          >
-            <i class="bi bi-house"></i>
-            Retour au tableau de bord
-          </button>
-        </div>
+        <div class="spacer" v-if="currentStep > 0"></div>
+        
+        <button 
+          v-if="currentStep < 2" 
+          @click="nextStep" 
+          class="nav-button primary"
+          :disabled="!canProceedToNextStep"
+        >
+          Suivant <i class="bi bi-arrow-right"></i>
+        </button>
+
+        <button 
+          v-if="currentStep === 2" 
+          @click="nextStep" 
+          class="nav-button primary"
+          :disabled="!canProceedToNextStep"
+        >
+          Confirmer <i class="bi bi-check"></i>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, defineEmits } from 'vue';
+import { ref, computed, onMounted, defineEmits, nextTick } from 'vue';
 import QrPositioner from '@/components/QrPositioner.vue';
 import TemplateService from '@/services/TemplateService.js';
 import AuthService from '@/services/AuthService.js';
@@ -316,28 +284,36 @@ const saveError = ref('');
 const templateNameError = ref('');
 const fileError = ref('');
 
-// Propriétés calculées pour la validation
+// Propriétés calculées
+
 const canProceedToNextStep = computed(() => {
-  if (currentStep.value === 0) {
-    // Étape 1: Nom du template requis
-    return templateData.value.name.trim().length > 0;
-  } else if (currentStep.value === 1) {
-    // Étape 2: Fichier PDF requis et prévisualisé
-    return templateData.value.file && !pdfPreview.value.loading && !pdfPreview.value.error;
-  } else if (currentStep.value === 2) {
-    // Étape 3: Positions QR confirmées
-    return templateData.value.qrPositions !== null;
+  switch (currentStep.value) {
+    case 0: // Informations
+      return templateData.value.name.trim().length > 0;
+    case 1: // Document PDF
+      return templateData.value.file !== null && 
+             pdfPreview.value?.url !== null && 
+             !pdfPreview.value?.loading && 
+             !pdfPreview.value?.error;
+    case 2: // Configuration
+      return templateData.value.qrPositions !== null;
+    default:
+      return false;
   }
-  
-  return true;
 });
 
 const canSaveTemplate = computed(() => {
   return templateData.value.name.trim().length > 0 && 
-         templateData.value.file && 
-         templateData.value.qrPositions &&
-         templateData.value.generatedPdfFile;
+         templateData.value.file !== null && 
+         templateData.value.qrPositions !== null;
 });
+
+const positionData = computed(() => templateData.value.qrPositions);
+
+const saving = computed(() => saveStatus.value === 'saving');
+const saveSuccess = computed(() => saveStatus.value === 'success');
+
+const totalPages = computed(() => pdfPreview.value?.totalPages || 1);
 
 // Méthodes de navigation entre les étapes
 function nextStep() {
@@ -357,9 +333,6 @@ function prevStep() {
 }
 
 // Méthodes de validation
-function clearTemplateNameError() {
-  templateNameError.value = '';
-}
 
 function clearFileError() {
   fileError.value = '';
@@ -380,6 +353,9 @@ function handleFileSelection(event) {
     templateData.value.file = file;
     clearFileError();
     console.log('Fichier PDF sélectionné:', file.name);
+    
+    // Créer immédiatement l'aperçu PDF (comme PrepareDocument)
+    createPdfPreview();
   } else {
     fileError.value = 'Veuillez sélectionner un fichier PDF valide';
   }
@@ -397,6 +373,9 @@ function handleFileDrop(event) {
     templateData.value.file = file;
     clearFileError();
     console.log('Fichier PDF déposé:', file.name);
+    
+    // Créer immédiatement l'aperçu PDF (comme PrepareDocument)
+    createPdfPreview();
   } else {
     fileError.value = 'Veuillez déposer un fichier PDF valide';
   }
@@ -404,6 +383,12 @@ function handleFileDrop(event) {
 
 function removeFile() {
   templateData.value.file = null;
+  
+  // Nettoyer l'URL de l'aperçu si elle existe
+  if (pdfPreview.value?.url) {
+    URL.revokeObjectURL(pdfPreview.value.url);
+  }
+  
   pdfPreview.value = { loading: false, error: null, url: null, totalPages: 1 };
   clearFileError();
 }
@@ -422,26 +407,53 @@ function formatFileSize(size) {
 function createPdfPreview() {
   if (!templateData.value.file) return;
   
-  console.log('Création de la prévisualisation PDF pour:', templateData.value.file.name);
-  
-  pdfPreview.value.loading = true;
-  pdfPreview.value.error = null;
+  console.log('🔵 Création de la prévisualisation pour:', templateData.value.file.name);
   
   try {
+    // Créer l'URL directement depuis le fichier
     const fileUrl = URL.createObjectURL(templateData.value.file);
-    pdfPreview.value.url = fileUrl;
-    pdfPreview.value.loading = false;
+    console.log('✅ URL créée:', fileUrl);
+    
+    // TEST: Essayer avec une URL publique de PDF pour vérifier l'iframe
+    // const testUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+    // console.log('🧪 TEST avec URL publique:', testUrl);
+    
+    // Mettre à jour l'état immédiatement
+    pdfPreview.value = {
+      loading: false,
+      error: null,
+      url: fileUrl, // ou testUrl pour le test
+      totalPages: 1
+    };
+    
+    console.log('📋 État pdfPreview final:', pdfPreview.value);
+    console.log('📋 Type de l\'URL:', typeof pdfPreview.value.url);
+    console.log('📋 URL commence par blob:', pdfPreview.value.url?.startsWith('blob:'));
+    
+    // Forcer un refresh de Vue après un court délai
+    setTimeout(() => {
+      console.log('⏱️ Vérification après 500ms:');
+      console.log('- pdfPreview existe toujours?', !!pdfPreview.value);
+      console.log('- URL toujours présente?', pdfPreview.value?.url);
+      console.log('- templateData.file toujours présent?', !!templateData.value.file);
+    }, 500);
     
     // Détecter le nombre de pages
     detectPdfPages(templateData.value.file).then(pages => {
-      pdfPreview.value.totalPages = pages;
-      console.log('Nombre de pages détecté:', pages);
+      console.log(`📄 PDF analysé: ${pages} pages détectées`);
+      if (pdfPreview.value) {
+        pdfPreview.value.totalPages = pages;
+      }
     });
     
   } catch (error) {
-    console.error('Erreur création URL pour la prévisualisation:', error);
-    pdfPreview.value.error = 'Erreur de chargement du PDF';
-    pdfPreview.value.loading = false;
+    console.error('❌ Erreur création URL:', error);
+    pdfPreview.value = {
+      loading: false,
+      error: 'Erreur de chargement: ' + error.message,
+      url: null,
+      totalPages: 1
+    };
   }
 }
 
@@ -470,6 +482,20 @@ async function detectPdfPages(file) {
   } catch (error) {
     console.error('Erreur détection pages:', error);
     return 1;
+  }
+}
+
+// Gestionnaires d'événements pour l'iframe
+function onIframeLoad() {
+  console.log('✅ Iframe chargée avec succès !');
+  console.log('URL de l\'iframe:', pdfPreview.value?.url);
+}
+
+function onIframeError(event) {
+  console.error('❌ Erreur de chargement de l\'iframe:', event);
+  console.error('URL de l\'iframe:', pdfPreview.value?.url);
+  if (pdfPreview.value) {
+    pdfPreview.value.error = 'Erreur de chargement du PDF dans l\'iframe';
   }
 }
 
@@ -572,215 +598,219 @@ async function saveTemplate() {
   }
 }
 
-// Fonction pour réessayer la sauvegarde
-function retrySave() {
-  saveStatus.value = null;
-  saveError.value = '';
-  currentStep.value = 2; // Retour à l'étape de configuration
+// Fonctions d'aide pour l'affichage
+function getQrSizeLabel(size) {
+  const sizeLabels = {
+    small: 'Petit',
+    medium: 'Moyen',
+    large: 'Grand'
+  };
+  return sizeLabels[size] || 'Moyen';
 }
 
-// Fonction pour fermer la modal
-function closeModal() {
-  // Nettoyer les URLs créées
-  if (pdfPreview.value.url) {
-    URL.revokeObjectURL(pdfPreview.value.url);
-  }
-  if (templateData.value.generatedPdfDataUrl) {
-    URL.revokeObjectURL(templateData.value.generatedPdfDataUrl);
-  }
-  
-  emit('close');
-}
-
-// Fonction pour obtenir un résumé de la configuration QR
-function getQrConfigurationSummary() {
-  if (!templateData.value.qrPositions) return 'Non configuré';
-  
-  const qr = templateData.value.qrPositions.qr;
-  const sizeLabels = { small: 'Petit', medium: 'Moyen', large: 'Grand' };
-  const modeLabels = { 
+function getPageApplicationLabel(mode) {
+  const modeLabels = {
     all: 'Toutes les pages',
     current: 'Page actuelle',
     custom: 'Pages spécifiques',
     individual: 'Positions individuelles'
   };
-  
-  return `${sizeLabels[qr.size] || 'Moyen'} - ${modeLabels[templateData.value.qrPositions.mode] || 'Standard'}`;
+  return modeLabels[mode] || 'Standard';
 }
 
 // Nettoyage au démontage
 onMounted(() => {
   console.log('Composant CreateTemplate monté');
+  
+  // S'assurer que pdfPreview est toujours initialisé
+  if (!pdfPreview.value) {
+    pdfPreview.value = {
+      loading: false,
+      error: null,
+      url: null,
+      totalPages: 1
+    };
+  }
 });
 </script>
 
 <style scoped>
-/* Styles cohérents avec CollaboratorDashboard */
 .create-template-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  background-color: transparent;
+  border-radius: 16px;
+  box-shadow: none;
+  width: 100%;
+  max-width: 100%;
+  animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow-y: auto;
+  max-height: 85vh;
+  margin: 0;
   padding: 0;
-  background: transparent;
 }
 
-/* Header section */
+.section-card {
+  background-color: var(--card-bg, #ffffff);
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  position: relative;
+  border: 1px solid var(--border-color, #eaeaea);
+}
+
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 32px;
-  background: var(--card-bg);
-  border-radius: 16px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  border: 1px solid var(--border-color);
+  padding: 20px 25px;
+  border-bottom: 1px solid rgba(6, 255, 165, 0.2);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
   position: relative;
-}
-
-.section-header::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 32px;
-  right: 32px;
-  height: 3px;
-  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-  border-radius: 2px;
+  z-index: 5;
+  margin-bottom: 20px;
 }
 
 .section-title {
-  color: var(--text-color);
-  font-size: 1.5rem;
-  font-weight: 700;
   margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color, #212529);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .section-title i {
-  color: var(--primary-color);
-  font-size: 1.4rem;
+  color: var(--accent-color, #06ffa5);
+  font-size: 1.3em;
 }
 
-/* Section card */
-.section-card {
-  background: var(--card-bg);
-  border-radius: 20px;
-  padding: 32px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-  border: 1px solid var(--border-color);
-  min-height: 600px;
+.btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+  background: var(--bg-light);
+  color: var(--text-color);
+  cursor: pointer;
 }
 
-/* Progression des étapes */
+.btn:hover {
+  background: var(--hover-bg);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Progression des étapes - Plus étalée */
 .steps-progress {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 40px;
-  padding: 0 20px;
+  justify-content: space-between;
+  margin: 25px 0;
+  position: relative;
+  padding: 0 20px; /* Réduction des marges latérales */
+}
+
+.steps-progress::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 20px;
+  right: 20px;
+  height: 2px;
+  background-color: var(--border-color, rgba(0, 0, 0, 0.1));
+  z-index: 1;
 }
 
 .step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1;
-  max-width: 150px;
   position: relative;
-}
-
-.step:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  right: -50%;
-  height: 2px;
-  background: var(--border-color);
-  z-index: 1;
-}
-
-.step.active:not(:last-child)::after,
-.step.completed:not(:last-child)::after {
-  background: var(--primary-color);
+  z-index: 2;
+  flex: 1;
 }
 
 .step-number {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background: var(--bg-light);
-  border: 2px solid var(--border-color);
+  background-color: var(--bg-color, #fff);
+  border: 2px solid var(--border-color, rgba(0, 0, 0, 0.1));
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-muted, #6c757d);
   margin-bottom: 8px;
-  position: relative;
-  z-index: 2;
   transition: all 0.3s ease;
 }
 
-.step.active .step-number,
+.step.active .step-number {
+  background-color: var(--primary, #4a6cf7);
+  border-color: var(--primary, #4a6cf7);
+  color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(74, 108, 247, 0.3);
+}
+
 .step.completed .step-number {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
-  color: white;
+  background-color: var(--accent-color, #06ffa5);
+  border-color: var(--accent-color, #06ffa5);
+  color: #fff;
 }
 
 .step-label {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-size: 14px;
+  color: var(--text-muted, #6c757d);
   text-align: center;
+  transition: all 0.3s ease;
 }
 
 .step.active .step-label,
 .step.completed .step-label {
-  color: var(--primary-color);
-  font-weight: 600;
+  color: var(--text-color, #212529);
+  font-weight: 500;
 }
 
-/* Contenu des étapes */
+/* Contenus des étapes - Marges réduites */
 .step-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  margin: 20px 0; /* Réduction des marges latérales de 30px à 0 */
+  min-height: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .step-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  animation: fade-in 0.3s ease-in-out;
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
 }
 
-/* Formulaire d'informations */
-.template-info-form {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  max-width: 600px;
-  margin: 0 auto;
+/* Section formulaire - Plus large */
+.form-section {
+  max-width: none; /* Suppression de la limitation de largeur */
+  width: 100%;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  margin-bottom: 24px;
 }
 
 .form-label {
-  font-weight: 600;
-  color: var(--text-color);
   display: flex;
   align-items: center;
   gap: 8px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 8px;
   font-size: 1rem;
 }
 
@@ -788,197 +818,145 @@ onMounted(() => {
   color: var(--primary-color);
 }
 
-.form-input, .form-textarea {
+/* Zones de texte étirées */
+.form-control {
+  width: 100%;
   padding: 12px 16px;
   border: 2px solid var(--border-color);
-  border-radius: 12px;
-  background: var(--bg-light);
-  color: var(--text-color);
+  border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s ease;
+  background: var(--bg-light);
+  color: var(--text-color);
+  resize: vertical;
 }
 
-.form-input:focus, .form-textarea:focus {
+.form-control:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+  background: white;
 }
 
-.form-input.error {
+.form-control.is-invalid {
   border-color: var(--danger-color);
 }
 
-.form-textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-.error-message {
+.invalid-feedback {
   color: var(--danger-color);
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.875rem;
+  margin-top: 5px;
 }
 
-/* Section upload */
-.upload-section {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
+/* Zone de dépôt de fichier */
 .upload-area {
-  border: 2px dashed var(--border-color);
-  border-radius: 16px;
-  padding: 40px 20px;
+  border: 2px dashed var(--border-color, #dee2e6);
+  border-radius: 12px;
+  padding: 50px 40px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: var(--bg-light);
-  position: relative;
-  min-height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-color: rgba(6, 255, 165, 0.02);
+  width: 100%;
 }
 
 .upload-area:hover {
-  border-color: var(--primary-color);
-  background: rgba(var(--primary-color-rgb), 0.02);
+  border-color: var(--accent-color, #06ffa5);
+  background-color: rgba(6, 255, 165, 0.05);
+  transform: translateY(-2px);
 }
 
-.upload-area.has-file {
-  border-style: solid;
-  border-color: var(--success-color);
-  background: rgba(var(--success-color-rgb), 0.05);
-}
-
-.file-input {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.upload-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-
-.upload-icon {
-  font-size: 3rem;
-  color: var(--primary-color);
-}
-
-.upload-text {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.upload-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--text-color);
-}
-
-.upload-subtitle {
-  font-size: 1rem;
-  color: var(--text-secondary);
-}
-
-.upload-hint {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-.file-selected {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 16px 24px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.file-info {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex: 1;
-}
-
-.file-info i {
-  font-size: 2rem;
-}
-
-.file-details {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.file-name {
-  font-weight: 600;
-  color: var(--text-color);
-  font-size: 1rem;
-}
-
-.file-size, .file-pages {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-}
-
-.remove-file {
-  background: none;
-  border: none;
-  color: var(--danger-color);
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 8px;
+.upload-area i {
+  font-size: 54px;
+  color: var(--primary, #4a6cf7);
+  margin-bottom: 20px;
   transition: all 0.3s ease;
 }
 
-.remove-file:hover {
-  background: rgba(var(--danger-color-rgb), 0.1);
+.upload-area:hover i {
+  color: var(--accent-color, #06ffa5);
+  transform: scale(1.1);
 }
 
-/* Section prévisualisation PDF */
-.pdf-preview-section h4 {
-  color: var(--text-color);
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 0 0 16px 0;
+.upload-area p {
+  font-size: 18px;
+  color: var(--text-color, #212529);
+  margin: 0 0 8px 0;
+  font-weight: 500;
+}
+
+.upload-hint {
+  color: var(--text-muted, #6c757d);
+  font-size: 14px;
+}
+
+.file-input {
+  display: none;
+}
+
+/* Info document */
+.document-info {
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.pdf-preview-container {
-  border: 1px solid var(--border-color);
+  gap: 15px;
+  padding: 20px;
+  background: var(--bg-light);
   border-radius: 12px;
-  overflow: hidden;
-  height: 400px;
-  background: white;
+  border: 1px solid var(--border-color);
+  margin-bottom: 20px;
 }
 
-.pdf-loading, .pdf-error {
-  height: 100%;
+.document-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--primary-color);
+  border-radius: 10px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.document-details {
+  flex: 1;
+}
+
+.document-name {
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 4px;
+}
+
+.document-size, .document-pages {
+  font-size: 0.875rem;
   color: var(--text-secondary);
 }
 
-.pdf-loading .spinning {
-  animation: spin 1s linear infinite;
+.remove-file-btn {
+  background: rgba(220, 53, 69, 0.1);
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  color: var(--danger-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.remove-file-btn:hover {
+  background: rgba(220, 53, 69, 0.2);
+  transform: scale(1.1);
+}
+
+/* PDF preview styles */
+.pdf-preview-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  border: 1px solid var(--border-color);
+  height: 600px;
 }
 
 .pdf-preview {
@@ -987,175 +965,237 @@ onMounted(() => {
   border: none;
 }
 
-/* Section positionnement */
-.positioning-section h4 {
-  color: var(--text-color);
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 0 0 8px 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.positioning-hint {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  margin-bottom: 24px;
-  line-height: 1.5;
-}
-
-.qr-positioner-container {
-  background: var(--bg-light);
-  border-radius: 12px;
-  padding: 20px;
-  border: 1px solid var(--border-color);
-}
-
-/* Section confirmation */
-.confirmation-section {
+.pdf-loading, .pdf-error {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 100%;
   text-align: center;
-  gap: 24px;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.pdf-loading i {
+  font-size: 48px;
+  margin-bottom: 15px;
+  color: var(--primary, #4a6cf7);
+}
+
+.pdf-error i {
+  font-size: 48px;
+  margin-bottom: 15px;
+  color: var(--danger, #dc3545);
+}
+
+.pdf-error {
+  color: #dc3545;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* QR Positioner container */
+.qr-position-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* États de sauvegarde */
+.saving-state, .error-state, .success-state, .confirmation-state {
+  text-align: center;
   padding: 40px 20px;
 }
 
-.saving-state, .success-state, .error-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  max-width: 500px;
-}
-
-.saving-icon, .success-icon, .error-icon {
-  font-size: 4rem;
-}
-
-.saving-icon .spinning {
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(var(--primary-color-rgb), 0.2);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
   animation: spin 1s linear infinite;
-  color: var(--primary-color);
+  margin: 0 auto 20px;
 }
 
-.success-icon {
-  color: var(--success-color);
+.error-state i, .success-state i {
+  font-size: 4rem;
+  margin-bottom: 20px;
 }
 
-.error-icon {
+.error-state i {
   color: var(--danger-color);
 }
 
-.confirmation-section h4 {
-  color: var(--text-color);
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin: 0;
+.success-state i {
+  color: var(--success-color);
 }
 
-.confirmation-section p {
-  color: var(--text-secondary);
-  font-size: 1rem;
-  margin: 0;
-  line-height: 1.5;
+.confirmation-state h4 {
+  color: var(--text-color);
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .template-summary {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
   background: var(--bg-light);
-  padding: 20px;
   border-radius: 12px;
+  padding: 25px;
+  margin: 20px 0;
   border: 1px solid var(--border-color);
-  width: 100%;
-  max-width: 400px;
+  text-align: left;
 }
 
 .summary-item {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.5);
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.summary-label {
+  font-weight: 600;
   color: var(--text-color);
-  font-size: 0.9rem;
 }
 
-.summary-item i {
-  color: var(--primary-color);
-  width: 20px;
-  text-align: center;
+.summary-value {
+  color: var(--text-secondary);
+  text-align: right;
+  max-width: 60%;
+  word-break: break-word;
 }
 
-/* Navigation */
+.confirmation-actions {
+  margin-top: 30px;
+}
+
+/* Navigation entre les étapes - Comme PrepareDocument */
 .step-navigation {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border-color);
+  margin-top: 30px;
+  border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
+  padding: 20px 25px;
+  background: rgba(255, 255, 255, 0.9);
 }
 
-.nav-left, .nav-right {
-  display: flex;
-  gap: 12px;
-}
-
-/* Boutons */
-.btn {
-  padding: 12px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.9rem;
+.nav-button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: none;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  text-decoration: none;
+  border: none;
 }
 
-.btn-secondary {
-  background: var(--bg-light);
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
+.nav-button.primary {
+  background-color: var(--primary, #4a6cf7);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(74, 108, 247, 0.2);
 }
 
-.btn-secondary:hover {
-  background: var(--hover-bg);
-  border-color: var(--text-secondary);
+.nav-button.primary:hover:not(:disabled) {
+  background-color: #3955c8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(74, 108, 247, 0.3);
+}
+
+.nav-button.secondary {
+  background-color: transparent;
+  color: var(--text-color, #212529);
+  border: 1px solid var(--border-color, #dee2e6);
+}
+
+.nav-button.secondary:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-color: var(--text-muted, #6c757d);
+}
+
+.nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.spacer {
+  flex: 1;
 }
 
 .btn-primary {
   background: var(--primary-color);
   color: white;
-  border: 1px solid var(--primary-color);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.btn-primary:hover:not(:disabled) {
+.btn-primary:hover {
   background: var(--primary-dark);
-  border-color: var(--primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(var(--primary-color-rgb), 0.3);
+  box-shadow: 0 6px 20px rgba(var(--primary-color-rgb), 0.3);
 }
 
-.btn-primary:disabled {
-  background: var(--neutral-color);
-  border-color: var(--neutral-color);
-  cursor: not-allowed;
-  opacity: 0.6;
-  transform: none;
-  box-shadow: none;
+.btn-retry {
+  background: var(--danger-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.btn .spinning {
-  animation: spin 1s linear infinite;
+.btn-retry:hover {
+  background: var(--danger-dark);
+  transform: translateY(-2px);
 }
 
 /* Animations */
+@keyframes slide-up {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -1163,38 +1203,44 @@ onMounted(() => {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .create-template-container {
-    padding: 16px;
+  .step-content {
+    margin: 15px 0;
   }
   
-  .section-header {
+  .step-body {
     padding: 20px;
-    flex-direction: column;
-    gap: 16px;
-    text-align: center;
   }
   
-  .section-card {
-    padding: 24px 20px;
+  .upload-area {
+    padding: 30px 20px;
+  }
+  
+  .form-control {
+    padding: 10px 14px;
   }
   
   .steps-progress {
-    flex-wrap: wrap;
-    gap: 16px;
+    padding: 0 10px;
   }
   
-  .template-info-form {
-    max-width: 100%;
+  .steps-progress::before {
+    left: 10px;
+    right: 10px;
   }
   
   .step-navigation {
-    flex-direction: column-reverse;
-    gap: 16px;
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 10px;
   }
   
-  .nav-left, .nav-right {
+  .nav-button {
     width: 100%;
     justify-content: center;
+  }
+  
+  .spacer {
+    display: none;
   }
 }
 </style> 

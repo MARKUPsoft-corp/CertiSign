@@ -1401,3 +1401,185 @@ Unauthorized: /api/users/token-verify/
   warnings.warn(
 127.0.0.1 - - [08/Jul/2025 13:56:58] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
 127.0.0.1 - - [08/Jul/2025 13:56:58] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:58:17] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 13:58:17.840035) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 13:58:17.843159) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 13:58:17] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 13:58:17] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:04:43] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:04:43.714855) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:04:43.726852) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:04:43] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:04:43] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:07:01] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:07:02.020161) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:07:02.030529) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:07:02] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:07:02] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+Unauthorized: /api/users/token-verify/
+127.0.0.1 - - [08/Jul/2025 14:07:42] "[31m[1mPOST /api/users/token-verify/ HTTP/1.0[0m" 401 -
+127.0.0.1 - - [08/Jul/2025 14:07:43] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [08/Jul/2025 14:07:43] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:07:55] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:07:56] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:07:56.439547) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:07:56] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:07:56.445042) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:07:56] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:08:06] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:08:06.806530) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:08:06.810377) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:08:06] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:08:06] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:15:23] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:15:23.587771) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:15:23.593802) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:15:23] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:15:23] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:16:16] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:16:17.026049) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:16:17.035082) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:16:17] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:16:17] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:17:20] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:17:20.945839) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:17:20.951900) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:17:20] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:17:20] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:18:49] "[35m[1mPOST /api/signature-templates/templates/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [08/Jul/2025 14:18:58] "GET /admin/signature_templates/signaturetemplate/11/change/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:18:58] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:19:03] "GET /admin/signature_templates/signaturetemplate/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:19:03] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:19:05] "GET /admin/signature_templates/signaturetemplate/12/change/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:19:05] "GET /admin/jsi18n/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:19:14] "GET /media/templates/8/previews/acte_modifié_KR0GxXk.pdf HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:19:19] "GET /admin/signature_templates/signaturetemplate/12/change/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:19:49] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:19:49.686050) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:19:49.694399) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:19:49] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:19:49] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:20:32] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:20:32.516241) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:20:32.519597) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:20:32] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:20:32] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:22:48] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:22:48.263553) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:22:48.274723) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:22:48] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:22:48] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:36:43] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:36:43.448561) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:36:43.450958) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:36:43] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:36:43] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:38:46] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:38:46.488563) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:38:46] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:38:46.512208) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:38:46] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:40:15] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:40:15.567344) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:40:15.570811) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:40:15] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:40:15] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:41:48] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:41:48.567179) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:41:48] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:41:48.574882) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:41:48] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:42:58] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:42:58.468083) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:42:58.477185) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:42:58] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:42:58] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:49:36] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:49:36.670634) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:49:36.675136) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:49:36] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:49:36] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:51:18] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:51:18.250166) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:51:18.256136) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:51:18] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:51:18] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:58:08] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 14:58:08.353920) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 14:58:08.364728) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 14:58:08] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 14:58:08] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 15:02:28] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 15:02:28.612193) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 15:02:28] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 15:02:28.622090) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 15:02:28] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 15:05:07] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 15:05:07.732279) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 15:05:07.739321) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 15:05:07] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 15:05:07] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 15:05:55] "[35m[1mPOST /api/signature-templates/templates/ HTTP/1.0[0m" 201 -
+Unauthorized: /api/users/token-verify/
+127.0.0.1 - - [08/Jul/2025 15:09:03] "[31m[1mPOST /api/users/token-verify/ HTTP/1.0[0m" 401 -
+127.0.0.1 - - [08/Jul/2025 15:09:03] "[35m[1mPOST /api/users/activity-log/ HTTP/1.0[0m" 201 -
+127.0.0.1 - - [08/Jul/2025 15:09:04] "GET /api/users/organizations/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 15:09:21] "POST /api/users/auth/with-organization/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 15:09:22] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 15:09:22.424713) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 15:09:22.434240) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 15:09:22] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 15:09:22] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 15:10:10] "POST /api/users/token-verify/ HTTP/1.0" 200 -
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-07-01 15:10:10.444663) while time zone support is active.
+  warnings.warn(
+/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1671: RuntimeWarning: DateTimeField DocumentQRPosition.created_at received a naive datetime (2025-06-08 15:10:10.448225) while time zone support is active.
+  warnings.warn(
+127.0.0.1 - - [08/Jul/2025 15:10:10] "GET /api/signature-templates/templates/ HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 15:10:10] "GET /api/documents/qr-positions/by_collaborator/?organization_id=2 HTTP/1.0" 200 -
+127.0.0.1 - - [08/Jul/2025 15:10:34] "[35m[1mPOST /api/signature-templates/templates/ HTTP/1.0[0m" 201 -
