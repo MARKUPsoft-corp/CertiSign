@@ -1,23 +1,23 @@
 INFO:     Will watch for changes in these directories: ['/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/microservices/signature_document']
 INFO:     Uvicorn running on https://127.0.0.1:8003 (Press CTRL+C to quit)
-INFO:     Started reloader process [791355] using StatReload
+INFO:     Started reloader process [5558] using StatReload
 WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
 WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
 WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [791361]
+INFO:     Started server process [5564]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:main:Nouvelle demande de signature pour le fichier COPIE-DACTE-DE-NAISSANCE-1.pdf
-INFO:signer:Clé privée chargée avec succès: <Name(C=CM,O=ANTIC CA,OU=GovRA,OU=ANTIC RA,OU=PKI Center,CN=ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310))>
-INFO:main:Identifiant généré pour le document: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:Hash du document original calculé: 4f22dd87eadeeacef198a330fad4cf98f62258fcc4fb7f2fa237536d3da5acdf
+INFO:main:Nouvelle demande de signature pour le fichier dnssec yaounde - lab01.pdf
+INFO:signer:Clé privée chargée avec succès: <Name(C=CM,O=ANTIC CA,OU=GovRA,OU=ANTIC RA,OU=PKI Center,CN=ANTIC(NDEFO KEVIN KAMGA 19881006))>
+INFO:main:Identifiant généré pour le document: 63449d97-5c70-4225-a4da-46461b82b3a3
+INFO:main:Hash du document original calculé: 956ec8fd74605d6f2be9eea5934b6971867d0776f76d71e3155bd00a56aabe43
 INFO:signer:Fichier signé avec succès, taille de la signature: 256 octets
 INFO:main:Document signé, taille de la signature: 256 octets
 INFO:main:Métadonnées parsées avec succès. Clés disponibles: ['user_id', 'username', 'email', 'full_name', 'organization', 'organization_id', 'signer_role', 'jwt_token', 'qr_position', 'signature_position']
-INFO:main:Position du QR code extraite des métadonnées: {'x': 84.78991596638656, 'y': 90.94615945340335, 'size': 'large', 'pages': 'all', 'positions': {'default': {'x': 84.78991596638656, 'y': 90.94615945340335}}, 'mode': 'all'}
+INFO:main:Position du QR code extraite des métadonnées: {'x': 82.18487394957982, 'y': 81.81598871733968, 'size': 'medium', 'pages': 'all', 'positions': {'default': {'x': 82.18487394957982, 'y': 81.81598871733968}}, 'mode': 'all'}
 INFO:main:Données de signature trouvées. Clés: ['positions', 'signature_image', 'signature_size']
-INFO:main:Image de signature trouvée. Longueur: 235954 caractères. Début: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABVYA...
-INFO:main:Positions de signature trouvées: 1 position(s). Détails: [{'page': 'all', 'x': 85.29411764705883, 'y': 71.34995992846274, 'width': 20, 'height': 10}]
+INFO:main:Image de signature trouvée. Longueur: 6926 caractères. Début: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfcA...
+INFO:main:Positions de signature trouvées: 1 position(s). Détails: [{'page': 'all', 'x': 82.68907563025209, 'y': 91.07964667458432, 'width': 20, 'height': 10}]
 INFO:main:Taille de signature extraite des métadonnées: 50%
 INFO:main:ID d'organisation extrait des métadonnées: 
 INFO:main:Rôle du signataire extrait des métadonnées: user
@@ -25,17 +25,17 @@ INFO:main:Ajout de l'image de signature au document avec taille 50%
 INFO:main:=== DÉBUT add_signature_image_to_pdf ===
 INFO:main:Taille de signature reçue: 50%
 INFO:main:Nombre de positions: 1
-INFO:main:Positions détaillées: [{'page': 'all', 'x': 85.29411764705883, 'y': 71.34995992846274, 'width': 20, 'height': 10}]
-INFO:main:Début des données d'image reçues: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABVYA...
-INFO:main:DEBUG MICROSERVICE - Positions de signature reçues: [{'page': 'all', 'x': 85.29411764705883, 'y': 71.34995992846274, 'width': 20, 'height': 10}]
-INFO:main:DEBUG MICROSERVICE - Position 1: page=all, x=85.29411764705883, y=71.34995992846274, width=20, height=10
+INFO:main:Positions détaillées: [{'page': 'all', 'x': 82.68907563025209, 'y': 91.07964667458432, 'width': 20, 'height': 10}]
+INFO:main:Début des données d'image reçues: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfcA...
+INFO:main:DEBUG MICROSERVICE - Positions de signature reçues: [{'page': 'all', 'x': 82.68907563025209, 'y': 91.07964667458432, 'width': 20, 'height': 10}]
+INFO:main:DEBUG MICROSERVICE - Position 1: page=all, x=82.68907563025209, y=91.07964667458432, width=20, height=10
 INFO:main:En-tête de l'image détecté: data:image/png;base64
 INFO:main:Format d'image détecté: png
-INFO:main:Données base64 pures extraites, longueur: 235932
-INFO:main:Image décodée avec succès, taille: 176949 octets
+INFO:main:Données base64 pures extraites, longueur: 6904
+INFO:main:Image décodée avec succès, taille: 5176 octets
 INFO:main:Image validée par PIL
-INFO:main:Image de signature sauvegardée temporairement: /tmp/temp_signature_5ed971ad-38cd-463e-91e8-bbf98bf1a4ae.png
-INFO:main:Traitement des 1 pages du PDF
+INFO:main:Image de signature sauvegardée temporairement: /tmp/temp_signature_63671c63-9c56-41b4-8ba7-10036646d62d.png
+INFO:main:Traitement des 8 pages du PDF
 INFO:main:Mode 'all' détecté - signature appliquée sur la page 1
 INFO:main:Ajout de 1 signature(s) sur la page 1
 INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
@@ -43,835 +43,233 @@ INFO:main:signature_size reçu: 50%
 INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
 INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
 INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
-INFO:main:Position de signature: x=85.29411764705883%, y=71.34995992846274%, largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=82.68907563025209%, y=91.07964667458432%, largeur=30.0%, hauteur=15.0%
 INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
-INFO:main:Page dimensions: 595.2 x 841.92 points
-INFO:main:Position absolue: x=507.6705882352942, y=241.2104173702865
-INFO:main:Dimensions absolues: largeur=178.56, hauteur=126.28799999999998 points
-INFO:main:Signature ajoutée à la position: x=418.3905882352942, y=178.0664173702865, largeur=178.56, hauteur=126.28799999999998
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=506.0571428571428, y=70.64919833729215
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=414.2571428571428, y=11.24919833729215, largeur=183.6, hauteur=118.8
 INFO:main:Fusion réussie pour la page 1
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 2
+INFO:main:Ajout de 1 signature(s) sur la page 2
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=82.68907563025209%, y=91.07964667458432%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=506.0571428571428, y=70.64919833729215
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=414.2571428571428, y=11.24919833729215, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 2
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 3
+INFO:main:Ajout de 1 signature(s) sur la page 3
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=82.68907563025209%, y=91.07964667458432%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=506.0571428571428, y=70.64919833729215
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=414.2571428571428, y=11.24919833729215, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 3
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 4
+INFO:main:Ajout de 1 signature(s) sur la page 4
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=82.68907563025209%, y=91.07964667458432%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=506.0571428571428, y=70.64919833729215
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=414.2571428571428, y=11.24919833729215, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 4
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 5
+INFO:main:Ajout de 1 signature(s) sur la page 5
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=82.68907563025209%, y=91.07964667458432%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=506.0571428571428, y=70.64919833729215
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=414.2571428571428, y=11.24919833729215, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 5
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 6
+INFO:main:Ajout de 1 signature(s) sur la page 6
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=82.68907563025209%, y=91.07964667458432%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=506.0571428571428, y=70.64919833729215
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=414.2571428571428, y=11.24919833729215, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 6
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 7
+INFO:main:Ajout de 1 signature(s) sur la page 7
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=82.68907563025209%, y=91.07964667458432%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=506.0571428571428, y=70.64919833729215
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=414.2571428571428, y=11.24919833729215, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 7
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 8
+INFO:main:Ajout de 1 signature(s) sur la page 8
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=82.68907563025209%, y=91.07964667458432%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=506.0571428571428, y=70.64919833729215
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=414.2571428571428, y=11.24919833729215, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 8
 INFO:main:Processus d'ajout de l'image de signature terminé avec succès
-INFO:main:Suppression du fichier temporaire: /tmp/temp_signature_5ed971ad-38cd-463e-91e8-bbf98bf1a4ae.png
+INFO:main:Suppression du fichier temporaire: /tmp/temp_signature_63671c63-9c56-41b4-8ba7-10036646d62d.png
 INFO:main:Début du processus d'ajout du QR code au PDF
 INFO:main:Mode de positionnement: all
-INFO:main:Position par défaut: x=84.78991596638656%, y=90.94615945340335%, taille=large
+INFO:main:Position par défaut: x=82.18487394957982%, y=81.81598871733968%, taille=medium
 INFO:main:Pages où appliquer le QR code: all
 INFO:main:Positions individuelles définies pour les pages: ['default']
-INFO:main:Encodage de l'ID du document: a6399a48-4675-4f45-a06e-629f48015d5c dans le QR code
+INFO:main:Encodage de l'ID du document: 63449d97-5c70-4225-a4da-46461b82b3a3 dans le QR code
 INFO:main:Génération de l'image du QR code
-INFO:main:Sauvegarde du QR code dans: /tmp/temp_qr_29ab5e29-2e9a-412d-97d0-a88890f563cc.png
+INFO:main:Sauvegarde du QR code dans: /tmp/temp_qr_356ec1a7-bd4c-4dee-ac1a-dc2d55b2f468.png
 INFO:main:Lecture du PDF original
-INFO:main:Traitement des 1 pages du PDF
+INFO:main:Traitement des 8 pages du PDF
 INFO:main:Application du QR code sur la page 1
-INFO:main:Dimensions de la page 1: 595.2 x 841.92 points
+INFO:main:Dimensions de la page 1: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 2
+INFO:main:Dimensions de la page 2: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 3
+INFO:main:Dimensions de la page 3: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 4
+INFO:main:Dimensions de la page 4: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 5
+INFO:main:Dimensions de la page 5: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 6
+INFO:main:Dimensions de la page 6: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 7
+INFO:main:Dimensions de la page 7: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 8
+INFO:main:Dimensions de la page 8: 612.0 x 792.0 points
 INFO:main:Sauvegarde du PDF modifié avec le QR code
 INFO:main:Processus d'ajout du QR code terminé avec succès
-INFO:main:Suppression du fichier temporaire: /tmp/temp_qr_29ab5e29-2e9a-412d-97d0-a88890f563cc.png
-INFO:main:QR code contenant l'ID a6399a48-4675-4f45-a06e-629f48015d5c ajouté au document à la position personnalisée
+INFO:main:Suppression du fichier temporaire: /tmp/temp_qr_356ec1a7-bd4c-4dee-ac1a-dc2d55b2f468.png
+INFO:main:QR code contenant l'ID 63449d97-5c70-4225-a4da-46461b82b3a3 ajouté au document à la position personnalisée
 [INFO] URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
 INFO:django_api:URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
 [INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
 INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[DEBUG] Fichier original: taille=414967 octets
-DEBUG:django_api:Fichier original: taille=414967 octets
-[DEBUG] Fichier signé: taille=569767 octets
-DEBUG:django_api:Fichier signé: taille=569767 octets
-[DEBUG] Propriétaire du document: 8
-DEBUG:django_api:Propriétaire du document: 8
+[DEBUG] Fichier original: taille=1728249 octets
+DEBUG:django_api:Fichier original: taille=1728249 octets
+[DEBUG] Fichier signé: taille=6971947 octets
+DEBUG:django_api:Fichier signé: taille=6971947 octets
+[DEBUG] Propriétaire du document: 10
+DEBUG:django_api:Propriétaire du document: 10
 [DEBUG] Rôle du signataire: user
 DEBUG:django_api:Rôle du signataire: user
-[DEBUG] Titre du document: COPIE-DACTE-DE-NAISSANCE-1.pdf
-DEBUG:django_api:Titre du document: COPIE-DACTE-DE-NAISSANCE-1.pdf
+[DEBUG] Titre du document: dnssec yaounde - lab01.pdf
+DEBUG:django_api:Titre du document: dnssec yaounde - lab01.pdf
 [DEBUG] En-têtes: {}
 DEBUG:django_api:En-têtes: {}
-[DEBUG] Données: document_id=a6399a48-4675-4f45-a06e-629f48015d5c, hash=4f22dd87eadeeacef198a330fad4cf98f62258fcc4fb7f2fa237536d3da5acdf, taille signature=344, titre=COPIE-DACTE-DE-NAISSANCE-1.pdf
-DEBUG:django_api:Données: document_id=a6399a48-4675-4f45-a06e-629f48015d5c, hash=4f22dd87eadeeacef198a330fad4cf98f62258fcc4fb7f2fa237536d3da5acdf, taille signature=344, titre=COPIE-DACTE-DE-NAISSANCE-1.pdf
-[INFO] Envoi des données de signature à l'API Django pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Envoi des données de signature à l'API Django pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+[DEBUG] Données: document_id=63449d97-5c70-4225-a4da-46461b82b3a3, hash=956ec8fd74605d6f2be9eea5934b6971867d0776f76d71e3155bd00a56aabe43, taille signature=344, titre=dnssec yaounde - lab01.pdf
+DEBUG:django_api:Données: document_id=63449d97-5c70-4225-a4da-46461b82b3a3, hash=956ec8fd74605d6f2be9eea5934b6971867d0776f76d71e3155bd00a56aabe43, taille signature=344, titre=dnssec yaounde - lab01.pdf
+[INFO] Envoi des données de signature à l'API Django pour le document 63449d97-5c70-4225-a4da-46461b82b3a3
+INFO:django_api:Envoi des données de signature à l'API Django pour le document 63449d97-5c70-4225-a4da-46461b82b3a3
 INFO:httpx:HTTP Request: POST https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025 "HTTP/1.1 201 Created"
 [DEBUG] Statut de la réponse: 201
 DEBUG:django_api:Statut de la réponse: 201
-[DEBUG] Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "a6399a48-4675-4f45-a06e-629f48015d5c"}
-DEBUG:django_api:Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "a6399a48-4675-4f45-a06e-629f48015d5c"}
-[DEBUG] En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Mon, 07 Jul 2025 09:11:26 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
-DEBUG:django_api:En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Mon, 07 Jul 2025 09:11:26 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
-[INFO] Données de signature stockées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature stockées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:Données de signature stockées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:Signature terminée en 0.56 secondes
-INFO:     192.168.5.49:0 - "POST /sign HTTP/1.0" 200 OK
-INFO:main:Fichier temporaire supprimé: /tmp/COPIE-DACTE-DE-NAISSANCE-1_signed_20250707101126.pdf
-INFO:     127.0.0.1:0 - "POST /verify/ HTTP/1.0" 307 Temporary Redirect
-INFO:     127.0.0.1:0 - "POST /verify/ HTTP/1.0" 307 Temporary Redirect
-INFO:     127.0.0.1:38768 - "GET / HTTP/1.1" 404 Not Found
-INFO:main:[b640306d-0b03-490e-822b-f5b1913d6ed6] Nouvelle demande de vérification par ID: test-uuid-12345
-INFO:main:[b640306d-0b03-490e-822b-f5b1913d6ed6] Récupération des données de signature pour le document ID: test-uuid-12345
-[INFO] ID du document nettoyé: 'test-uuid-12345'
-INFO:django_api:ID du document nettoyé: 'test-uuid-12345'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=test-uuid-12345
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=test-uuid-12345
+[DEBUG] Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "63449d97-5c70-4225-a4da-46461b82b3a3"}
+DEBUG:django_api:Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "63449d97-5c70-4225-a4da-46461b82b3a3"}
+[DEBUG] En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Wed, 09 Jul 2025 07:54:31 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+DEBUG:django_api:En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Wed, 09 Jul 2025 07:54:31 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+[INFO] Données de signature stockées avec succès pour le document 63449d97-5c70-4225-a4da-46461b82b3a3
+INFO:django_api:Données de signature stockées avec succès pour le document 63449d97-5c70-4225-a4da-46461b82b3a3
+INFO:main:Données de signature stockées avec succès pour le document 63449d97-5c70-4225-a4da-46461b82b3a3
+INFO:main:Signature terminée en 44.54 secondes
+INFO:     154.72.161.142:0 - "POST /sign HTTP/1.0" 200 OK
+INFO:main:Fichier temporaire supprimé: /tmp/dnssec yaounde - lab01_signed_20250709085430.pdf
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] Nouvelle demande de vérification par ID: 63449d97-5c70-4225-a4da-46461b82b3a3
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] Récupération des données de signature pour le document ID: 63449d97-5c70-4225-a4da-46461b82b3a3
+[INFO] ID du document nettoyé: '63449d97-5c70-4225-a4da-46461b82b3a3'
+INFO:django_api:ID du document nettoyé: '63449d97-5c70-4225-a4da-46461b82b3a3'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=63449d97-5c70-4225-a4da-46461b82b3a3
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=63449d97-5c70-4225-a4da-46461b82b3a3
 [INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
 INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document test-uuid-12345
-INFO:django_api:Récupération des données de signature pour le document test-uuid-12345
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=test-uuid-12345 "HTTP/1.1 400 Bad Request"
-[ERROR] Erreur lors de la récupération des données de signature: 400 - {"error": "Format d'identifiant de document invalide: test-uuid-12345. Un UUID est requis."}
-ERROR:django_api:Erreur lors de la récupération des données de signature: 400 - {"error": "Format d'identifiant de document invalide: test-uuid-12345. Un UUID est requis."}
-ERROR:main:[b640306d-0b03-490e-822b-f5b1913d6ed6] Erreur lors de la récupération des données de signature: Erreur 400: {"error": "Format d'identifiant de document invalide: test-uuid-12345. Un UUID est requis."}
-INFO:     127.0.0.1:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[3a888a7e-1164-4eda-8acb-46dc6004e945] Nouvelle demande de vérification par ID: test-uuid-12345
-INFO:main:[3a888a7e-1164-4eda-8acb-46dc6004e945] Récupération des données de signature pour le document ID: test-uuid-12345
-[INFO] ID du document nettoyé: 'test-uuid-12345'
-INFO:django_api:ID du document nettoyé: 'test-uuid-12345'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=test-uuid-12345
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=test-uuid-12345
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document test-uuid-12345
-INFO:django_api:Récupération des données de signature pour le document test-uuid-12345
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=test-uuid-12345 "HTTP/1.1 400 Bad Request"
-[ERROR] Erreur lors de la récupération des données de signature: 400 - {"error": "Format d'identifiant de document invalide: test-uuid-12345. Un UUID est requis."}
-ERROR:django_api:Erreur lors de la récupération des données de signature: 400 - {"error": "Format d'identifiant de document invalide: test-uuid-12345. Un UUID est requis."}
-ERROR:main:[3a888a7e-1164-4eda-8acb-46dc6004e945] Erreur lors de la récupération des données de signature: Erreur 400: {"error": "Format d'identifiant de document invalide: test-uuid-12345. Un UUID est requis."}
-INFO:     127.0.0.1:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[9a2e2647-cfe7-466b-b7a2-65aab57f6c49] Nouvelle demande de vérification par ID: 12345678-1234-5678-9abc-123456789012
-INFO:main:[9a2e2647-cfe7-466b-b7a2-65aab57f6c49] Récupération des données de signature pour le document ID: 12345678-1234-5678-9abc-123456789012
-[INFO] ID du document nettoyé: '12345678-1234-5678-9abc-123456789012'
-INFO:django_api:ID du document nettoyé: '12345678-1234-5678-9abc-123456789012'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=12345678-1234-5678-9abc-123456789012
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=12345678-1234-5678-9abc-123456789012
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document 12345678-1234-5678-9abc-123456789012
-INFO:django_api:Récupération des données de signature pour le document 12345678-1234-5678-9abc-123456789012
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=12345678-1234-5678-9abc-123456789012 "HTTP/1.1 404 Not Found"
-[ERROR] Erreur lors de la récupération des données de signature: 404 - {"error": "Aucune signature trouv\u00e9e pour le document ID: 12345678-1234-5678-9abc-123456789012"}
-ERROR:django_api:Erreur lors de la récupération des données de signature: 404 - {"error": "Aucune signature trouv\u00e9e pour le document ID: 12345678-1234-5678-9abc-123456789012"}
-ERROR:main:[9a2e2647-cfe7-466b-b7a2-65aab57f6c49] Erreur lors de la récupération des données de signature: Erreur 404: {"error": "Aucune signature trouv\u00e9e pour le document ID: 12345678-1234-5678-9abc-123456789012"}
-INFO:     127.0.0.1:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[ecbcf2bf-1d1c-4e27-8d0d-40c4a17cfffa] Nouvelle demande de vérification par ID: 00000000-0000-0000-0000-000000000000
-INFO:main:[ecbcf2bf-1d1c-4e27-8d0d-40c4a17cfffa] Récupération des données de signature pour le document ID: 00000000-0000-0000-0000-000000000000
-[INFO] ID du document nettoyé: '00000000-0000-0000-0000-000000000000'
-INFO:django_api:ID du document nettoyé: '00000000-0000-0000-0000-000000000000'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=00000000-0000-0000-0000-000000000000
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=00000000-0000-0000-0000-000000000000
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document 00000000-0000-0000-0000-000000000000
-INFO:django_api:Récupération des données de signature pour le document 00000000-0000-0000-0000-000000000000
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=00000000-0000-0000-0000-000000000000 "HTTP/1.1 404 Not Found"
-[ERROR] Erreur lors de la récupération des données de signature: 404 - {"error": "Aucune signature trouv\u00e9e pour le document ID: 00000000-0000-0000-0000-000000000000"}
-ERROR:django_api:Erreur lors de la récupération des données de signature: 404 - {"error": "Aucune signature trouv\u00e9e pour le document ID: 00000000-0000-0000-0000-000000000000"}
-ERROR:main:[ecbcf2bf-1d1c-4e27-8d0d-40c4a17cfffa] Erreur lors de la récupération des données de signature: Erreur 404: {"error": "Aucune signature trouv\u00e9e pour le document ID: 00000000-0000-0000-0000-000000000000"}
-INFO:     127.0.0.1:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[2759209c-15ca-4e55-bd10-7d1e3fc3eab1] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[2759209c-15ca-4e55-bd10-7d1e3fc3eab1] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[2759209c-15ca-4e55-bd10-7d1e3fc3eab1] Ajout des informations du signataire à la réponse
-INFO:main:[2759209c-15ca-4e55-bd10-7d1e3fc3eab1] Téléchargement du document original depuis https://ppd.camgovca.cm/media/signatures/original/original_CK6F53r.pdf
-ERROR:main:[2759209c-15ca-4e55-bd10-7d1e3fc3eab1] Erreur lors de la récupération du document original: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1007)
-INFO:main:[2759209c-15ca-4e55-bd10-7d1e3fc3eab1] Vérification terminée en 0.10 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[ae970e75-7e9a-48d4-9389-96ac10580be4] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[ae970e75-7e9a-48d4-9389-96ac10580be4] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[ae970e75-7e9a-48d4-9389-96ac10580be4] Ajout des informations du signataire à la réponse
-INFO:main:[ae970e75-7e9a-48d4-9389-96ac10580be4] Vérification terminée en 0.05 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[6743cf1e-676e-43af-b851-d2bee3e25345] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[6743cf1e-676e-43af-b851-d2bee3e25345] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[6743cf1e-676e-43af-b851-d2bee3e25345] Ajout des informations du signataire à la réponse
-INFO:main:[6743cf1e-676e-43af-b851-d2bee3e25345] Téléchargement du document original depuis https://ppd.camgovca.cm/media/signatures/original/original_CK6F53r.pdf
-ERROR:main:[6743cf1e-676e-43af-b851-d2bee3e25345] Erreur lors de la récupération du document original: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1007)
-INFO:main:[6743cf1e-676e-43af-b851-d2bee3e25345] Vérification terminée en 0.10 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[8da9976a-4fb1-4fdc-bad1-25403ba9a068] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[8da9976a-4fb1-4fdc-bad1-25403ba9a068] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[8da9976a-4fb1-4fdc-bad1-25403ba9a068] Ajout des informations du signataire à la réponse
-INFO:main:[8da9976a-4fb1-4fdc-bad1-25403ba9a068] Téléchargement du document original depuis https://ppd.camgovca.cm/media/signatures/original/original_CK6F53r.pdf
-ERROR:main:[8da9976a-4fb1-4fdc-bad1-25403ba9a068] Erreur lors de la récupération du document original: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1007)
-INFO:main:[8da9976a-4fb1-4fdc-bad1-25403ba9a068] Vérification terminée en 0.12 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [791361]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [799780]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [799780]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [800483]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:main:[b8d16ad2-8cc3-4e45-b4e9-4cbed2c7582c] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[b8d16ad2-8cc3-4e45-b4e9-4cbed2c7582c] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[b8d16ad2-8cc3-4e45-b4e9-4cbed2c7582c] Ajout des informations du signataire à la réponse
-INFO:main:[b8d16ad2-8cc3-4e45-b4e9-4cbed2c7582c] Vérification terminée en 0.07 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[afebe9b5-cb62-40b3-8355-8e38518ecaee] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[afebe9b5-cb62-40b3-8355-8e38518ecaee] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[afebe9b5-cb62-40b3-8355-8e38518ecaee] Ajout des informations du signataire à la réponse
-INFO:main:[afebe9b5-cb62-40b3-8355-8e38518ecaee] Vérification terminée en 0.06 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[ff512417-a359-4bba-b450-f25c5cd2970b] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[ff512417-a359-4bba-b450-f25c5cd2970b] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[ff512417-a359-4bba-b450-f25c5cd2970b] Ajout des informations du signataire à la réponse
-INFO:main:[ff512417-a359-4bba-b450-f25c5cd2970b] Vérification terminée en 0.05 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[992829f8-aa69-4324-b78f-daf958a9f1ad] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[992829f8-aa69-4324-b78f-daf958a9f1ad] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[992829f8-aa69-4324-b78f-daf958a9f1ad] Ajout des informations du signataire à la réponse
-INFO:main:[992829f8-aa69-4324-b78f-daf958a9f1ad] Vérification terminée en 0.05 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [800483]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [804942]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [804942]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [804944]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [804944]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [804994]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [804994]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [804997]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [804997]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [805032]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [805032]
-Process SpawnProcess-9:
-Traceback (most recent call last):
-  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
-    self.run()
-  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
-    target(sockets=sockets)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 66, in run
-    return asyncio.run(self.serve(sockets=sockets))
-  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
-    return loop.run_until_complete(main)
-  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
-    return future.result()
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 70, in serve
-    await self._serve(sockets)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
-    config.load()
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
-    self.loaded_app = import_from_string(self.app)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
-    module = importlib.import_module(module_str)
-  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
-  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
-  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
-  File "<frozen importlib._bootstrap_external>", line 1017, in get_code
-  File "<frozen importlib._bootstrap_external>", line 947, in source_to_code
-  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/microservices/signature_document/main.py", line 1186
-    original_document_data = response.content
-    ^^^^^^^^^^^^^^^^^^^^^^
-IndentationError: expected an indented block after 'if' statement on line 1185
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-Process SpawnProcess-10:
-Traceback (most recent call last):
-  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
-    self.run()
-  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
-    target(sockets=sockets)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 66, in run
-    return asyncio.run(self.serve(sockets=sockets))
-  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
-    return loop.run_until_complete(main)
-  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
-    return future.result()
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 70, in serve
-    await self._serve(sockets)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
-    config.load()
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
-    self.loaded_app = import_from_string(self.app)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
-    module = importlib.import_module(module_str)
-  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
-  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
-  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
-  File "<frozen importlib._bootstrap_external>", line 1017, in get_code
-  File "<frozen importlib._bootstrap_external>", line 947, in source_to_code
-  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/microservices/signature_document/main.py", line 1193
-    original_document_data = response.content
-    ^^^^^^^^^^^^^^^^^^^^^^
-IndentationError: expected an indented block after 'if' statement on line 1192
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [805219]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [805219]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [805225]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [805225]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [805261]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [805261]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [805525]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:main:[f9f742ef-bec5-41cc-9900-8a25cd282ad4] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[f9f742ef-bec5-41cc-9900-8a25cd282ad4] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[f9f742ef-bec5-41cc-9900-8a25cd282ad4] Ajout des informations du signataire à la réponse
-INFO:main:[f9f742ef-bec5-41cc-9900-8a25cd282ad4] Vérification terminée en 0.07 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[ed7baae2-ff51-4b83-8002-416405b43d87] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[ed7baae2-ff51-4b83-8002-416405b43d87] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[ed7baae2-ff51-4b83-8002-416405b43d87] Ajout des informations du signataire à la réponse
-INFO:main:[ed7baae2-ff51-4b83-8002-416405b43d87] Vérification terminée en 0.05 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [805525]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [806659]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [806659]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [806745]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] Ajout des informations du signataire à la réponse
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path']
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] DEBUG - return_original_document: True
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] DEBUG - signed_file_url présent: False
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] FALLBACK ORIGINAL - URL trouvée: /media/signatures/original/original_CK6F53r.pdf
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] 🔄 TÉLÉCHARGEMENT FORCÉ du document original depuis: https://ppd.camgovca.cm/media/signatures/original/original_CK6F53r.pdf
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] 📥 Envoi de la requête HTTP...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/original/original_CK6F53r.pdf "HTTP/1.1 200 OK"
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] ✅ Document original ajouté à la réponse (taille: 414967 octets)
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] 📄 Nom du fichier: COPIE-DACTE-DE-NAISSANCE-1.pdf
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] 🔗 Base64 longueur: 553292 caractères
-INFO:main:[ab274139-046e-44d9-b12a-7501300d11ad] Vérification terminée en 0.13 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [806745]
-Process SpawnProcess-17:
-Traceback (most recent call last):
-  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
-    self.run()
-  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
-    target(sockets=sockets)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 66, in run
-    return asyncio.run(self.serve(sockets=sockets))
-  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
-    return loop.run_until_complete(main)
-  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
-    return future.result()
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 70, in serve
-    await self._serve(sockets)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
-    config.load()
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
-    self.loaded_app = import_from_string(self.app)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
-    module = importlib.import_module(module_str)
-  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
-  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
-  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
-  File "<frozen importlib._bootstrap_external>", line 1017, in get_code
-  File "<frozen importlib._bootstrap_external>", line 947, in source_to_code
-  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/microservices/signature_document/main.py", line 1186
-    except Exception as e:
-    ^^^^^^
-SyntaxError: invalid syntax
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-Process SpawnProcess-18:
-Traceback (most recent call last):
-  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
-    self.run()
-  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
-    target(sockets=sockets)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 66, in run
-    return asyncio.run(self.serve(sockets=sockets))
-  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
-    return loop.run_until_complete(main)
-  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
-    return future.result()
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 70, in serve
-    await self._serve(sockets)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 77, in _serve
-    config.load()
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 435, in load
-    self.loaded_app = import_from_string(self.app)
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
-    module = importlib.import_module(module_str)
-  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
-  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
-  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
-  File "<frozen importlib._bootstrap_external>", line 1017, in get_code
-  File "<frozen importlib._bootstrap_external>", line 947, in source_to_code
-  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
-  File "/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/microservices/signature_document/main.py", line 1186
-    except Exception as e:
-    ^^^^^^
-SyntaxError: invalid syntax
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [807407]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [807407]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [807408]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [807408]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [807443]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [807443]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [807488]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] Ajout des informations du signataire à la réponse
-INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path']
-INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] DEBUG - return_original_document: True
-INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] DEBUG - signed_file_url présent: False
-WARNING:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] ⚠️ AUCUN document signé trouvé - signed_file_url manquant ou vide
-WARNING:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] 🚫 AUCUN DOCUMENT ne sera retourné (politique: SIGNÉ UNIQUEMENT)
-INFO:main:[9bac275e-2d92-40a3-bf86-9e9e2b6b1471] Vérification terminée en 0.06 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-WARNING:  StatReload detected changes in 'main.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [807488]
-WARNING:main:ATTENTION: Les bibliothèques numpy et OpenCV (cv2) sont temporairement désactivées.
-WARNING:main:Certaines fonctionnalités liées à l'extraction de code QR peuvent ne pas fonctionner.
-WARNING:main:Pour résoudre ce problème, réinstallez ces bibliothèques avec: pip install numpy opencv-python-headless
-INFO:     Started server process [807829]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] Ajout des informations du signataire à la réponse
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] DEBUG - return_original_document: True
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] DEBUG - signed_file_url présent: True
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_VTYurYW.pdf
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf "HTTP/1.1 200 OK"
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] ✅ Document SIGNÉ ajouté à la réponse (taille: 569767 octets)
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] 📄 Nom du fichier signé: COPIE-DACTE-DE-NAISSANCE-1_signé.pdf
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] 🔗 Base64 longueur: 759692 caractères
-INFO:main:[04dcad56-2a87-408e-adb7-a4717cbdba98] Vérification terminée en 0.10 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] Ajout des informations du signataire à la réponse
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] DEBUG - return_original_document: True
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] DEBUG - signed_file_url présent: True
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_VTYurYW.pdf
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf "HTTP/1.1 200 OK"
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] ✅ Document SIGNÉ ajouté à la réponse (taille: 569767 octets)
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] 📄 Nom du fichier signé: COPIE-DACTE-DE-NAISSANCE-1_signé.pdf
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] 🔗 Base64 longueur: 759692 caractères
-INFO:main:[2c52d090-de99-4bb1-9fec-aff53db3f9c5] Vérification terminée en 0.06 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:Nouvelle demande de signature pour le fichier transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91.pdf
-INFO:signer:Clé privée chargée avec succès: <Name(C=CM,O=ANTIC CA,OU=GovRA,OU=ANTIC RA,OU=PKI Center,CN=ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310))>
-INFO:main:Identifiant généré pour le document: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:Hash du document original calculé: 95d6f8a3524b2ca2056c079d61609f001878b7067e47c4521b08a8b21a7e3692
+[INFO] Récupération des données de signature pour le document 63449d97-5c70-4225-a4da-46461b82b3a3
+INFO:django_api:Récupération des données de signature pour le document 63449d97-5c70-4225-a4da-46461b82b3a3
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=63449d97-5c70-4225-a4da-46461b82b3a3 "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document 63449d97-5c70-4225-a4da-46461b82b3a3
+INFO:django_api:Données de signature récupérées avec succès pour le document 63449d97-5c70-4225-a4da-46461b82b3a3
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] Ajout des informations du signataire à la réponse
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] DEBUG - return_original_document: True
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] DEBUG - signed_file_url présent: True
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_1X7rTho.pdf
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_1X7rTho.pdf
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_1X7rTho.pdf "HTTP/1.1 200 OK"
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] 📊 Réponse HTTP reçue - Status: 200
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] ✅ Document SIGNÉ ajouté à la réponse (taille: 6971947 octets)
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] 📄 Nom du fichier signé: dnssec yaounde - lab01_signé.pdf
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] 🔗 Base64 longueur: 9295932 caractères
+INFO:main:[d0bd6774-ff16-4226-89d4-187cbd5acff4] Vérification terminée en 0.17 secondes
+INFO:     154.72.161.142:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:Nouvelle demande de signature pour le fichier Prions pour les femmes du monde.pdf
+INFO:signer:Clé privée chargée avec succès: <Name(C=CM,O=ANTIC CA,OU=GovRA,OU=ANTIC RA,OU=PKI Center Test,CN=ANTIC(NZOH ALOGO CLEMENT 19800817))>
+INFO:main:Identifiant généré pour le document: a8b36800-3452-41bc-8491-0344bec97494
+INFO:main:Hash du document original calculé: 24d3eab032c740e2524bc420346d2461ab74a1b9ecb34f31cde5c5901641d459
 INFO:signer:Fichier signé avec succès, taille de la signature: 256 octets
 INFO:main:Document signé, taille de la signature: 256 octets
 INFO:main:Métadonnées parsées avec succès. Clés disponibles: ['user_id', 'username', 'email', 'full_name', 'organization', 'organization_id', 'signer_role', 'jwt_token', 'qr_position', 'signature_position']
-INFO:main:Position du QR code extraite des métadonnées: {'x': 87.47899159663865, 'y': 75.86302406147936, 'size': 'large', 'pages': 'all', 'positions': {'default': {'x': 87.47899159663865, 'y': 75.86302406147936}}, 'mode': 'all'}
-WARNING:main:Aucune section signature_position trouvée dans les métadonnées
-INFO:main:ID d'organisation extrait des métadonnées: 
-INFO:main:Rôle du signataire extrait des métadonnées: user
-INFO:main:Aucune image de signature à ajouter
-INFO:main:Début du processus d'ajout du QR code au PDF
-INFO:main:Mode de positionnement: all
-INFO:main:Position par défaut: x=87.47899159663865%, y=75.86302406147936%, taille=large
-INFO:main:Pages où appliquer le QR code: all
-INFO:main:Positions individuelles définies pour les pages: ['default']
-INFO:main:Encodage de l'ID du document: caf8dd31-e3e6-4465-a76b-a0a72aee8940 dans le QR code
-INFO:main:Génération de l'image du QR code
-INFO:main:Sauvegarde du QR code dans: /tmp/temp_qr_9f1c9bdf-6503-47d1-a457-0bc0cc0a97fd.png
-INFO:main:Lecture du PDF original
-INFO:main:Traitement des 1 pages du PDF
-INFO:main:Application du QR code sur la page 1
-INFO:main:Dimensions de la page 1: 595.28 x 841.88 points
-INFO:main:Sauvegarde du PDF modifié avec le QR code
-INFO:main:Processus d'ajout du QR code terminé avec succès
-INFO:main:Suppression du fichier temporaire: /tmp/temp_qr_9f1c9bdf-6503-47d1-a457-0bc0cc0a97fd.png
-INFO:main:QR code contenant l'ID caf8dd31-e3e6-4465-a76b-a0a72aee8940 ajouté au document à la position personnalisée
-[INFO] URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
-INFO:django_api:URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[DEBUG] Fichier original: taille=28129 octets
-DEBUG:django_api:Fichier original: taille=28129 octets
-[DEBUG] Fichier signé: taille=47491 octets
-DEBUG:django_api:Fichier signé: taille=47491 octets
-[DEBUG] Propriétaire du document: 8
-DEBUG:django_api:Propriétaire du document: 8
-[DEBUG] Rôle du signataire: user
-DEBUG:django_api:Rôle du signataire: user
-[DEBUG] Titre du document: transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91.pdf
-DEBUG:django_api:Titre du document: transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91.pdf
-[DEBUG] En-têtes: {}
-DEBUG:django_api:En-têtes: {}
-[DEBUG] Données: document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940, hash=95d6f8a3524b2ca2056c079d61609f001878b7067e47c4521b08a8b21a7e3692, taille signature=344, titre=transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91.pdf
-DEBUG:django_api:Données: document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940, hash=95d6f8a3524b2ca2056c079d61609f001878b7067e47c4521b08a8b21a7e3692, taille signature=344, titre=transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91.pdf
-[INFO] Envoi des données de signature à l'API Django pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Envoi des données de signature à l'API Django pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:httpx:HTTP Request: POST https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025 "HTTP/1.1 201 Created"
-[DEBUG] Statut de la réponse: 201
-DEBUG:django_api:Statut de la réponse: 201
-[DEBUG] Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "caf8dd31-e3e6-4465-a76b-a0a72aee8940"}
-DEBUG:django_api:Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "caf8dd31-e3e6-4465-a76b-a0a72aee8940"}
-[DEBUG] En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Mon, 07 Jul 2025 13:45:32 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
-DEBUG:django_api:En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Mon, 07 Jul 2025 13:45:32 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
-[INFO] Données de signature stockées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Données de signature stockées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:Données de signature stockées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:Signature terminée en 0.17 secondes
-INFO:     192.168.5.101:0 - "POST /sign HTTP/1.0" 200 OK
-INFO:main:Nouvelle demande de signature pour le fichier Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir.pdf
-INFO:signer:Clé privée chargée avec succès: <Name(C=CM,O=ANTIC CA,OU=GovRA,OU=ANTIC RA,OU=PKI Center,CN=ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310))>
-INFO:main:Identifiant généré pour le document: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:Hash du document original calculé: 96be7ad539a0eba5531779c8dd5d3c6c6c12b1d7fdbf681a2456fe8759502f57
-INFO:signer:Fichier signé avec succès, taille de la signature: 256 octets
-INFO:main:Document signé, taille de la signature: 256 octets
-INFO:main:Métadonnées parsées avec succès. Clés disponibles: ['user_id', 'username', 'email', 'full_name', 'organization', 'organization_id', 'signer_role', 'jwt_token', 'qr_position', 'signature_position']
-INFO:main:Position du QR code extraite des métadonnées: {'x': 92.3529411764706, 'y': 68.38083878832022, 'size': 'large', 'pages': [1, 14], 'positions': {'1': {'x': 92.3529411764706, 'y': 68.38083878832022}, '14': {'x': 87.14285714285714, 'y': 89.28345161492355}}, 'mode': 'all'}
+INFO:main:Position du QR code extraite des métadonnées: {'x': 85, 'y': 90, 'size': 'medium', 'pages': [1], 'positions': {'1': {'x': 85, 'y': 90}}, 'mode': 'all'}
 INFO:main:Données de signature trouvées. Clés: ['positions', 'signature_image', 'signature_size']
-INFO:main:Image de signature trouvée. Longueur: 36494 caractères. Début: data:image/png;base64,/9j/4Q+MRXhpZgAATU0AKgAAAAgA...
-INFO:main:Positions de signature trouvées: 3 position(s). Détails: [{'page': 1, 'x': 87.14285714285714, 'y': 90.35233522537484, 'width': 20, 'height': 10}, {'page': 3, 'x': 43.78151260504202, 'y': 93.44022121112306, 'width': 20, 'height': 10}, {'page': 14, 'x': 18.067226890756302, 'y': 91.18368914461476, 'width': 20, 'height': 10}]
+INFO:main:Image de signature trouvée. Longueur: 4639 caractères. Début: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD...
+INFO:main:Positions de signature trouvées: 1 position(s). Détails: [{'page': 1, 'x': 13.977591891248686, 'y': 89.16864463099391, 'width': 20, 'height': 10}]
 INFO:main:Taille de signature extraite des métadonnées: 50%
 INFO:main:ID d'organisation extrait des métadonnées: 
 INFO:main:Rôle du signataire extrait des métadonnées: user
 INFO:main:Ajout de l'image de signature au document avec taille 50%
 INFO:main:=== DÉBUT add_signature_image_to_pdf ===
 INFO:main:Taille de signature reçue: 50%
-INFO:main:Nombre de positions: 3
-INFO:main:Positions détaillées: [{'page': 1, 'x': 87.14285714285714, 'y': 90.35233522537484, 'width': 20, 'height': 10}, {'page': 3, 'x': 43.78151260504202, 'y': 93.44022121112306, 'width': 20, 'height': 10}, {'page': 14, 'x': 18.067226890756302, 'y': 91.18368914461476, 'width': 20, 'height': 10}]
-INFO:main:Début des données d'image reçues: data:image/png;base64,/9j/4Q+MRXhpZgAATU0AKgAAAAgA...
-INFO:main:DEBUG MICROSERVICE - Positions de signature reçues: [{'page': 1, 'x': 87.14285714285714, 'y': 90.35233522537484, 'width': 20, 'height': 10}, {'page': 3, 'x': 43.78151260504202, 'y': 93.44022121112306, 'width': 20, 'height': 10}, {'page': 14, 'x': 18.067226890756302, 'y': 91.18368914461476, 'width': 20, 'height': 10}]
-INFO:main:DEBUG MICROSERVICE - Position 1: page=1, x=87.14285714285714, y=90.35233522537484, width=20, height=10
-INFO:main:DEBUG MICROSERVICE - Position 2: page=3, x=43.78151260504202, y=93.44022121112306, width=20, height=10
-INFO:main:DEBUG MICROSERVICE - Position 3: page=14, x=18.067226890756302, y=91.18368914461476, width=20, height=10
-INFO:main:En-tête de l'image détecté: data:image/png;base64
-INFO:main:Format d'image détecté: png
-INFO:main:Données base64 pures extraites, longueur: 36472
-INFO:main:Image décodée avec succès, taille: 27353 octets
+INFO:main:Nombre de positions: 1
+INFO:main:Positions détaillées: [{'page': 1, 'x': 13.977591891248686, 'y': 89.16864463099391, 'width': 20, 'height': 10}]
+INFO:main:Début des données d'image reçues: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD...
+INFO:main:DEBUG MICROSERVICE - Positions de signature reçues: [{'page': 1, 'x': 13.977591891248686, 'y': 89.16864463099391, 'width': 20, 'height': 10}]
+INFO:main:DEBUG MICROSERVICE - Position 1: page=1, x=13.977591891248686, y=89.16864463099391, width=20, height=10
+INFO:main:En-tête de l'image détecté: data:image/jpeg;base64
+INFO:main:Format d'image détecté: jpg
+INFO:main:Données base64 pures extraites, longueur: 4616
+INFO:main:Image décodée avec succès, taille: 3462 octets
 INFO:main:Image validée par PIL
-INFO:main:Image de signature sauvegardée temporairement: /tmp/temp_signature_43c8852d-cc44-470d-b437-1df1b5e3ce9a.png
-INFO:main:Traitement des 14 pages du PDF
+INFO:main:Image de signature sauvegardée temporairement: /tmp/temp_signature_408d91c8-b61d-4772-9592-7601a5c3e4e0.jpg
+INFO:main:Traitement des 1 pages du PDF
 INFO:main:Mode spécifique - signature appliquée sur la page 1
 INFO:main:Ajout de 1 signature(s) sur la page 1
 INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
@@ -879,580 +277,61 @@ INFO:main:signature_size reçu: 50%
 INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
 INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
 INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
-INFO:main:Position de signature: x=87.14285714285714%, y=90.35233522537484%, largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=13.977591891248686%, y=89.16864463099391%, largeur=30.0%, hauteur=15.0%
 INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
-INFO:main:Page dimensions: 596.0 x 842.0 points
-INFO:main:Position absolue: x=519.3714285714286, y=81.2333374023438
-INFO:main:Dimensions absolues: largeur=178.79999999999998, hauteur=126.3 points
-INFO:main:Signature ajoutée à la position: x=429.97142857142865, y=18.08333740234381, largeur=178.79999999999998, hauteur=126.3
+INFO:main:Page dimensions: 595.32 x 841.92 points
+INFO:main:Position absolue: x=83.21140004698168, y=91.19134712273608
+INFO:main:Dimensions absolues: largeur=178.596, hauteur=126.28799999999998 points
+INFO:main:Signature ajoutée à la position: x=-6.086599953018322, y=28.047347122736085, largeur=178.596, hauteur=126.28799999999998
 INFO:main:Fusion réussie pour la page 1
-INFO:main:Mode spécifique - signature appliquée sur la page 3
-INFO:main:Ajout de 1 signature(s) sur la page 3
-INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
-INFO:main:signature_size reçu: 50%
-INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
-INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
-INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
-INFO:main:Position de signature: x=43.78151260504202%, y=93.44022121112306%, largeur=30.0%, hauteur=15.0%
-INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
-INFO:main:Page dimensions: 596.0 x 842.0 points
-INFO:main:Position absolue: x=260.9378151260504, y=55.23333740234384
-INFO:main:Dimensions absolues: largeur=178.79999999999998, hauteur=126.3 points
-INFO:main:Signature ajoutée à la position: x=171.53781512605042, y=-7.916662597656156, largeur=178.79999999999998, hauteur=126.3
-INFO:main:Fusion réussie pour la page 3
-INFO:main:Mode spécifique - signature appliquée sur la page 14
-INFO:main:Ajout de 1 signature(s) sur la page 14
-INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
-INFO:main:signature_size reçu: 50%
-INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
-INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
-INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
-INFO:main:Position de signature: x=18.067226890756302%, y=91.18368914461476%, largeur=30.0%, hauteur=15.0%
-INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
-INFO:main:Page dimensions: 596.0 x 842.0 points
-INFO:main:Position absolue: x=107.68067226890756, y=74.23333740234372
-INFO:main:Dimensions absolues: largeur=178.79999999999998, hauteur=126.3 points
-INFO:main:Signature ajoutée à la position: x=18.280672268907566, y=11.083337402343723, largeur=178.79999999999998, hauteur=126.3
-INFO:main:Fusion réussie pour la page 14
 INFO:main:Processus d'ajout de l'image de signature terminé avec succès
-INFO:main:Suppression du fichier temporaire: /tmp/temp_signature_43c8852d-cc44-470d-b437-1df1b5e3ce9a.png
+INFO:main:Suppression du fichier temporaire: /tmp/temp_signature_408d91c8-b61d-4772-9592-7601a5c3e4e0.jpg
 INFO:main:Début du processus d'ajout du QR code au PDF
 INFO:main:Mode de positionnement: all
-INFO:main:Position par défaut: x=92.3529411764706%, y=68.38083878832022%, taille=large
-INFO:main:Pages où appliquer le QR code: [1, 14]
-INFO:main:Positions individuelles définies pour les pages: ['1', '14']
-INFO:main:Encodage de l'ID du document: 0a334cc0-db55-4c33-9d10-ea9abe101b5e dans le QR code
+INFO:main:Position par défaut: x=85%, y=90%, taille=medium
+INFO:main:Pages où appliquer le QR code: [1]
+INFO:main:Positions individuelles définies pour les pages: ['1']
+INFO:main:Encodage de l'ID du document: a8b36800-3452-41bc-8491-0344bec97494 dans le QR code
 INFO:main:Génération de l'image du QR code
-INFO:main:Sauvegarde du QR code dans: /tmp/temp_qr_ad19a0f2-568c-4d5b-9290-32714e34b255.png
+INFO:main:Sauvegarde du QR code dans: /tmp/temp_qr_405fa010-dea5-4c10-98f5-58a7d17db4bf.png
 INFO:main:Lecture du PDF original
-INFO:main:Traitement des 14 pages du PDF
+INFO:main:Traitement des 1 pages du PDF
 INFO:main:Application du QR code sur la page 1
-INFO:main:Dimensions de la page 1: 596.0 x 842.0 points
-INFO:main:Page 2 sans QR code
-INFO:main:Page 3 sans QR code
-INFO:main:Page 4 sans QR code
-INFO:main:Page 5 sans QR code
-INFO:main:Page 6 sans QR code
-INFO:main:Page 7 sans QR code
-INFO:main:Page 8 sans QR code
-INFO:main:Page 9 sans QR code
-INFO:main:Page 10 sans QR code
-INFO:main:Page 11 sans QR code
-INFO:main:Page 12 sans QR code
-INFO:main:Page 13 sans QR code
-INFO:main:Application du QR code sur la page 14
-INFO:main:Dimensions de la page 14: 596.0 x 842.0 points
+INFO:main:Dimensions de la page 1: 595.32 x 841.92 points
 INFO:main:Sauvegarde du PDF modifié avec le QR code
 INFO:main:Processus d'ajout du QR code terminé avec succès
-INFO:main:Suppression du fichier temporaire: /tmp/temp_qr_ad19a0f2-568c-4d5b-9290-32714e34b255.png
-INFO:main:QR code contenant l'ID 0a334cc0-db55-4c33-9d10-ea9abe101b5e ajouté au document à la position personnalisée
+INFO:main:Suppression du fichier temporaire: /tmp/temp_qr_405fa010-dea5-4c10-98f5-58a7d17db4bf.png
+INFO:main:QR code contenant l'ID a8b36800-3452-41bc-8491-0344bec97494 ajouté au document à la position personnalisée
 [INFO] URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
 INFO:django_api:URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
 [INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
 INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[DEBUG] Fichier original: taille=51424 octets
-DEBUG:django_api:Fichier original: taille=51424 octets
-[DEBUG] Fichier signé: taille=196154 octets
-DEBUG:django_api:Fichier signé: taille=196154 octets
-[DEBUG] Propriétaire du document: 8
-DEBUG:django_api:Propriétaire du document: 8
+[DEBUG] Fichier original: taille=54609 octets
+DEBUG:django_api:Fichier original: taille=54609 octets
+[DEBUG] Fichier signé: taille=82756 octets
+DEBUG:django_api:Fichier signé: taille=82756 octets
+[DEBUG] Propriétaire du document: 11
+DEBUG:django_api:Propriétaire du document: 11
 [DEBUG] Rôle du signataire: user
 DEBUG:django_api:Rôle du signataire: user
-[DEBUG] Titre du document: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir.pdf
-DEBUG:django_api:Titre du document: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir.pdf
+[DEBUG] Titre du document: Prions pour les femmes du monde.pdf
+DEBUG:django_api:Titre du document: Prions pour les femmes du monde.pdf
 [DEBUG] En-têtes: {}
 DEBUG:django_api:En-têtes: {}
-[DEBUG] Données: document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e, hash=96be7ad539a0eba5531779c8dd5d3c6c6c12b1d7fdbf681a2456fe8759502f57, taille signature=344, titre=Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir.pdf
-DEBUG:django_api:Données: document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e, hash=96be7ad539a0eba5531779c8dd5d3c6c6c12b1d7fdbf681a2456fe8759502f57, taille signature=344, titre=Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir.pdf
-[INFO] Envoi des données de signature à l'API Django pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Envoi des données de signature à l'API Django pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
+[DEBUG] Données: document_id=a8b36800-3452-41bc-8491-0344bec97494, hash=24d3eab032c740e2524bc420346d2461ab74a1b9ecb34f31cde5c5901641d459, taille signature=344, titre=Prions pour les femmes du monde.pdf
+DEBUG:django_api:Données: document_id=a8b36800-3452-41bc-8491-0344bec97494, hash=24d3eab032c740e2524bc420346d2461ab74a1b9ecb34f31cde5c5901641d459, taille signature=344, titre=Prions pour les femmes du monde.pdf
+[INFO] Envoi des données de signature à l'API Django pour le document a8b36800-3452-41bc-8491-0344bec97494
+INFO:django_api:Envoi des données de signature à l'API Django pour le document a8b36800-3452-41bc-8491-0344bec97494
 INFO:httpx:HTTP Request: POST https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025 "HTTP/1.1 201 Created"
 [DEBUG] Statut de la réponse: 201
 DEBUG:django_api:Statut de la réponse: 201
-[DEBUG] Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "0a334cc0-db55-4c33-9d10-ea9abe101b5e"}
-DEBUG:django_api:Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "0a334cc0-db55-4c33-9d10-ea9abe101b5e"}
-[DEBUG] En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Mon, 07 Jul 2025 13:45:32 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
-DEBUG:django_api:En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Mon, 07 Jul 2025 13:45:32 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
-[INFO] Données de signature stockées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Données de signature stockées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:Données de signature stockées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:Signature terminée en 0.37 secondes
-INFO:     192.168.5.101:0 - "POST /sign HTTP/1.0" 200 OK
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] Nouvelle demande de vérification par ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] Récupération des données de signature pour le document ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-INFO:django_api:ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] Ajout des informations du signataire à la réponse
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] DEBUG - return_original_document: True
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] DEBUG - signed_file_url présent: True
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf "HTTP/1.1 200 OK"
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] ✅ Document SIGNÉ ajouté à la réponse (taille: 47491 octets)
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] 📄 Nom du fichier signé: transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91_signé.pdf
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] 🔗 Base64 longueur: 63324 caractères
-INFO:main:[236d147d-d863-43c6-9186-87ef25e971e1] Vérification terminée en 0.08 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] Nouvelle demande de vérification par ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] Récupération des données de signature pour le document ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-INFO:django_api:ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] Ajout des informations du signataire à la réponse
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] DEBUG - return_original_document: True
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] DEBUG - signed_file_url présent: True
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf "HTTP/1.1 200 OK"
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] ✅ Document SIGNÉ ajouté à la réponse (taille: 47491 octets)
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] 📄 Nom du fichier signé: transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91_signé.pdf
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] 🔗 Base64 longueur: 63324 caractères
-INFO:main:[a76136b0-d7ff-42c8-968c-b4c0ac75650f] Vérification terminée en 0.08 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] Nouvelle demande de vérification par ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] Récupération des données de signature pour le document ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-INFO:django_api:ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] Ajout des informations du signataire à la réponse
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] DEBUG - return_original_document: True
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] DEBUG - signed_file_url présent: True
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf "HTTP/1.1 200 OK"
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] ✅ Document SIGNÉ ajouté à la réponse (taille: 196154 octets)
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] 📄 Nom du fichier signé: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signé.pdf
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] 🔗 Base64 longueur: 261540 caractères
-INFO:main:[4ea0d8a1-3bea-40ea-ba19-a1ef27adba51] Vérification terminée en 0.06 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:Fichier temporaire supprimé: /tmp/transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91_signed_20250707144532.pdf
-INFO:main:Fichier temporaire supprimé: /tmp/Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signed_20250707144532.pdf
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] Nouvelle demande de vérification par ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] Récupération des données de signature pour le document ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-INFO:django_api:ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] Ajout des informations du signataire à la réponse
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] DEBUG - return_original_document: True
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] DEBUG - signed_file_url présent: True
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf "HTTP/1.1 200 OK"
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] ✅ Document SIGNÉ ajouté à la réponse (taille: 196154 octets)
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] 📄 Nom du fichier signé: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signé.pdf
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] 🔗 Base64 longueur: 261540 caractères
-INFO:main:[04c3b906-157d-4945-8d35-1ea97b98d18b] Vérification terminée en 0.06 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] Nouvelle demande de vérification par ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] Récupération des données de signature pour le document ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-INFO:django_api:ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] Ajout des informations du signataire à la réponse
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] DEBUG - return_original_document: True
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] DEBUG - signed_file_url présent: True
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf "HTTP/1.1 200 OK"
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] ✅ Document SIGNÉ ajouté à la réponse (taille: 47491 octets)
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] 📄 Nom du fichier signé: transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91_signé.pdf
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] 🔗 Base64 longueur: 63324 caractères
-INFO:main:[791ef59b-2a36-4678-9dac-5988d4fd87e1] Vérification terminée en 0.08 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] Nouvelle demande de vérification par ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] Récupération des données de signature pour le document ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-INFO:django_api:ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] Ajout des informations du signataire à la réponse
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] DEBUG - return_original_document: True
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] DEBUG - signed_file_url présent: True
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf "HTTP/1.1 200 OK"
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] ✅ Document SIGNÉ ajouté à la réponse (taille: 47491 octets)
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] 📄 Nom du fichier signé: transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91_signé.pdf
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] 🔗 Base64 longueur: 63324 caractères
-INFO:main:[a4261ce5-018d-432e-b5e4-79c1fcceadc8] Vérification terminée en 0.07 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] Nouvelle demande de vérification par ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] Récupération des données de signature pour le document ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-INFO:django_api:ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] Ajout des informations du signataire à la réponse
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] DEBUG - return_original_document: True
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] DEBUG - signed_file_url présent: True
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf "HTTP/1.1 200 OK"
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] ✅ Document SIGNÉ ajouté à la réponse (taille: 47491 octets)
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] 📄 Nom du fichier signé: transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91_signé.pdf
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] 🔗 Base64 longueur: 63324 caractères
-INFO:main:[a9df9c0e-ae1a-4071-82cb-f21aa93b13ef] Vérification terminée en 0.08 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] Nouvelle demande de vérification par ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] Récupération des données de signature pour le document ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-INFO:django_api:ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] Ajout des informations du signataire à la réponse
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] DEBUG - return_original_document: True
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] DEBUG - signed_file_url présent: True
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf "HTTP/1.1 200 OK"
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] ✅ Document SIGNÉ ajouté à la réponse (taille: 47491 octets)
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] 📄 Nom du fichier signé: transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91_signé.pdf
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] 🔗 Base64 longueur: 63324 caractères
-INFO:main:[3f5b0b36-fcf0-484e-aa38-7d6141d593a1] Vérification terminée en 0.07 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] Nouvelle demande de vérification par ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] Récupération des données de signature pour le document ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-INFO:django_api:ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] Ajout des informations du signataire à la réponse
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] DEBUG - return_original_document: True
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] DEBUG - signed_file_url présent: True
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf "HTTP/1.1 200 OK"
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] ✅ Document SIGNÉ ajouté à la réponse (taille: 47491 octets)
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] 📄 Nom du fichier signé: transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91_signé.pdf
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] 🔗 Base64 longueur: 63324 caractères
-INFO:main:[5edd8402-b2ba-4308-986e-bc406a419c30] Vérification terminée en 0.08 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] Ajout des informations du signataire à la réponse
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] DEBUG - return_original_document: True
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] DEBUG - signed_file_url présent: True
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_VTYurYW.pdf
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf "HTTP/1.1 200 OK"
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] ✅ Document SIGNÉ ajouté à la réponse (taille: 569767 octets)
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] 📄 Nom du fichier signé: COPIE-DACTE-DE-NAISSANCE-1_signé.pdf
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] 🔗 Base64 longueur: 759692 caractères
-INFO:main:[f04a7566-e6a6-44d6-8c7e-821d56d278df] Vérification terminée en 0.07 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] Ajout des informations du signataire à la réponse
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] DEBUG - return_original_document: True
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] DEBUG - signed_file_url présent: True
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_VTYurYW.pdf
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf "HTTP/1.1 200 OK"
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] ✅ Document SIGNÉ ajouté à la réponse (taille: 569767 octets)
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] 📄 Nom du fichier signé: COPIE-DACTE-DE-NAISSANCE-1_signé.pdf
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] 🔗 Base64 longueur: 759692 caractères
-INFO:main:[908b53b9-a6dc-44a7-ab8a-fe1aec4d5424] Vérification terminée en 0.09 secondes
-INFO:     154.72.162.98:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] Nouvelle demande de vérification par ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] Récupération des données de signature pour le document ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-INFO:django_api:ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] Ajout des informations du signataire à la réponse
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] DEBUG - return_original_document: True
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] DEBUG - signed_file_url présent: True
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf "HTTP/1.1 200 OK"
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] ✅ Document SIGNÉ ajouté à la réponse (taille: 196154 octets)
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] 📄 Nom du fichier signé: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signé.pdf
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] 🔗 Base64 longueur: 261540 caractères
-INFO:main:[9cb13537-880d-4363-a599-32f5249078b1] Vérification terminée en 0.08 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] Nouvelle demande de vérification par ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] Récupération des données de signature pour le document ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-INFO:django_api:ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] Ajout des informations du signataire à la réponse
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] DEBUG - return_original_document: True
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] DEBUG - signed_file_url présent: True
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf "HTTP/1.1 200 OK"
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] ✅ Document SIGNÉ ajouté à la réponse (taille: 196154 octets)
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] 📄 Nom du fichier signé: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signé.pdf
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] 🔗 Base64 longueur: 261540 caractères
-INFO:main:[c9ede26a-9219-431d-80f5-8692cf31f097] Vérification terminée en 0.07 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] Nouvelle demande de vérification par ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] Récupération des données de signature pour le document ID: caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-INFO:django_api:ID du document nettoyé: 'caf8dd31-e3e6-4465-a76b-a0a72aee8940'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Récupération des données de signature pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=caf8dd31-e3e6-4465-a76b-a0a72aee8940 "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:django_api:Données de signature récupérées avec succès pour le document caf8dd31-e3e6-4465-a76b-a0a72aee8940
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] Ajout des informations du signataire à la réponse
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] DEBUG - return_original_document: True
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] DEBUG - signed_file_url présent: True
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_2fPq6GW.pdf "HTTP/1.1 200 OK"
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] ✅ Document SIGNÉ ajouté à la réponse (taille: 47491 octets)
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] 📄 Nom du fichier signé: transaction-statement_684159c0-a776-a81a-8734-b51015f0f2fc_fr-fr_340b91_signé.pdf
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] 🔗 Base64 longueur: 63324 caractères
-INFO:main:[a38a7f2b-2652-4394-b253-a72148412533] Vérification terminée en 0.07 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] Nouvelle demande de vérification par ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] Récupération des données de signature pour le document ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-INFO:django_api:ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] Ajout des informations du signataire à la réponse
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] DEBUG - return_original_document: True
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] DEBUG - signed_file_url présent: True
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf "HTTP/1.1 200 OK"
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] ✅ Document SIGNÉ ajouté à la réponse (taille: 196154 octets)
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] 📄 Nom du fichier signé: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signé.pdf
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] 🔗 Base64 longueur: 261540 caractères
-INFO:main:[ab627542-af53-452e-ae85-b7ddd91d18ab] Vérification terminée en 0.08 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] Nouvelle demande de vérification par ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] Récupération des données de signature pour le document ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-INFO:django_api:ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] Ajout des informations du signataire à la réponse
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] DEBUG - return_original_document: True
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] DEBUG - signed_file_url présent: True
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf "HTTP/1.1 200 OK"
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] ✅ Document SIGNÉ ajouté à la réponse (taille: 196154 octets)
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] 📄 Nom du fichier signé: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signé.pdf
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] 🔗 Base64 longueur: 261540 caractères
-INFO:main:[383c19ac-c761-49c4-bd61-34739ee90eed] Vérification terminée en 0.07 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] Nouvelle demande de vérification par ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] Récupération des données de signature pour le document ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-INFO:django_api:ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
-[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
-[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
-[INFO] Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e "HTTP/1.1 200 OK"
-[INFO] Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:django_api:Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] Ajout des informations du signataire à la réponse
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] DEBUG - return_original_document: True
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] DEBUG - signed_file_url présent: True
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
-INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf "HTTP/1.1 200 OK"
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] 📊 Réponse HTTP reçue - Status: 200
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] ✅ Document SIGNÉ ajouté à la réponse (taille: 196154 octets)
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] 📄 Nom du fichier signé: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signé.pdf
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] 🔗 Base64 longueur: 261540 caractères
-INFO:main:[c004fa6b-6f8a-4d2a-a701-449268c05ca5] Vérification terminée en 0.06 secondes
-INFO:     129.0.226.189:0 - "POST /verify HTTP/1.0" 200 OK
+[DEBUG] Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "a8b36800-3452-41bc-8491-0344bec97494"}
+DEBUG:django_api:Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "a8b36800-3452-41bc-8491-0344bec97494"}
+[DEBUG] En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Wed, 09 Jul 2025 09:36:51 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+DEBUG:django_api:En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Wed, 09 Jul 2025 09:36:51 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+[INFO] Données de signature stockées avec succès pour le document a8b36800-3452-41bc-8491-0344bec97494
+INFO:django_api:Données de signature stockées avec succès pour le document a8b36800-3452-41bc-8491-0344bec97494
+INFO:main:Données de signature stockées avec succès pour le document a8b36800-3452-41bc-8491-0344bec97494
+INFO:main:Signature terminée en 0.27 secondes
+INFO:     154.72.161.142:0 - "POST /sign HTTP/1.0" 200 OK
+INFO:main:Fichier temporaire supprimé: /tmp/Prions pour les femmes du monde_signed_20250709103651.pdf

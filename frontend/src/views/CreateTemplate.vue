@@ -233,7 +233,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, defineEmits, nextTick } from 'vue';
+import { ref, computed, onMounted, defineEmits } from 'vue';
 import QrPositioner from '@/components/QrPositioner.vue';
 import TemplateService from '@/services/TemplateService.js';
 import AuthService from '@/services/AuthService.js';

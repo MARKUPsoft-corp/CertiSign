@@ -1,7 +1,7 @@
 INFO:     Will watch for changes in these directories: ['/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/microservices/lecture_certificat']
 INFO:     Uvicorn running on https://127.0.0.1:8002 (Press CTRL+C to quit)
-INFO:     Started reloader process [791338] using StatReload
-INFO:     Started server process [791345]
+INFO:     Started reloader process [5525] using StatReload
+INFO:     Started server process [5531]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 Réception des données: certificat (longueur: 11340) et mot de passe
@@ -16,37 +16,23 @@ Tentative de chargement du certificat PKCS#12...
 Chargement du certificat PKCS#12 réussi
 Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
 INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
+Réception des données: certificat (longueur: 11236) et mot de passe
+Décodage base64 réussi, taille des données: 8425 octets
 Tentative de chargement du certificat PKCS#12...
 Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
+Extraction des informations du certificat réussie. Common Name: ANTIC(NDEFO KEVIN KAMGA 19881006)
 INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
+Réception des données: certificat (longueur: 11236) et mot de passe
+Décodage base64 réussi, taille des données: 8425 octets
 Tentative de chargement du certificat PKCS#12...
 Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
+Extraction des informations du certificat réussie. Common Name: ANTIC(NDEFO KEVIN KAMGA 19881006)
 INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
+Réception des données: certificat (longueur: 11236) et mot de passe
+Décodage base64 réussi, taille des données: 8425 octets
 Tentative de chargement du certificat PKCS#12...
 Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
-INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:33018 - "POST /verify/ HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:45732 - "GET / HTTP/1.1" 404 Not Found
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
-Tentative de chargement du certificat PKCS#12...
-Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
-INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
-Tentative de chargement du certificat PKCS#12...
-Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
+Extraction des informations du certificat réussie. Common Name: ANTIC(NDEFO KEVIN KAMGA 19881006)
 INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
 Réception des données: certificat (longueur: 11340) et mot de passe
 Décodage base64 réussi, taille des données: 8505 octets
@@ -66,65 +52,29 @@ Tentative de chargement du certificat PKCS#12...
 Chargement du certificat PKCS#12 réussi
 Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
 INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
+Réception des données: certificat (longueur: 11268) et mot de passe
+Décodage base64 réussi, taille des données: 8449 octets
 Tentative de chargement du certificat PKCS#12...
 Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
+Extraction des informations du certificat réussie. Common Name: ANTIC(NZOH ALOGO CLEMENT 19800817)
 INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
+Réception des données: certificat (longueur: 11268) et mot de passe
+Décodage base64 réussi, taille des données: 8449 octets
 Tentative de chargement du certificat PKCS#12...
 Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
+Extraction des informations du certificat réussie. Common Name: ANTIC(NZOH ALOGO CLEMENT 19800817)
 INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
+Réception des données: certificat (longueur: 11268) et mot de passe
+Décodage base64 réussi, taille des données: 8449 octets
 Tentative de chargement du certificat PKCS#12...
 Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
+Extraction des informations du certificat réussie. Common Name: ANTIC(NZOH ALOGO CLEMENT 19800817)
 INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
+Réception des données: certificat (longueur: 11268) et mot de passe
+Décodage base64 réussi, taille des données: 8449 octets
 Tentative de chargement du certificat PKCS#12...
 Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
-INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
-Tentative de chargement du certificat PKCS#12...
-Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
-INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
-Tentative de chargement du certificat PKCS#12...
-Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
-INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
-Tentative de chargement du certificat PKCS#12...
-Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
-INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
-Tentative de chargement du certificat PKCS#12...
-Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
-INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
-Tentative de chargement du certificat PKCS#12...
-Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
-INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
-Réception des données: certificat (longueur: 11340) et mot de passe
-Décodage base64 réussi, taille des données: 8505 octets
-Tentative de chargement du certificat PKCS#12...
-Chargement du certificat PKCS#12 réussi
-Extraction des informations du certificat réussie. Common Name: ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310)
+Extraction des informations du certificat réussie. Common Name: ANTIC(NZOH ALOGO CLEMENT 19800817)
 INFO:     127.0.0.1:0 - "POST /extract-cert-info-base64/ HTTP/1.0" 200 OK
 Réception des données: certificat (longueur: 11340) et mot de passe
 Décodage base64 réussi, taille des données: 8505 octets

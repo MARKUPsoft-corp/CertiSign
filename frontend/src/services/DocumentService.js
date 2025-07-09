@@ -253,6 +253,118 @@ class DocumentService {
     });
   }
   
+  /**
+   * Prépare un document avec un template spécifique
+   * @param {Object} docData - Données du document à préparer
+   * @param {File} docData.file - Le fichier PDF à traiter
+   * @param {number} docData.templateId - ID du template à utiliser
+   * @param {Object} docData.templateSettings - Paramètres du template
+   */
+  async prepareDocumentWithTemplate(docData) {
+    try {
+      const token = AuthService.getToken();
+      if (!token) {
+        throw new Error('Token d\'authentification manquant');
+      }
+      
+      const formData = new FormData();
+      
+      // Ajouter le fichier
+      formData.append('document_file', docData.file);
+      
+      // Ajouter l'ID du template
+      formData.append('template_id', docData.templateId);
+      
+      // Ajouter les paramètres du template s'ils existent
+      if (docData.templateSettings) {
+        formData.append('template_settings', JSON.stringify(docData.templateSettings));
+      }
+      
+      // Marquer comme document prêt pour signature (non brouillon)
+      formData.append('status', 'pending_signature');
+      
+      console.log('Préparation du document avec template:', {
+        filename: docData.file.name,
+        templateId: docData.templateId,
+        hasSettings: !!docData.templateSettings
+      });
+      
+      const response = await axios.post(`${API_URL}/api/documents/qr-positions/prepare_with_template/`, formData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      console.log('Document préparé avec succès:', response.data);
+      return response.data;
+      
+    } catch (error) {
+      console.error('Erreur lors de la préparation du document avec template:', error);
+      if (error.response) {
+        console.error('Statut:', error.response.status);
+        console.error('Données d\'erreur:', error.response.data);
+      }
+      throw error;
+    }
+  }
+  
+  /**
+   * Sauvegarde un document comme brouillon avec un template spécifique
+   * @param {Object} docData - Données du document à sauvegarder
+   * @param {File} docData.file - Le fichier PDF à traiter
+   * @param {number} docData.templateId - ID du template à utiliser
+   * @param {Object} docData.templateSettings - Paramètres du template
+   */
+  async saveDocumentDraftWithTemplate(docData) {
+    try {
+      const token = AuthService.getToken();
+      if (!token) {
+        throw new Error('Token d\'authentification manquant');
+      }
+      
+      const formData = new FormData();
+      
+      // Ajouter le fichier
+      formData.append('document_file', docData.file);
+      
+      // Ajouter l'ID du template
+      formData.append('template_id', docData.templateId);
+      
+      // Ajouter les paramètres du template s'ils existent
+      if (docData.templateSettings) {
+        formData.append('template_settings', JSON.stringify(docData.templateSettings));
+      }
+      
+      // Marquer comme brouillon
+      formData.append('status', 'draft');
+      
+      console.log('Sauvegarde du document comme brouillon avec template:', {
+        filename: docData.file.name,
+        templateId: docData.templateId,
+        hasSettings: !!docData.templateSettings
+      });
+      
+      const response = await axios.post(`${API_URL}/api/documents/qr-positions/prepare_with_template/`, formData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      console.log('Document sauvegardé comme brouillon avec succès:', response.data);
+      return response.data;
+      
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde du brouillon avec template:', error);
+      if (error.response) {
+        console.error('Statut:', error.response.status);
+        console.error('Données d\'erreur:', error.response.data);
+      }
+      throw error;
+    }
+  }
+
   // La méthode recordActivity est déjà définie plus haut dans le fichier
 }
 

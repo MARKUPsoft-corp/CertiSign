@@ -1,60 +1,30 @@
 INFO:     Will watch for changes in these directories: ['/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/api_gateway']
 INFO:     Uvicorn running on https://127.0.0.1:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [791294] using StatReload
-INFO:     Started server process [791315]
+INFO:     Started reloader process [5470] using StatReload
+INFO:     Started server process [5476]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     127.0.0.1:0 - "GET / HTTP/1.0" 404 Not Found
-INFO:     129.0.226.25:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:45006 - "GET / HTTP/1.1" 404 Not Found
-Erreur lors de l'échange de clés ECDH: Unable to load PEM file. See https://cryptography.io/en/latest/faq/#why-can-t-i-import-my-pem-file for more details. MalformedFraming
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 500 Internal Server Error
-INFO:     129.0.226.25:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
 INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     195.24.202.8:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.101:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.101:0 - "GET / HTTP/1.0" 404 Not Found
-INFO:     192.168.5.101:0 - "GET / HTTP/1.0" 404 Not Found
-INFO:     192.168.5.101:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     192.168.5.101:0 - "GET /gateway HTTP/1.0" 404 Not Found
-INFO:     192.168.5.101:0 - "GET /gateway/docs HTTP/1.0" 307 Temporary Redirect
-INFO:     192.168.5.101:0 - "GET /docs/ HTTP/1.0" 307 Temporary Redirect
-INFO:     192.168.5.101:0 - "GET /gateway/docs HTTP/1.0" 307 Temporary Redirect
-INFO:     192.168.5.101:0 - "GET /docs/ HTTP/1.0" 307 Temporary Redirect
-INFO:     127.0.0.1:0 - "POST /verify/ HTTP/1.0" 404 Not Found
-INFO:     127.0.0.1:57372 - "GET / HTTP/1.1" 404 Not Found
-INFO:     129.0.226.189:0 - "POST /verify/ HTTP/1.0" 404 Not Found
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     41.202.207.2:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.101:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     129.0.226.189:0 - "POST /verify/ HTTP/1.0" 404 Not Found
-INFO:     129.0.226.189:0 - "POST /verify/ HTTP/1.0" 404 Not Found
-INFO:     129.0.226.189:0 - "POST /verify/ HTTP/1.0" 404 Not Found
-INFO:     129.0.226.189:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     129.0.226.189:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.101:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.162.98:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     129.0.226.189:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     129.0.226.189:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
 INFO:     192.168.5.128:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     192.168.5.101:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
 INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
 INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.159:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
 INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
 INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
 INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
 INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK

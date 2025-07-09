@@ -599,59 +599,177 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
         # Organiser par statut
         pending_documents = documents.filter(status='pending_signature')
         signed_documents = documents.filter(status='signed')
+        draft_documents = documents.filter(status='draft')
         
-        # Statistiques
-        stats = {
-            'pending': pending_documents.count(),
-            'signed': signed_documents.count(),
-            'members': user.organization.members.count() if user.organization else 0,
-            'today_activity': DocumentActivity.objects.filter(
-                document__organization=user.organization if user.organization else None,
-                timestamp__date=datetime.now().date()
-            ).count() if user.organization else 0
-        }
+        # Compter les documents par collaborateur
+        collaborators_stats = {}
+        for doc in documents:
+            if doc.collaborator:
+                username = doc.collaborator.username
+                if username not in collaborators_stats:
+                    collaborators_stats[username] = {
+                        'id': doc.collaborator.id,
+                        'username': username,
+                        'email': doc.collaborator.email,
+                        'total': 0,
+                        'pending': 0,
+                        'signed': 0,
+                        'drafts': 0
+                    }
+                collaborators_stats[username]['total'] += 1
+                if doc.status == 'pending_signature':
+                    collaborators_stats[username]['pending'] += 1
+                elif doc.status == 'signed':
+                    collaborators_stats[username]['signed'] += 1
+                elif doc.status == 'draft':
+                    collaborators_stats[username]['drafts'] += 1
         
-        # Sérialiser les données
-        pending_data = DocumentQRPositionSerializer(pending_documents, many=True, context={'request': request}).data
-        signed_data = DocumentQRPositionSerializer(signed_documents, many=True, context={'request': request}).data
+        # Statistiques générales
+        total_documents = documents.count()
+        this_week_docs = documents.filter(created_at__gte=datetime.now() - timedelta(days=7)).count()
+        this_month_docs = documents.filter(created_at__gte=datetime.now() - timedelta(days=30)).count()
         
-        # Récupérer les activités de l'équipe
-        team_activities = DocumentActivity.objects.filter(
-            document__organization=user.organization if user.organization else None
-        ).order_by('-timestamp')[:10]
-        
-        team_activities_data = []
-        for activity in team_activities:
-            team_activities_data.append({
-                'id': activity.id,
-                'type': activity.activity_type,
-                'description': activity.description,
-                'user': activity.user.username if activity.user else 'Système',
-                'timestamp': activity.timestamp
-            })
-        
-        # Récupérer les membres de l'organisation
-        organization_members_data = []
-        if user.organization:
-            members = user.organization.members.all()
-            for member in members:
-                member_docs_count = DocumentQRPosition.objects.filter(
-                    collaborator=member,
-                    organization=user.organization
-                ).count()
-                
-                organization_members_data.append({
-                    'id': member.id,
-                    'username': member.username,
-                    'role': member.role,
-                    'documents_count': member_docs_count,
-                    'last_activity': member.last_login.strftime('%Y-%m-%d') if member.last_login else 'Jamais'
-                })
+        # Sérialiser les documents les plus récents
+        recent_documents = documents.order_by('-created_at')[:10]
+        recent_documents_data = DocumentQRPositionSerializer(recent_documents, many=True, context={'request': request}).data
         
         return Response({
-            'pending_documents': pending_data,
-            'signed_documents': signed_data,
-            'stats': stats,
-            'team_activities': team_activities_data,
-            'organization_members': organization_members_data
+            'general_stats': {
+                'total_documents': total_documents,
+                'pending_signature': pending_documents.count(),
+                'signed_documents': signed_documents.count(),
+                'draft_documents': draft_documents.count(),
+                'this_week': this_week_docs,
+                'this_month': this_month_docs
+            },
+            'collaborators': list(collaborators_stats.values()),
+            'recent_documents': recent_documents_data,
+            'organization': user.organization.name if user.organization else "Toutes les organisations"
         })
+
+    @action(detail=False, methods=['post'])
+    def prepare_with_template(self, request):
+        """
+        Endpoint pour préparer un document en utilisant un template existant.
+        
+        Paramètres attendus :
+        - document_file : Le fichier PDF à traiter
+        - template_id : L'ID du template à utiliser
+        - template_settings : Paramètres optionnels du template (JSON)
+        - status : Statut du document ('draft' ou 'pending_signature')
+        """
+        try:
+            user = request.user
+            
+            # Vérifier que l'utilisateur a le rôle de collaborateur
+            if not user.is_collaborator and not user.is_admin and not user.is_superadmin:
+                return Response(
+                    {"error": "Seuls les collaborateurs peuvent préparer des documents"},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            
+            # Récupérer les paramètres
+            document_file = request.FILES.get('document_file')
+            template_id = request.data.get('template_id')
+            template_settings = request.data.get('template_settings')
+            doc_status = request.data.get('status', 'pending_signature')
+            
+            # Validation des paramètres
+            if not document_file:
+                return Response(
+                    {"error": "Le fichier document est requis"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            if not template_id:
+                return Response(
+                    {"error": "L'ID du template est requis"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Récupérer le template
+            try:
+                from signature_templates.models import SignatureTemplate
+                template = SignatureTemplate.objects.get(id=template_id)
+                
+                # Vérifier que l'utilisateur a accès à ce template
+                if template.user != user and template.organization_name != (user.organization.name if user.organization else None):
+                    return Response(
+                        {"error": "Vous n'avez pas accès à ce template"},
+                        status=status.HTTP_403_FORBIDDEN
+                    )
+            except SignatureTemplate.DoesNotExist:
+                return Response(
+                    {"error": "Template non trouvé"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            
+            # Parser les template_settings si fournis
+            parsed_settings = {}
+            if template_settings:
+                try:
+                    import json
+                    if isinstance(template_settings, str):
+                        parsed_settings = json.loads(template_settings)
+                    else:
+                        parsed_settings = template_settings
+                except json.JSONDecodeError:
+                    return Response(
+                        {"error": "Format JSON invalide pour template_settings"},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+            
+            # Créer le document en copiant les paramètres du template
+            document_data = {
+                'document_file': document_file,
+                'document_name': document_file.name,
+                'qr_x_position': template.qr_positions.get('default', {}).get('x', 50) if template.qr_positions else 50,
+                'qr_y_position': template.qr_positions.get('default', {}).get('y', 50) if template.qr_positions else 50,
+                'qr_size': template.qr_size,
+                'qr_pages': 'all' if template.page_application == 'all' else ','.join(map(str, template.selected_pages)) if template.selected_pages else 'all',
+                'qr_positions': template.qr_positions,
+                'qr_mode': template.page_application,
+                'signature_positions': template.signature_positions,
+                'signature_size': template.signature_size,
+                'signature_image': template.signature_image,
+                'status': doc_status,
+                'metadata': {
+                    'template_used': {
+                        'template_id': template.id,
+                        'template_name': template.name,
+                        'applied_at': datetime.now().isoformat()
+                    },
+                    'template_settings': parsed_settings
+                }
+            }
+            
+            # Créer l'instance du document
+            document = DocumentQRPosition.objects.create(
+                collaborator=user,
+                organization=user.organization,
+                **document_data
+            )
+            
+            # Sérialiser la réponse
+            serializer = DocumentQRPositionSerializer(document, context={'request': request})
+            
+            return Response(
+                {
+                    "message": "Document préparé avec succès en utilisant le template",
+                    "document": serializer.data,
+                    "template_used": {
+                        "id": template.id,
+                        "name": template.name
+                    }
+                },
+                status=status.HTTP_201_CREATED
+            )
+            
+        except Exception as e:
+            print(f"Erreur lors de la préparation avec template: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return Response(
+                {"error": f"Erreur serveur: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

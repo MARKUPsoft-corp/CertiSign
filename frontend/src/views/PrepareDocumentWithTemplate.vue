@@ -133,7 +133,7 @@
           <div v-if="selectedFiles.length > 0" class="selected-documents-list">
             <h4>Documents sélectionnés ({{ selectedFiles.length }})</h4>
             <div class="documents-grid">
-              <div v-for="(file, index) in selectedFiles" :key="index" class="document-card">
+              <div v-for="file in selectedFiles" :key="file.name" class="document-card">
                 <div class="document-header">
                   <div class="document-icon">
                     <i class="bi bi-file-earmark-pdf"></i>
@@ -239,7 +239,7 @@
               <p>Les {{ selectedFiles.length }} document(s) ont été préparés avec le template "{{ selectedTemplate?.name }}" et sont prêts pour signature.</p>
               
               <div class="documents-list">
-                <div v-for="(file, index) in selectedFiles" :key="index" class="document-info">
+                <div v-for="file in selectedFiles" :key="file.name" class="document-info">
                   <div class="document-icon large">
                     <i class="bi bi-file-earmark-check"></i>
                   </div>
@@ -542,7 +542,7 @@ function truncateFileName(fileName, maxLength = 25) {
 function createDocumentPreviews() {
   console.log('Création des prévisualisations pour', selectedFiles.value.length, 'documents');
   
-  documentPreviews.value = selectedFiles.value.map((file, index) => {
+  documentPreviews.value = selectedFiles.value.map((file) => {
     const preview = {
       loading: true,
       error: null,

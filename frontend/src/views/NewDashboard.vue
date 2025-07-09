@@ -349,144 +349,109 @@
       <section class="welcome-section" data-animate="fade-in-up">
         <div class="welcome-content">
           <h2 class="welcome-title">
-            Bienvenue, <span class="highlight-text">{{ userName }}</span> !
+            <span class="underlined-text">Bienvenue, <span class="text-green">{{ userName }}</span> !</span>
           </h2>
-          <p class="welcome-subtitle" v-if="userRole">Vous êtes connecté en tant que <span class="badge role-badge">{{ userRole }}</span></p>
-          <p class="welcome-subtitle">Gérez vos signatures électroniques en toute sécurité</p>
-        </div>
-        <div class="quick-actions">
-          <button @click="setActiveContent('sign-options')" class="action-button primary">
-            <i class="bi bi-pen"></i>
-            <span>Signer un document</span>
+          <p class="welcome-description">
+            Signez, vérifiez et gérez vos documents électroniques en toute sécurité
+          </p>
+          
+          <!-- Indicateur d'organisation active -->
+          <div class="organization-filter-info">
+            <i class="bi bi-filter-circle"></i>
+            <span>Données filtrées pour l'utilisateur <strong>{{ userName }}</strong></span>
+            <button @click="refreshUserData" class="refresh-btn" title="Actualiser les données">
+              <i class="bi bi-arrow-clockwise"></i>
           </button>
-          <button @click="setActiveContent('verify')" class="action-button accent">
-            <i class="bi bi-check-circle"></i>
-            <span>Vérifier un document</span>
-          </button>
+          </div>
         </div>
       </section>
 
-      <!-- Section des statistiques -->
+      <!-- Statistiques -->
       <section class="stats-section">
-        <div class="stats-grid">
-          <div class="stat-card" data-animate="fade-in-up" data-delay="0.1">
+        <div class="stats-container">
+          <div class="stat-card">
+            <div class="stat-content">
+              <div class="stat-value">5</div>
+              <div class="stat-label">Cette semaine</div>
+            </div>
             <div class="stat-icon primary">
-              <i class="bi bi-file-earmark-check"></i>
-            </div>
-            <div class="stat-info">
-              <div class="stat-value">{{ stats.signed }}</div>
-              <div class="stat-label">Documents signés</div>
-            </div>
-            <div class="stat-trend up">
-              <i class="bi bi-arrow-up-right"></i>
-              <span>+12%</span>
+              <i class="bi bi-calendar-week"></i>
             </div>
           </div>
 
-          <div class="stat-card" data-animate="fade-in-up" data-delay="0.2">
+          <div class="stat-card">
+            <div class="stat-content">
+              <div class="stat-value">18</div>
+              <div class="stat-label">Ce mois-ci</div>
+            </div>
             <div class="stat-icon accent">
-              <i class="bi bi-shield-check"></i>
-            </div>
-            <div class="stat-info">
-              <div class="stat-value">{{ stats.verified }}</div>
-              <div class="stat-label">Documents vérifiés</div>
-            </div>
-            <div class="stat-trend up">
-              <i class="bi bi-arrow-up-right"></i>
-              <span>+8%</span>
+              <i class="bi bi-calendar-month"></i>
             </div>
           </div>
 
-          <div class="stat-card" data-animate="fade-in-up" data-delay="0.3">
-            <div class="stat-icon neutral">
-              <i class="bi bi-hourglass-split"></i>
+          <button class="stat-card action-stat" @click="setActiveContent('sign-options')">
+            <div class="stat-content">
+              <div class="stat-value">
+                <i class="bi bi-plus-circle"></i>
             </div>
-            <div class="stat-info">
-              <div class="stat-value">{{ stats.pending }}</div>
-              <div class="stat-label">En attente</div>
+              <div class="stat-label">Signer un document</div>
             </div>
-            <div class="stat-trend neutral">
-              <i class="bi bi-dash"></i>
-              <span>0%</span>
+            <div class="stat-icon primary">
+              <i class="bi bi-file-earmark-plus"></i>
             </div>
+          </button>
           </div>
+      </section>
 
-          <div class="stat-card" data-animate="fade-in-up" data-delay="0.4">
-            <div class="stat-icon success">
-              <i class="bi bi-people"></i>
+      <!-- Actions rapides -->
+      <section class="quick-actions">
+        <div class="actions-grid">
+          <button class="action-card" @click="setActiveContent('templates')" :class="{ 'active': activeContent === 'templates' }">
+            <div class="action-icon accent">
+              <i class="bi bi-file-earmark-richtext"></i>
             </div>
-            <div class="stat-info">
-              <div class="stat-value">{{ stats.shared }}</div>
-              <div class="stat-label">Partagés</div>
+            <span class="action-title">Templates</span>
+            <span class="action-description">{{ templates.length }} modèles disponibles</span>
+          </button>
+          <button class="action-card" @click="setActiveContent('documents')" :class="{ 'active': activeContent === 'documents' }">
+            <div class="action-icon accent">
+              <i class="bi bi-file-earmark-text"></i>
             </div>
-            <div class="stat-trend up">
-              <i class="bi bi-arrow-up-right"></i>
-              <span>+20%</span>
+            <span class="action-title">Mes documents</span>
+            <span class="action-description">Gérer vos documents</span>
+          </button>
+          <button class="action-card" @click="setActiveContent('history')" :class="{ 'active': activeContent === 'history' }">
+            <div class="action-icon warning">
+              <i class="bi bi-clock-history"></i>
             </div>
+            <span class="action-title">Historique</span>
+            <span class="action-description">Voir l'activité récente</span>
+          </button>
+          <button class="action-card" @click="setActiveContent('profile')" :class="{ 'active': activeContent === 'profile' }">
+            <div class="action-icon success">
+              <i class="bi bi-person-circle"></i>
           </div>
+            <span class="action-title">Profil</span>
+            <span class="action-description">Gérer votre profil</span>
+          </button>
         </div>
       </section>
 
-      <!-- Section des graphiques -->
-      <div class="charts-grid">
-        <section class="chart-section" data-animate="fade-in-up" data-delay="0.5">
-          <div class="section-card">
-            <div class="section-header">
-              <h3 class="section-title">Activité de signature</h3>
-              <div class="chart-legend">
-                <span class="legend-item">
-                  <span class="legend-color primary"></span>
-                  Signatures
-                </span>
-                <span class="legend-item">
-                  <span class="legend-color accent"></span>
-                  Vérifications
-                </span>
+      <!-- Section par défaut si aucune section spécifique -->
+      <section class="default-content">
+        <div class="welcome-card">
+          <div class="welcome-icon">
+            <i class="bi bi-person-workspace"></i>
               </div>
-            </div>
-            <div class="chart-container responsive-chart">
-              <canvas ref="activityChart"></canvas>
-            </div>
+          <h3>Bienvenue dans votre espace de travail</h3>
+          <p>Gérez vos documents et suivez leur progression de signature</p>
+          <button class="btn-primary" @click="setActiveContent('sign-options')">
+            <i class="bi bi-file-earmark-plus"></i>
+            Commencer maintenant
+          </button>
           </div>
         </section>
 
-        <section class="chart-section" data-animate="fade-in-up" data-delay="0.6">
-          <div class="section-card">
-            <div class="section-header">
-              <h3 class="section-title">Types de documents</h3>
-            </div>
-            <div class="chart-container responsive-chart">
-              <canvas ref="docTypesChart"></canvas>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <!-- Section historique récent -->
-      <section class="history-section" data-animate="fade-in-up" data-delay="0.7">
-        <div class="section-card">
-          <div class="section-header">
-            <h3 class="section-title">Activité récente</h3>
-            <button class="view-all-btn" @click="setActiveContent('history')">
-              Voir tout <i class="bi bi-arrow-right"></i>
-            </button>
-          </div>
-          <div class="history-list">
-            <div v-for="(item, index) in recentActivity" :key="index" class="history-item" data-animate="fade-in-left" :data-delay="0.8 + (index * 0.1)">
-              <div class="history-icon" :class="item.type">
-                <i :class="item.icon"></i>
-              </div>
-              <div class="history-content">
-                <h4 class="history-title username-truncate">{{ item.title }}</h4>
-                <p class="history-text" v-html="item.description"></p>
-              </div>
-              <div class="history-time">
-                <span>{{ item.time }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       </div>
     </main>
     
@@ -554,8 +519,6 @@ import SignWithTemplateMultiple from '@/views/SignWithTemplateMultiple.vue'; // 
 import SignSimple from '@/views/SignSimple.vue'; // Importer le composant de signature rapide
 // VerifyDocument a été supprimé
 import AuthService from '@/services/AuthService';
-import AnalyticsService from '@/services/AnalyticsService';
-import DocumentService from '@/services/DocumentService';
 import { initScrollAnimations } from '@/assets/js/scrollAnimations.js';
 import QrPositioner from '@/components/QrPositioner.vue';
 
@@ -565,25 +528,7 @@ const activeContent = ref('dashboard'); // 'dashboard', 'documents', 'sign', 'hi
 const showNewTemplateModal = ref(false);
 const showSignatureOptionsModal = ref(false);
 
-// Références pour les graphiques
-const activityChart = ref(null);
-const docTypesChart = ref(null);
-const activityChartInstance = ref(null);
-const docTypesChartInstance = ref(null);
 
-// Données pour les graphiques
-const chartData = ref({
-  activity: {
-    signatures: [],
-    verifications: [],
-    labels: []
-  },
-  documentTypes: {
-    labels: [],
-    data: [],
-    colors: []
-  }
-});
 
 // Variables pour les templates
 const templates = ref([]);
@@ -716,109 +661,7 @@ function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value;
 }
 
-// Données statistiques (initialisées avec des valeurs par défaut)
-const stats = ref({
-  signed: 0,
-  verified: 0,
-  pending: 0,
-  shared: 0
-});
 
-// Activité récente (données dynamiques)
-const recentActivity = ref([]);
-
-// Fonction pour charger les activités récentes
-const loadRecentActivities = async () => {
-  try {
-    console.log('Chargement des 4 activités récentes depuis UserHistory...');
-    const activitiesResponse = await DocumentService.getMyActivities();
-    const activities = activitiesResponse.data || [];
-    
-    console.log('Activités brutes récupérées:', activities);
-    console.log('Nombre total d\'activités:', activities.length);
-    
-    // Prendre les 4 dernières activités et les transformer
-    const latestActivities = activities
-      .slice(0, 4)
-      .map(activity => ({
-        type: activity.activity_type,
-        icon: getActivityIcon(activity.activity_type),
-        title: getActivityTitle(activity.activity_type),
-        description: activity.description || `Activité de type ${activity.activity_type}`,
-        time: formatRelativeTime(activity.timestamp || activity.created_at)
-      }));
-    
-    recentActivity.value = latestActivities;
-    console.log('4 activités récentes chargées et transformées:', latestActivities);
-  } catch (error) {
-    console.error('Erreur lors du chargement des activités récentes:', error);
-    // En cas d'erreur, garder les données par défaut (tableau vide)
-  }
-};
-
-// Fonction utilitaire pour obtenir l'icône d'une activité
-const getActivityIcon = (activityType) => {
-  const iconMap = {
-    'signed': 'bi bi-file-earmark-check',
-    'signature_simple': 'bi bi-pen',
-    'signature_multiple': 'bi bi-files',
-    'signature_with_template': 'bi bi-file-earmark-medical',
-    'template_created': 'bi bi-file-earmark-plus',
-    'template_used': 'bi bi-file-earmark-check',
-    'viewed': 'bi bi-eye',
-    'original_viewed': 'bi bi-file-earmark',
-    'downloaded': 'bi bi-download',
-    'signed_downloaded': 'bi bi-file-earmark-arrow-down',
-    'original_downloaded': 'bi bi-file-arrow-down',
-    'created': 'bi bi-file-plus',
-    'modified': 'bi bi-file-earmark-text'
-  };
-  return iconMap[activityType] || 'bi bi-file-earmark';
-};
-
-// Fonction utilitaire pour obtenir le titre d'une activité
-const getActivityTitle = (activityType) => {
-  const titleMap = {
-    'signed': 'Document signé',
-    'signature_simple': 'Signature simple',
-    'signature_multiple': 'Signature multiple',
-    'signature_with_template': 'Signature avec template',
-    'template_created': 'Template créé',
-    'template_used': 'Template utilisé',
-    'viewed': 'Document consulté',
-    'original_viewed': 'Document original consulté',
-    'downloaded': 'Document téléchargé',
-    'signed_downloaded': 'Document signé téléchargé',
-    'original_downloaded': 'Document original téléchargé',
-    'created': 'Document créé',
-    'modified': 'Document modifié'
-  };
-  return titleMap[activityType] || 'Activité';
-};
-
-// Fonction utilitaire pour formater le temps relatif
-const formatRelativeTime = (timestamp) => {
-  const now = new Date();
-  const activityDate = new Date(timestamp);
-  const diffMs = now - activityDate;
-  const diffMinutes = Math.floor(diffMs / (1000 * 60));
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  
-  if (diffMinutes < 60) {
-    return `Il y a ${diffMinutes} min`;
-  } else if (diffHours < 24) {
-    return `Il y a ${diffHours} h`;
-  } else if (diffDays < 7) {
-    return `Il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`;
-  } else {
-    return activityDate.toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric'
-    });
-  }
-};
 
 // Positionnement aléatoire des particules
 const particlePositions = Array.from({ length: 20 }, () => ({
@@ -846,25 +689,6 @@ const userName = computed(() => {
   return 'Utilisateur';
 });
 
-// Récupérer le rôle de l'utilisateur
-const userRole = computed(() => {
-  if (currentUser.value && currentUser.value.role) {
-    switch(currentUser.value.role) {
-      case 'superadmin':
-        return 'Super Administrateur';
-      case 'admin':
-        return 'Administrateur';
-      case 'collaborator':
-        return 'Collaborateur';
-      case 'signer':
-        return 'Signataire';
-      default:
-        return 'Utilisateur';
-    }
-  }
-  return null;
-});
-
 // Version tronquée du nom pour l'affichage mobile
 const truncatedUserName = computed(() => {
   if (userName.value.length > 10) {
@@ -889,189 +713,26 @@ const logout = async () => {
   }
 };
 
-// Fonction pour charger les données des graphiques
-const loadChartData = async () => {
+// Fonction pour actualiser les données utilisateur
+const refreshUserData = async () => {
   try {
-    console.log('Chargement des données pour les graphiques...');
+    console.log('Actualisation des données utilisateur...');
     
-    // Charger les données d'activité et de types de documents en parallèle
-    const [activityData, documentTypeData] = await Promise.all([
-      AnalyticsService.getActivityAnalytics(),
-      AnalyticsService.getDocumentTypeAnalytics()
-    ]);
+    // Revalider le token et récupérer les dernières informations utilisateur
+    const isValid = await AuthService.validateToken();
     
-    console.log('Données d\'activité reçues:', activityData);
-    console.log('Données de types de documents reçues:', documentTypeData);
-  
-    // Mettre à jour les données
-    chartData.value.activity = activityData;
-    chartData.value.documentTypes = documentTypeData;
-    
-    // Réinitialiser les graphiques avec les nouvelles données
-    await initCharts();
-    
-  } catch (error) {
-    console.error('Erreur lors du chargement des données des graphiques:', error);
-    // En cas d'erreur, initialiser avec des données par défaut
-    await initCharts();
-  }
-};
-  
-// Fonction pour initialiser les graphiques
-const initCharts = async () => {
-  try {
-    const { Chart, registerables } = await import('chart.js');
-    Chart.register(...registerables);
-
-    // Détruire les graphiques existants s'ils existent
-    if (activityChartInstance.value) {
-      activityChartInstance.value.destroy();
-    }
-    if (docTypesChartInstance.value) {
-      docTypesChartInstance.value.destroy();
-    }
-
-    // Graphique d'activité avec vraies données
-    if (activityChart.value) {
-      const activityLabels = chartData.value.activity.labels.length > 0 
-        ? chartData.value.activity.labels 
-        : ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil'];
-      
-      const signaturesData = chartData.value.activity.monthlySignatures.length > 0 
-        ? chartData.value.activity.monthlySignatures 
-        : [0, 0, 0, 0, 0, 0, 0];
-      
-      const verificationsData = chartData.value.activity.monthlyVerifications.length > 0 
-        ? chartData.value.activity.monthlyVerifications 
-        : [0, 0, 0, 0, 0, 0, 0];
-
-      activityChartInstance.value = new Chart(activityChart.value.getContext('2d'), {
-        type: 'line',
-        data: {
-          labels: activityLabels,
-          datasets: [
-            {
-              label: 'Signatures',
-              data: signaturesData,
-              borderColor: '#3a86ff',
-              backgroundColor: 'rgba(58, 134, 255, 0.1)',
-              tension: 0.3,
-              fill: true
-            },
-            {
-              label: 'Vérifications',
-              data: verificationsData,
-              borderColor: '#4cb58e',
-              backgroundColor: 'rgba(76, 181, 142, 0.1)',
-              tension: 0.3,
-              fill: true
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: {
-                display: true,
-                color: 'rgba(0, 0, 0, 0.05)'
-              },
-              ticks: {
-                font: {
-                  size: 10
-                },
-                stepSize: 1 // Pour afficher seulement les entiers
-              }
-            },
-            x: {
-              grid: {
-                display: false
-              },
-              ticks: {
-                font: {
-                  size: 10
-                }
-              }
-            }
-          }
-        }
-      });
-    }
-
-    // Graphique des types de documents avec vraies données
-    if (docTypesChart.value) {
-      const typeLabels = chartData.value.documentTypes.labels.length > 0 
-        ? chartData.value.documentTypes.labels 
-        : ['PDF'];
-      
-      const typeData = chartData.value.documentTypes.data.length > 0 
-        ? chartData.value.documentTypes.data 
-        : [100];
-      
-      const typeColors = chartData.value.documentTypes.colors.length > 0 
-        ? chartData.value.documentTypes.colors 
-        : ['#3a86ff'];
-
-      docTypesChartInstance.value = new Chart(docTypesChart.value.getContext('2d'), {
-        type: 'doughnut',
-        data: {
-          labels: typeLabels,
-          datasets: [{
-            data: typeData,
-            backgroundColor: typeColors,
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                padding: 15,
-                boxWidth: 10,
-                font: {
-                  size: 10
-                }
-              }
-            }
-          },
-          cutout: '70%'
-        }
-      });
+    if (isValid) {
+      currentUser.value = AuthService.getCurrentUser();
+      console.log('Données utilisateur actualisées avec succès');
+    } else {
+      // Si le token n'est plus valide, rediriger vers la connexion
+      router.push('/login');
     }
   } catch (error) {
-    console.error('Erreur lors de l\'initialisation des graphiques:', error);
+    console.error('Erreur lors de l\'actualisation des données utilisateur:', error);
   }
 };
 
-// Fonction pour charger les statistiques
-const loadStatistics = async () => {
-  try {
-    console.log('Chargement des statistiques...');
-    const generalStats = await AnalyticsService.getGeneralStats();
-    console.log('Statistiques reçues:', generalStats);
-    
-    // Mettre à jour les statistiques
-    stats.value = {
-      signed: generalStats.signedDocuments,
-      verified: generalStats.totalVerifications,
-      pending: generalStats.pendingDocuments,
-      shared: generalStats.totalDownloads
-    };
-  } catch (error) {
-    console.error('Erreur lors du chargement des statistiques:', error);
-    // En cas d'erreur, garder les valeurs par défaut
-  }
-};
 
 // Initialisation au chargement
 onMounted(async () => {
@@ -1097,10 +758,7 @@ onMounted(async () => {
       
       // Charger toutes les données en parallèle
       await Promise.all([
-        loadTemplates(),
-        loadChartData(),
-        loadStatistics(),
-        loadRecentActivities()
+        loadTemplates()
       ]);
     } else {
       // Rediriger vers la page de connexion si le token n'est pas valide
@@ -1119,26 +777,7 @@ watch(() => AuthService.isAuthenticated(), (isAuthenticated) => {
   }
 });
 
-// Gestionnaire de redimensionnement pour les graphiques
-const handleResizeCharts = () => {
-  if (activityChartInstance.value) {
-    activityChartInstance.value.resize();
-  }
-  if (docTypesChartInstance.value) {
-    docTypesChartInstance.value.resize();
-  }
-};
 
-// Gestion des écouteurs d'événements et nettoyage
-onMounted(() => {
-  // Ajouter l'écouteur quand le composant est monté
-  window.addEventListener('resize', handleResizeCharts);
-  
-  // Retourner une fonction de nettoyage qui sera appelée quand le composant est démonté
-  return () => {
-    window.removeEventListener('resize', handleResizeCharts);
-  };
-});
 
 // Fonctions pour gérer les templates
 function handleFileSelect(event) {
@@ -1744,9 +1383,7 @@ async function saveTemplate() {
 
 /* Welcome section */
 .welcome-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
   margin-bottom: 40px;
   padding: 30px;
   background-color: var(--card-bg);
@@ -1818,132 +1455,6 @@ async function saveTemplate() {
   box-shadow: var(--shadow-lg);
 }
 
-/* Stats section */
-.stats-section {
-  margin-bottom: 40px;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-}
-
-.stat-card {
-  background-color: var(--card-bg);
-  border-radius: 16px;
-  padding: 25px;
-  display: flex;
-  align-items: flex-start;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.stat-card.animated {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.stat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
-}
-
-.stat-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  margin-right: 15px;
-  transition: transform 0.3s ease;
-}
-
-.stat-card:hover .stat-icon {
-  transform: scale(1.1) rotate(5deg);
-}
-
-.stat-icon.primary {
-  background-color: rgba(58, 134, 255, 0.1);
-  color: var(--primary-color);
-}
-
-.stat-icon.accent {
-  background-color: rgba(76, 181, 142, 0.1);
-  color: var(--accent-color);
-}
-
-.stat-icon.neutral {
-  background-color: rgba(108, 117, 125, 0.1);
-  color: var(--neutral-color);
-}
-
-.stat-icon.success {
-  background-color: rgba(40, 167, 69, 0.1);
-  color: #28a745;
-}
-
-.stat-info {
-  flex: 1;
-}
-
-.stat-value {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 5px;
-}
-
-.stat-label {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
-.stat-trend {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.stat-trend.up {
-  color: #28a745;
-}
-
-.stat-trend.down {
-  color: #dc3545;
-}
-
-.stat-trend.neutral {
-  color: var(--neutral-color);
-}
-
-/* Charts section */
-.charts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 20px;
-  margin-bottom: 40px;
-}
-
-.chart-section {
-  background-color: var(--card-bg);
-  border-radius: 16px;
-  padding: 25px;
-  box-shadow: var(--shadow-sm);
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.5s ease;
-}
-
-.chart-section.animated {
-  opacity: 1;
-  transform: translateY(0);
-}
 
 .section-header {
   display: flex;
@@ -1958,10 +1469,6 @@ async function saveTemplate() {
   margin: 0;
 }
 
-.chart-legend {
-  display: flex;
-  gap: 15px;
-}
 
 .legend-item {
   display: flex;
@@ -1984,10 +1491,6 @@ async function saveTemplate() {
   background-color: var(--accent-color);
 }
 
-.chart-container {
-  height: 300px;
-  position: relative;
-}
 
 /* History section */
 .history-section {
@@ -2170,9 +1673,6 @@ async function saveTemplate() {
 
 /* Responsive design amélioré */
 @media (max-width: 1200px) {
-  .charts-grid {
-    grid-template-columns: 1fr;
-  }
   
   .welcome-section {
     padding: 25px;
@@ -2182,8 +1682,11 @@ async function saveTemplate() {
     font-size: 2.2rem;
   }
   
-  .chart-container {
-    height: 250px;
+}
+
+@media (max-width: 1024px) {
+  .actions-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -2196,10 +1699,6 @@ async function saveTemplate() {
 
   .quick-actions {
     justify-content: center;
-  }
-
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
   }
   
   .nav-menu {
@@ -2232,9 +1731,6 @@ async function saveTemplate() {
     display: block;
   }
   
-  .chart-container {
-    height: 220px;
-  }
   
   .user-info {
     max-width: 120px;
@@ -2258,7 +1754,7 @@ async function saveTemplate() {
     padding: 20px;
   }
 
-  .stats-grid {
+  .actions-grid {
     grid-template-columns: 1fr;
   }
 
@@ -2274,14 +1770,6 @@ async function saveTemplate() {
     width: 35px;
   }
   
-  .chart-container {
-    height: 200px;
-  }
-  
-  .chart-legend {
-    flex-direction: column;
-    align-items: flex-start;
-  }
   
   .legend-item {
     margin-bottom: 4px;
@@ -2327,10 +1815,6 @@ async function saveTemplate() {
     align-self: flex-start;
   }
   
-  .chart-container {
-    height: 180px;
-  }
-  
   .user-info {
     max-width: 80px;
   }
@@ -2354,7 +1838,6 @@ async function saveTemplate() {
 
 /* Dark mode optimisé */
 :global(.dark-theme) .stat-card,
-:global(.dark-theme) .chart-section,
 :global(.dark-theme) .history-section,
 :global(.dark-theme) .welcome-section {
   background-color: rgba(30, 41, 59, 0.7);
@@ -2425,12 +1908,6 @@ async function saveTemplate() {
   --accent-color-rgb: 76, 181, 142;
 }
 
-/* Responsive charts */
-.responsive-chart {
-  height: 300px;
-  position: relative;
-  width: 100%;
-}
 
 /* History items hover effect */
 .history-item {
@@ -3333,7 +2810,7 @@ async function saveTemplate() {
 /* Templates Grid */
 .templates-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 25px;
   margin-top: 30px;
 }
@@ -3977,5 +3454,389 @@ async function saveTemplate() {
 .sign-template-btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(var(--primary-color-rgb), 0.4);
+}
+
+/* Styles pour la section de bienvenue améliorée */
+.underlined-text {
+  position: relative;
+  display: inline-block;
+}
+
+.underlined-text::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--accent-color, #06ffa5), #39ffb4, var(--accent-color, #06ffa5));
+  background-size: 200% 100%;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(6, 255, 165, 0.3);
+  animation: gradientMove 3s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.welcome-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary, #6c757d);
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+}
+
+.organization-filter-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: rgba(6, 255, 165, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin: 1.5rem auto 0;
+  max-width: 80%;
+  font-size: 0.9rem;
+  color: var(--text-color, #333);
+  border: 1px dashed rgba(6, 255, 165, 0.3);
+}
+
+.organization-filter-info i {
+  color: var(--accent-color, #06ffa5);
+  font-size: 1.1rem;
+}
+
+.organization-filter-info strong {
+  color: var(--accent-color, #06ffa5);
+  font-weight: 700;
+}
+
+.user-role-badge {
+  background: linear-gradient(45deg, var(--primary-color, #3a86ff), var(--accent-color, #06ffa5));
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(58, 134, 255, 0.2);
+}
+
+.refresh-btn {
+  background: transparent;
+  border: none;
+  color: var(--accent-color, #06ffa5);
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.refresh-btn:hover {
+  background-color: rgba(6, 255, 165, 0.2);
+  transform: rotate(180deg);
+}
+
+/* Statistiques */
+.stats-section {
+  margin-bottom: 3rem;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-color, #333);
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-muted, #6c757d);
+}
+
+.stat-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.stat-icon.primary {
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--primary-color, #3a86ff);
+}
+
+.stat-icon.accent {
+  background: rgba(6, 255, 165, 0.1);
+  color: var(--accent-color, #06ffa5);
+}
+
+.stat-icon.warning {
+  background: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
+}
+
+.stat-card.action-stat {
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.stat-card.action-stat:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(58, 134, 255, 0.2);
+  border-color: var(--primary-color, #3a86ff);
+  background: rgba(255, 255, 255, 1);
+}
+
+.stat-card.action-stat .stat-value {
+  color: var(--primary-color, #3a86ff);
+  font-size: 2.5rem;
+}
+
+.stat-card.action-stat .stat-label {
+  color: var(--primary-color, #3a86ff);
+  font-weight: 600;
+}
+
+.stat-card.action-stat .stat-icon {
+  transform: scale(1.1);
+}
+
+/* Actions rapides */
+.quick-actions {
+  margin-bottom: 3rem;
+}
+
+.actions-grid {
+  display: flex; /* Flexbox plutôt que grid */
+  flex-wrap: wrap; /* Permet le retour à la ligne */
+  justify-content: space-between; /* Espacement entre les cartes */
+  gap: 1.5rem; /* Espace entre les cartes */
+  width: 100%;
+}
+
+.action-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid transparent;
+  border-radius: 1rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  flex-basis: calc(25% - 1.5rem); /* Chaque carte prend 25% de la largeur moins le 'gap' */
+  flex-grow: 1; /* Permet aux cartes de grandir pour remplir l'espace */
+}
+
+.action-card:hover, .action-card.active {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.action-card.primary:hover {
+  border-color: var(--primary-color, #3a86ff);
+  box-shadow: 0 10px 30px rgba(58, 134, 255, 0.2);
+}
+
+.action-card:not(.primary):hover, .action-card.active {
+  border-color: var(--accent-color, #06ffa5);
+  box-shadow: 0 10px 30px rgba(6, 255, 165, 0.15);
+}
+
+.action-icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.action-card .action-icon {
+  background: rgba(6, 255, 165, 0.1);
+  color: var(--accent-color, #06ffa5);
+}
+
+.action-card.primary .action-icon {
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--primary-color, #3a86ff);
+}
+
+.action-icon.accent {
+  background: rgba(6, 255, 165, 0.1);
+  color: var(--accent-color, #06ffa5);
+}
+
+.action-icon.warning {
+  background: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
+}
+
+.action-icon.success {
+  background: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+.action-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+}
+
+.action-description {
+  font-size: 0.875rem;
+  color: var(--text-muted, #6c757d);
+}
+
+/* Contenu par défaut */
+.default-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.welcome-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  padding: 3rem;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-card .btn-primary {
+  margin: 0 auto;
+  display: inline-flex;
+}
+
+.welcome-icon {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 1rem;
+  background: rgba(6, 255, 165, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: var(--accent-color, #06ffa5);
+  margin: 0 auto 1.5rem;
+}
+
+.welcome-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+  margin-bottom: 1rem;
+}
+
+.welcome-card p {
+  color: var(--text-muted, #6c757d);
+  margin-bottom: 2rem;
+}
+
+.btn-primary {
+  background: var(--accent-color, #06ffa5);
+  color: white;
+  box-shadow: 0 4px 15px rgba(6, 255, 165, 0.3);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(6, 255, 165, 0.4);
+  background: #05e394;
+}
+
+/* Media queries pour responsivité */
+@media (max-width: 1024px) {
+  .actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .actions-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .action-card {
+    padding: 1.5rem;
+  }
+  
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .welcome-title {
+    font-size: 2rem;
+  }
+  
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
