@@ -142,40 +142,103 @@
           </h3>
           
           <div class="documents-list">
-            <div v-for="doc in sortedPendingDocuments" :key="doc.id" class="document-item" :class="{ 'urgent': doc.is_urgent }">
-              <div class="doc-info">
-                <i class="bi" :class="doc.is_urgent ? 'bi-exclamation-triangle-fill' : 'bi-file-earmark'"></i>
-                <div class="doc-details">
-                  <div class="doc-header">
-                    <span class="doc-name">{{ doc.document_name || 'Document sans nom' }}</span>
-                    <span v-if="doc.is_urgent" class="urgent-tag">URGENT</span>
-                  </div>
-                  <span class="doc-meta">
-                    Préparé par {{ doc.preparedBy || doc.collaborator_username || 'Collaborateur' }} • 
-                    {{ formatDate(doc.assignedAt || doc.created_at) }}
-                  </span>
-                  <div class="doc-priority">
-                    <span class="time-elapsed" :class="{ 'urgent': doc.is_urgent }">
-                      {{ getTimeElapsed(doc.assignedAt || doc.created_at) }} d'attente
+            <!-- Onglets -->
+            <div class="pending-tabs">
+              <button class="tab-btn" :class="{ active: pendingTab === 'quick' }" @click="pendingTab = 'quick'">
+                Préparation directe
+              </button>
+              <button class="tab-btn" :class="{ active: pendingTab === 'template' }" @click="pendingTab = 'template'">
+                Avec template
+              </button>
+            </div>
+
+            <!-- Contenu selon onglet -->
+            <template v-if="pendingTab === 'quick'">
+              <div v-for="doc in pendingQuickDocuments" :key="doc.id" class="document-item" :class="{ 'urgent': doc.is_urgent }">
+                <div class="doc-info">
+                  <i class="bi" :class="doc.is_urgent ? 'bi-exclamation-triangle-fill' : 'bi-file-earmark'"></i>
+                  <div class="doc-details">
+                    <div class="doc-header">
+                      <span class="doc-name">{{ doc.document_name || 'Document sans nom' }}</span>
+                      <span v-if="doc.is_urgent" class="urgent-tag">URGENT</span>
+                    </div>
+                    <span class="doc-meta">
+                      Préparé par {{ doc.preparedBy || doc.collaborator_username || 'Collaborateur' }} • 
+                      {{ formatDate(doc.assignedAt || doc.created_at) }}
                     </span>
+                    <div class="doc-priority">
+                      <span class="time-elapsed" :class="{ 'urgent': doc.is_urgent }">
+                        {{ getTimeElapsed(doc.assignedAt || doc.created_at) }} d'attente
+                      </span>
+                    </div>
                   </div>
                 </div>
+                <div class="doc-actions">
+                  <button class="btn-primary" @click="signDocument(doc)">
+                    <i class="bi bi-pen"></i>
+                    Signer maintenant
+                  </button>
+                  <button class="btn-icon" title="Prévisualiser" @click="previewDocument(doc)">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
               </div>
-              <div class="doc-actions">
-                <button class="btn-primary" @click="signDocument(doc)">
-                  <i class="bi bi-pen"></i>
-                  Signer maintenant
-                </button>
-                <button class="btn-icon" title="Prévisualiser" @click="previewDocument(doc)">
-                  <i class="bi bi-eye"></i>
-                </button>
+              <div v-if="pendingQuickDocuments.length === 0" class="empty-state">
+                <i class="bi bi-file-earmark-check"></i>
+                <p>Aucun document à signer</p>
               </div>
-            </div>
-            <div v-if="pendingDocuments.length === 0" class="empty-state">
-              <i class="bi bi-file-earmark-check"></i>
-              <p>Aucun document à signer</p>
-              <span class="empty-subtitle">Parfait ! Tous vos documents sont à jour.</span>
-            </div>
+            </template>
+
+            <template v-else>
+              <!-- Cartes templates -->
+              <div v-if="!selectedPendingTemplateId" class="template-cards-grid">
+                <div v-for="tpl in pendingTemplateCards" :key="tpl.templateId" class="template-card-pending">
+                  <h4 class="template-card-title">{{ tpl.templateName }}</h4>
+                  <p class="template-card-count">{{ tpl.documents.length }} document(s)</p>
+                  <div class="template-card-actions">
+                    <button class="btn-icon" @click="previewTemplateById(tpl.templateId)" title="Aperçu template">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn-icon primary" @click="selectedPendingTemplateId = tpl.templateId" title="Voir documents">
+                      <i class="bi bi-list"></i>
+                    </button>
+                  </div>
+                </div>
+                <div v-if="pendingTemplateCards.length === 0" class="empty-state">
+                  <i class="bi bi-hourglass-split"></i>
+                  <p>Aucun document via template</p>
+                </div>
+              </div>
+              <!-- Liste documents d'un template -->
+              <div v-else>
+                <div class="template-docs-header">
+                  <h4 class="template-docs-title">{{ currentTemplateName }}</h4>
+                  <button class="btn-secondary" @click="selectedPendingTemplateId = null">Retour aux templates →</button>
+                </div>
+                <div v-for="doc in currentTemplateDocs" :key="doc.id" class="document-item" :class="{ 'urgent': doc.is_urgent }">
+                  <div class="doc-info">
+                    <i class="bi bi-file-earmark"></i>
+                    <div class="doc-details">
+                      <span class="doc-name">{{ doc.document_name || 'Document sans nom' }}</span>
+                      <span class="doc-meta">Assigné le {{ formatDate(doc.assignedAt) }}</span>
+                    </div>
+                  </div>
+                  <div class="doc-actions">
+                    <button class="btn-primary" @click="signDocument(doc)">
+                      <i class="bi bi-pen"></i>
+                      Signer maintenant
+                    </button>
+                    <button class="btn-icon" @click="previewDocument(doc)" title="Prévisualiser">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+                <div v-if="currentTemplateDocs.length === 0" class="empty-state">
+                  <i class="bi bi-hourglass-split"></i>
+                  <p>Aucun document pour ce template</p>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
 
@@ -373,6 +436,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import AuthService from '@/services/AuthService';
 import axios from 'axios';
+import TemplateService from '@/services/TemplateService.js';
 
 const router = useRouter();
 
@@ -432,6 +496,46 @@ const signatureHistory = ref([
     status: 'signed'
   }
 ]);
+
+// Classification des documents en attente par mode de préparation
+const pendingTab = ref('quick'); // 'quick' ou 'template'
+
+const pendingQuickDocuments = computed(() => pendingDocuments.value.filter(doc => !doc.isTemplate));
+const pendingTemplateDocuments = computed(() => pendingDocuments.value.filter(doc => doc.isTemplate));
+
+const selectedPendingTemplateId = ref(null);
+
+const pendingTemplateCards = computed(() => {
+  const map = {};
+  pendingTemplateDocuments.value.forEach(doc => {
+    if (!doc.templateId) return;
+    if (!map[doc.templateId]) {
+      map[doc.templateId] = {
+        templateId: doc.templateId,
+        templateName: doc.templateName || `Template ${doc.templateId}`,
+        documents: []
+      };
+    }
+    map[doc.templateId].documents.push(doc);
+  });
+  return Object.values(map);
+});
+
+const currentTemplateDocs = computed(() => {
+  if (!selectedPendingTemplateId.value) return [];
+  return pendingTemplateDocuments.value.filter(doc => doc.templateId === selectedPendingTemplateId.value);
+});
+
+const currentTemplateName = computed(() => {
+  const d = currentTemplateDocs.value[0];
+  return d ? (d.templateName || `Template ${d.templateId}`) : '';
+});
+
+watch(pendingTab, (newVal) => {
+  if (newVal !== 'template') {
+    selectedPendingTemplateId.value = null;
+  }
+});
 
 // Watcher pour rafraîchir les données quand la section active change
 watch(activeSection, (newSection) => {
@@ -1169,7 +1273,14 @@ async function fetchPendingDocuments() {
 
     const response = await axios.get('https://ppd.camgovca.cm/api/documents/qr-positions/pending_for_signer/', config);
     if (response.data) {
-      pendingDocuments.value = response.data.pending_documents || [];
+      pendingDocuments.value = (response.data.pending_documents || []).map(doc => ({
+        ...doc,
+        id: doc.id,
+        assignedAt: doc.assignedAt || doc.created_at,
+        isTemplate: !!(doc.metadata && doc.metadata.template_used),
+        templateId: doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_id : null,
+        templateName: doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_name : null
+      }));
       
       // Mettre à jour les statistiques
       if (response.data.stats) {
@@ -1306,6 +1417,28 @@ function initStats() {
   // Les statistiques sont mises à jour automatiquement 
   // via fetchPendingDocuments qui récupère les stats du backend
   console.log('Initialisation des statistiques...');
+}
+
+function openBlobInNewTab(blob) {
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+
+async function previewTemplateById(tplId) {
+  try {
+    const blob = await TemplateService.downloadPreview(tplId);
+    openBlobInNewTab(blob);
+  } catch (err) {
+    console.warn('Aperçu indisponible, essai avec le document original...', err);
+    try {
+      const blob = await TemplateService.downloadOriginal(tplId);
+      openBlobInNewTab(blob);
+    } catch (e) {
+      console.error('Erreur de prévisualisation template', e);
+      alert('Impossible de prévisualiser ce template');
+    }
+  }
 }
 </script>
 
@@ -2646,5 +2779,96 @@ function initStats() {
     width: 100%;
     justify-content: center;
   }
+}
+
+/* Onglets documents à signer */
+.pending-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.pending-tabs .tab-btn {
+  background: rgba(255, 149, 0, 0.1);
+  border: 1px solid rgba(255, 149, 0, 0.3);
+  padding: 0.4rem 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-color, #333);
+}
+.pending-tabs .tab-btn.active,
+.pending-tabs .tab-btn:hover {
+  background: #ff9500;
+  color: #fff;
+}
+
+/* Cartes template en attente */
+.template-cards-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.template-card-pending {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 149, 0, 0.2);
+  border-radius: 1rem;
+  padding: 1rem;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(255, 149, 0, 0.05);
+}
+.template-card-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-color, #333);
+}
+.template-card-count {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+}
+.template-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+/* Header documents template */
+.template-docs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.template-docs-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, #ff9500, #ffb347);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: capitalize;
+}
+
+.btn-secondary {
+  background: none;
+  border: 1.5px solid #ff9500;
+  color: #ff9500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.btn-secondary:hover {
+  background: #ff9500;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 149, 0, 0.25);
 }
 </style> 

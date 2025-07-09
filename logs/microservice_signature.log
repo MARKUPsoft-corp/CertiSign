@@ -402,3 +402,175 @@ INFO:main:Données de signature stockées avec succès pour le document 42ce6979
 INFO:main:Signature terminée en 0.37 secondes
 INFO:     192.168.5.49:0 - "POST /sign HTTP/1.0" 200 OK
 INFO:main:Fichier temporaire supprimé: /tmp/birthCertificateBurundi_signed_20250709130241.pdf
+INFO:main:Nouvelle demande de signature pour le fichier pdf-exemple.pdf
+INFO:signer:Clé privée chargée avec succès: <Name(C=CM,O=ANTIC CA,OU=GovRA,OU=ANTIC RA,OU=PKI Center,CN=ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310))>
+INFO:main:Identifiant généré pour le document: 61d026d3-5b44-4026-9ebd-cec022a75333
+INFO:main:Hash du document original calculé: 021d0a37e5d8b0e21d8259e1f322f13187ea0fe9f66c72f47ed65c0121b75cf1
+INFO:signer:Fichier signé avec succès, taille de la signature: 256 octets
+INFO:main:Document signé, taille de la signature: 256 octets
+INFO:main:Métadonnées parsées avec succès. Clés disponibles: ['qr_position', 'document_id', 'document_title', 'organization_id', 'organization_name', 'signer_role', 'signer_name', 'signature_position']
+INFO:main:Position du QR code extraite des métadonnées: {'x': 50, 'y': 50, 'size': 'medium', 'pages': [1], 'positions': {'1': {'x': 19.411764705882355, 'y': 85.19794165097053}}, 'mode': 'current'}
+INFO:main:Données de signature trouvées. Clés: ['signature_image', 'signature_size', 'positions']
+INFO:main:Image de signature trouvée. Longueur: 12907 caractères. Début: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD...
+INFO:main:Positions de signature trouvées: 1 position(s). Détails: [{'page': 1, 'x': 82.26890756302521, 'y': 85.00791717311832, 'width': 20, 'height': 10}]
+INFO:main:Taille de signature extraite des métadonnées: 50%
+INFO:main:ID d'organisation extrait des métadonnées: 2
+INFO:main:Nom d'organisation extrait des métadonnées: CNCCE
+INFO:main:Rôle du signataire extrait des métadonnées: signer
+INFO:main:Nom du signataire extrait des métadonnées: test
+INFO:main:Ajout de l'image de signature au document avec taille 50%
+INFO:main:=== DÉBUT add_signature_image_to_pdf ===
+INFO:main:Taille de signature reçue: 50%
+INFO:main:Nombre de positions: 1
+INFO:main:Positions détaillées: [{'page': 1, 'x': 82.26890756302521, 'y': 85.00791717311832, 'width': 20, 'height': 10}]
+INFO:main:Début des données d'image reçues: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD...
+INFO:main:DEBUG MICROSERVICE - Positions de signature reçues: [{'page': 1, 'x': 82.26890756302521, 'y': 85.00791717311832, 'width': 20, 'height': 10}]
+INFO:main:DEBUG MICROSERVICE - Position 1: page=1, x=82.26890756302521, y=85.00791717311832, width=20, height=10
+INFO:main:En-tête de l'image détecté: data:image/jpeg;base64
+INFO:main:Format d'image détecté: jpg
+INFO:main:Données base64 pures extraites, longueur: 12884
+INFO:main:Image décodée avec succès, taille: 9663 octets
+INFO:main:Image validée par PIL
+INFO:main:Image de signature sauvegardée temporairement: /tmp/temp_signature_01820c8b-4bdd-4157-9da7-f27e90073094.jpg
+INFO:main:Traitement des 1 pages du PDF
+INFO:main:Mode spécifique - signature appliquée sur la page 1
+INFO:main:Ajout de 1 signature(s) sur la page 1
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=82.26890756302521%, y=85.00791717311832%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 595.0 x 842.0 points
+INFO:main:Position absolue: x=489.5, y=126.23333740234378
+INFO:main:Dimensions absolues: largeur=178.5, hauteur=126.3 points
+INFO:main:Signature ajoutée à la position: x=400.25, y=63.08333740234378, largeur=178.5, hauteur=126.3
+INFO:main:Fusion réussie pour la page 1
+INFO:main:Processus d'ajout de l'image de signature terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_signature_01820c8b-4bdd-4157-9da7-f27e90073094.jpg
+INFO:main:Début du processus d'ajout du QR code au PDF
+INFO:main:Mode de positionnement: current
+INFO:main:Position par défaut: x=50%, y=50%, taille=medium
+INFO:main:Pages où appliquer le QR code: [1]
+INFO:main:Positions individuelles définies pour les pages: ['1']
+INFO:main:Encodage de l'ID du document: 61d026d3-5b44-4026-9ebd-cec022a75333 dans le QR code
+INFO:main:Génération de l'image du QR code
+INFO:main:Sauvegarde du QR code dans: /tmp/temp_qr_74f3be35-8494-4959-9141-513c5341ad77.png
+INFO:main:Lecture du PDF original
+INFO:main:Traitement des 1 pages du PDF
+INFO:main:Application du QR code sur la page 1
+INFO:main:Dimensions de la page 1: 595.0 x 842.0 points
+INFO:main:Sauvegarde du PDF modifié avec le QR code
+INFO:main:Processus d'ajout du QR code terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_qr_74f3be35-8494-4959-9141-513c5341ad77.png
+INFO:main:QR code contenant l'ID 61d026d3-5b44-4026-9ebd-cec022a75333 ajouté au document à la position personnalisée
+[INFO] URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+INFO:django_api:URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[DEBUG] Fichier original: taille=131213 octets
+DEBUG:django_api:Fichier original: taille=131213 octets
+[DEBUG] Fichier signé: taille=191305 octets
+DEBUG:django_api:Fichier signé: taille=191305 octets
+[DEBUG] Propriétaire du document: 4
+DEBUG:django_api:Propriétaire du document: 4
+[DEBUG] Organisation du document: 2
+DEBUG:django_api:Organisation du document: 2
+[DEBUG] Rôle du signataire: signer
+DEBUG:django_api:Rôle du signataire: signer
+[DEBUG] Nom de l'organisation: CNCCE
+DEBUG:django_api:Nom de l'organisation: CNCCE
+[DEBUG] Nom du signataire: test
+DEBUG:django_api:Nom du signataire: test
+[DEBUG] Titre du document: pdf-exemple.pdf
+DEBUG:django_api:Titre du document: pdf-exemple.pdf
+[DEBUG] En-têtes: {}
+DEBUG:django_api:En-têtes: {}
+[DEBUG] Données: document_id=61d026d3-5b44-4026-9ebd-cec022a75333, hash=021d0a37e5d8b0e21d8259e1f322f13187ea0fe9f66c72f47ed65c0121b75cf1, taille signature=344, titre=pdf-exemple.pdf
+DEBUG:django_api:Données: document_id=61d026d3-5b44-4026-9ebd-cec022a75333, hash=021d0a37e5d8b0e21d8259e1f322f13187ea0fe9f66c72f47ed65c0121b75cf1, taille signature=344, titre=pdf-exemple.pdf
+[INFO] Envoi des données de signature à l'API Django pour le document 61d026d3-5b44-4026-9ebd-cec022a75333
+INFO:django_api:Envoi des données de signature à l'API Django pour le document 61d026d3-5b44-4026-9ebd-cec022a75333
+INFO:httpx:HTTP Request: POST https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025 "HTTP/1.1 201 Created"
+[DEBUG] Statut de la réponse: 201
+DEBUG:django_api:Statut de la réponse: 201
+[DEBUG] Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "61d026d3-5b44-4026-9ebd-cec022a75333"}
+DEBUG:django_api:Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "61d026d3-5b44-4026-9ebd-cec022a75333"}
+[DEBUG] En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Wed, 09 Jul 2025 14:09:44 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+DEBUG:django_api:En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Wed, 09 Jul 2025 14:09:44 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+[INFO] Données de signature stockées avec succès pour le document 61d026d3-5b44-4026-9ebd-cec022a75333
+INFO:django_api:Données de signature stockées avec succès pour le document 61d026d3-5b44-4026-9ebd-cec022a75333
+INFO:main:Données de signature stockées avec succès pour le document 61d026d3-5b44-4026-9ebd-cec022a75333
+INFO:main:Signature terminée en 1.57 secondes
+INFO:     192.168.5.49:0 - "POST /sign HTTP/1.0" 200 OK
+INFO:main:Nouvelle demande de signature pour le fichier acte.pdf
+INFO:signer:Clé privée chargée avec succès: <Name(C=CM,O=ANTIC CA,OU=GovRA,OU=ANTIC RA,OU=PKI Center,CN=ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310))>
+INFO:main:Identifiant généré pour le document: c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+INFO:main:Hash du document original calculé: 9e415fbb1785b287c3fe3d283628511f7f539b967075b892bc0a6192e9708e9f
+INFO:signer:Fichier signé avec succès, taille de la signature: 256 octets
+INFO:main:Document signé, taille de la signature: 256 octets
+INFO:main:Métadonnées parsées avec succès. Clés disponibles: ['qr_position', 'document_id', 'document_title', 'organization_id', 'organization_name', 'signer_role', 'signer_name', 'signature_position']
+INFO:main:Position du QR code extraite des métadonnées: {'x': 81.76470588235294, 'y': 84.60411742294202, 'size': 'medium', 'pages': 'all', 'positions': {'default': {'x': 81.76470588235294, 'y': 84.60411742294202}}, 'mode': 'all'}
+INFO:main:Données de signature trouvées. Clés: ['signature_size', 'positions']
+WARNING:main:Aucune image de signature trouvée dans signature_position
+WARNING:main:Aucune position de signature trouvée dans signature_position
+INFO:main:Taille de signature extraite des métadonnées: 50%
+INFO:main:ID d'organisation extrait des métadonnées: 2
+INFO:main:Nom d'organisation extrait des métadonnées: CNCCE
+INFO:main:Rôle du signataire extrait des métadonnées: signer
+INFO:main:Nom du signataire extrait des métadonnées: test
+INFO:main:Aucune image de signature à ajouter
+INFO:main:Début du processus d'ajout du QR code au PDF
+INFO:main:Mode de positionnement: all
+INFO:main:Position par défaut: x=81.76470588235294%, y=84.60411742294202%, taille=medium
+INFO:main:Pages où appliquer le QR code: all
+INFO:main:Positions individuelles définies pour les pages: ['default']
+INFO:main:Encodage de l'ID du document: c95c5fc4-79f3-412b-9eb8-ba7755354fd5 dans le QR code
+INFO:main:Génération de l'image du QR code
+INFO:main:Sauvegarde du QR code dans: /tmp/temp_qr_980b13a3-ad69-4054-abe4-2d95d0ce6fe5.png
+INFO:main:Lecture du PDF original
+INFO:main:Traitement des 1 pages du PDF
+INFO:main:Application du QR code sur la page 1
+INFO:main:Dimensions de la page 1: 595.5 x 842.25 points
+INFO:main:Sauvegarde du PDF modifié avec le QR code
+INFO:main:Processus d'ajout du QR code terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_qr_980b13a3-ad69-4054-abe4-2d95d0ce6fe5.png
+INFO:main:QR code contenant l'ID c95c5fc4-79f3-412b-9eb8-ba7755354fd5 ajouté au document à la position personnalisée
+[INFO] URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+INFO:django_api:URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[DEBUG] Fichier original: taille=435055 octets
+DEBUG:django_api:Fichier original: taille=435055 octets
+[DEBUG] Fichier signé: taille=490708 octets
+DEBUG:django_api:Fichier signé: taille=490708 octets
+[DEBUG] Propriétaire du document: 4
+DEBUG:django_api:Propriétaire du document: 4
+[DEBUG] Organisation du document: 2
+DEBUG:django_api:Organisation du document: 2
+[DEBUG] Rôle du signataire: signer
+DEBUG:django_api:Rôle du signataire: signer
+[DEBUG] Nom de l'organisation: CNCCE
+DEBUG:django_api:Nom de l'organisation: CNCCE
+[DEBUG] Nom du signataire: test
+DEBUG:django_api:Nom du signataire: test
+[DEBUG] Titre du document: acte.pdf
+DEBUG:django_api:Titre du document: acte.pdf
+[DEBUG] En-têtes: {}
+DEBUG:django_api:En-têtes: {}
+[DEBUG] Données: document_id=c95c5fc4-79f3-412b-9eb8-ba7755354fd5, hash=9e415fbb1785b287c3fe3d283628511f7f539b967075b892bc0a6192e9708e9f, taille signature=344, titre=acte.pdf
+DEBUG:django_api:Données: document_id=c95c5fc4-79f3-412b-9eb8-ba7755354fd5, hash=9e415fbb1785b287c3fe3d283628511f7f539b967075b892bc0a6192e9708e9f, taille signature=344, titre=acte.pdf
+[INFO] Envoi des données de signature à l'API Django pour le document c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+INFO:django_api:Envoi des données de signature à l'API Django pour le document c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+INFO:httpx:HTTP Request: POST https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025 "HTTP/1.1 201 Created"
+[DEBUG] Statut de la réponse: 201
+DEBUG:django_api:Statut de la réponse: 201
+[DEBUG] Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "c95c5fc4-79f3-412b-9eb8-ba7755354fd5"}
+DEBUG:django_api:Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "c95c5fc4-79f3-412b-9eb8-ba7755354fd5"}
+[DEBUG] En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Wed, 09 Jul 2025 14:10:39 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+DEBUG:django_api:En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Wed, 09 Jul 2025 14:10:39 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+[INFO] Données de signature stockées avec succès pour le document c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+INFO:django_api:Données de signature stockées avec succès pour le document c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+INFO:main:Données de signature stockées avec succès pour le document c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+INFO:main:Signature terminée en 1.06 secondes
+INFO:     192.168.5.49:0 - "POST /sign HTTP/1.0" 200 OK
