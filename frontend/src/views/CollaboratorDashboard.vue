@@ -352,9 +352,12 @@
               </div>
               <!-- Vue documents d'un template -->
               <div v-else>
-                <button class="btn-secondary" @click="selectedPendingTemplateId = null" style="margin-bottom:1rem;">
-                  ← Retour aux templates
-                </button>
+                <div class="template-docs-header">
+                  <h4 class="template-docs-title">{{ currentTemplateName }}</h4>
+                  <button class="btn-secondary" @click="selectedPendingTemplateId = null">
+                    Retour aux templates →
+                  </button>
+                </div>
                 <div v-for="doc in currentTemplateDocs" :key="doc.id" class="document-item">
                   <div class="doc-info">
                     <div class="action-icon warning">
@@ -1520,6 +1523,11 @@ watch(pendingTab, (newVal) => {
   if (newVal !== 'template') {
     selectedPendingTemplateId.value = null;
   }
+});
+
+const currentTemplateName = computed(() => {
+  const doc = currentTemplateDocs.value[0];
+  return doc ? (doc.templateName || `Template ${doc.templateId}`) : '';
 });
 
 </script>
@@ -4456,6 +4464,38 @@ watch(pendingTab, (newVal) => {
 }
 .btn-secondary:hover {
   background: rgba(0,0,0,0.08);
+}
+
+.template-docs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.template-docs-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, var(--accent-color, #06ffa5), #39ffb4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+}
+
+.template-docs-button {
+  background: var(--accent-color, #06ffa5);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.template-docs-button:hover {
+  background: var(--primary-color, #3a86ff);
 }
 
 </style> 
