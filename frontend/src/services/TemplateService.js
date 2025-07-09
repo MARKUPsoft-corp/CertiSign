@@ -7,15 +7,22 @@ class TemplateService {
   /**
    * Récupère tous les templates de signature de l'utilisateur
    */
-  async getTemplates() {
+  async getTemplates(organizationName) {
     const token = AuthService.getToken();
     
     try {
-      const response = await axios.get(`${API_URL}/signature-templates/templates/`, {
+      const config = {
         headers: {
           'Authorization': `Bearer ${token}`
-        }
-      });
+        },
+        params: {}
+      };
+
+      if (organizationName) {
+        config.params.organization_name = organizationName;
+      }
+
+      const response = await axios.get(`${API_URL}/signature-templates/templates/`, config);
       
       return response.data;
     } catch (error) {

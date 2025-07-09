@@ -649,44 +649,13 @@ const stats = {
 };
 
 // Documents brouillons
-const drafts = ref([
-  {
-    id: 1,
-    name: 'Contrat fournisseur - Brouillon.pdf',
-    createdAt: new Date('2024-01-14')
-  },
-  {
-    id: 2,
-    name: 'Accord de partenariat.pdf',
-    createdAt: new Date('2024-01-13')
-  }
-]);
+const drafts = ref([]);
 
 // Documents en attente
-const pendingDocuments = ref([
-  {
-    id: 1,
-    name: 'Rapport annuel 2023.pdf',
-    assignedTo: 'Directeur Général',
-    assignedAt: new Date('2024-01-13')
-  },
-  {
-    id: 2,
-    name: 'Budget prévisionnel.pdf',
-    assignedTo: 'Chef comptable',
-    assignedAt: new Date('2024-01-12')
-  }
-]);
+const pendingDocuments = ref([]);
 
 // Documents terminés
-const completedDocuments = ref([
-  {
-    id: 1,
-    name: 'Convention collective.pdf',
-    signedBy: 'RH Manager',
-    signedAt: new Date('2024-01-11')
-  }
-]);
+const completedDocuments = ref([]);
 
 // Positions des particules
 const particlePositions = Array.from({ length: 12 }, () => ({
@@ -1284,7 +1253,7 @@ async function loadTemplates() {
     console.log('Chargement des templates depuis l\'API...');
     
     // Appel à l'API pour récupérer les templates
-    const response = await TemplateService.getTemplates();
+    const response = await TemplateService.getTemplates(organizationName.value);
     console.log('Réponse API templates:', response);
     
     // Transformer les données de l'API pour le format local

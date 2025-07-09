@@ -41,17 +41,22 @@ class SignatureTemplateViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         """
-        Filtrer les templates pour ne montrer que ceux de l'utilisateur connecté
-        ou ceux de son organisation s'il en a une.
+        Filtrer les templates. Si un nom d'organisation est fourni, filtre par ce nom.
+        Sinon, retourne les templates de l'utilisateur connecté et de son organisation.
         """
         user = self.request.user
-        queryset = SignatureTemplate.objects.filter(user=user)
+        organization_name = self.request.query_params.get('organization_name', None)
+
+        if organization_name:
+            # Si un nom d'organisation est spécifié, ne retourner que les templates de cette organisation
+            return SignatureTemplate.objects.filter(organization_name=organization_name).order_by('-created_at')
         
-        # Si l'utilisateur a une organisation, ajouter les templates de l'organisation
+        # Comportement par défaut : templates personnels + templates de l'organisation de l'utilisateur
+        queryset = SignatureTemplate.objects.filter(user=user)
         if hasattr(user, 'profile') and user.profile.organization:
             org_templates = SignatureTemplate.objects.filter(
                 organization_name=user.profile.organization.name
-            ).exclude(user=user)  # Exclure ceux déjà inclus
+            ).exclude(user=user)
             queryset = queryset | org_templates
         
         return queryset.order_by('-created_at')

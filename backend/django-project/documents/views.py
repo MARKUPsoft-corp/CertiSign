@@ -461,16 +461,38 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
         Endpoint pour récupérer tous les documents préparés par le collaborateur connecté.
         """
         user = request.user
-        documents = DocumentQRPosition.objects.filter(collaborator=user)
         
-        # Organiser par statut
-        drafts = documents.filter(status='draft')
-        pending = documents.filter(status='pending_signature')
-        completed = documents.filter(status='signed')
+        # L'utilisateur doit être un collaborateur pour accéder à cette vue
+        if not user.is_collaborator:
+            return Response(
+                {"detail": "Accès non autorisé. Seuls les collaborateurs peuvent accéder à cette ressource."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+            
+        organization_id = request.query_params.get('organization_id')
+        if not organization_id:
+            return Response({"detail": "L'ID de l'organisation est requis."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            organization = Organization.objects.get(id=organization_id)
+        except Organization.DoesNotExist:
+            return Response({"detail": "Organisation non trouvée."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Vérifier si le collaborateur appartient bien à cette organisation
+        if user.organization != organization:
+            return Response({"detail": "Vous n'appartenez pas à cette organisation."}, status=status.HTTP_403_FORBIDDEN)
+            
+        # Filtrer les documents par l'ID de l'organisation
+        queryset = DocumentQRPosition.objects.filter(organization_id=organization_id)
+
+        # Répartir les documents par statut
+        drafts = queryset.filter(status='draft')
+        pending = queryset.filter(status='pending_signature')
+        completed = queryset.filter(status='signed')
         
         # Créer les statistiques
-        this_week = documents.filter(created_at__gte=datetime.now() - timedelta(days=7)).count()
-        this_month = documents.filter(created_at__gte=datetime.now() - timedelta(days=30)).count()
+        this_week = queryset.filter(created_at__gte=datetime.now() - timedelta(days=7)).count()
+        this_month = queryset.filter(created_at__gte=datetime.now() - timedelta(days=30)).count()
         
         # Sérialiser les données
         drafts_data = DocumentQRPositionSerializer(drafts, many=True, context={'request': request}).data

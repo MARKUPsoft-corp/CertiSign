@@ -335,3 +335,70 @@ INFO:main:Données de signature stockées avec succès pour le document a8b36800
 INFO:main:Signature terminée en 0.27 secondes
 INFO:     154.72.161.142:0 - "POST /sign HTTP/1.0" 200 OK
 INFO:main:Fichier temporaire supprimé: /tmp/Prions pour les femmes du monde_signed_20250709103651.pdf
+INFO:main:Nouvelle demande de signature pour le fichier birthCertificateBurundi.pdf
+INFO:signer:Clé privée chargée avec succès: <Name(C=CM,O=ANTIC CA,OU=GovRA,OU=ANTIC RA,OU=PKI Center,CN=TEST MTN CAMEROON(TEST EMPLOYE 19880808))>
+INFO:main:Identifiant généré pour le document: 42ce6979-057f-4500-95db-0999f67960f4
+INFO:main:Hash du document original calculé: 970ab2e8271f04ec37e243ce09042bf5568af8e801ca6e419e2492a59a1fb656
+INFO:signer:Fichier signé avec succès, taille de la signature: 256 octets
+INFO:main:Document signé, taille de la signature: 256 octets
+INFO:main:Métadonnées parsées avec succès. Clés disponibles: ['user_id', 'username', 'email', 'full_name', 'organization', 'organization_id', 'signer_role', 'jwt_token', 'qr_position', 'signature_position']
+INFO:main:Position du QR code extraite des métadonnées: {'x': 79.5798319327731, 'y': 79.18448187676292, 'size': 'medium', 'pages': 'all', 'positions': {'default': {'x': 79.5798319327731, 'y': 79.18448187676292}}, 'mode': 'all'}
+WARNING:main:Aucune section signature_position trouvée dans les métadonnées
+INFO:main:ID d'organisation extrait des métadonnées: 
+INFO:main:Rôle du signataire extrait des métadonnées: user
+INFO:main:Aucune image de signature à ajouter
+INFO:main:Début du processus d'ajout du QR code au PDF
+INFO:main:Mode de positionnement: all
+INFO:main:Position par défaut: x=79.5798319327731%, y=79.18448187676292%, taille=medium
+INFO:main:Pages où appliquer le QR code: all
+INFO:main:Positions individuelles définies pour les pages: ['default']
+INFO:main:Encodage de l'ID du document: 42ce6979-057f-4500-95db-0999f67960f4 dans le QR code
+INFO:main:Génération de l'image du QR code
+INFO:main:Sauvegarde du QR code dans: /tmp/temp_qr_ade6f13e-fe48-43d8-afeb-a5d190ccfaf7.png
+INFO:main:Lecture du PDF original
+INFO:main:Traitement des 4 pages du PDF
+INFO:main:Application du QR code sur la page 1
+INFO:main:Dimensions de la page 1: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 2
+INFO:main:Dimensions de la page 2: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 3
+INFO:main:Dimensions de la page 3: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 4
+INFO:main:Dimensions de la page 4: 612.0 x 792.0 points
+INFO:main:Sauvegarde du PDF modifié avec le QR code
+INFO:main:Processus d'ajout du QR code terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_qr_ade6f13e-fe48-43d8-afeb-a5d190ccfaf7.png
+INFO:main:QR code contenant l'ID 42ce6979-057f-4500-95db-0999f67960f4 ajouté au document à la position personnalisée
+[INFO] URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+INFO:django_api:URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[DEBUG] Fichier original: taille=181297 octets
+DEBUG:django_api:Fichier original: taille=181297 octets
+[DEBUG] Fichier signé: taille=286548 octets
+DEBUG:django_api:Fichier signé: taille=286548 octets
+[DEBUG] Propriétaire du document: 4
+DEBUG:django_api:Propriétaire du document: 4
+[DEBUG] Rôle du signataire: user
+DEBUG:django_api:Rôle du signataire: user
+[DEBUG] Titre du document: birthCertificateBurundi.pdf
+DEBUG:django_api:Titre du document: birthCertificateBurundi.pdf
+[DEBUG] En-têtes: {}
+DEBUG:django_api:En-têtes: {}
+[DEBUG] Données: document_id=42ce6979-057f-4500-95db-0999f67960f4, hash=970ab2e8271f04ec37e243ce09042bf5568af8e801ca6e419e2492a59a1fb656, taille signature=344, titre=birthCertificateBurundi.pdf
+DEBUG:django_api:Données: document_id=42ce6979-057f-4500-95db-0999f67960f4, hash=970ab2e8271f04ec37e243ce09042bf5568af8e801ca6e419e2492a59a1fb656, taille signature=344, titre=birthCertificateBurundi.pdf
+[INFO] Envoi des données de signature à l'API Django pour le document 42ce6979-057f-4500-95db-0999f67960f4
+INFO:django_api:Envoi des données de signature à l'API Django pour le document 42ce6979-057f-4500-95db-0999f67960f4
+INFO:httpx:HTTP Request: POST https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025 "HTTP/1.1 201 Created"
+[DEBUG] Statut de la réponse: 201
+DEBUG:django_api:Statut de la réponse: 201
+[DEBUG] Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "42ce6979-057f-4500-95db-0999f67960f4"}
+DEBUG:django_api:Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "42ce6979-057f-4500-95db-0999f67960f4"}
+[DEBUG] En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Wed, 09 Jul 2025 12:02:41 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+DEBUG:django_api:En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Wed, 09 Jul 2025 12:02:41 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+[INFO] Données de signature stockées avec succès pour le document 42ce6979-057f-4500-95db-0999f67960f4
+INFO:django_api:Données de signature stockées avec succès pour le document 42ce6979-057f-4500-95db-0999f67960f4
+INFO:main:Données de signature stockées avec succès pour le document 42ce6979-057f-4500-95db-0999f67960f4
+INFO:main:Signature terminée en 0.37 secondes
+INFO:     192.168.5.49:0 - "POST /sign HTTP/1.0" 200 OK
+INFO:main:Fichier temporaire supprimé: /tmp/birthCertificateBurundi_signed_20250709130241.pdf

@@ -371,7 +371,7 @@
         <div class="stats-container">
           <div class="stat-card">
             <div class="stat-content">
-              <div class="stat-value">5</div>
+              <div class="stat-value">{{ statsThisWeek }}</div>
               <div class="stat-label">Cette semaine</div>
             </div>
             <div class="stat-icon primary">
@@ -381,7 +381,7 @@
 
           <div class="stat-card">
             <div class="stat-content">
-              <div class="stat-value">18</div>
+              <div class="stat-value">{{ statsThisMonth }}</div>
               <div class="stat-label">Ce mois-ci</div>
             </div>
             <div class="stat-icon accent">
@@ -519,6 +519,7 @@ import SignWithTemplateMultiple from '@/views/SignWithTemplateMultiple.vue'; // 
 import SignSimple from '@/views/SignSimple.vue'; // Importer le composant de signature rapide
 // VerifyDocument a été supprimé
 import AuthService from '@/services/AuthService';
+import DocumentService from '@/services/DocumentService.js';
 import { initScrollAnimations } from '@/assets/js/scrollAnimations.js';
 import QrPositioner from '@/components/QrPositioner.vue';
 
@@ -724,6 +725,7 @@ const refreshUserData = async () => {
     if (isValid) {
       currentUser.value = AuthService.getCurrentUser();
       console.log('Données utilisateur actualisées avec succès');
+      await fetchUserDocuments();
     } else {
       // Si le token n'est plus valide, rediriger vers la connexion
       router.push('/login');
@@ -758,7 +760,8 @@ onMounted(async () => {
       
       // Charger toutes les données en parallèle
       await Promise.all([
-        loadTemplates()
+        loadTemplates(),
+        fetchUserDocuments()
       ]);
     } else {
       // Rediriger vers la page de connexion si le token n'est pas valide
@@ -1095,6 +1098,32 @@ async function saveTemplate() {
     } finally {
       isSaving.value = false;
     }
+  }
+}
+
+const statsThisWeek = ref(0);
+const statsThisMonth = ref(0);
+
+async function fetchUserDocuments() {
+  try {
+    const response = await DocumentService.getDocuments();
+    const docs = (response && response.data) ? response.data : [];
+    const now = new Date();
+    let weekCount = 0;
+    let monthCount = 0;
+    docs.forEach(doc => {
+      const dateStr = doc.created_at || doc.created_at_display;
+      if (!dateStr) return;
+      const createdAt = new Date(dateStr);
+      if (isNaN(createdAt)) return;
+      const diffDays = (now - createdAt) / (1000 * 60 * 60 * 24);
+      if (diffDays <= 7) weekCount += 1;
+      if (diffDays <= 30) monthCount += 1;
+    });
+    statsThisWeek.value = weekCount;
+    statsThisMonth.value = monthCount;
+  } catch (error) {
+    console.error('Erreur lors de la récupération des documents pour les statistiques:', error);
   }
 }
 </script>
@@ -2174,7 +2203,7 @@ async function saveTemplate() {
 
 .templates-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 20px;
   margin-top: 20px;
 }
@@ -2530,7 +2559,7 @@ async function saveTemplate() {
 /* Template Cards Enhanced Styles */
 .templates-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 25px;
   margin-top: 30px;
 }
@@ -2810,7 +2839,7 @@ async function saveTemplate() {
 /* Templates Grid */
 .templates-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 25px;
   margin-top: 30px;
 }
