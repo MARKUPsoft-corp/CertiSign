@@ -692,6 +692,7 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
             
             # Récupérer les paramètres
             document_file = request.FILES.get('document_file')
+            generated_pdf_file = request.FILES.get('generated_pdf')  # Nouveau: PDF pré-généré avec QR/signatures
             template_id = request.data.get('template_id')
             template_settings = request.data.get('template_settings')
             doc_status = request.data.get('status', 'pending_signature')
@@ -744,6 +745,7 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
             # Créer le document en copiant les paramètres du template
             document_data = {
                 'document_file': document_file,
+                'generated_pdf': generated_pdf_file,  # Peut être None si non fourni
                 'document_name': document_file.name,
                 'qr_x_position': template.qr_positions.get('default', {}).get('x', 50) if template.qr_positions else 50,
                 'qr_y_position': template.qr_positions.get('default', {}).get('y', 50) if template.qr_positions else 50,

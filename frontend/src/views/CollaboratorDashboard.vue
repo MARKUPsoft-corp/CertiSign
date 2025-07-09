@@ -285,36 +285,107 @@
             </button>
           </div>
           
+          <!-- Onglets pour séparer les documents en attente -->
+          <div class="pending-tabs">
+            <button class="tab-btn" :class="{ active: pendingTab === 'quick' }" @click="pendingTab = 'quick'">
+              Préparation directe
+            </button>
+            <button class="tab-btn" :class="{ active: pendingTab === 'template' }" @click="pendingTab = 'template'">
+              Avec template
+            </button>
+          </div>
+          
           <div class="documents-list">
-            <div v-for="doc in pendingDocuments" :key="doc.id" class="document-item">
-              <div class="doc-info">
-                <div class="action-icon warning">
-                  <i class="bi bi-file-earmark-pdf"></i>
+            <!-- Affichage pour l'onglet préparation directe -->
+            <template v-if="pendingTab === 'quick'">
+              <div v-for="doc in pendingQuickDocuments" :key="doc.id" class="document-item">
+                <div class="doc-info">
+                  <div class="action-icon warning">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                  </div>
+                  <div class="doc-details">
+                    <span class="doc-name">{{ doc.name }}</span>
+                    <span class="doc-meta">Assigné à {{ doc.assignedTo }} le {{ formatDate(doc.assignedAt) }}</span>
+                  </div>
                 </div>
-                <div class="doc-details">
-                  <span class="doc-name">{{ doc.name }}</span>
-                  <span class="doc-meta">Assigné à {{ doc.assignedTo }} le {{ formatDate(doc.assignedAt) }}</span>
+                <div class="doc-status">
+                  <div class="status-info">
+                    <span class="time-elapsed">{{ getTimeElapsed(doc.assignedAt) }}</span>
+                    <span class="status-badge pending">En attente</span>
+                  </div>
+                  <div class="doc-actions">
+                    <button class="btn-icon" title="Voir détails" @click="viewPendingDocument(doc)">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn-icon danger" title="Supprimer" @click="deletePendingDocument(doc)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div class="doc-status">
-                <div class="status-info">
-                  <span class="time-elapsed">{{ getTimeElapsed(doc.assignedAt) }}</span>
-                  <span class="status-badge pending">En attente</span>
+              <div v-if="pendingQuickDocuments.length === 0" class="empty-state">
+                <i class="bi bi-hourglass-split"></i>
+                <p>Aucun document en attente</p>
+              </div>
+            </template>
+
+            <!-- Affichage pour l'onglet template -->
+            <template v-else>
+              <!-- Vue cartes de template -->
+              <div v-if="!selectedPendingTemplateId" class="template-cards-grid">
+                <div v-for="tpl in pendingTemplateCards" :key="tpl.templateId" class="template-card-pending">
+                  <h4 class="template-card-title">{{ tpl.templateName }}</h4>
+                  <p class="template-card-count">{{ tpl.documents.length }} document(s) en attente</p>
+                  <div class="template-card-actions">
+                    <button class="btn-icon" @click="previewTemplateById(tpl.templateId)" title="Aperçu template">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn-icon primary" @click="selectedPendingTemplateId = tpl.templateId" title="Voir documents">
+                      <i class="bi bi-list"></i>
+                    </button>
+                  </div>
                 </div>
-                <div class="doc-actions">
-                  <button class="btn-icon" title="Voir détails" @click="viewPendingDocument(doc)">
-                    <i class="bi bi-eye"></i>
-                  </button>
-                  <button class="btn-icon danger" title="Supprimer" @click="deletePendingDocument(doc)">
-                    <i class="bi bi-trash"></i>
-                  </button>
+                <div v-if="pendingTemplateCards.length === 0" class="empty-state">
+                  <i class="bi bi-hourglass-split"></i>
+                  <p>Aucun document en attente via template</p>
                 </div>
               </div>
-            </div>
-            <div v-if="pendingDocuments.length === 0" class="empty-state">
-              <i class="bi bi-hourglass-split"></i>
-              <p>Aucun document en attente</p>
-            </div>
+              <!-- Vue documents d'un template -->
+              <div v-else>
+                <button class="btn-secondary" @click="selectedPendingTemplateId = null" style="margin-bottom:1rem;">
+                  ← Retour aux templates
+                </button>
+                <div v-for="doc in currentTemplateDocs" :key="doc.id" class="document-item">
+                  <div class="doc-info">
+                    <div class="action-icon warning">
+                      <i class="bi bi-file-earmark-pdf"></i>
+                    </div>
+                    <div class="doc-details">
+                      <span class="doc-name">{{ doc.name }}</span>
+                      <span class="doc-meta">Assigné à {{ doc.assignedTo }} le {{ formatDate(doc.assignedAt) }}</span>
+                    </div>
+                  </div>
+                  <div class="doc-status">
+                    <div class="status-info">
+                      <span class="time-elapsed">{{ getTimeElapsed(doc.assignedAt) }}</span>
+                      <span class="status-badge pending">En attente</span>
+                    </div>
+                    <div class="doc-actions">
+                      <button class="btn-icon" title="Voir détails" @click="viewPendingDocument(doc)">
+                        <i class="bi bi-eye"></i>
+                      </button>
+                      <button class="btn-icon danger" title="Supprimer" @click="deletePendingDocument(doc)">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div v-if="currentTemplateDocs.length === 0" class="empty-state">
+                  <i class="bi bi-hourglass-split"></i>
+                  <p>Aucun document pour ce template</p>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
 
@@ -581,7 +652,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import AuthService from '@/services/AuthService';
@@ -791,7 +862,10 @@ async function fetchDocuments() {
           name: doc.document_name,
           assignedAt: new Date(doc.created_at),
           assignedTo: doc.collaborator_username || 'En attente de signature',
-          status: 'pending'
+          status: 'pending',
+          isTemplate: !!(doc.metadata && doc.metadata.template_used),
+          templateId: doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_id : null,
+          templateName: doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_name : null
         }));
       }
       
@@ -1404,6 +1478,49 @@ function openCreateTemplateFromPrepare() {
   // Ouvrir la création de template
   openNewTemplateModal();
 }
+
+const pendingTab = ref('quick');
+const pendingQuickDocuments = computed(() => pendingDocuments.value.filter(doc => !doc.isTemplate));
+const pendingTemplateDocuments = computed(() => pendingDocuments.value.filter(doc => doc.isTemplate));
+
+const selectedPendingTemplateId = ref(null);
+
+const pendingTemplateCards = computed(() => {
+  const map = {};
+  pendingTemplateDocuments.value.forEach(doc => {
+    if (!doc.templateId) return;
+    if (!map[doc.templateId]) {
+      map[doc.templateId] = {
+        templateId: doc.templateId,
+        templateName: doc.templateName || `Template ${doc.templateId}`,
+        documents: []
+      };
+    }
+    map[doc.templateId].documents.push(doc);
+  });
+  return Object.values(map);
+});
+
+const currentTemplateDocs = computed(() => {
+  if (!selectedPendingTemplateId.value) return [];
+  return pendingTemplateDocuments.value.filter(doc => doc.templateId === selectedPendingTemplateId.value);
+});
+
+// Fonction utilitaire : apercevoir un template à partir de son ID
+function previewTemplateById(tplId) {
+  const tpl = templates.value.find(t => t.id === tplId);
+  if (tpl) {
+    previewTemplate(tpl);
+  } else {
+    console.warn("Template introuvable pour l'ID", tplId);
+  }
+}
+
+watch(pendingTab, (newVal) => {
+  if (newVal !== 'template') {
+    selectedPendingTemplateId.value = null;
+  }
+});
 
 </script>
 
@@ -4274,6 +4391,71 @@ function openCreateTemplateFromPrepare() {
 :global(.dark-theme) .form-control:focus {
   border-color: var(--primary-color);
   background: rgba(30, 41, 59, 0.9);
+}
+
+.pending-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.pending-tabs .tab-btn {
+  background: rgba(6, 255, 165, 0.1);
+  border: 1px solid rgba(6, 255, 165, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-color, #333);
+}
+.pending-tabs .tab-btn.active,
+.pending-tabs .tab-btn:hover {
+  background: var(--accent-color, #06ffa5);
+  color: #fff;
+}
+
+/* Cartes template en attente */
+.template-cards-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.template-card-pending {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.template-card-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.template-card-count {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+}
+.template-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.btn-secondary {
+  background: rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.1);
+  color: var(--text-color, #333);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.btn-secondary:hover {
+  background: rgba(0,0,0,0.08);
 }
 
 </style> 
