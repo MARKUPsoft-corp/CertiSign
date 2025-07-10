@@ -2613,19 +2613,22 @@ watch(selectedPendingTemplateId, () => {
   align-items: center;
   justify-content: center;
   font-size: 1.25rem;
-  color: white;
 }
 
+/* Même palette que CollaboratorDashboard */
 .stat-icon.success {
-  background: linear-gradient(45deg, #28a745, #5bc85a);
+  background: rgba(40, 167, 69, 0.1);
+  color: #28a745;
 }
 
 .stat-icon.primary {
-  background: linear-gradient(45deg, var(--primary-color, #3a86ff), #5a95ff);
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--primary-color, #3a86ff);
 }
 
 .stat-icon.warning {
-  background: linear-gradient(45deg, #ff9500, #ffb347);
+  background: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
 }
 
 /* Section de contenu */
