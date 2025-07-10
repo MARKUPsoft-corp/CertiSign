@@ -298,7 +298,19 @@
           <div class="documents-list">
             <!-- Affichage pour l'onglet préparation directe -->
             <template v-if="pendingTab === 'quick'">
-              <div v-for="doc in pendingQuickDocuments" :key="doc.id" class="document-item">
+              <!-- Barre de recherche pour les documents quick -->
+              <div class="search-container">
+                <input 
+                  type="text" 
+                  v-model="searchQueryQuick" 
+                  class="search-input" 
+                  placeholder="Rechercher un document..."
+                  @input="filterQuickDocuments"
+                >
+                <i class="bi bi-search search-icon"></i>
+              </div>
+
+              <div v-for="doc in paginatedQuickDocuments" :key="doc.id" class="document-item">
                 <div class="doc-info">
                   <div class="action-icon warning">
                     <i class="bi bi-file-earmark-pdf"></i>
@@ -323,9 +335,78 @@
                   </div>
                 </div>
               </div>
-              <div v-if="pendingQuickDocuments.length === 0" class="empty-state">
+              
+              <!-- Pagination pour quick documents -->
+              <div v-if="totalPagesQuick > 1" class="pagination-container">
+                <div class="pagination-info">
+                  <span>Page {{ currentPageQuick }} sur {{ totalPagesQuick }}</span>
+                  <span class="documents-count">({{ filteredQuickDocuments.length }} documents au total)</span>
+                </div>
+                
+                <div class="pagination-controls">
+                  <!-- Bouton Précédent -->
+                  <button 
+                    class="pagination-btn prev" 
+                    :disabled="currentPageQuick === 1"
+                    @click="previousPageQuick"
+                    title="Page précédente"
+                  >
+                    <i class="bi bi-chevron-left"></i>
+                    Précédent
+                  </button>
+                  
+                  <!-- Première page si pas visible -->
+                  <button 
+                    v-if="visiblePagesQuick[0] > 1"
+                    class="pagination-btn page"
+                    @click="goToPageQuick(1)"
+                  >
+                    1
+                  </button>
+                  
+                  <!-- Points de suspension si nécessaire -->
+                  <span v-if="visiblePagesQuick[0] > 2" class="pagination-dots">...</span>
+                  
+                  <!-- Pages visibles -->
+                  <button 
+                    v-for="page in visiblePagesQuick"
+                    :key="page"
+                    class="pagination-btn page"
+                    :class="{ 'active': page === currentPageQuick }"
+                    @click="goToPageQuick(page)"
+                  >
+                    {{ page }}
+                  </button>
+                  
+                  <!-- Points de suspension si nécessaire -->
+                  <span v-if="visiblePagesQuick[visiblePagesQuick.length - 1] < totalPagesQuick - 1" class="pagination-dots">...</span>
+                  
+                  <!-- Dernière page si pas visible -->
+                  <button 
+                    v-if="visiblePagesQuick[visiblePagesQuick.length - 1] < totalPagesQuick"
+                    class="pagination-btn page"
+                    @click="goToPageQuick(totalPagesQuick)"
+                  >
+                    {{ totalPagesQuick }}
+                  </button>
+                  
+                  <!-- Bouton Suivant -->
+                  <button 
+                    class="pagination-btn next" 
+                    :disabled="currentPageQuick === totalPagesQuick"
+                    @click="nextPageQuick"
+                    title="Page suivante"
+                  >
+                    Suivant
+                    <i class="bi bi-chevron-right"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div v-if="filteredQuickDocuments.length === 0" class="empty-state">
                 <i class="bi bi-hourglass-split"></i>
-                <p>Aucun document en attente</p>
+                <p v-if="searchQueryQuick">Aucun résultat trouvé pour "{{ searchQueryQuick }}"</p>
+                <p v-else>Aucun document en attente</p>
               </div>
             </template>
 
@@ -358,7 +439,20 @@
                     Retour aux templates →
                   </button>
                 </div>
-                <div v-for="doc in currentTemplateDocs" :key="doc.id" class="document-item">
+                
+                <!-- Barre de recherche pour les documents template -->
+                <div class="search-container">
+                  <input 
+                    type="text" 
+                    v-model="searchQueryTemplate" 
+                    class="search-input" 
+                    placeholder="Rechercher un document..."
+                    @input="filterTemplateDocuments"
+                  >
+                  <i class="bi bi-search search-icon"></i>
+                </div>
+
+                <div v-for="doc in paginatedTemplateDocuments" :key="doc.id" class="document-item">
                   <div class="doc-info">
                     <div class="action-icon warning">
                       <i class="bi bi-file-earmark-pdf"></i>
@@ -383,9 +477,78 @@
                     </div>
                   </div>
                 </div>
-                <div v-if="currentTemplateDocs.length === 0" class="empty-state">
+                
+                <!-- Pagination pour template documents -->
+                <div v-if="totalPagesTemplate > 1" class="pagination-container">
+                  <div class="pagination-info">
+                    <span>Page {{ currentPageTemplate }} sur {{ totalPagesTemplate }}</span>
+                    <span class="documents-count">({{ filteredTemplateDocuments.length }} documents au total)</span>
+                  </div>
+                  
+                  <div class="pagination-controls">
+                    <!-- Bouton Précédent -->
+                    <button 
+                      class="pagination-btn prev" 
+                      :disabled="currentPageTemplate === 1"
+                      @click="previousPageTemplate"
+                      title="Page précédente"
+                    >
+                      <i class="bi bi-chevron-left"></i>
+                      Précédent
+                    </button>
+                    
+                    <!-- Première page si pas visible -->
+                    <button 
+                      v-if="visiblePagesTemplate[0] > 1"
+                      class="pagination-btn page"
+                      @click="goToPageTemplate(1)"
+                    >
+                      1
+                    </button>
+                    
+                    <!-- Points de suspension si nécessaire -->
+                    <span v-if="visiblePagesTemplate[0] > 2" class="pagination-dots">...</span>
+                    
+                    <!-- Pages visibles -->
+                    <button 
+                      v-for="page in visiblePagesTemplate"
+                      :key="page"
+                      class="pagination-btn page"
+                      :class="{ 'active': page === currentPageTemplate }"
+                      @click="goToPageTemplate(page)"
+                    >
+                      {{ page }}
+                    </button>
+                    
+                    <!-- Points de suspension si nécessaire -->
+                    <span v-if="visiblePagesTemplate[visiblePagesTemplate.length - 1] < totalPagesTemplate - 1" class="pagination-dots">...</span>
+                    
+                    <!-- Dernière page si pas visible -->
+                    <button 
+                      v-if="visiblePagesTemplate[visiblePagesTemplate.length - 1] < totalPagesTemplate"
+                      class="pagination-btn page"
+                      @click="goToPageTemplate(totalPagesTemplate)"
+                    >
+                      {{ totalPagesTemplate }}
+                    </button>
+                    
+                    <!-- Bouton Suivant -->
+                    <button 
+                      class="pagination-btn next" 
+                      :disabled="currentPageTemplate === totalPagesTemplate"
+                      @click="nextPageTemplate"
+                      title="Page suivante"
+                    >
+                      Suivant
+                      <i class="bi bi-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div v-if="filteredTemplateDocuments.length === 0" class="empty-state">
                   <i class="bi bi-hourglass-split"></i>
-                  <p>Aucun document pour ce template</p>
+                  <p v-if="searchQueryTemplate">Aucun résultat trouvé pour "{{ searchQueryTemplate }}"</p>
+                  <p v-else>Aucun document pour ce template</p>
                 </div>
               </div>
             </template>
@@ -1528,6 +1691,175 @@ watch(pendingTab, (newVal) => {
 const currentTemplateName = computed(() => {
   const doc = currentTemplateDocs.value[0];
   return doc ? (doc.templateName || `Template ${doc.templateId}`) : '';
+});
+
+// Variables de pagination et recherche pour les documents en attente
+const searchQueryQuick = ref('');
+const searchQueryTemplate = ref('');
+const currentPageQuick = ref(1);
+const currentPageTemplate = ref(1);
+const itemsPerPage = 5; // Maximum 5 documents par page comme demandé
+
+// Documents filtrés pour l'onglet quick
+const filteredQuickDocuments = ref([]);
+
+// Documents filtrés pour l'onglet template
+const filteredTemplateDocuments = ref([]);
+
+// Propriétés calculées pour la pagination - Onglet Quick
+const paginatedQuickDocuments = computed(() => {
+  const start = (currentPageQuick.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredQuickDocuments.value.slice(start, end);
+});
+
+const totalPagesQuick = computed(() => {
+  return Math.ceil(filteredQuickDocuments.value.length / itemsPerPage);
+});
+
+const visiblePagesQuick = computed(() => {
+  const pages = [];
+  const total = totalPagesQuick.value;
+  const current = currentPageQuick.value;
+  
+  // Afficher au maximum 5 pages à la fois
+  let start = Math.max(1, current - 2);
+  let end = Math.min(total, current + 2);
+  
+  // Ajuster si on est au début ou à la fin
+  if (end - start < 4) {
+    if (start === 1) {
+      end = Math.min(total, start + 4);
+    } else if (end === total) {
+      start = Math.max(1, end - 4);
+    }
+  }
+  
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  
+  return pages;
+});
+
+// Propriétés calculées pour la pagination - Onglet Template
+const paginatedTemplateDocuments = computed(() => {
+  const start = (currentPageTemplate.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredTemplateDocuments.value.slice(start, end);
+});
+
+const totalPagesTemplate = computed(() => {
+  return Math.ceil(filteredTemplateDocuments.value.length / itemsPerPage);
+});
+
+const visiblePagesTemplate = computed(() => {
+  const pages = [];
+  const total = totalPagesTemplate.value;
+  const current = currentPageTemplate.value;
+  
+  // Afficher au maximum 5 pages à la fois
+  let start = Math.max(1, current - 2);
+  let end = Math.min(total, current + 2);
+  
+  // Ajuster si on est au début ou à la fin
+  if (end - start < 4) {
+    if (start === 1) {
+      end = Math.min(total, start + 4);
+    } else if (end === total) {
+      start = Math.max(1, end - 4);
+    }
+  }
+  
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  
+  return pages;
+});
+
+// Fonctions de filtrage
+function filterQuickDocuments() {
+  const query = searchQueryQuick.value.toLowerCase();
+  
+  filteredQuickDocuments.value = pendingQuickDocuments.value.filter(doc => {
+    return doc.name.toLowerCase().includes(query) ||
+           (doc.assignedTo && doc.assignedTo.toLowerCase().includes(query));
+  });
+  
+  // Réinitialiser à la première page après un filtrage
+  currentPageQuick.value = 1;
+}
+
+function filterTemplateDocuments() {
+  const query = searchQueryTemplate.value.toLowerCase();
+  
+  filteredTemplateDocuments.value = currentTemplateDocs.value.filter(doc => {
+    return doc.name.toLowerCase().includes(query) ||
+           (doc.assignedTo && doc.assignedTo.toLowerCase().includes(query));
+  });
+  
+  // Réinitialiser à la première page après un filtrage
+  currentPageTemplate.value = 1;
+}
+
+// Fonctions de pagination - Onglet Quick
+function goToPageQuick(page) {
+  if (page >= 1 && page <= totalPagesQuick.value) {
+    currentPageQuick.value = page;
+  }
+}
+
+function previousPageQuick() {
+  if (currentPageQuick.value > 1) {
+    currentPageQuick.value--;
+  }
+}
+
+function nextPageQuick() {
+  if (currentPageQuick.value < totalPagesQuick.value) {
+    currentPageQuick.value++;
+  }
+}
+
+// Fonctions de pagination - Onglet Template
+function goToPageTemplate(page) {
+  if (page >= 1 && page <= totalPagesTemplate.value) {
+    currentPageTemplate.value = page;
+  }
+}
+
+function previousPageTemplate() {
+  if (currentPageTemplate.value > 1) {
+    currentPageTemplate.value--;
+  }
+}
+
+function nextPageTemplate() {
+  if (currentPageTemplate.value < totalPagesTemplate.value) {
+    currentPageTemplate.value++;
+  }
+}
+
+// Watcher pour mettre à jour les documents filtrés quand les données changent
+watch(pendingQuickDocuments, () => {
+  filterQuickDocuments();
+}, { immediate: true });
+
+watch(currentTemplateDocs, () => {
+  filterTemplateDocuments();
+}, { immediate: true });
+
+// Watcher pour réinitialiser la pagination quand on change d'onglet
+watch(pendingTab, () => {
+  currentPageQuick.value = 1;
+  currentPageTemplate.value = 1;
+});
+
+// Watcher pour réinitialiser la recherche template quand on change de template
+watch(selectedPendingTemplateId, () => {
+  searchQueryTemplate.value = '';
+  currentPageTemplate.value = 1;
 });
 
 </script>
@@ -4498,4 +4830,193 @@ const currentTemplateName = computed(() => {
   background: var(--primary-color, #3a86ff);
 }
 
+/* Styles pour la pagination et recherche */
+.search-container {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.search-input {
+  padding: 10px 15px 10px 40px;
+  border-radius: 25px;
+  border: 1px solid var(--border-color, #ddd);
+  background-color: var(--input-bg, white);
+  color: var(--text-color, #333);
+  min-width: 100%;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-color, #06ffa5);
+  box-shadow: 0 0 0 2px rgba(6, 255, 165, 0.2);
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary, #6c757d);
+}
+
+/* Styles pour la pagination */
+.pagination-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: 40px;
+  padding: 30px;
+  background-color: var(--card-bg, white);
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.pagination-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+  color: var(--text-color, #333);
+}
+
+.pagination-info span:first-child {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.documents-count {
+  font-size: 14px;
+  color: var(--text-secondary, #6c757d);
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  border: 1px solid var(--border-color, #ddd);
+  background-color: var(--card-bg, white);
+  color: var(--text-color, #333);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 44px;
+  min-height: 44px;
+  text-decoration: none;
+  gap: 6px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: var(--accent-color, #06ffa5);
+  color: white;
+  border-color: var(--accent-color, #06ffa5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(6, 255, 165, 0.3);
+}
+
+.pagination-btn.active {
+  background-color: var(--accent-color, #06ffa5);
+  color: white;
+  border-color: var(--accent-color, #06ffa5);
+  font-weight: 600;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--light-bg, #f8f9fa);
+  color: var(--text-secondary, #6c757d);
+}
+
+.pagination-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+  background-color: var(--light-bg, #f8f9fa);
+  color: var(--text-secondary, #6c757d);
+  border-color: var(--border-color, #ddd);
+}
+
+.pagination-btn.prev,
+.pagination-btn.next {
+  padding: 10px 20px;
+  font-weight: 600;
+}
+
+.pagination-btn.page {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.pagination-dots {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  color: var(--text-secondary, #6c757d);
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Responsive pour la pagination */
+@media (max-width: 768px) {
+  .pagination-container {
+    margin-top: 30px;
+    padding: 20px;
+  }
+  
+  .pagination-controls {
+    gap: 4px;
+  }
+  
+  .pagination-btn {
+    min-width: 40px;
+    min-height: 40px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  
+  .pagination-btn.page {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .pagination-btn.prev,
+  .pagination-btn.next {
+    padding: 8px 16px;
+  }
+  
+  .search-input {
+    min-width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-info {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .pagination-controls {
+    flex-wrap: wrap;
+  }
+  
+  .search-input {
+    min-width: 200px;
+  }
+}
 </style> 
