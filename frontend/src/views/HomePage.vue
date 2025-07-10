@@ -57,7 +57,7 @@
       <section class="hero-section">
         <div class="hero-content">
           <h1 class="hero-title">
-            <span class="highlight-text">Sécurisez vos documents TEST</span>
+            <span class="highlight-text">Sécurisez vos documents</span>
             <br>avec des signatures électroniques
           </h1>
           <p class="hero-description">

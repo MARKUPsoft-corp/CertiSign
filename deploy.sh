@@ -68,59 +68,28 @@ else
     exit 1
 fi
 
-# Vérifier s'il y a des changements dans les dépendances
-log "${YELLOW}📦 Vérification des dépendances...${NC}"
-
-# Backend - vérifier requirements.txt
-if [ -f "backend/django-project/requirements.txt" ]; then
-    log "${YELLOW}🔧 Mise à jour des dépendances Python...${NC}"
-    cd backend/django-project
-    if [ -d "../../venv" ]; then
-        source ../../venv/bin/activate
-        pip install -r requirements.txt
-        deactivate
-    fi
-    cd "$PROJECT_DIR"
-fi
-
-# Frontend - vérifier package.json
-if [ -f "frontend/package.json" ]; then
-    log "${YELLOW}🔧 Mise à jour des dépendances Node.js...${NC}"
-    cd frontend
-    if command -v npm &> /dev/null; then
-        npm install
-        npm run build
-    fi
-    cd "$PROJECT_DIR"
-fi
-
-# Migrations Django si nécessaire
+# Migrations Django si nécessaire (uniquement)
 if [ -f "backend/django-project/manage.py" ]; then
     log "${YELLOW}🗃️  Application des migrations Django...${NC}"
     cd backend/django-project
     if [ -d "../../.venv" ]; then
         source ../../.venv/bin/activate
-        python3 manage.py migrate
+        python3 manage.py migrate --noinput
         deactivate
     fi
     cd "$PROJECT_DIR"
 fi
 
-# Redémarrer les services
+# Redémarrer les services avec votre script existant
 log "${YELLOW}🚀 Redémarrage des services CertiSign...${NC}"
 if [ -f "./start_certisign_services.sh" ]; then
     chmod +x ./start_certisign_services.sh
+    log "${GREEN}📋 Exécution du script de démarrage existant...${NC}"
     ./start_certisign_services.sh
-    sleep 10  # Attendre que les services démarrent
-    log "${GREEN}✅ Services redémarrés${NC}"
+    log "${GREEN}✅ Services redémarrés via script existant${NC}"
 else
-    log "${YELLOW}⚠️  Script de démarrage non trouvé${NC}"
-fi
-
-# Vérification du statut
-log "${YELLOW}🔍 Vérification du statut des services...${NC}"
-if command -v systemctl &> /dev/null; then
-    systemctl --user status certisign* 2>/dev/null || true
+    log "${RED}❌ Script de démarrage non trouvé: ./start_certisign_services.sh${NC}"
+    exit 1
 fi
 
 log "${GREEN}🎉 Déploiement terminé avec succès !${NC}"
