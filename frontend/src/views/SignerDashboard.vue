@@ -2635,10 +2635,6 @@ watch(selectedPendingTemplateId, () => {
   margin-top: 1rem;
 }
 
-.section-content {
-  /* Styles existants préservés */
-}
-
 .content-title {
   font-size: 1.35rem;
   font-weight: 700;
@@ -3205,7 +3201,7 @@ watch(selectedPendingTemplateId, () => {
   box-shadow: 0 4px 12px rgba(255, 149, 0, 0.25);
 }
 
-* Styles pour la pagination et recherche */
+/* Styles pour la pagination et recherche */
 .search-container {
   position: relative;
   margin-bottom: 1.5rem;

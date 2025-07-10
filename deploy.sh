@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Script de déploiement automatique pour CertiSign
+# Script de déploiement automatique pour Doc@uthANTIC
 # Ce script doit être exécuté sur le serveur de production
 
-echo "🚀 Début du déploiement automatique CertiSign..."
+echo "🚀 Début du déploiement automatique Doc@uthANTIC..."
 echo "📅 $(date)"
 
 # Couleurs pour les logs
@@ -78,4 +78,4 @@ log "${GREEN}📍 Version déployée: $(git rev-parse --short HEAD)${NC}"
 log "${GREEN}📅 $(date)${NC}"
 
 echo ""
-log "${GREEN}✨ CertiSign est maintenant à jour et fonctionnel !${NC}" 
+log "${GREEN}✨ Doc@uthANTIC est maintenant à jour et fonctionnel !${NC}" 
