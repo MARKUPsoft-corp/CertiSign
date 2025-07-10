@@ -574,3 +574,1308 @@ INFO:django_api:Données de signature stockées avec succès pour le document c9
 INFO:main:Données de signature stockées avec succès pour le document c95c5fc4-79f3-412b-9eb8-ba7755354fd5
 INFO:main:Signature terminée en 1.06 secondes
 INFO:     192.168.5.49:0 - "POST /sign HTTP/1.0" 200 OK
+INFO:main:Fichier temporaire supprimé: /tmp/pdf-exemple_signed_20250709150944.pdf
+INFO:main:Fichier temporaire supprimé: /tmp/acte_signed_20250709151039.pdf
+INFO:main:Nouvelle demande de signature pour le fichier 2021-1183.pdf
+INFO:signer:Clé privée chargée avec succès: <Name(C=CM,O=ANTIC CA,OU=GovRA,OU=ANTIC RA,OU=PKI Center,CN=ANTIC TEST CERTIFICATE(EMPLOYE TEST 20250310))>
+INFO:main:Identifiant généré pour le document: 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:main:Hash du document original calculé: e5e244ad71702c3788d3b466afa03254e0c15b82acf03be2c6ee791dae242969
+INFO:signer:Fichier signé avec succès, taille de la signature: 256 octets
+INFO:main:Document signé, taille de la signature: 256 octets
+INFO:main:Métadonnées parsées avec succès. Clés disponibles: ['qr_position', 'document_id', 'document_title', 'organization_id', 'organization_name', 'signer_role', 'signer_name', 'signature_position']
+INFO:main:Position du QR code extraite des métadonnées: {'x': 80.75630252100841, 'y': 92.06848869414341, 'size': 'medium', 'pages': [1], 'positions': {'1': {'x': 80.75630252100841, 'y': 92.06848869414341}}, 'mode': 'all'}
+INFO:main:Données de signature trouvées. Clés: ['signature_image', 'signature_size', 'positions']
+INFO:main:Image de signature trouvée. Longueur: 109370 caractères. Début: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYoA...
+INFO:main:Positions de signature trouvées: 1 position(s). Détails: [{'page': 1, 'x': 23.10924369747899, 'y': 92.6623129221719, 'width': 20, 'height': 10}]
+INFO:main:Taille de signature extraite des métadonnées: 80%
+INFO:main:ID d'organisation extrait des métadonnées: 2
+INFO:main:Nom d'organisation extrait des métadonnées: CNCCE
+INFO:main:Rôle du signataire extrait des métadonnées: signer
+INFO:main:Nom du signataire extrait des métadonnées: test
+INFO:main:Ajout de l'image de signature au document avec taille 80%
+INFO:main:=== DÉBUT add_signature_image_to_pdf ===
+INFO:main:Taille de signature reçue: 80%
+INFO:main:Nombre de positions: 1
+INFO:main:Positions détaillées: [{'page': 1, 'x': 23.10924369747899, 'y': 92.6623129221719, 'width': 20, 'height': 10}]
+INFO:main:Début des données d'image reçues: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYoA...
+INFO:main:DEBUG MICROSERVICE - Positions de signature reçues: [{'page': 1, 'x': 23.10924369747899, 'y': 92.6623129221719, 'width': 20, 'height': 10}]
+INFO:main:DEBUG MICROSERVICE - Position 1: page=1, x=23.10924369747899, y=92.6623129221719, width=20, height=10
+INFO:main:En-tête de l'image détecté: data:image/png;base64
+INFO:main:Format d'image détecté: png
+INFO:main:Données base64 pures extraites, longueur: 109348
+INFO:main:Image décodée avec succès, taille: 82011 octets
+INFO:main:Image validée par PIL
+INFO:main:Image de signature sauvegardée temporairement: /tmp/temp_signature_958d1899-27a1-4b62-b293-0eb97e7abbde.png
+INFO:main:Traitement des 16 pages du PDF
+INFO:main:Mode spécifique - signature appliquée sur la page 1
+INFO:main:Ajout de 1 signature(s) sur la page 1
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 80%
+INFO:main:Calcul: width_percent = 80 * 0.6 = 48.0%
+INFO:main:Calcul: height_percent = 80 * 0.3 = 24.0%
+INFO:main:Utilisation de la taille de signature 80%: largeur=48.0%, hauteur=24.0%
+INFO:main:Position de signature: x=23.10924369747899%, y=92.6623129221719%, largeur=48.0%, hauteur=24.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=141.42857142857142, y=58.1144816563985
+INFO:main:Dimensions absolues: largeur=293.76, hauteur=190.07999999999998 points
+INFO:main:Signature ajoutée à la position: x=-5.451428571428579, y=-36.92551834360149, largeur=293.76, hauteur=190.07999999999998
+INFO:main:Fusion réussie pour la page 1
+INFO:main:Processus d'ajout de l'image de signature terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_signature_958d1899-27a1-4b62-b293-0eb97e7abbde.png
+INFO:main:Début du processus d'ajout du QR code au PDF
+INFO:main:Mode de positionnement: all
+INFO:main:Position par défaut: x=80.75630252100841%, y=92.06848869414341%, taille=medium
+INFO:main:Pages où appliquer le QR code: [1]
+INFO:main:Positions individuelles définies pour les pages: ['1']
+INFO:main:Encodage de l'ID du document: 78802724-aa4d-42de-a1ec-07924bc9015e dans le QR code
+INFO:main:Génération de l'image du QR code
+INFO:main:Sauvegarde du QR code dans: /tmp/temp_qr_92a180fa-078a-46e1-ae34-48e2c01ee2e3.png
+INFO:main:Lecture du PDF original
+INFO:main:Traitement des 16 pages du PDF
+INFO:main:Application du QR code sur la page 1
+INFO:main:Dimensions de la page 1: 612.0 x 792.0 points
+INFO:main:Page 2 sans QR code
+INFO:main:Page 3 sans QR code
+INFO:main:Page 4 sans QR code
+INFO:main:Page 5 sans QR code
+INFO:main:Page 6 sans QR code
+INFO:main:Page 7 sans QR code
+INFO:main:Page 8 sans QR code
+INFO:main:Page 9 sans QR code
+INFO:main:Page 10 sans QR code
+INFO:main:Page 11 sans QR code
+INFO:main:Page 12 sans QR code
+INFO:main:Page 13 sans QR code
+INFO:main:Page 14 sans QR code
+INFO:main:Page 15 sans QR code
+INFO:main:Page 16 sans QR code
+INFO:main:Sauvegarde du PDF modifié avec le QR code
+INFO:main:Processus d'ajout du QR code terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_qr_92a180fa-078a-46e1-ae34-48e2c01ee2e3.png
+INFO:main:QR code contenant l'ID 78802724-aa4d-42de-a1ec-07924bc9015e ajouté au document à la position personnalisée
+[INFO] URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+INFO:django_api:URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[DEBUG] Fichier original: taille=337890 octets
+DEBUG:django_api:Fichier original: taille=337890 octets
+[DEBUG] Fichier signé: taille=470964 octets
+DEBUG:django_api:Fichier signé: taille=470964 octets
+[DEBUG] Propriétaire du document: 4
+DEBUG:django_api:Propriétaire du document: 4
+[DEBUG] Organisation du document: 2
+DEBUG:django_api:Organisation du document: 2
+[DEBUG] Rôle du signataire: signer
+DEBUG:django_api:Rôle du signataire: signer
+[DEBUG] Nom de l'organisation: CNCCE
+DEBUG:django_api:Nom de l'organisation: CNCCE
+[DEBUG] Nom du signataire: test
+DEBUG:django_api:Nom du signataire: test
+[DEBUG] Titre du document: 2021-1183.pdf
+DEBUG:django_api:Titre du document: 2021-1183.pdf
+[DEBUG] En-têtes: {}
+DEBUG:django_api:En-têtes: {}
+[DEBUG] Données: document_id=78802724-aa4d-42de-a1ec-07924bc9015e, hash=e5e244ad71702c3788d3b466afa03254e0c15b82acf03be2c6ee791dae242969, taille signature=344, titre=2021-1183.pdf
+DEBUG:django_api:Données: document_id=78802724-aa4d-42de-a1ec-07924bc9015e, hash=e5e244ad71702c3788d3b466afa03254e0c15b82acf03be2c6ee791dae242969, taille signature=344, titre=2021-1183.pdf
+[INFO] Envoi des données de signature à l'API Django pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:Envoi des données de signature à l'API Django pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:httpx:HTTP Request: POST https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025 "HTTP/1.1 201 Created"
+[DEBUG] Statut de la réponse: 201
+DEBUG:django_api:Statut de la réponse: 201
+[DEBUG] Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "78802724-aa4d-42de-a1ec-07924bc9015e"}
+DEBUG:django_api:Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "78802724-aa4d-42de-a1ec-07924bc9015e"}
+[DEBUG] En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Wed, 09 Jul 2025 15:16:22 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+DEBUG:django_api:En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Wed, 09 Jul 2025 15:16:22 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+[INFO] Données de signature stockées avec succès pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:Données de signature stockées avec succès pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:main:Données de signature stockées avec succès pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:main:Signature terminée en 0.45 secondes
+INFO:     129.0.226.192:0 - "POST /sign HTTP/1.0" 200 OK
+INFO:main:Fichier temporaire supprimé: /tmp/2021-1183_signed_20250709161621.pdf
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] Nouvelle demande de vérification par ID: 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] Récupération des données de signature pour le document ID: 78802724-aa4d-42de-a1ec-07924bc9015e
+[INFO] ID du document nettoyé: '78802724-aa4d-42de-a1ec-07924bc9015e'
+INFO:django_api:ID du document nettoyé: '78802724-aa4d-42de-a1ec-07924bc9015e'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=78802724-aa4d-42de-a1ec-07924bc9015e
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:Récupération des données de signature pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=78802724-aa4d-42de-a1ec-07924bc9015e "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:Données de signature récupérées avec succès pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] Ajout des informations du signataire à la réponse
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] DEBUG - return_original_document: True
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] DEBUG - signed_file_url présent: True
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_Xm2WJKf.pdf
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_Xm2WJKf.pdf
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_Xm2WJKf.pdf "HTTP/1.1 200 OK"
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] 📊 Réponse HTTP reçue - Status: 200
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] ✅ Document SIGNÉ ajouté à la réponse (taille: 470964 octets)
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] 📄 Nom du fichier signé: 2021-1183_signé.pdf
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] 🔗 Base64 longueur: 627952 caractères
+INFO:main:[d50e28de-b5ba-4464-a614-32436d290ae3] Vérification terminée en 0.08 secondes
+INFO:     129.0.205.65:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] Nouvelle demande de vérification par ID: 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] Récupération des données de signature pour le document ID: 78802724-aa4d-42de-a1ec-07924bc9015e
+[INFO] ID du document nettoyé: '78802724-aa4d-42de-a1ec-07924bc9015e'
+INFO:django_api:ID du document nettoyé: '78802724-aa4d-42de-a1ec-07924bc9015e'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=78802724-aa4d-42de-a1ec-07924bc9015e
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:Récupération des données de signature pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=78802724-aa4d-42de-a1ec-07924bc9015e "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:Données de signature récupérées avec succès pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] Ajout des informations du signataire à la réponse
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] DEBUG - return_original_document: True
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] DEBUG - signed_file_url présent: True
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_Xm2WJKf.pdf
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_Xm2WJKf.pdf
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_Xm2WJKf.pdf "HTTP/1.1 200 OK"
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] 📊 Réponse HTTP reçue - Status: 200
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] ✅ Document SIGNÉ ajouté à la réponse (taille: 470964 octets)
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] 📄 Nom du fichier signé: 2021-1183_signé.pdf
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] 🔗 Base64 longueur: 627952 caractères
+INFO:main:[5cc03d25-27a3-4e9d-b633-b23edd668659] Vérification terminée en 0.07 secondes
+INFO:     129.0.205.65:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] Ajout des informations du signataire à la réponse
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] DEBUG - return_original_document: True
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] DEBUG - signed_file_url présent: True
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_VTYurYW.pdf
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf "HTTP/1.1 200 OK"
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] 📊 Réponse HTTP reçue - Status: 200
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] ✅ Document SIGNÉ ajouté à la réponse (taille: 569767 octets)
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] 📄 Nom du fichier signé: COPIE-DACTE-DE-NAISSANCE-1_signé.pdf
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] 🔗 Base64 longueur: 759692 caractères
+INFO:main:[d2fe3ffe-d384-47c7-b71f-9c77a162eaf4] Vérification terminée en 0.09 secondes
+INFO:     129.0.205.65:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] Nouvelle demande de vérification par ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] Récupération des données de signature pour le document ID: 0a334cc0-db55-4c33-9d10-ea9abe101b5e
+[INFO] ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
+INFO:django_api:ID du document nettoyé: '0a334cc0-db55-4c33-9d10-ea9abe101b5e'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
+INFO:django_api:Récupération des données de signature pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=0a334cc0-db55-4c33-9d10-ea9abe101b5e "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
+INFO:django_api:Données de signature récupérées avec succès pour le document 0a334cc0-db55-4c33-9d10-ea9abe101b5e
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] Ajout des informations du signataire à la réponse
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] DEBUG - return_original_document: True
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] DEBUG - signed_file_url présent: True
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_luLKusp.pdf
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_luLKusp.pdf "HTTP/1.1 200 OK"
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] 📊 Réponse HTTP reçue - Status: 200
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] ✅ Document SIGNÉ ajouté à la réponse (taille: 196154 octets)
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] 📄 Nom du fichier signé: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signé.pdf
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] 🔗 Base64 longueur: 261540 caractères
+INFO:main:[f8dd87ef-73bf-421c-b90b-c5b074d2567a] Vérification terminée en 0.09 secondes
+INFO:     129.0.205.65:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[4a672018-d113-4376-8fe3-a2d8d2c67d33] Nouvelle demande de vérification par ID: 6d09b3e9-da39-4ab8-adbf-9b244e906f5a
+INFO:main:[4a672018-d113-4376-8fe3-a2d8d2c67d33] Récupération des données de signature pour le document ID: 6d09b3e9-da39-4ab8-adbf-9b244e906f5a
+[INFO] ID du document nettoyé: '6d09b3e9-da39-4ab8-adbf-9b244e906f5a'
+INFO:django_api:ID du document nettoyé: '6d09b3e9-da39-4ab8-adbf-9b244e906f5a'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=6d09b3e9-da39-4ab8-adbf-9b244e906f5a
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=6d09b3e9-da39-4ab8-adbf-9b244e906f5a
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document 6d09b3e9-da39-4ab8-adbf-9b244e906f5a
+INFO:django_api:Récupération des données de signature pour le document 6d09b3e9-da39-4ab8-adbf-9b244e906f5a
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=6d09b3e9-da39-4ab8-adbf-9b244e906f5a "HTTP/1.1 404 Not Found"
+[ERROR] Erreur lors de la récupération des données de signature: 404 - {"error": "Aucune signature trouv\u00e9e pour le document ID: 6d09b3e9-da39-4ab8-adbf-9b244e906f5a"}
+ERROR:django_api:Erreur lors de la récupération des données de signature: 404 - {"error": "Aucune signature trouv\u00e9e pour le document ID: 6d09b3e9-da39-4ab8-adbf-9b244e906f5a"}
+ERROR:main:[4a672018-d113-4376-8fe3-a2d8d2c67d33] Erreur lors de la récupération des données de signature: Erreur 404: {"error": "Aucune signature trouv\u00e9e pour le document ID: 6d09b3e9-da39-4ab8-adbf-9b244e906f5a"}
+INFO:     129.0.205.65:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[47fa0c6a-8dad-4795-9f16-139bb29d2184] Nouvelle demande de vérification par ID: 6d09b3e9-da39-4ab8-adbf-9b244e906f5a
+INFO:main:[47fa0c6a-8dad-4795-9f16-139bb29d2184] Récupération des données de signature pour le document ID: 6d09b3e9-da39-4ab8-adbf-9b244e906f5a
+[INFO] ID du document nettoyé: '6d09b3e9-da39-4ab8-adbf-9b244e906f5a'
+INFO:django_api:ID du document nettoyé: '6d09b3e9-da39-4ab8-adbf-9b244e906f5a'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=6d09b3e9-da39-4ab8-adbf-9b244e906f5a
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=6d09b3e9-da39-4ab8-adbf-9b244e906f5a
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document 6d09b3e9-da39-4ab8-adbf-9b244e906f5a
+INFO:django_api:Récupération des données de signature pour le document 6d09b3e9-da39-4ab8-adbf-9b244e906f5a
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=6d09b3e9-da39-4ab8-adbf-9b244e906f5a "HTTP/1.1 404 Not Found"
+[ERROR] Erreur lors de la récupération des données de signature: 404 - {"error": "Aucune signature trouv\u00e9e pour le document ID: 6d09b3e9-da39-4ab8-adbf-9b244e906f5a"}
+ERROR:django_api:Erreur lors de la récupération des données de signature: 404 - {"error": "Aucune signature trouv\u00e9e pour le document ID: 6d09b3e9-da39-4ab8-adbf-9b244e906f5a"}
+ERROR:main:[47fa0c6a-8dad-4795-9f16-139bb29d2184] Erreur lors de la récupération des données de signature: Erreur 404: {"error": "Aucune signature trouv\u00e9e pour le document ID: 6d09b3e9-da39-4ab8-adbf-9b244e906f5a"}
+INFO:     129.0.205.65:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] Nouvelle demande de vérification par ID: a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] Récupération des données de signature pour le document ID: a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+INFO:django_api:ID du document nettoyé: 'a6399a48-4675-4f45-a06e-629f48015d5c'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Récupération des données de signature pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=a6399a48-4675-4f45-a06e-629f48015d5c "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:django_api:Données de signature récupérées avec succès pour le document a6399a48-4675-4f45-a06e-629f48015d5c
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] Ajout des informations du signataire à la réponse
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] DEBUG - return_original_document: True
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] DEBUG - signed_file_url présent: True
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_VTYurYW.pdf
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_VTYurYW.pdf "HTTP/1.1 200 OK"
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] 📊 Réponse HTTP reçue - Status: 200
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] ✅ Document SIGNÉ ajouté à la réponse (taille: 569767 octets)
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] 📄 Nom du fichier signé: COPIE-DACTE-DE-NAISSANCE-1_signé.pdf
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] 🔗 Base64 longueur: 759692 caractères
+INFO:main:[69d36890-de2d-4c38-b035-96916b490c3b] Vérification terminée en 0.09 secondes
+INFO:     129.0.205.65:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] Nouvelle demande de vérification par ID: 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] Récupération des données de signature pour le document ID: 78802724-aa4d-42de-a1ec-07924bc9015e
+[INFO] ID du document nettoyé: '78802724-aa4d-42de-a1ec-07924bc9015e'
+INFO:django_api:ID du document nettoyé: '78802724-aa4d-42de-a1ec-07924bc9015e'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=78802724-aa4d-42de-a1ec-07924bc9015e
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:Récupération des données de signature pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=78802724-aa4d-42de-a1ec-07924bc9015e "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:Données de signature récupérées avec succès pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] Ajout des informations du signataire à la réponse
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] DEBUG - return_original_document: True
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] DEBUG - signed_file_url présent: True
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_Xm2WJKf.pdf
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_Xm2WJKf.pdf
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_Xm2WJKf.pdf "HTTP/1.1 200 OK"
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] 📊 Réponse HTTP reçue - Status: 200
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] ✅ Document SIGNÉ ajouté à la réponse (taille: 470964 octets)
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] 📄 Nom du fichier signé: 2021-1183_signé.pdf
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] 🔗 Base64 longueur: 627952 caractères
+INFO:main:[73eb2c62-a293-4130-85b4-b16fd0a0e84d] Vérification terminée en 0.07 secondes
+INFO:     129.0.205.30:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] Nouvelle demande de vérification par ID: 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] Récupération des données de signature pour le document ID: 78802724-aa4d-42de-a1ec-07924bc9015e
+[INFO] ID du document nettoyé: '78802724-aa4d-42de-a1ec-07924bc9015e'
+INFO:django_api:ID du document nettoyé: '78802724-aa4d-42de-a1ec-07924bc9015e'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=78802724-aa4d-42de-a1ec-07924bc9015e
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:Récupération des données de signature pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=78802724-aa4d-42de-a1ec-07924bc9015e "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:django_api:Données de signature récupérées avec succès pour le document 78802724-aa4d-42de-a1ec-07924bc9015e
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] Ajout des informations du signataire à la réponse
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] DEBUG - return_original_document: True
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] DEBUG - signed_file_url présent: True
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_Xm2WJKf.pdf
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_Xm2WJKf.pdf
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_Xm2WJKf.pdf "HTTP/1.1 200 OK"
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] 📊 Réponse HTTP reçue - Status: 200
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] ✅ Document SIGNÉ ajouté à la réponse (taille: 470964 octets)
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] 📄 Nom du fichier signé: 2021-1183_signé.pdf
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] 🔗 Base64 longueur: 627952 caractères
+INFO:main:[b95fe6da-5fc8-411a-9079-0be6c2226769] Vérification terminée en 0.07 secondes
+INFO:     129.0.205.30:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:Nouvelle demande de signature pour le fichier ZKAttest.pdf
+INFO:signer:Clé privée chargée avec succès: <Name(C=CM,O=ANTIC CA,OU=GovRA,OU=ANTIC RA,OU=PKI Center,CN=TEST MTN CAMEROON(TEST EMPLOYE 19880808))>
+INFO:main:Identifiant généré pour le document: 8edb1c58-360e-43d8-972c-8058a6814d56
+INFO:main:Hash du document original calculé: e5e244ad71702c3788d3b466afa03254e0c15b82acf03be2c6ee791dae242969
+INFO:signer:Fichier signé avec succès, taille de la signature: 256 octets
+INFO:main:Document signé, taille de la signature: 256 octets
+INFO:main:Métadonnées parsées avec succès. Clés disponibles: ['qr_position', 'document_id', 'document_title', 'organization_id', 'organization_name', 'signer_role', 'signer_name', 'signature_position']
+INFO:main:Position du QR code extraite des métadonnées: {'x': 49.831932773109244, 'y': 85.43547134218194, 'size': 'medium', 'pages': 'all', 'positions': {'default': {'x': 49.831932773109244, 'y': 85.43547134218194}}, 'mode': 'all'}
+INFO:main:Données de signature trouvées. Clés: ['signature_image', 'signature_size', 'positions']
+INFO:main:Image de signature trouvée. Longueur: 123551 caractères. Début: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAAAAAAAD...
+INFO:main:Positions de signature trouvées: 1 position(s). Détails: [{'page': 'all', 'x': 81.9327731092437, 'y': 85.36421170993542, 'width': 20, 'height': 10}]
+INFO:main:Taille de signature extraite des métadonnées: 50%
+INFO:main:ID d'organisation extrait des métadonnées: 2
+INFO:main:Nom d'organisation extrait des métadonnées: CNCCE
+INFO:main:Rôle du signataire extrait des métadonnées: signer
+INFO:main:Nom du signataire extrait des métadonnées: test
+INFO:main:Ajout de l'image de signature au document avec taille 50%
+INFO:main:=== DÉBUT add_signature_image_to_pdf ===
+INFO:main:Taille de signature reçue: 50%
+INFO:main:Nombre de positions: 1
+INFO:main:Positions détaillées: [{'page': 'all', 'x': 81.9327731092437, 'y': 85.36421170993542, 'width': 20, 'height': 10}]
+INFO:main:Début des données d'image reçues: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAAAAAAAD...
+INFO:main:DEBUG MICROSERVICE - Positions de signature reçues: [{'page': 'all', 'x': 81.9327731092437, 'y': 85.36421170993542, 'width': 20, 'height': 10}]
+INFO:main:DEBUG MICROSERVICE - Position 1: page=all, x=81.9327731092437, y=85.36421170993542, width=20, height=10
+INFO:main:En-tête de l'image détecté: data:image/jpeg;base64
+INFO:main:Format d'image détecté: jpg
+INFO:main:Données base64 pures extraites, longueur: 123528
+INFO:main:Image décodée avec succès, taille: 92644 octets
+INFO:main:Image validée par PIL
+INFO:main:Image de signature sauvegardée temporairement: /tmp/temp_signature_f8a71fc0-a6c7-4e34-be6f-389ed051e9fd.jpg
+INFO:main:Traitement des 16 pages du PDF
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 1
+INFO:main:Ajout de 1 signature(s) sur la page 1
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 1
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 2
+INFO:main:Ajout de 1 signature(s) sur la page 2
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 2
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 3
+INFO:main:Ajout de 1 signature(s) sur la page 3
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 3
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 4
+INFO:main:Ajout de 1 signature(s) sur la page 4
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 4
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 5
+INFO:main:Ajout de 1 signature(s) sur la page 5
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 5
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 6
+INFO:main:Ajout de 1 signature(s) sur la page 6
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 6
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 7
+INFO:main:Ajout de 1 signature(s) sur la page 7
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 7
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 8
+INFO:main:Ajout de 1 signature(s) sur la page 8
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 8
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 9
+INFO:main:Ajout de 1 signature(s) sur la page 9
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 9
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 10
+INFO:main:Ajout de 1 signature(s) sur la page 10
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 10
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 11
+INFO:main:Ajout de 1 signature(s) sur la page 11
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 11
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 12
+INFO:main:Ajout de 1 signature(s) sur la page 12
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 12
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 13
+INFO:main:Ajout de 1 signature(s) sur la page 13
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 13
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 14
+INFO:main:Ajout de 1 signature(s) sur la page 14
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 14
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 15
+INFO:main:Ajout de 1 signature(s) sur la page 15
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 15
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 16
+INFO:main:Ajout de 1 signature(s) sur la page 16
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=81.9327731092437%, y=85.36421170993542%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=501.4285714285714, y=115.9154432573115
+INFO:main:Dimensions absolues: largeur=183.6, hauteur=118.8 points
+INFO:main:Signature ajoutée à la position: x=409.6285714285714, y=56.515443257311496, largeur=183.6, hauteur=118.8
+INFO:main:Fusion réussie pour la page 16
+INFO:main:Processus d'ajout de l'image de signature terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_signature_f8a71fc0-a6c7-4e34-be6f-389ed051e9fd.jpg
+INFO:main:Début du processus d'ajout du QR code au PDF
+INFO:main:Mode de positionnement: all
+INFO:main:Position par défaut: x=49.831932773109244%, y=85.43547134218194%, taille=medium
+INFO:main:Pages où appliquer le QR code: all
+INFO:main:Positions individuelles définies pour les pages: ['default']
+INFO:main:Encodage de l'ID du document: 8edb1c58-360e-43d8-972c-8058a6814d56 dans le QR code
+INFO:main:Génération de l'image du QR code
+INFO:main:Sauvegarde du QR code dans: /tmp/temp_qr_4c89f53f-d074-4c29-935b-6981981e92e9.png
+INFO:main:Lecture du PDF original
+INFO:main:Traitement des 16 pages du PDF
+INFO:main:Application du QR code sur la page 1
+INFO:main:Dimensions de la page 1: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 2
+INFO:main:Dimensions de la page 2: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 3
+INFO:main:Dimensions de la page 3: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 4
+INFO:main:Dimensions de la page 4: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 5
+INFO:main:Dimensions de la page 5: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 6
+INFO:main:Dimensions de la page 6: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 7
+INFO:main:Dimensions de la page 7: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 8
+INFO:main:Dimensions de la page 8: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 9
+INFO:main:Dimensions de la page 9: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 10
+INFO:main:Dimensions de la page 10: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 11
+INFO:main:Dimensions de la page 11: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 12
+INFO:main:Dimensions de la page 12: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 13
+INFO:main:Dimensions de la page 13: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 14
+INFO:main:Dimensions de la page 14: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 15
+INFO:main:Dimensions de la page 15: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 16
+INFO:main:Dimensions de la page 16: 612.0 x 792.0 points
+INFO:main:Sauvegarde du PDF modifié avec le QR code
+INFO:main:Processus d'ajout du QR code terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_qr_4c89f53f-d074-4c29-935b-6981981e92e9.png
+INFO:main:QR code contenant l'ID 8edb1c58-360e-43d8-972c-8058a6814d56 ajouté au document à la position personnalisée
+[INFO] URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+INFO:django_api:URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[DEBUG] Fichier original: taille=337890 octets
+DEBUG:django_api:Fichier original: taille=337890 octets
+[DEBUG] Fichier signé: taille=2499242 octets
+DEBUG:django_api:Fichier signé: taille=2499242 octets
+[DEBUG] Propriétaire du document: 4
+DEBUG:django_api:Propriétaire du document: 4
+[DEBUG] Organisation du document: 2
+DEBUG:django_api:Organisation du document: 2
+[DEBUG] Rôle du signataire: signer
+DEBUG:django_api:Rôle du signataire: signer
+[DEBUG] Nom de l'organisation: CNCCE
+DEBUG:django_api:Nom de l'organisation: CNCCE
+[DEBUG] Nom du signataire: test
+DEBUG:django_api:Nom du signataire: test
+[DEBUG] Titre du document: ZKAttest.pdf
+DEBUG:django_api:Titre du document: ZKAttest.pdf
+[DEBUG] En-têtes: {}
+DEBUG:django_api:En-têtes: {}
+[DEBUG] Données: document_id=8edb1c58-360e-43d8-972c-8058a6814d56, hash=e5e244ad71702c3788d3b466afa03254e0c15b82acf03be2c6ee791dae242969, taille signature=344, titre=ZKAttest.pdf
+DEBUG:django_api:Données: document_id=8edb1c58-360e-43d8-972c-8058a6814d56, hash=e5e244ad71702c3788d3b466afa03254e0c15b82acf03be2c6ee791dae242969, taille signature=344, titre=ZKAttest.pdf
+[INFO] Envoi des données de signature à l'API Django pour le document 8edb1c58-360e-43d8-972c-8058a6814d56
+INFO:django_api:Envoi des données de signature à l'API Django pour le document 8edb1c58-360e-43d8-972c-8058a6814d56
+INFO:httpx:HTTP Request: POST https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025 "HTTP/1.1 201 Created"
+[DEBUG] Statut de la réponse: 201
+DEBUG:django_api:Statut de la réponse: 201
+[DEBUG] Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "8edb1c58-360e-43d8-972c-8058a6814d56"}
+DEBUG:django_api:Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "8edb1c58-360e-43d8-972c-8058a6814d56"}
+[DEBUG] En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Thu, 10 Jul 2025 08:11:32 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+DEBUG:django_api:En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Thu, 10 Jul 2025 08:11:32 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+[INFO] Données de signature stockées avec succès pour le document 8edb1c58-360e-43d8-972c-8058a6814d56
+INFO:django_api:Données de signature stockées avec succès pour le document 8edb1c58-360e-43d8-972c-8058a6814d56
+INFO:main:Données de signature stockées avec succès pour le document 8edb1c58-360e-43d8-972c-8058a6814d56
+INFO:main:Signature terminée en 2.50 secondes
+INFO:     192.168.5.101:0 - "POST /sign HTTP/1.0" 200 OK
+INFO:main:Nouvelle demande de signature pour le fichier ZKAttest.pdf
+ERROR:signer:Erreur lors du chargement de la clé privée: Invalid password or PKCS12 data
+INFO:     192.168.5.101:0 - "POST /sign HTTP/1.0" 400 Bad Request
+INFO:main:Nouvelle demande de signature pour le fichier ZKAttest.pdf
+INFO:signer:Clé privée chargée avec succès: <Name(C=CM,O=ANTIC CA,OU=GovRA,OU=ANTIC RA,OU=PKI Center,CN=TEST MTN CAMEROON(TEST EMPLOYE 19880808))>
+INFO:main:Identifiant généré pour le document: a6919029-3e65-473c-9848-d9131a1412e1
+INFO:main:Hash du document original calculé: e5e244ad71702c3788d3b466afa03254e0c15b82acf03be2c6ee791dae242969
+INFO:signer:Fichier signé avec succès, taille de la signature: 256 octets
+INFO:main:Document signé, taille de la signature: 256 octets
+INFO:main:Métadonnées parsées avec succès. Clés disponibles: ['qr_position', 'document_id', 'document_title', 'organization_id', 'organization_name', 'signer_role', 'signer_name', 'signature_position']
+INFO:main:Position du QR code extraite des métadonnées: {'x': 81.59663865546219, 'y': 89.25969900824396, 'size': 'medium', 'pages': 'all', 'positions': {'default': {'x': 81.59663865546219, 'y': 89.25969900824396}}, 'mode': 'all'}
+INFO:main:Données de signature trouvées. Clés: ['signature_image', 'signature_size', 'positions']
+INFO:main:Image de signature trouvée. Longueur: 244530 caractères. Début: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABVYA...
+INFO:main:Positions de signature trouvées: 1 position(s). Détails: [{'page': 'all', 'x': 26.47058823529412, 'y': 89.14093416263825, 'width': 20, 'height': 10}]
+INFO:main:Taille de signature extraite des métadonnées: 35%
+INFO:main:ID d'organisation extrait des métadonnées: 2
+INFO:main:Nom d'organisation extrait des métadonnées: CNCCE
+INFO:main:Rôle du signataire extrait des métadonnées: signer
+INFO:main:Nom du signataire extrait des métadonnées: test
+INFO:main:Ajout de l'image de signature au document avec taille 35%
+INFO:main:=== DÉBUT add_signature_image_to_pdf ===
+INFO:main:Taille de signature reçue: 35%
+INFO:main:Nombre de positions: 1
+INFO:main:Positions détaillées: [{'page': 'all', 'x': 26.47058823529412, 'y': 89.14093416263825, 'width': 20, 'height': 10}]
+INFO:main:Début des données d'image reçues: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABVYA...
+INFO:main:DEBUG MICROSERVICE - Positions de signature reçues: [{'page': 'all', 'x': 26.47058823529412, 'y': 89.14093416263825, 'width': 20, 'height': 10}]
+INFO:main:DEBUG MICROSERVICE - Position 1: page=all, x=26.47058823529412, y=89.14093416263825, width=20, height=10
+INFO:main:En-tête de l'image détecté: data:image/png;base64
+INFO:main:Format d'image détecté: png
+INFO:main:Données base64 pures extraites, longueur: 244508
+INFO:main:Image décodée avec succès, taille: 183380 octets
+INFO:main:Image validée par PIL
+INFO:main:Image de signature sauvegardée temporairement: /tmp/temp_signature_2dadf94d-5270-4675-8738-d0a6df08102d.png
+INFO:main:Traitement des 16 pages du PDF
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 1
+INFO:main:Ajout de 1 signature(s) sur la page 1
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 1
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 2
+INFO:main:Ajout de 1 signature(s) sur la page 2
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 2
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 3
+INFO:main:Ajout de 1 signature(s) sur la page 3
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 3
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 4
+INFO:main:Ajout de 1 signature(s) sur la page 4
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 4
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 5
+INFO:main:Ajout de 1 signature(s) sur la page 5
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 5
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 6
+INFO:main:Ajout de 1 signature(s) sur la page 6
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 6
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 7
+INFO:main:Ajout de 1 signature(s) sur la page 7
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 7
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 8
+INFO:main:Ajout de 1 signature(s) sur la page 8
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 8
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 9
+INFO:main:Ajout de 1 signature(s) sur la page 9
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 9
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 10
+INFO:main:Ajout de 1 signature(s) sur la page 10
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 10
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 11
+INFO:main:Ajout de 1 signature(s) sur la page 11
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 11
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 12
+INFO:main:Ajout de 1 signature(s) sur la page 12
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 12
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 13
+INFO:main:Ajout de 1 signature(s) sur la page 13
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 13
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 14
+INFO:main:Ajout de 1 signature(s) sur la page 14
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 14
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 15
+INFO:main:Ajout de 1 signature(s) sur la page 15
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 15
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 16
+INFO:main:Ajout de 1 signature(s) sur la page 16
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 35%
+INFO:main:Calcul: width_percent = 35 * 0.6 = 21.0%
+INFO:main:Calcul: height_percent = 35 * 0.3 = 10.5%
+INFO:main:Utilisation de la taille de signature 35%: largeur=21.0%, hauteur=10.5%
+INFO:main:Position de signature: x=26.47058823529412%, y=89.14093416263825%, largeur=21.0%, hauteur=10.5%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 612.0 x 792.0 points
+INFO:main:Position absolue: x=162.0, y=86.0038014319051
+INFO:main:Dimensions absolues: largeur=128.51999999999998, hauteur=83.16 points
+INFO:main:Signature ajoutée à la position: x=97.74000000000001, y=44.423801431905105, largeur=128.51999999999998, hauteur=83.16
+INFO:main:Fusion réussie pour la page 16
+INFO:main:Processus d'ajout de l'image de signature terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_signature_2dadf94d-5270-4675-8738-d0a6df08102d.png
+INFO:main:Début du processus d'ajout du QR code au PDF
+INFO:main:Mode de positionnement: all
+INFO:main:Position par défaut: x=81.59663865546219%, y=89.25969900824396%, taille=medium
+INFO:main:Pages où appliquer le QR code: all
+INFO:main:Positions individuelles définies pour les pages: ['default']
+INFO:main:Encodage de l'ID du document: a6919029-3e65-473c-9848-d9131a1412e1 dans le QR code
+INFO:main:Génération de l'image du QR code
+INFO:main:Sauvegarde du QR code dans: /tmp/temp_qr_1a88c95a-9cdd-48f0-9fc9-653d48756835.png
+INFO:main:Lecture du PDF original
+INFO:main:Traitement des 16 pages du PDF
+INFO:main:Application du QR code sur la page 1
+INFO:main:Dimensions de la page 1: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 2
+INFO:main:Dimensions de la page 2: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 3
+INFO:main:Dimensions de la page 3: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 4
+INFO:main:Dimensions de la page 4: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 5
+INFO:main:Dimensions de la page 5: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 6
+INFO:main:Dimensions de la page 6: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 7
+INFO:main:Dimensions de la page 7: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 8
+INFO:main:Dimensions de la page 8: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 9
+INFO:main:Dimensions de la page 9: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 10
+INFO:main:Dimensions de la page 10: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 11
+INFO:main:Dimensions de la page 11: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 12
+INFO:main:Dimensions de la page 12: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 13
+INFO:main:Dimensions de la page 13: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 14
+INFO:main:Dimensions de la page 14: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 15
+INFO:main:Dimensions de la page 15: 612.0 x 792.0 points
+INFO:main:Application du QR code sur la page 16
+INFO:main:Dimensions de la page 16: 612.0 x 792.0 points
+INFO:main:Sauvegarde du PDF modifié avec le QR code
+INFO:main:Processus d'ajout du QR code terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_qr_1a88c95a-9cdd-48f0-9fc9-653d48756835.png
+INFO:main:QR code contenant l'ID a6919029-3e65-473c-9848-d9131a1412e1 ajouté au document à la position personnalisée
+[INFO] URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+INFO:django_api:URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[DEBUG] Fichier original: taille=337890 octets
+DEBUG:django_api:Fichier original: taille=337890 octets
+[DEBUG] Fichier signé: taille=2752762 octets
+DEBUG:django_api:Fichier signé: taille=2752762 octets
+[DEBUG] Propriétaire du document: 4
+DEBUG:django_api:Propriétaire du document: 4
+[DEBUG] Organisation du document: 2
+DEBUG:django_api:Organisation du document: 2
+[DEBUG] Rôle du signataire: signer
+DEBUG:django_api:Rôle du signataire: signer
+[DEBUG] Nom de l'organisation: CNCCE
+DEBUG:django_api:Nom de l'organisation: CNCCE
+[DEBUG] Nom du signataire: test
+DEBUG:django_api:Nom du signataire: test
+[DEBUG] Titre du document: ZKAttest.pdf
+DEBUG:django_api:Titre du document: ZKAttest.pdf
+[DEBUG] En-têtes: {}
+DEBUG:django_api:En-têtes: {}
+[DEBUG] Données: document_id=a6919029-3e65-473c-9848-d9131a1412e1, hash=e5e244ad71702c3788d3b466afa03254e0c15b82acf03be2c6ee791dae242969, taille signature=344, titre=ZKAttest.pdf
+DEBUG:django_api:Données: document_id=a6919029-3e65-473c-9848-d9131a1412e1, hash=e5e244ad71702c3788d3b466afa03254e0c15b82acf03be2c6ee791dae242969, taille signature=344, titre=ZKAttest.pdf
+[INFO] Envoi des données de signature à l'API Django pour le document a6919029-3e65-473c-9848-d9131a1412e1
+INFO:django_api:Envoi des données de signature à l'API Django pour le document a6919029-3e65-473c-9848-d9131a1412e1
+INFO:httpx:HTTP Request: POST https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025 "HTTP/1.1 201 Created"
+[DEBUG] Statut de la réponse: 201
+DEBUG:django_api:Statut de la réponse: 201
+[DEBUG] Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "a6919029-3e65-473c-9848-d9131a1412e1"}
+DEBUG:django_api:Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "a6919029-3e65-473c-9848-d9131a1412e1"}
+[DEBUG] En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Thu, 10 Jul 2025 08:13:33 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+DEBUG:django_api:En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Thu, 10 Jul 2025 08:13:33 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+[INFO] Données de signature stockées avec succès pour le document a6919029-3e65-473c-9848-d9131a1412e1
+INFO:django_api:Données de signature stockées avec succès pour le document a6919029-3e65-473c-9848-d9131a1412e1
+INFO:main:Données de signature stockées avec succès pour le document a6919029-3e65-473c-9848-d9131a1412e1
+INFO:main:Signature terminée en 4.17 secondes
+INFO:     192.168.5.101:0 - "POST /sign HTTP/1.0" 200 OK
+INFO:main:Fichier temporaire supprimé: /tmp/ZKAttest_signed_20250710091132.pdf
+INFO:main:Fichier temporaire supprimé: /tmp/ZKAttest_signed_20250710091333.pdf
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] Nouvelle demande de vérification par ID: c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] Récupération des données de signature pour le document ID: c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+[INFO] ID du document nettoyé: 'c95c5fc4-79f3-412b-9eb8-ba7755354fd5'
+INFO:django_api:ID du document nettoyé: 'c95c5fc4-79f3-412b-9eb8-ba7755354fd5'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+INFO:django_api:Récupération des données de signature pour le document c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=c95c5fc4-79f3-412b-9eb8-ba7755354fd5 "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+INFO:django_api:Données de signature récupérées avec succès pour le document c95c5fc4-79f3-412b-9eb8-ba7755354fd5
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] Ajout des informations du signataire à la réponse
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] DEBUG - return_original_document: True
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] DEBUG - signed_file_url présent: True
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_5bRyEwY.pdf
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_5bRyEwY.pdf
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_5bRyEwY.pdf "HTTP/1.1 200 OK"
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] 📊 Réponse HTTP reçue - Status: 200
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] ✅ Document SIGNÉ ajouté à la réponse (taille: 490708 octets)
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] 📄 Nom du fichier signé: acte_signé.pdf
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] 🔗 Base64 longueur: 654280 caractères
+INFO:main:[0a9d2925-d040-4b35-8892-366c3faef708] Vérification terminée en 0.08 secondes
+INFO:     129.0.205.30:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:Nouvelle demande de signature pour le fichier Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signed.pdf
+INFO:signer:Clé privée chargée avec succès: <Name(C=CM,O=ANTIC CA,OU=GovRA,OU=ANTIC RA,OU=PKI Center,CN=TEST MTN CAMEROON(TEST EMPLOYE 19880808))>
+INFO:main:Identifiant généré pour le document: 8731943e-95af-4641-bc83-e3f0a8ed57bf
+INFO:main:Hash du document original calculé: 0a94202375c7df5dc67bbbfb7dc011e36d91f2377e271f78bffd58eab909fd3f
+INFO:signer:Fichier signé avec succès, taille de la signature: 256 octets
+INFO:main:Document signé, taille de la signature: 256 octets
+INFO:main:Métadonnées parsées avec succès. Clés disponibles: ['qr_position', 'document_id', 'document_title', 'organization_id', 'organization_name', 'signer_role', 'signer_name', 'signature_position']
+INFO:main:Position du QR code extraite des métadonnées: {'x': 50, 'y': 50, 'size': 'medium', 'pages': [1], 'positions': {'1': {'x': 19.411764705882355, 'y': 85.19794165097053}}, 'mode': 'current'}
+INFO:main:Données de signature trouvées. Clés: ['signature_image', 'signature_size', 'positions']
+INFO:main:Image de signature trouvée. Longueur: 12907 caractères. Début: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD...
+INFO:main:Positions de signature trouvées: 1 position(s). Détails: [{'page': 1, 'x': 82.26890756302521, 'y': 85.00791717311832, 'width': 20, 'height': 10}]
+INFO:main:Taille de signature extraite des métadonnées: 50%
+INFO:main:ID d'organisation extrait des métadonnées: 1
+INFO:main:Nom d'organisation extrait des métadonnées: MINFI
+INFO:main:Rôle du signataire extrait des métadonnées: signer
+INFO:main:Nom du signataire extrait des métadonnées: test
+INFO:main:Ajout de l'image de signature au document avec taille 50%
+INFO:main:=== DÉBUT add_signature_image_to_pdf ===
+INFO:main:Taille de signature reçue: 50%
+INFO:main:Nombre de positions: 1
+INFO:main:Positions détaillées: [{'page': 1, 'x': 82.26890756302521, 'y': 85.00791717311832, 'width': 20, 'height': 10}]
+INFO:main:Début des données d'image reçues: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD...
+INFO:main:DEBUG MICROSERVICE - Positions de signature reçues: [{'page': 1, 'x': 82.26890756302521, 'y': 85.00791717311832, 'width': 20, 'height': 10}]
+INFO:main:DEBUG MICROSERVICE - Position 1: page=1, x=82.26890756302521, y=85.00791717311832, width=20, height=10
+INFO:main:En-tête de l'image détecté: data:image/jpeg;base64
+INFO:main:Format d'image détecté: jpg
+INFO:main:Données base64 pures extraites, longueur: 12884
+INFO:main:Image décodée avec succès, taille: 9663 octets
+INFO:main:Image validée par PIL
+INFO:main:Image de signature sauvegardée temporairement: /tmp/temp_signature_144c212a-28ab-45a1-be6d-4bf145ecc2db.jpg
+INFO:main:Traitement des 14 pages du PDF
+INFO:main:Mode spécifique - signature appliquée sur la page 1
+INFO:main:Ajout de 1 signature(s) sur la page 1
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 50%
+INFO:main:Calcul: width_percent = 50 * 0.6 = 30.0%
+INFO:main:Calcul: height_percent = 50 * 0.3 = 15.0%
+INFO:main:Utilisation de la taille de signature 50%: largeur=30.0%, hauteur=15.0%
+INFO:main:Position de signature: x=82.26890756302521%, y=85.00791717311832%, largeur=30.0%, hauteur=15.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 596.0 x 842.0 points
+INFO:main:Position absolue: x=490.32268907563025, y=126.23333740234378
+INFO:main:Dimensions absolues: largeur=178.79999999999998, hauteur=126.3 points
+INFO:main:Signature ajoutée à la position: x=400.9226890756303, y=63.08333740234378, largeur=178.79999999999998, hauteur=126.3
+INFO:main:Fusion réussie pour la page 1
+INFO:main:Processus d'ajout de l'image de signature terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_signature_144c212a-28ab-45a1-be6d-4bf145ecc2db.jpg
+INFO:main:Début du processus d'ajout du QR code au PDF
+INFO:main:Mode de positionnement: current
+INFO:main:Position par défaut: x=50%, y=50%, taille=medium
+INFO:main:Pages où appliquer le QR code: [1]
+INFO:main:Positions individuelles définies pour les pages: ['1']
+INFO:main:Encodage de l'ID du document: 8731943e-95af-4641-bc83-e3f0a8ed57bf dans le QR code
+INFO:main:Génération de l'image du QR code
+INFO:main:Sauvegarde du QR code dans: /tmp/temp_qr_12fa8347-23d0-4725-8875-23e36ef58df7.png
+INFO:main:Lecture du PDF original
+INFO:main:Traitement des 14 pages du PDF
+INFO:main:Application du QR code sur la page 1
+INFO:main:Dimensions de la page 1: 596.0 x 842.0 points
+INFO:main:Page 2 sans QR code
+INFO:main:Page 3 sans QR code
+INFO:main:Page 4 sans QR code
+INFO:main:Page 5 sans QR code
+INFO:main:Page 6 sans QR code
+INFO:main:Page 7 sans QR code
+INFO:main:Page 8 sans QR code
+INFO:main:Page 9 sans QR code
+INFO:main:Page 10 sans QR code
+INFO:main:Page 11 sans QR code
+INFO:main:Page 12 sans QR code
+INFO:main:Page 13 sans QR code
+INFO:main:Page 14 sans QR code
+INFO:main:Sauvegarde du PDF modifié avec le QR code
+INFO:main:Processus d'ajout du QR code terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_qr_12fa8347-23d0-4725-8875-23e36ef58df7.png
+INFO:main:QR code contenant l'ID 8731943e-95af-4641-bc83-e3f0a8ed57bf ajouté au document à la position personnalisée
+[INFO] URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+INFO:django_api:URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[DEBUG] Fichier original: taille=196154 octets
+DEBUG:django_api:Fichier original: taille=196154 octets
+[DEBUG] Fichier signé: taille=217718 octets
+DEBUG:django_api:Fichier signé: taille=217718 octets
+[DEBUG] Propriétaire du document: 4
+DEBUG:django_api:Propriétaire du document: 4
+[DEBUG] Organisation du document: 1
+DEBUG:django_api:Organisation du document: 1
+[DEBUG] Rôle du signataire: signer
+DEBUG:django_api:Rôle du signataire: signer
+[DEBUG] Nom de l'organisation: MINFI
+DEBUG:django_api:Nom de l'organisation: MINFI
+[DEBUG] Nom du signataire: test
+DEBUG:django_api:Nom du signataire: test
+[DEBUG] Titre du document: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signed.pdf
+DEBUG:django_api:Titre du document: Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signed.pdf
+[DEBUG] En-têtes: {}
+DEBUG:django_api:En-têtes: {}
+[DEBUG] Données: document_id=8731943e-95af-4641-bc83-e3f0a8ed57bf, hash=0a94202375c7df5dc67bbbfb7dc011e36d91f2377e271f78bffd58eab909fd3f, taille signature=344, titre=Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signed.pdf
+DEBUG:django_api:Données: document_id=8731943e-95af-4641-bc83-e3f0a8ed57bf, hash=0a94202375c7df5dc67bbbfb7dc011e36d91f2377e271f78bffd58eab909fd3f, taille signature=344, titre=Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signed.pdf
+[INFO] Envoi des données de signature à l'API Django pour le document 8731943e-95af-4641-bc83-e3f0a8ed57bf
+INFO:django_api:Envoi des données de signature à l'API Django pour le document 8731943e-95af-4641-bc83-e3f0a8ed57bf
+INFO:httpx:HTTP Request: POST https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025 "HTTP/1.1 201 Created"
+[DEBUG] Statut de la réponse: 201
+DEBUG:django_api:Statut de la réponse: 201
+[DEBUG] Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "8731943e-95af-4641-bc83-e3f0a8ed57bf"}
+DEBUG:django_api:Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "8731943e-95af-4641-bc83-e3f0a8ed57bf"}
+[DEBUG] En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Thu, 10 Jul 2025 08:44:04 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+DEBUG:django_api:En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Thu, 10 Jul 2025 08:44:04 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+[INFO] Données de signature stockées avec succès pour le document 8731943e-95af-4641-bc83-e3f0a8ed57bf
+INFO:django_api:Données de signature stockées avec succès pour le document 8731943e-95af-4641-bc83-e3f0a8ed57bf
+INFO:main:Données de signature stockées avec succès pour le document 8731943e-95af-4641-bc83-e3f0a8ed57bf
+INFO:main:Signature terminée en 0.23 secondes
+INFO:     154.72.161.142:0 - "POST /sign HTTP/1.0" 200 OK
+INFO:main:Fichier temporaire supprimé: /tmp/Plan de mémoire _ Authentification TLS avec ZKP via Fiat-Shamir_signed_signed_20250710094404.pdf
+INFO:main:Nouvelle demande de signature pour le fichier pdf-exemple.pdf
+INFO:signer:Clé privée chargée avec succès: <Name(C=CM,O=ANTIC CA,OU=GovRA,OU=ANTIC RA,OU=PKI Center,CN=TEST MTN CAMEROON(TEST EMPLOYE 19880808))>
+INFO:main:Identifiant généré pour le document: d8d98385-abf0-4e48-b259-649d56ac7707
+INFO:main:Hash du document original calculé: 021d0a37e5d8b0e21d8259e1f322f13187ea0fe9f66c72f47ed65c0121b75cf1
+INFO:signer:Fichier signé avec succès, taille de la signature: 256 octets
+INFO:main:Document signé, taille de la signature: 256 octets
+INFO:main:Métadonnées parsées avec succès. Clés disponibles: ['qr_position', 'document_id', 'document_title', 'organization_id', 'organization_name', 'signer_role', 'signer_name', 'signature_position']
+INFO:main:Position du QR code extraite des métadonnées: {'x': 82.35294117647058, 'y': 91.541716152019, 'size': 'medium', 'pages': 'all', 'positions': {'default': {'x': 82.35294117647058, 'y': 91.541716152019}}, 'mode': 'all'}
+INFO:main:Données de signature trouvées. Clés: ['signature_image', 'signature_size', 'positions']
+INFO:main:Image de signature trouvée. Longueur: 181471 caractères. Début: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...
+INFO:main:Positions de signature trouvées: 1 position(s). Détails: [{'page': 'all', 'x': 13.61344537815126, 'y': 92.49183491686462, 'width': 20, 'height': 10}]
+INFO:main:Taille de signature extraite des métadonnées: 30%
+INFO:main:ID d'organisation extrait des métadonnées: 1
+INFO:main:Nom d'organisation extrait des métadonnées: MINFI
+INFO:main:Rôle du signataire extrait des métadonnées: signer
+INFO:main:Nom du signataire extrait des métadonnées: test
+INFO:main:Ajout de l'image de signature au document avec taille 30%
+INFO:main:=== DÉBUT add_signature_image_to_pdf ===
+INFO:main:Taille de signature reçue: 30%
+INFO:main:Nombre de positions: 1
+INFO:main:Positions détaillées: [{'page': 'all', 'x': 13.61344537815126, 'y': 92.49183491686462, 'width': 20, 'height': 10}]
+INFO:main:Début des données d'image reçues: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...
+INFO:main:DEBUG MICROSERVICE - Positions de signature reçues: [{'page': 'all', 'x': 13.61344537815126, 'y': 92.49183491686462, 'width': 20, 'height': 10}]
+INFO:main:DEBUG MICROSERVICE - Position 1: page=all, x=13.61344537815126, y=92.49183491686462, width=20, height=10
+INFO:main:En-tête de l'image détecté: data:image/jpeg;base64
+INFO:main:Format d'image détecté: jpg
+INFO:main:Données base64 pures extraites, longueur: 181448
+INFO:main:Image décodée avec succès, taille: 136084 octets
+INFO:main:Image validée par PIL
+INFO:main:Image de signature sauvegardée temporairement: /tmp/temp_signature_8fd35289-bbe5-4a0b-abdc-1da4878a5248.jpg
+INFO:main:Traitement des 1 pages du PDF
+INFO:main:Mode 'all' détecté - signature appliquée sur la page 1
+INFO:main:Ajout de 1 signature(s) sur la page 1
+INFO:main:=== CALCUL DIMENSIONS SIGNATURE ===
+INFO:main:signature_size reçu: 30%
+INFO:main:Calcul: width_percent = 30 * 0.6 = 18.0%
+INFO:main:Calcul: height_percent = 30 * 0.3 = 9.0%
+INFO:main:Utilisation de la taille de signature 30%: largeur=18.0%, hauteur=9.0%
+INFO:main:Position de signature: x=13.61344537815126%, y=92.49183491686462%, largeur=18.0%, hauteur=9.0%
+INFO:main:=== CONVERSION EN COORDONNÉES ABSOLUES ===
+INFO:main:Page dimensions: 595.0 x 842.0 points
+INFO:main:Position absolue: x=81.0, y=63.218749999999915
+INFO:main:Dimensions absolues: largeur=107.1, hauteur=75.78 points
+INFO:main:Signature ajoutée à la position: x=27.450000000000003, y=25.328749999999914, largeur=107.1, hauteur=75.78
+INFO:main:Fusion réussie pour la page 1
+INFO:main:Processus d'ajout de l'image de signature terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_signature_8fd35289-bbe5-4a0b-abdc-1da4878a5248.jpg
+INFO:main:Début du processus d'ajout du QR code au PDF
+INFO:main:Mode de positionnement: all
+INFO:main:Position par défaut: x=82.35294117647058%, y=91.541716152019%, taille=medium
+INFO:main:Pages où appliquer le QR code: all
+INFO:main:Positions individuelles définies pour les pages: ['default']
+INFO:main:Encodage de l'ID du document: d8d98385-abf0-4e48-b259-649d56ac7707 dans le QR code
+INFO:main:Génération de l'image du QR code
+INFO:main:Sauvegarde du QR code dans: /tmp/temp_qr_7800a99a-a884-4709-afe7-c0ad235e728b.png
+INFO:main:Lecture du PDF original
+INFO:main:Traitement des 1 pages du PDF
+INFO:main:Application du QR code sur la page 1
+INFO:main:Dimensions de la page 1: 595.0 x 842.0 points
+INFO:main:Sauvegarde du PDF modifié avec le QR code
+INFO:main:Processus d'ajout du QR code terminé avec succès
+INFO:main:Suppression du fichier temporaire: /tmp/temp_qr_7800a99a-a884-4709-afe7-c0ad235e728b.png
+INFO:main:QR code contenant l'ID d8d98385-abf0-4e48-b259-649d56ac7707 ajouté au document à la position personnalisée
+[INFO] URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+INFO:django_api:URL pour stocker la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[DEBUG] Fichier original: taille=131213 octets
+DEBUG:django_api:Fichier original: taille=131213 octets
+[DEBUG] Fichier signé: taille=346853 octets
+DEBUG:django_api:Fichier signé: taille=346853 octets
+[DEBUG] Propriétaire du document: 4
+DEBUG:django_api:Propriétaire du document: 4
+[DEBUG] Organisation du document: 1
+DEBUG:django_api:Organisation du document: 1
+[DEBUG] Rôle du signataire: signer
+DEBUG:django_api:Rôle du signataire: signer
+[DEBUG] Nom de l'organisation: MINFI
+DEBUG:django_api:Nom de l'organisation: MINFI
+[DEBUG] Nom du signataire: test
+DEBUG:django_api:Nom du signataire: test
+[DEBUG] Titre du document: pdf-exemple.pdf
+DEBUG:django_api:Titre du document: pdf-exemple.pdf
+[DEBUG] En-têtes: {}
+DEBUG:django_api:En-têtes: {}
+[DEBUG] Données: document_id=d8d98385-abf0-4e48-b259-649d56ac7707, hash=021d0a37e5d8b0e21d8259e1f322f13187ea0fe9f66c72f47ed65c0121b75cf1, taille signature=344, titre=pdf-exemple.pdf
+DEBUG:django_api:Données: document_id=d8d98385-abf0-4e48-b259-649d56ac7707, hash=021d0a37e5d8b0e21d8259e1f322f13187ea0fe9f66c72f47ed65c0121b75cf1, taille signature=344, titre=pdf-exemple.pdf
+[INFO] Envoi des données de signature à l'API Django pour le document d8d98385-abf0-4e48-b259-649d56ac7707
+INFO:django_api:Envoi des données de signature à l'API Django pour le document d8d98385-abf0-4e48-b259-649d56ac7707
+INFO:httpx:HTTP Request: POST https://ppd.camgovca.cm/api/public/store_signature/?api_key=certisign_microservice_key_2025 "HTTP/1.1 201 Created"
+[DEBUG] Statut de la réponse: 201
+DEBUG:django_api:Statut de la réponse: 201
+[DEBUG] Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "d8d98385-abf0-4e48-b259-649d56ac7707"}
+DEBUG:django_api:Corps de la réponse: {"status": "success", "message": "Signature stock\u00e9e avec succ\u00e8s", "document_id": "d8d98385-abf0-4e48-b259-649d56ac7707"}
+[DEBUG] En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Thu, 10 Jul 2025 09:12:45 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+DEBUG:django_api:En-têtes de réponse: Headers([('server', 'nginx/1.18.0 (Ubuntu)'), ('date', 'Thu, 10 Jul 2025 09:12:45 GMT'), ('content-type', 'application/json'), ('content-length', '130'), ('connection', 'keep-alive'), ('x-frame-options', 'DENY'), ('vary', 'origin'), ('x-content-type-options', 'nosniff'), ('referrer-policy', 'same-origin'), ('cross-origin-opener-policy', 'same-origin'), ('x-frame-options', 'DENY'), ('x-content-type-options', 'nosniff'), ('x-xss-protection', '1; mode=block')])
+[INFO] Données de signature stockées avec succès pour le document d8d98385-abf0-4e48-b259-649d56ac7707
+INFO:django_api:Données de signature stockées avec succès pour le document d8d98385-abf0-4e48-b259-649d56ac7707
+INFO:main:Données de signature stockées avec succès pour le document d8d98385-abf0-4e48-b259-649d56ac7707
+INFO:main:Signature terminée en 0.48 secondes
+INFO:     154.72.161.142:0 - "POST /sign HTTP/1.0" 200 OK
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] Nouvelle demande de vérification par ID: d8d98385-abf0-4e48-b259-649d56ac7707
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] Récupération des données de signature pour le document ID: d8d98385-abf0-4e48-b259-649d56ac7707
+[INFO] ID du document nettoyé: 'd8d98385-abf0-4e48-b259-649d56ac7707'
+INFO:django_api:ID du document nettoyé: 'd8d98385-abf0-4e48-b259-649d56ac7707'
+[INFO] URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=d8d98385-abf0-4e48-b259-649d56ac7707
+INFO:django_api:URL pour récupérer la signature (route publique spéciale): https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=d8d98385-abf0-4e48-b259-649d56ac7707
+[INFO] Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+INFO:django_api:Clé API utilisée (en paramètre URL): certisign_microservice_key_2025
+[INFO] Récupération des données de signature pour le document d8d98385-abf0-4e48-b259-649d56ac7707
+INFO:django_api:Récupération des données de signature pour le document d8d98385-abf0-4e48-b259-649d56ac7707
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/api/public/get_signature/?api_key=certisign_microservice_key_2025&document_id=d8d98385-abf0-4e48-b259-649d56ac7707 "HTTP/1.1 200 OK"
+[INFO] Données de signature récupérées avec succès pour le document d8d98385-abf0-4e48-b259-649d56ac7707
+INFO:django_api:Données de signature récupérées avec succès pour le document d8d98385-abf0-4e48-b259-649d56ac7707
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] Ajout des informations du signataire à la réponse
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] DEBUG - Clés des données de signature: ['document_id', 'original_hash', 'signature', 'public_key_pem', 'created_at', 'title', 'signer_info', 'original_file_url', 'original_file_path', 'signed_file_url', 'signed_file_path']
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] DEBUG - return_original_document: True
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] DEBUG - signed_file_url présent: True
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] DEBUG - signed_file_url valeur: /media/signatures/signed/signed_c36wy9c.pdf
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: https://ppd.camgovca.cm/media/signatures/signed/signed_c36wy9c.pdf
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] 📥 Envoi de la requête HTTP pour le document SIGNÉ...
+INFO:httpx:HTTP Request: GET https://ppd.camgovca.cm/media/signatures/signed/signed_c36wy9c.pdf "HTTP/1.1 200 OK"
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] 📊 Réponse HTTP reçue - Status: 200
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] ✅ Document SIGNÉ ajouté à la réponse (taille: 346853 octets)
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] 📄 Nom du fichier signé: pdf-exemple_signé.pdf
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] 🔗 Base64 longueur: 462472 caractères
+INFO:main:[f442ba69-914b-4fb5-b408-eb20e9134bda] Vérification terminée en 0.08 secondes
+INFO:     129.0.205.30:0 - "POST /verify HTTP/1.0" 200 OK
+INFO:main:Fichier temporaire supprimé: /tmp/pdf-exemple_signed_20250710101245.pdf
