@@ -58,7 +58,7 @@
         <div class="hero-content">
           <h1 class="hero-title">
             <span class="highlight-text">Sécurisez vos documents</span>
-            <br>avec des signatures électroniques
+            <br>avec des signatures électroniques MARKUP
           </h1>
           <p class="hero-description">
             Doc@uthANTIC est une solution de signature électronique professionnelle et sécurisée qui vous permet
