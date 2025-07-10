@@ -50,14 +50,6 @@ fi
 
 log "${YELLOW}🔄 Nouveaux changements détectés. Mise à jour en cours...${NC}"
 
-# Arrêter les services
-log "${YELLOW}🛑 Arrêt des services CertiSign...${NC}"
-if [ -f "./stop_certisign_services.sh" ]; then
-    chmod +x ./stop_certisign_services.sh
-    ./stop_certisign_services.sh
-else
-    log "${YELLOW}⚠️  Script d'arrêt non trouvé, continuons...${NC}"
-fi
 
 # Mettre à jour le code
 log "${YELLOW}⬇️  Pull des changements...${NC}"
@@ -80,17 +72,6 @@ if [ -f "backend/django-project/manage.py" ]; then
     cd "$PROJECT_DIR"
 fi
 
-# Redémarrer les services avec votre script existant
-log "${YELLOW}🚀 Redémarrage des services CertiSign...${NC}"
-if [ -f "./start_certisign_services.sh" ]; then
-    chmod +x ./start_certisign_services.sh
-    log "${GREEN}📋 Exécution du script de démarrage existant...${NC}"
-    ./start_certisign_services.sh
-    log "${GREEN}✅ Services redémarrés via script existant${NC}"
-else
-    log "${RED}❌ Script de démarrage non trouvé: ./start_certisign_services.sh${NC}"
-    exit 1
-fi
 
 log "${GREEN}🎉 Déploiement terminé avec succès !${NC}"
 log "${GREEN}📍 Version déployée: $(git rev-parse --short HEAD)${NC}"
