@@ -828,7 +828,22 @@ const previewUrl = ref(null);
 async function loadTemplates() {
   try {
     loading.value = true;
-    const response = await TemplateService.getTemplates();
+    
+    // Récupérer l'utilisateur actuel et son organisation
+    const user = AuthService.getCurrentUser();
+    let organizationName = null;
+    
+    if (user) {
+      if (user.organization && typeof user.organization === 'object') {
+        organizationName = user.organization.name;
+      } else if (user.organization) {
+        organizationName = user.organization;
+      }
+    }
+    
+    console.log('Chargement des templates pour l\'organisation:', organizationName);
+    
+    const response = await TemplateService.getTemplates(organizationName);
     
     // Transformer les données de l'API pour correspondre à notre format local
     templates.value = response.results.map(template => ({
@@ -844,6 +859,8 @@ async function loadTemplates() {
       qrSize: template.qr_size,
       pageApplication: template.page_application
     }));
+    
+    console.log('Templates disponibles pour cette organisation:', templates.value.length);
   } catch (error) {
     console.error('Erreur lors du chargement des templates:', error);
   } finally {

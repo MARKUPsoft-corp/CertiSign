@@ -28,6 +28,13 @@ class SignatureTemplateSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         validated_data['user'] = user
         
+        # Récupérer les informations sur l'organisation de l'utilisateur si disponibles
+        if user.organization:
+            validated_data['organization_name'] = user.organization.name
+            validated_data['organization_role'] = getattr(user, 'role', 'collaborator')
+        
+        validated_data['user_role'] = getattr(user, 'role', 'user')
+        
         return super().create(validated_data)
 
 class SignatureTemplateListSerializer(serializers.ModelSerializer):
@@ -63,9 +70,9 @@ class SignatureTemplateCreateSerializer(serializers.ModelSerializer):
         validated_data['user'] = user
         
         # Récupérer les informations sur l'organisation de l'utilisateur si disponibles
-        if hasattr(user, 'profile') and user.profile.organization:
-            validated_data['organization_name'] = user.profile.organization.name
-            validated_data['organization_role'] = user.profile.role
+        if user.organization:
+            validated_data['organization_name'] = user.organization.name
+            validated_data['organization_role'] = getattr(user, 'role', 'collaborator')
         
         validated_data['user_role'] = getattr(user, 'role', 'user')
         

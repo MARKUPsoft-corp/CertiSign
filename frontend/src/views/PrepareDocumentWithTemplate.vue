@@ -331,6 +331,7 @@
 import { ref, computed, onMounted, defineEmits, defineProps } from 'vue';
 import TemplateService from '@/services/TemplateService';
 import DocumentService from '@/services/DocumentService';
+import AuthService from '@/services/AuthService'; // Added import for AuthService
 
 // Définir les props
 const props = defineProps({
@@ -423,7 +424,22 @@ function proceedToSubmission() {
 async function loadTemplates() {
   loadingTemplates.value = true;
   try {
-    const response = await TemplateService.getTemplates();
+    // Récupérer l'utilisateur actuel et son organisation
+    const user = AuthService.getCurrentUser();
+    let organizationName = null;
+    
+    if (user) {
+      if (user.organization && typeof user.organization === 'object') {
+        organizationName = user.organization.name;
+      } else if (user.organization) {
+        organizationName = user.organization;
+      }
+    }
+    
+    console.log('Chargement des templates pour l\'organisation:', organizationName);
+    
+    // Appel au service avec le nom de l'organisation pour filtrer les templates
+    const response = await TemplateService.getTemplates(organizationName);
     console.log('Templates récupérés:', response);
     
     if (response && response.results && Array.isArray(response.results)) {
@@ -434,6 +450,8 @@ async function loadTemplates() {
       console.warn('Format de réponse inattendu:', response);
       availableTemplates.value = [];
     }
+    
+    console.log('Templates disponibles pour cette organisation:', availableTemplates.value.length);
   } catch (error) {
     console.error('Erreur lors du chargement des templates:', error);
     availableTemplates.value = [];

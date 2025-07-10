@@ -41,25 +41,36 @@ class SignatureTemplateViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         """
-        Filtrer les templates. Si un nom d'organisation est fourni, filtre par ce nom.
-        Sinon, retourne les templates de l'utilisateur connecté et de son organisation.
+        Filtrer les templates selon les règles métier :
+        1. Si un organization_name est fourni : seulement les templates de cette organisation
+        2. Si l'utilisateur appartient à une organisation : templates de son organisation
+        3. Si l'utilisateur n'appartient à aucune organisation : seulement ses propres templates
         """
         user = self.request.user
         organization_name = self.request.query_params.get('organization_name', None)
 
         if organization_name:
-            # Si un nom d'organisation est spécifié, ne retourner que les templates de cette organisation
-            return SignatureTemplate.objects.filter(organization_name=organization_name).order_by('-created_at')
+            # Si un nom d'organisation est spécifié, retourner seulement les templates de cette organisation
+            # Vérifier que l'utilisateur a accès à cette organisation
+            if user.organization and user.organization.name == organization_name:
+                # Utilisateur appartient à l'organisation demandée
+                return SignatureTemplate.objects.filter(organization_name=organization_name).order_by('-created_at')
+            elif not user.organization:
+                # Utilisateur sans organisation ne peut pas accéder aux templates d'organisation
+                return SignatureTemplate.objects.none()
+            else:
+                # Utilisateur demande une organisation différente de la sienne
+                return SignatureTemplate.objects.none()
         
-        # Comportement par défaut : templates personnels + templates de l'organisation de l'utilisateur
-        queryset = SignatureTemplate.objects.filter(user=user)
-        if hasattr(user, 'profile') and user.profile.organization:
-            org_templates = SignatureTemplate.objects.filter(
-                organization_name=user.profile.organization.name
-            ).exclude(user=user)
-            queryset = queryset | org_templates
-        
-        return queryset.order_by('-created_at')
+        # Comportement par défaut selon l'organisation de l'utilisateur
+        if user.organization:
+            # Utilisateur appartient à une organisation : retourner tous les templates de cette organisation
+            return SignatureTemplate.objects.filter(
+                organization_name=user.organization.name
+            ).order_by('-created_at')
+        else:
+            # Utilisateur sans organisation : retourner seulement ses propres templates
+            return SignatureTemplate.objects.filter(user=user).order_by('-created_at')
     
     @action(detail=True, methods=['get'])
     def download_preview(self, request, pk=None):

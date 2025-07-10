@@ -60,7 +60,7 @@ else
     exit 1
 fi
 
-# Migrations Django si nécessaire (uniquement)
+# Migrations Django si nécessaire 
 if [ -f "backend/django-project/manage.py" ]; then
     log "${YELLOW}🗃️  Application des migrations Django...${NC}"
     cd backend/django-project

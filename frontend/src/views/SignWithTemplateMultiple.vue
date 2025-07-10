@@ -409,6 +409,7 @@
 <script setup>
 import { ref, computed, defineEmits, onMounted } from 'vue';
 import TemplateService from '@/services/TemplateService';
+import AuthService from '@/services/AuthService';
 
 // Définir les émetteurs d'événements
 const emit = defineEmits(['close']);
@@ -463,7 +464,21 @@ const loadingTemplates = ref(false);
 async function loadTemplates() {
   loadingTemplates.value = true;
   try {
-    const response = await TemplateService.getTemplates();
+    // Récupérer l'utilisateur actuel et son organisation
+    const user = AuthService.getCurrentUser();
+    let organizationName = null;
+    
+    if (user) {
+      if (user.organization && typeof user.organization === 'object') {
+        organizationName = user.organization.name;
+      } else if (user.organization) {
+        organizationName = user.organization;
+      }
+    }
+    
+    console.log('Chargement des templates pour l\'organisation:', organizationName);
+    
+    const response = await TemplateService.getTemplates(organizationName);
     console.log('Réponse des templates:', response);
     
     // Gérer la structure paginée de l'API
@@ -478,6 +493,8 @@ async function loadTemplates() {
       console.warn('Format de réponse inattendu:', response);
       availableTemplates.value = [];
     }
+    
+    console.log('Templates disponibles pour cette organisation:', availableTemplates.value.length);
   } catch (error) {
     console.error('Erreur lors du chargement des templates:', error);
     availableTemplates.value = [];
