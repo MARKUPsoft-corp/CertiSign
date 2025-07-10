@@ -413,31 +413,128 @@
           </h3>
           
           <div class="documents-list">
-            <div v-for="doc in signedDocuments" :key="doc.id" class="document-item">
-              <div class="doc-info">
-                <i class="bi bi-file-earmark-check"></i>
-                <div class="doc-details">
-                  <span class="doc-name">{{ doc.document_name || doc.name || 'Document sans nom' }}</span>
-                  <span class="doc-meta">Signé le {{ formatDate(doc.signedAt || doc.updated_at) }}</span>
-                  <div class="signer-info" v-if="doc.organization_name || doc.signer_role">
-                    <i class="bi bi-building"></i>
-                    <span>{{ doc.organization_name }}{{ doc.signer_role ? ` - ${doc.signer_role}` : '' }}</span>
+            <!-- Onglets Quick / Template -->
+            <div class="pending-tabs">
+              <button class="tab-btn" :class="{ active: signedTab === 'quick' }" @click="signedTab = 'quick'">Signés directs</button>
+              <button class="tab-btn" :class="{ active: signedTab === 'template' }" @click="signedTab = 'template'">Avec template</button>
+            </div>
+
+            <!-- Onglet QUICK -->
+            <template v-if="signedTab === 'quick'">
+              <!-- Recherche -->
+              <div class="search-container">
+                <input type="text" v-model="searchQuerySignedQuick" class="search-input" placeholder="Rechercher un document..." @input="filterSignedQuickDocuments">
+                <i class="bi bi-search search-icon"></i>
+              </div>
+
+              <div v-for="doc in paginatedSignedQuickDocuments" :key="doc.id" class="document-item">
+                <div class="doc-info">
+                  <i class="bi bi-file-earmark-check"></i>
+                  <div class="doc-details">
+                    <span class="doc-name">{{ doc.document_name || doc.name || 'Document sans nom' }}</span>
+                    <span class="doc-meta">Signé le {{ formatDate(doc.signedAt || doc.updated_at) }}</span>
+                    <div class="signer-info" v-if="doc.organization_name || doc.signer_role">
+                      <i class="bi bi-building"></i>
+                      <span>{{ doc.organization_name }}{{ doc.signer_role ? ` - ${doc.signer_role}` : '' }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="doc-status">
+                  <span class="status-badge signed">Signé</span>
+                  <div class="doc-actions">
+                    <button class="btn-icon" title="Télécharger" @click="downloadSignedDocument(doc)"><i class="bi bi-download"></i></button>
                   </div>
                 </div>
               </div>
-              <div class="doc-status">
-                <span class="status-badge signed">Signé</span>
-                <div class="doc-actions">
-                  <button class="btn-icon" title="Télécharger" @click="downloadSignedDocument(doc)">
-                    <i class="bi bi-download"></i>
-                  </button>
+
+              <!-- Pagination quick -->
+              <div v-if="totalPagesSignedQuick > 1" class="pagination-container">
+                <div class="pagination-info">
+                  <span>Page {{ currentPageSignedQuick }} sur {{ totalPagesSignedQuick }}</span>
+                  <span class="documents-count">({{ filteredSignedQuickDocuments.length }} documents au total)</span>
+                </div>
+                <div class="pagination-controls">
+                  <button class="pagination-btn prev" :disabled="currentPageSignedQuick === 1" @click="previousPageSignedQuick"><i class="bi bi-chevron-left"></i> Précédent</button>
+                  <button v-if="visiblePagesSignedQuick[0] > 1" class="pagination-btn page" @click="goToPageSignedQuick(1)">1</button>
+                  <span v-if="visiblePagesSignedQuick[0] > 2" class="pagination-dots">...</span>
+                  <button v-for="page in visiblePagesSignedQuick" :key="page" class="pagination-btn page" :class="{ 'active': page === currentPageSignedQuick }" @click="goToPageSignedQuick(page)">{{ page }}</button>
+                  <span v-if="visiblePagesSignedQuick[visiblePagesSignedQuick.length - 1] < totalPagesSignedQuick - 1" class="pagination-dots">...</span>
+                  <button v-if="visiblePagesSignedQuick[visiblePagesSignedQuick.length - 1] < totalPagesSignedQuick" class="pagination-btn page" @click="goToPageSignedQuick(totalPagesSignedQuick)">{{ totalPagesSignedQuick }}</button>
+                  <button class="pagination-btn next" :disabled="currentPageSignedQuick === totalPagesSignedQuick" @click="nextPageSignedQuick">Suivant <i class="bi bi-chevron-right"></i></button>
                 </div>
               </div>
-            </div>
-            <div v-if="signedDocuments.length === 0" class="empty-state">
-              <i class="bi bi-file-earmark"></i>
-              <p>Aucun document signé récemment</p>
-            </div>
+
+              <div v-if="filteredSignedQuickDocuments.length === 0" class="empty-state">
+                <i class="bi bi-file-earmark"></i>
+                <p v-if="searchQuerySignedQuick">Aucun résultat trouvé pour "{{ searchQuerySignedQuick }}"</p>
+                <p v-else>Aucun document signé</p>
+              </div>
+            </template>
+
+            <!-- Onglet TEMPLATE -->
+            <template v-else>
+              <!-- Cartes templates -->
+              <div v-if="!selectedSignedTemplateId" class="template-cards-grid">
+                <div v-for="tpl in signedTemplateCards" :key="tpl.templateId" class="template-card-pending">
+                  <h4 class="template-card-title">{{ tpl.templateName }}</h4>
+                  <p class="template-card-count">{{ tpl.documents.length }} document(s)</p>
+                  <div class="template-card-actions">
+                    <button class="btn-icon" @click="previewTemplateById(tpl.templateId)" title="Aperçu template"><i class="bi bi-eye"></i></button>
+                    <button class="btn-icon primary" @click="selectedSignedTemplateId = tpl.templateId" title="Voir documents"><i class="bi bi-list"></i></button>
+                  </div>
+                </div>
+                <div v-if="signedTemplateCards.length === 0" class="empty-state"><i class="bi bi-file-earmark"></i><p>Aucun document signé via template</p></div>
+              </div>
+
+              <!-- Liste d'un template -->
+              <div v-else>
+                <div class="template-docs-header">
+                  <h4 class="template-docs-title">{{ currentSignedTemplateDocs[0]?.templateName || 'Template' }}</h4>
+                  <button class="btn-secondary" @click="selectedSignedTemplateId = null">Retour aux templates →</button>
+                </div>
+
+                <!-- Recherche -->
+                <div class="search-container">
+                  <input type="text" v-model="searchQuerySignedTemplate" class="search-input" placeholder="Rechercher un document..." @input="filterSignedTemplateDocuments">
+                  <i class="bi bi-search search-icon"></i>
+                </div>
+
+                <div v-for="doc in paginatedSignedTemplateDocuments" :key="doc.id" class="document-item">
+                  <div class="doc-info">
+                    <i class="bi bi-file-earmark-check"></i>
+                    <div class="doc-details">
+                      <span class="doc-name">{{ doc.document_name || doc.name || 'Document sans nom' }}</span>
+                      <span class="doc-meta">Signé le {{ formatDate(doc.signedAt || doc.updated_at) }}</span>
+                    </div>
+                  </div>
+                  <div class="doc-status">
+                    <span class="status-badge signed">Signé</span>
+                    <div class="doc-actions">
+                      <button class="btn-icon" title="Télécharger" @click="downloadSignedDocument(doc)"><i class="bi bi-download"></i></button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Pagination template -->
+                <div v-if="totalPagesSignedTemplate > 1" class="pagination-container">
+                  <div class="pagination-info">
+                    <span>Page {{ currentPageSignedTemplate }} sur {{ totalPagesSignedTemplate }}</span>
+                    <span class="documents-count">({{ filteredSignedTemplateDocuments.length }} documents au total)</span>
+                  </div>
+                  <div class="pagination-controls">
+                    <button class="pagination-btn prev" :disabled="currentPageSignedTemplate === 1" @click="previousPageSignedTemplate"><i class="bi bi-chevron-left"></i> Précédent</button>
+                    <button v-if="visiblePagesSignedTemplate[0] > 1" class="pagination-btn page" @click="goToPageSignedTemplate(1)">1</button>
+                    <span v-if="visiblePagesSignedTemplate[0] > 2" class="pagination-dots">...</span>
+                    <button v-for="page in visiblePagesSignedTemplate" :key="page" class="pagination-btn page" :class="{ 'active': page === currentPageSignedTemplate }" @click="goToPageSignedTemplate(page)">{{ page }}</button>
+                    <span v-if="visiblePagesSignedTemplate[visiblePagesSignedTemplate.length - 1] < totalPagesSignedTemplate - 1" class="pagination-dots">...</span>
+                    <button v-if="visiblePagesSignedTemplate[visiblePagesSignedTemplate.length - 1] < totalPagesSignedTemplate" class="pagination-btn page" @click="goToPageSignedTemplate(totalPagesSignedTemplate)">{{ totalPagesSignedTemplate }}</button>
+                    <button class="pagination-btn next" :disabled="currentPageSignedTemplate === totalPagesSignedTemplate" @click="nextPageSignedTemplate">Suivant <i class="bi bi-chevron-right"></i></button>
+                  </div>
+                </div>
+
+                <div v-if="filteredSignedTemplateDocuments.length === 0" class="empty-state"><i class="bi bi-file-earmark"></i><p v-if="searchQuerySignedTemplate">Aucun résultat trouvé pour "{{ searchQuerySignedTemplate }}"</p><p v-else>Aucun document pour ce template</p></div>
+              </div>
+            </template>
           </div>
         </div>
 
@@ -1496,7 +1593,10 @@ async function fetchSignedDocuments() {
         signedAt: doc.created_at,
         signedBy: doc.owner_username || 'Signataire',
         organization_name: doc.organization_name || 'Organisation',
-        signer_role: doc.signer_role || 'Signataire'
+        signer_role: doc.signer_role || 'Signataire',
+        isTemplate: !!(doc.metadata && doc.metadata.template_used),
+        templateId: doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_id : null,
+        templateName: doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_name : null
       }));
       
       console.log('Documents signés récupérés depuis DocumentSignature:', signedDocuments.value);
@@ -1773,6 +1873,135 @@ watch(selectedPendingTemplateId, () => {
   searchQueryTemplate.value = '';
   currentPageTemplate.value = 1;
 });
+
+// === Gestion des documents SIGNÉS (onglets, recherche, pagination) ===
+const signedTab = ref('quick');
+const signedQuickDocuments = computed(() => signedDocuments.value.filter(doc => !doc.isTemplate));
+const signedTemplateDocuments = computed(() => signedDocuments.value.filter(doc => doc.isTemplate));
+
+const selectedSignedTemplateId = ref(null);
+
+const signedTemplateCards = computed(() => {
+  const map = {};
+  signedTemplateDocuments.value.forEach(doc => {
+    if (!doc.templateId) return;
+    if (!map[doc.templateId]) {
+      map[doc.templateId] = {
+        templateId: doc.templateId,
+        templateName: doc.templateName || `Template ${doc.templateId}`,
+        documents: []
+      };
+    }
+    map[doc.templateId].documents.push(doc);
+  });
+  return Object.values(map);
+});
+
+const currentSignedTemplateDocs = computed(() => {
+  if (!selectedSignedTemplateId.value) return [];
+  return signedTemplateDocuments.value.filter(doc => doc.templateId === selectedSignedTemplateId.value);
+});
+
+// Recherche & Pagination
+const searchQuerySignedQuick = ref('');
+const searchQuerySignedTemplate = ref('');
+const currentPageSignedQuick = ref(1);
+const currentPageSignedTemplate = ref(1);
+
+const filteredSignedQuickDocuments = ref([]);
+const filteredSignedTemplateDocuments = ref([]);
+
+const paginatedSignedQuickDocuments = computed(() => {
+  const start = (currentPageSignedQuick.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredSignedQuickDocuments.value.slice(start, end);
+});
+
+const totalPagesSignedQuick = computed(() => Math.ceil(filteredSignedQuickDocuments.value.length / itemsPerPage));
+
+const visiblePagesSignedQuick = computed(() => {
+  const pages = [];
+  const total = totalPagesSignedQuick.value;
+  const current = currentPageSignedQuick.value;
+  let start = Math.max(1, current - 2);
+  let end = Math.min(total, current + 2);
+  if (end - start < 4) {
+    if (start === 1) {
+      end = Math.min(total, start + 4);
+    } else if (end === total) {
+      start = Math.max(1, end - 4);
+    }
+  }
+  for (let i = start; i <= end; i++) pages.push(i);
+  return pages;
+});
+
+const paginatedSignedTemplateDocuments = computed(() => {
+  const start = (currentPageSignedTemplate.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredSignedTemplateDocuments.value.slice(start, end);
+});
+
+const totalPagesSignedTemplate = computed(() => Math.ceil(filteredSignedTemplateDocuments.value.length / itemsPerPage));
+
+const visiblePagesSignedTemplate = computed(() => {
+  const pages = [];
+  const total = totalPagesSignedTemplate.value;
+  const current = currentPageSignedTemplate.value;
+  let start = Math.max(1, current - 2);
+  let end = Math.min(total, current + 2);
+  if (end - start < 4) {
+    if (start === 1) {
+      end = Math.min(total, start + 4);
+    } else if (end === total) {
+      start = Math.max(1, end - 4);
+    }
+  }
+  for (let i = start; i <= end; i++) pages.push(i);
+  return pages;
+});
+
+// Fonctions de filtrage
+function filterSignedQuickDocuments() {
+  const query = searchQuerySignedQuick.value.toLowerCase();
+  filteredSignedQuickDocuments.value = signedQuickDocuments.value.filter(doc => {
+    return (doc.document_name && doc.document_name.toLowerCase().includes(query)) ||
+           (doc.signedBy && doc.signedBy.toLowerCase().includes(query));
+  });
+  currentPageSignedQuick.value = 1;
+}
+
+function filterSignedTemplateDocuments() {
+  const query = searchQuerySignedTemplate.value.toLowerCase();
+  filteredSignedTemplateDocuments.value = currentSignedTemplateDocs.value.filter(doc => {
+    return (doc.document_name && doc.document_name.toLowerCase().includes(query)) ||
+           (doc.signedBy && doc.signedBy.toLowerCase().includes(query));
+  });
+  currentPageSignedTemplate.value = 1;
+}
+
+// Pagination helpers
+function goToPageSignedQuick(page) { if (page >= 1 && page <= totalPagesSignedQuick.value) currentPageSignedQuick.value = page; }
+function previousPageSignedQuick() { if (currentPageSignedQuick.value > 1) currentPageSignedQuick.value--; }
+function nextPageSignedQuick() { if (currentPageSignedQuick.value < totalPagesSignedQuick.value) currentPageSignedQuick.value++; }
+
+function goToPageSignedTemplate(page) { if (page >= 1 && page <= totalPagesSignedTemplate.value) currentPageSignedTemplate.value = page; }
+function previousPageSignedTemplate() { if (currentPageSignedTemplate.value > 1) currentPageSignedTemplate.value--; }
+function nextPageSignedTemplate() { if (currentPageSignedTemplate.value < totalPagesSignedTemplate.value) currentPageSignedTemplate.value++; }
+
+// Watchers
+watch(signedQuickDocuments, () => { filterSignedQuickDocuments(); }, { immediate: true });
+watch(currentSignedTemplateDocs, () => { filterSignedTemplateDocuments(); }, { immediate: true });
+watch(signedTab, () => {
+  currentPageSignedQuick.value = 1;
+  currentPageSignedTemplate.value = 1;
+  if (signedTab.value !== 'template') selectedSignedTemplateId.value = null;
+});
+watch(selectedSignedTemplateId, () => {
+  searchQuerySignedTemplate.value = '';
+  currentPageSignedTemplate.value = 1;
+});
+// === Fin gestion documents signés ===
 </script>
 
 <style scoped>
