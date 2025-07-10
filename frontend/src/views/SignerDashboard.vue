@@ -1584,20 +1584,29 @@ async function fetchSignedDocuments() {
     // Récupérer les documents signés depuis l'API DocumentSignature
     const response = await axios.get('https://ppd.camgovca.cm/api/documents/signatures/', config);
     if (response.data && response.data.results) {
-      signedDocuments.value = response.data.results.map(doc => ({
-        ...doc,
-        // Mapper les champs pour compatibilité avec l'interface existante
-        id: doc.document_id,
-        document_name: doc.title,
-        name: doc.title,
-        signedAt: doc.created_at,
-        signedBy: doc.owner_username || 'Signataire',
-        organization_name: doc.organization_name || 'Organisation',
-        signer_role: doc.signer_role || 'Signataire',
-        isTemplate: !!(doc.metadata && doc.metadata.template_used),
-        templateId: doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_id : null,
-        templateName: doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_name : null
-      }));
+      signedDocuments.value = response.data.results.map(doc => {
+        // Extraction robuste des informations de template
+        const tplId = doc.template_id ||
+                     (doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_id : null) ||
+                     (doc.metadata && doc.metadata.template_id ? doc.metadata.template_id : null);
+        const tplName = doc.template_name ||
+                       (doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_name : null) ||
+                       (doc.metadata && doc.metadata.template_name ? doc.metadata.template_name : null);
+
+        return {
+          ...doc,
+          id: doc.document_id,
+          document_name: doc.title,
+          name: doc.title,
+          signedAt: doc.created_at,
+          signedBy: doc.owner_username || 'Signataire',
+          organization_name: doc.organization_name || 'Organisation',
+          signer_role: doc.signer_role || 'Signataire',
+          isTemplate: !!tplId,
+          templateId: tplId,
+          templateName: tplName
+        };
+      });
       
       console.log('Documents signés récupérés depuis DocumentSignature:', signedDocuments.value);
     }
