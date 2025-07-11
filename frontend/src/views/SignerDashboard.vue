@@ -65,7 +65,7 @@
       </section>
 
       <!-- Statistiques -->
-      <section class="stats-section">
+      <section class="stats-section" v-if="activeSection !== 'sign-simple'">
         <div class="stats-container">
           <div class="stat-card">
             <div class="stat-content">
@@ -98,7 +98,7 @@
       </section>
 
       <!-- Actions rapides -->
-      <section class="quick-actions">
+      <section class="quick-actions" v-if="activeSection !== 'sign-simple'">
         <div class="actions-grid">
           <div class="action-card urgent" v-if="urgentDocuments.length > 0">
             <div class="action-icon">
