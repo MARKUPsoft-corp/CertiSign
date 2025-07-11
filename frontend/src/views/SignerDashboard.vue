@@ -439,13 +439,7 @@
               </div>
             </div>
 
-            <div v-if="paginatedSignedDocuments.length === 0" class="empty-state">
-              <i class="bi bi-file-earmark"></i>
-              <p v-if="searchQuerySigned">Aucun résultat trouvé pour "{{ searchQuerySigned }}"</p>
-              <p v-else>Aucun document signé pour cette organisation</p>
-            </div>
-
-            <!-- Pagination -->
+            <!-- Pagination globale -->
             <div v-if="totalPagesSigned > 1" class="pagination-container">
               <div class="pagination-info">
                 <span>Page {{ currentPageSigned }} sur {{ totalPagesSigned }}</span>
@@ -460,6 +454,12 @@
                 <button v-if="visiblePagesSigned[visiblePagesSigned.length - 1] < totalPagesSigned" class="pagination-btn page" @click="goToPageSigned(totalPagesSigned)">{{ totalPagesSigned }}</button>
                 <button class="pagination-btn next" :disabled="currentPageSigned === totalPagesSigned" @click="nextPageSigned">Suivant <i class="bi bi-chevron-right"></i></button>
               </div>
+            </div>
+
+            <div v-if="filteredSignedDocuments.length === 0" class="empty-state">
+              <i class="bi bi-file-earmark"></i>
+              <p v-if="searchQuerySigned">Aucun résultat trouvé pour "{{ searchQuerySigned }}"</p>
+              <p v-else>Aucun document signé pour cette organisation</p>
             </div>
           </div>
         </div>
@@ -1954,8 +1954,12 @@ const filteredSignedDocuments = computed(() => {
   });
 });
 
+// === Pagination combinée pour signed ===
+const currentPageSigned = ref(1);
+watch(filteredSignedDocuments, () => { currentPageSigned.value = 1; });
+
 const paginatedSignedDocuments = computed(() => {
-  const start = (currentPageSignedQuick.value - 1) * itemsPerPage;
+  const start = (currentPageSigned.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
   return filteredSignedDocuments.value.slice(start, end);
 });
@@ -1965,19 +1969,22 @@ const totalPagesSigned = computed(() => Math.ceil(filteredSignedDocuments.value.
 const visiblePagesSigned = computed(() => {
   const pages = [];
   const total = totalPagesSigned.value;
-  const current = currentPageSignedQuick.value;
+  const current = currentPageSigned.value;
   let start = Math.max(1, current - 2);
   let end = Math.min(total, current + 2);
   if (end - start < 4) {
-    if (start === 1) {
-      end = Math.min(total, start + 4);
-    } else if (end === total) {
-      start = Math.max(1, end - 4);
-    }
+    if (start === 1) end = Math.min(total, start + 4);
+    else if (end === total) start = Math.max(1, end - 4);
   }
   for (let i = start; i <= end; i++) pages.push(i);
   return pages;
 });
+
+function goToPageSigned(page) { if (page >= 1 && page <= totalPagesSigned.value) currentPageSigned.value = page; }
+function previousPageSigned() { if (currentPageSigned.value > 1) currentPageSigned.value--; }
+function nextPageSigned() { if (currentPageSigned.value < totalPagesSigned.value) currentPageSigned.value++; }
+// === Fin pagination combinée ===
+
 </script>
 
 <style scoped>
