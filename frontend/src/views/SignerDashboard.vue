@@ -570,7 +570,7 @@
 
         <!-- Signature directe par le signataire -->
         <div v-if="activeSection === 'sign-simple'" class="section-content sign-section">
-          <SignSimpleSigner @close="activeSection = ''" />
+          <SignSimpleSigner @close="activeSection = ''" :organization-name="organizationName" />
         </div>
       </section>
 
