@@ -888,6 +888,7 @@ const urgentDocuments = computed(() => {
   return pendingDocuments.value.filter(doc => doc.is_urgent);
 });
 
+// eslint-disable-next-line no-unused-vars
 const sortedPendingDocuments = computed(() => {
   return [...pendingDocuments.value].sort((a, b) => {
     if (a.is_urgent && !b.is_urgent) return -1;
@@ -2132,6 +2133,10 @@ watch(searchQuerySignedSelf, () => {
   currentPageSignedSelf.value = 1;
 });
 // === Fin gestion documents signés ===
+
+// Placeholder pour éviter undefined si logique future d'agrégation par template
+const signedSelfDocumentsCards = ref([]);
+const currentSignedSelfDocuments = ref([]);
 </script>
 
 <style scoped>
