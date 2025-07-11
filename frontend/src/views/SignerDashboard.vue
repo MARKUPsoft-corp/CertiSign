@@ -3045,6 +3045,8 @@ const totalUrgentCount = computed(() => urgentDocuments.value.length);
   transition: all 0.3s ease;
   text-align: center;
   position: relative;
+  /* Ombre identique à CollaboratorDashboard */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 .action-card:hover, .action-card.active {
@@ -3063,8 +3065,9 @@ const totalUrgentCount = computed(() => urgentDocuments.value.length);
   box-shadow: 0 10px 30px rgba(220, 53, 69, 0.2);
 }
 
+/* Hover/accent comme CollaboratorDashboard */
 .action-card:not(.urgent):hover, .action-card.active {
-  border-color: #ff9500;
+  border-color: var(--accent-color, #ff9500);
   box-shadow: 0 10px 30px rgba(255, 149, 0, 0.15);
 }
 
