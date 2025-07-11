@@ -100,7 +100,7 @@
       <!-- Actions rapides -->
       <section class="quick-actions" v-if="activeSection !== 'sign-simple'">
         <div class="actions-grid">
-          <div class="action-card urgent" v-if="urgentDocuments.length > 0">
+          <div class="action-card urgent" v-if="urgentDocuments.length > 0" @click="activeSection = 'urgent'" :class="{ 'active': activeSection === 'urgent' }">
             <div class="action-icon">
               <i class="bi bi-exclamation-triangle-fill"></i>
             </div>
@@ -461,6 +461,175 @@
               <p v-if="searchQuerySigned">Aucun résultat trouvé pour "{{ searchQuerySigned }}"</p>
               <p v-else>Aucun document signé pour cette organisation</p>
             </div>
+          </div>
+        </div>
+
+        <!-- Documents urgents -->
+        <div v-if="activeSection === 'urgent'" class="section-content">
+          <h3 class="content-title">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            Documents urgents
+          </h3>
+          
+          <div class="documents-list">
+            <!-- Onglets -->
+            <div class="pending-tabs">
+              <button class="tab-btn" :class="{ active: urgentTab === 'quick' }" @click="urgentTab = 'quick'">
+                Préparation directe
+              </button>
+              <button class="tab-btn" :class="{ active: urgentTab === 'template' }" @click="urgentTab = 'template'">
+                Avec template
+              </button>
+            </div>
+
+            <!-- Contenu selon onglet -->
+            <template v-if="urgentTab === 'quick'">
+              <!-- Barre de recherche pour les documents quick -->
+              <div class="search-container">
+                <input 
+                  type="text" 
+                  v-model="searchQueryUrgentQuick" 
+                  class="search-input" 
+                  placeholder="Rechercher un document urgent..."
+                  @input="filterUrgentQuickDocuments"
+                >
+                <i class="bi bi-search search-icon"></i>
+              </div>
+
+              <div v-for="doc in paginatedUrgentQuickDocuments" :key="doc.id" class="document-item urgent">
+                <div class="doc-info">
+                  <i class="bi bi-exclamation-triangle-fill"></i>
+                  <div class="doc-details">
+                    <div class="doc-header">
+                      <span class="doc-name">{{ doc.document_name || 'Document sans nom' }}</span>
+                      <span class="urgent-tag">URGENT</span>
+                    </div>
+                    <span class="doc-meta">
+                      Préparé par {{ doc.preparedBy || doc.collaborator_username || 'Collaborateur' }} • 
+                      {{ formatDate(doc.assignedAt || doc.created_at) }}
+                    </span>
+                    <div class="doc-priority">
+                      <span class="time-elapsed urgent">
+                        {{ getTimeElapsed(doc.assignedAt || doc.created_at) }} d'attente
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="doc-actions">
+                  <button class="btn-primary" @click="signDocument(doc)">
+                    <i class="bi bi-pen"></i>
+                    Signer maintenant
+                  </button>
+                  <button class="btn-icon" title="Prévisualiser" @click="previewDocument(doc)">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Pagination pour documents urgents quick -->
+              <div v-if="totalPagesUrgentQuick > 1" class="pagination-container">
+                <div class="pagination-info">
+                  <span>Page {{ currentPageUrgentQuick }} sur {{ totalPagesUrgentQuick }}</span>
+                  <span class="documents-count">({{ filteredUrgentQuickDocuments.length }} documents urgents au total)</span>
+                </div>
+                
+                <div class="pagination-controls">
+                  <button class="pagination-btn prev" :disabled="currentPageUrgentQuick === 1" @click="previousPageUrgentQuick">
+                    <i class="bi bi-chevron-left"></i> Précédent
+                  </button>
+                  <button v-if="visiblePagesUrgentQuick[0] > 1" class="pagination-btn page" @click="goToPageUrgentQuick(1)">1</button>
+                  <span v-if="visiblePagesUrgentQuick[0] > 2" class="pagination-dots">...</span>
+                  <button v-for="page in visiblePagesUrgentQuick" :key="page" class="pagination-btn page" :class="{ 'active': page === currentPageUrgentQuick }" @click="goToPageUrgentQuick(page)">{{ page }}</button>
+                  <span v-if="visiblePagesUrgentQuick[visiblePagesUrgentQuick.length - 1] < totalPagesUrgentQuick - 1" class="pagination-dots">...</span>
+                  <button v-if="visiblePagesUrgentQuick[visiblePagesUrgentQuick.length - 1] < totalPagesUrgentQuick" class="pagination-btn page" @click="goToPageUrgentQuick(totalPagesUrgentQuick)">{{ totalPagesUrgentQuick }}</button>
+                  <button class="pagination-btn next" :disabled="currentPageUrgentQuick === totalPagesUrgentQuick" @click="nextPageUrgentQuick">Suivant <i class="bi bi-chevron-right"></i></button>
+                </div>
+              </div>
+
+              <div v-if="filteredUrgentQuickDocuments.length === 0" class="empty-state">
+                <i class="bi bi-exclamation-triangle"></i>
+                <p v-if="searchQueryUrgentQuick">Aucun résultat urgent trouvé pour "{{ searchQueryUrgentQuick }}"</p>
+                <p v-else>Aucun document urgent à signer</p>
+              </div>
+            </template>
+
+            <!-- Onglet Template pour urgents -->
+            <template v-else>
+              <div v-if="!selectedUrgentTemplateId" class="template-cards-grid">
+                <div v-for="tpl in urgentTemplateCards" :key="tpl.templateId" class="template-card-pending">
+                  <h4 class="template-card-title">{{ tpl.templateName }}</h4>
+                  <p class="template-card-count">{{ tpl.documents.length }} document(s) urgent(s)</p>
+                  <div class="template-card-actions">
+                    <button class="btn-icon" @click="previewTemplateById(tpl.templateId)" title="Aperçu template">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn-icon primary" @click="selectedUrgentTemplateId = tpl.templateId" title="Voir documents">
+                      <i class="bi bi-list"></i>
+                    </button>
+                  </div>
+                </div>
+                <div v-if="urgentTemplateCards.length === 0" class="empty-state">
+                  <i class="bi bi-exclamation-triangle"></i>
+                  <p>Aucun template urgent</p>
+                </div>
+              </div>
+
+              <div v-else>
+                <div class="template-docs-header">
+                  <h4 class="template-docs-title">{{ currentUrgentTemplateName }}</h4>
+                  <button class="btn-secondary" @click="selectedUrgentTemplateId = null">Retour aux templates →</button>
+                </div>
+                
+                <div class="search-container">
+                  <input type="text" v-model="searchQueryUrgentTemplate" class="search-input" placeholder="Rechercher un document urgent..." @input="filterUrgentTemplateDocuments">
+                  <i class="bi bi-search search-icon"></i>
+                </div>
+
+                <div v-for="doc in paginatedUrgentTemplateDocuments" :key="doc.id" class="document-item urgent">
+                  <div class="doc-info">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <div class="doc-details">
+                      <div class="doc-header">
+                        <span class="doc-name">{{ doc.document_name || 'Document sans nom' }}</span>
+                        <span class="urgent-tag">URGENT</span>
+                      </div>
+                      <span class="doc-meta">Template: {{ doc.templateName }} • {{ formatDate(doc.assignedAt || doc.created_at) }}</span>
+                    </div>
+                  </div>
+                  <div class="doc-actions">
+                    <button class="btn-primary" @click="signDocument(doc)">
+                      <i class="bi bi-pen"></i>
+                      Signer maintenant
+                    </button>
+                    <button class="btn-icon" title="Prévisualiser" @click="previewDocument(doc)">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div v-if="totalPagesUrgentTemplate > 1" class="pagination-container">
+                  <div class="pagination-info">
+                    <span>Page {{ currentPageUrgentTemplate }} sur {{ totalPagesUrgentTemplate }}</span>
+                    <span class="documents-count">({{ filteredUrgentTemplateDocuments.length }} documents urgents au total)</span>
+                  </div>
+                  <div class="pagination-controls">
+                    <button class="pagination-btn prev" :disabled="currentPageUrgentTemplate === 1" @click="previousPageUrgentTemplate"><i class="bi bi-chevron-left"></i> Précédent</button>
+                    <button v-if="visiblePagesUrgentTemplate[0] > 1" class="pagination-btn page" @click="goToPageUrgentTemplate(1)">1</button>
+                    <span v-if="visiblePagesUrgentTemplate[0] > 2" class="pagination-dots">...</span>
+                    <button v-for="page in visiblePagesUrgentTemplate" :key="page" class="pagination-btn page" :class="{ 'active': page === currentPageUrgentTemplate }" @click="goToPageUrgentTemplate(page)">{{ page }}</button>
+                    <span v-if="visiblePagesUrgentTemplate[visiblePagesUrgentTemplate.length - 1] < totalPagesUrgentTemplate - 1" class="pagination-dots">...</span>
+                    <button v-if="visiblePagesUrgentTemplate[visiblePagesUrgentTemplate.length - 1] < totalPagesUrgentTemplate" class="pagination-btn page" @click="goToPageUrgentTemplate(totalPagesUrgentTemplate)">{{ totalPagesUrgentTemplate }}</button>
+                    <button class="pagination-btn next" :disabled="currentPageUrgentTemplate === totalPagesUrgentTemplate" @click="nextPageUrgentTemplate">Suivant <i class="bi bi-chevron-right"></i></button>
+                  </div>
+                </div>
+
+                <div v-if="filteredUrgentTemplateDocuments.length === 0" class="empty-state">
+                  <i class="bi bi-exclamation-triangle"></i>
+                  <p v-if="searchQueryUrgentTemplate">Aucun résultat urgent trouvé pour "{{ searchQueryUrgentTemplate }}"</p>
+                  <p v-else>Aucun document urgent pour ce template</p>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
 
@@ -1991,6 +2160,186 @@ function nextPageSigned() { if (currentPageSigned.value < totalPagesSigned.value
 // === Fin pagination combinée ===
 
 const totalSignedCount = computed(() => signedDocuments.value.length);
+
+// Variables de pagination et recherche pour les documents urgents
+const urgentTab = ref('quick');
+const urgentQuickDocuments = computed(() => urgentDocuments.value.filter(doc => !doc.isTemplate));
+const urgentTemplateDocuments = computed(() => urgentDocuments.value.filter(doc => doc.isTemplate));
+
+const selectedUrgentTemplateId = ref(null);
+
+const urgentTemplateCards = computed(() => {
+  const map = {};
+  urgentTemplateDocuments.value.forEach(doc => {
+    if (!doc.templateId) return;
+    if (!map[doc.templateId]) {
+      map[doc.templateId] = {
+        templateId: doc.templateId,
+        templateName: doc.templateName || `Template ${doc.templateId}`,
+        documents: []
+      };
+    }
+    map[doc.templateId].documents.push(doc);
+  });
+  return Object.values(map);
+});
+
+const currentUrgentTemplateDocs = computed(() => {
+  if (!selectedUrgentTemplateId.value) return [];
+  return urgentTemplateDocuments.value.filter(doc => doc.templateId === selectedUrgentTemplateId.value);
+});
+
+const currentUrgentTemplateName = computed(() => {
+  const d = currentUrgentTemplateDocs.value[0];
+  return d ? (d.templateName || `Template ${d.templateId}`) : '';
+});
+
+// Recherche & Pagination
+const searchQueryUrgentQuick = ref('');
+const searchQueryUrgentTemplate = ref('');
+const currentPageUrgentQuick = ref(1);
+const currentPageUrgentTemplate = ref(1);
+
+const filteredUrgentQuickDocuments = ref([]);
+const filteredUrgentTemplateDocuments = ref([]);
+
+const paginatedUrgentQuickDocuments = computed(() => {
+  const start = (currentPageUrgentQuick.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredUrgentQuickDocuments.value.slice(start, end);
+});
+
+const totalPagesUrgentQuick = computed(() => Math.ceil(filteredUrgentQuickDocuments.value.length / itemsPerPage));
+
+const visiblePagesUrgentQuick = computed(() => {
+  const pages = [];
+  const total = totalPagesUrgentQuick.value;
+  const current = currentPageUrgentQuick.value;
+  let start = Math.max(1, current - 2);
+  let end = Math.min(total, current + 2);
+  if (end - start < 4) {
+    if (start === 1) {
+      end = Math.min(total, start + 4);
+    } else if (end === total) {
+      start = Math.max(1, end - 4);
+    }
+  }
+  for (let i = start; i <= end; i++) pages.push(i);
+  return pages;
+});
+
+const paginatedUrgentTemplateDocuments = computed(() => {
+  const start = (currentPageUrgentTemplate.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredUrgentTemplateDocuments.value.slice(start, end);
+});
+
+const totalPagesUrgentTemplate = computed(() => Math.ceil(filteredUrgentTemplateDocuments.value.length / itemsPerPage));
+
+const visiblePagesUrgentTemplate = computed(() => {
+  const pages = [];
+  const total = totalPagesUrgentTemplate.value;
+  const current = currentPageUrgentTemplate.value;
+  let start = Math.max(1, current - 2);
+  let end = Math.min(total, current + 2);
+  if (end - start < 4) {
+    if (start === 1) {
+      end = Math.min(total, start + 4);
+    } else if (end === total) {
+      start = Math.max(1, end - 4);
+    }
+  }
+  for (let i = start; i <= end; i++) pages.push(i);
+  return pages;
+});
+
+// Fonctions de filtrage
+function filterUrgentQuickDocuments() {
+  const query = searchQueryUrgentQuick.value.toLowerCase();
+  filteredUrgentQuickDocuments.value = urgentQuickDocuments.value.filter(doc => {
+    return (doc.document_name && doc.document_name.toLowerCase().includes(query)) ||
+           (doc.collaborator_username && doc.collaborator_username.toLowerCase().includes(query)) ||
+           (doc.preparedBy && doc.preparedBy.toLowerCase().includes(query));
+  });
+  currentPageUrgentQuick.value = 1;
+}
+
+function filterUrgentTemplateDocuments() {
+  const query = searchQueryUrgentTemplate.value.toLowerCase();
+  filteredUrgentTemplateDocuments.value = currentUrgentTemplateDocs.value.filter(doc => {
+    return (doc.document_name && doc.document_name.toLowerCase().includes(query)) ||
+           (doc.collaborator_username && doc.collaborator_username.toLowerCase().includes(query));
+  });
+  currentPageUrgentTemplate.value = 1;
+}
+
+// Pagination helpers
+function goToPageUrgentQuick(page) { if (page >= 1 && page <= totalPagesUrgentQuick.value) currentPageUrgentQuick.value = page; }
+function previousPageUrgentQuick() { if (currentPageUrgentQuick.value > 1) currentPageUrgentQuick.value--; }
+function nextPageUrgentQuick() { if (currentPageUrgentQuick.value < totalPagesUrgentQuick.value) currentPageUrgentQuick.value++; }
+
+function goToPageUrgentTemplate(page) { if (page >= 1 && page <= totalPagesUrgentTemplate.value) currentPageUrgentTemplate.value = page; }
+function previousPageUrgentTemplate() { if (currentPageUrgentTemplate.value > 1) currentPageUrgentTemplate.value--; }
+function nextPageUrgentTemplate() { if (currentPageUrgentTemplate.value < totalPagesUrgentTemplate.value) currentPageUrgentTemplate.value++; }
+
+// Watchers
+watch(urgentQuickDocuments, () => { filterUrgentQuickDocuments(); }, { immediate: true });
+watch(currentUrgentTemplateDocs, () => { filterUrgentTemplateDocuments(); }, { immediate: true });
+watch(urgentTab, () => {
+  currentPageUrgentQuick.value = 1;
+  currentPageUrgentTemplate.value = 1;
+  if (urgentTab.value !== 'template') selectedUrgentTemplateId.value = null;
+});
+watch(selectedUrgentTemplateId, () => {
+  searchQueryUrgentTemplate.value = '';
+  currentPageUrgentTemplate.value = 1;
+});
+// === Fin gestion documents urgents ===
+
+const searchQueryUrgent = ref('');
+const filteredUrgentDocuments = computed(() => {
+  return urgentDocuments.value.filter(doc => {
+    return (doc.document_name && doc.document_name.toLowerCase().includes(searchQueryUrgent.value.toLowerCase())) ||
+           (doc.name && doc.name.toLowerCase().includes(searchQueryUrgent.value.toLowerCase())) ||
+           (doc.organization_name && doc.organization_name.toLowerCase().includes(searchQueryUrgent.value.toLowerCase()));
+  });
+});
+
+// === Pagination combinée pour urgents ===
+const currentPageUrgent = ref(1);
+watch(filteredUrgentDocuments, () => { currentPageUrgent.value = 1; });
+
+const paginatedUrgentDocuments = computed(() => {
+  const start = (currentPageUrgent.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredUrgentDocuments.value.slice(start, end);
+});
+
+const totalPagesUrgent = computed(() => Math.ceil(filteredUrgentDocuments.value.length / itemsPerPage));
+
+const visiblePagesUrgent = computed(() => {
+  const pages = [];
+  const total = totalPagesUrgent.value;
+  const current = currentPageUrgent.value;
+  let start = Math.max(1, current - 2);
+  let end = Math.min(total, current + 2);
+  if (end - start < 4) {
+    if (start === 1) {
+      end = Math.min(total, start + 4);
+    } else if (end === total) {
+      start = Math.max(1, end - 4);
+    }
+  }
+  for (let i = start; i <= end; i++) pages.push(i);
+  return pages;
+});
+
+function goToPageUrgent(page) { if (page >= 1 && page <= totalPagesUrgent.value) currentPageUrgent.value = page; }
+function previousPageUrgent() { if (currentPageUrgent.value > 1) currentPageUrgent.value--; }
+function nextPageUrgent() { if (currentPageUrgent.value < totalPagesUrgent.value) currentPageUrgent.value++; }
+// === Fin pagination combinée ===
+
+const totalUrgentCount = computed(() => urgentDocuments.value.length);
 
 </script>
 
