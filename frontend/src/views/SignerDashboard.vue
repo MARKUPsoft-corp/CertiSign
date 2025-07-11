@@ -85,15 +85,15 @@
               <i class="bi bi-file-earmark-check"></i>
             </div>
           </div>
-          <div class="stat-card">
+          <button class="stat-card action-stat" @click="activeSection = 'sign-simple'">
             <div class="stat-content">
-              <div class="stat-value">{{ stats.avgTime }}</div>
-              <div class="stat-label">Temps moyen de signature</div>
+              <div class="stat-value"><i class="bi bi-plus-circle"></i></div>
+              <div class="stat-label">Préparez et signez vous-même</div>
             </div>
-            <div class="stat-icon warning">
-              <i class="bi bi-stopwatch"></i>
+            <div class="stat-icon primary">
+              <i class="bi bi-file-earmark-plus"></i>
             </div>
-          </div>
+          </button>
         </div>
       </section>
 
@@ -567,6 +567,11 @@
             </div>
           </div>
         </div>
+
+        <!-- Signature directe par le signataire -->
+        <div v-if="activeSection === 'sign-simple'" class="section-content sign-section">
+          <SignSimpleSigner @close="activeSection = ''" />
+        </div>
       </section>
 
       <!-- Section par défaut si aucune section active -->
@@ -697,6 +702,7 @@ import { useRouter } from 'vue-router';
 import AuthService from '@/services/AuthService';
 import axios from 'axios';
 import TemplateService from '@/services/TemplateService.js';
+import SignSimpleSigner from '@/views/SignSimpleSigner.vue';
 
 const router = useRouter();
 
@@ -3635,5 +3641,19 @@ watch(selectedSignedTemplateId, () => {
   .search-input {
     min-width: 200px;
   }
+}
+
+/* Ajout cohésion SignSimpleSigner */
+.sign-section {
+  background: transparent;
+  padding: 0;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.sign-section :deep(.sign-document-container) {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
 }
 </style> 
