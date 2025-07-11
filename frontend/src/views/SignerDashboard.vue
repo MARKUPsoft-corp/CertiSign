@@ -623,6 +623,7 @@
 </template>
 
 <script setup>
+/* eslint-disable no-unused-vars */
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import AuthService from '@/services/AuthService';
@@ -1495,54 +1496,55 @@ async function fetchSignedDocuments() {
       return;
     }
 
-    // Récupérer l'ID de l'organisation actuelle
     const currentUser = AuthService.getCurrentUser();
     const organizationId = currentUser?.organization?.id;
-    
     if (!organizationId) {
       console.error('ID d\'organisation manquant');
       return;
     }
 
-    const config = {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-      params: {
-        organization_id: organizationId,
-        page_size: 1000
-      } 
-    };  
+    const baseUrl = 'https://ppd.camgovca.cm/api/documents/signatures/';
+    let nextUrl = `${baseUrl}?organization_id=${organizationId}&page_size=100`;
 
-    // Récupérer les documents signés depuis l'API DocumentSignature
-    const response = await axios.get('https://ppd.camgovca.cm/api/documents/signatures/', config);
-    if (response.data && response.data.results) {
-      signedDocuments.value = response.data.results.map(doc => {
-        // Extraction robuste des informations de template
-        const tplId = doc.template_id ||
-                     (doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_id : null) ||
-                     (doc.metadata && doc.metadata.template_id ? doc.metadata.template_id : null);
-        const tplName = doc.template_name ||
-                       (doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_name : null) ||
-                       (doc.metadata && doc.metadata.template_name ? doc.metadata.template_name : null);
+    signedDocuments.value = [];
 
-        return {
-          ...doc,
-          id: doc.document_id,
-          document_name: doc.title,
-          name: doc.title,
-          signedAt: doc.created_at,
-          signedBy: doc.owner_username || 'Signataire',
-          organization_name: doc.organization_name || 'Organisation',
-          signer_role: doc.signer_role || 'Signataire',
-          isTemplate: !!tplId,
-          templateId: tplId,
-          templateName: tplName
-        };
+    while (nextUrl) {
+      const response = await axios.get(nextUrl, {
+        headers: { 'Authorization': `Bearer ${token}` }
       });
-      
-      console.log('Documents signés récupérés depuis DocumentSignature:', signedDocuments.value);
+
+      if (response.data && response.data.results) {
+        const pageDocs = response.data.results.map(doc => {
+          const tplId = doc.template_id ||
+                       (doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_id : null) ||
+                       (doc.metadata && doc.metadata.template_id ? doc.metadata.template_id : null);
+          const tplName = doc.template_name ||
+                         (doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_name : null) ||
+                         (doc.metadata && doc.metadata.template_name ? doc.metadata.template_name : null);
+
+          return {
+            ...doc,
+            id: doc.document_id,
+            document_name: doc.title,
+            name: doc.title,
+            signedAt: doc.created_at,
+            signedBy: doc.owner_username || 'Signataire',
+            organization_name: doc.organization_name || 'Organisation',
+            signer_role: doc.signer_role || 'Signataire',
+            isTemplate: !!tplId,
+            templateId: tplId,
+            templateName: tplName
+          };
+        });
+
+        signedDocuments.value.push(...pageDocs);
+        nextUrl = response.data.next;
+      } else {
+        nextUrl = null;
+      }
     }
+
+    console.log('Documents signés récupérés (pagination complète):', signedDocuments.value.length);
   } catch (error) {
     console.error('Erreur lors de la récupération des documents signés:', error);
   }
@@ -1973,8 +1975,11 @@ const visiblePagesSigned = computed(() => {
   let start = Math.max(1, current - 2);
   let end = Math.min(total, current + 2);
   if (end - start < 4) {
-    if (start === 1) end = Math.min(total, start + 4);
-    else if (end === total) start = Math.max(1, end - 4);
+    if (start === 1) {
+      end = Math.min(total, start + 4);
+    } else if (end === total) {
+      start = Math.max(1, end - 4);
+    }
   }
   for (let i = start; i <= end; i++) pages.push(i);
   return pages;
