@@ -785,7 +785,6 @@ async function startSigningProcess() {
         email: userInfo.email || '',
         full_name: userInfo.fullName || '',
         organization: userInfo.organization || '',
-        organization_name: userInfo.organization || userInfo.organization_name || '',
         organization_id: userInfo.organizationId || '',
         signer_role: userInfo.position || userInfo.role || '',
         jwt_token: localStorage.getItem('jwtToken') || '',
