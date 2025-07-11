@@ -417,7 +417,6 @@
             <div class="pending-tabs">
               <button class="tab-btn" :class="{ active: signedTab === 'quick' }" @click="signedTab = 'quick'">Signés directs</button>
               <button class="tab-btn" :class="{ active: signedTab === 'template' }" @click="signedTab = 'template'">Avec template</button>
-              <button class="tab-btn" :class="{ active: signedTab === 'self' }" @click="signedTab = 'self'">Self</button>
             </div>
 
             <!-- Onglet QUICK -->
@@ -473,7 +472,7 @@
             </template>
 
             <!-- Onglet TEMPLATE -->
-            <template v-else-if="signedTab === 'template'">
+            <template v-else>
               <!-- Cartes templates -->
               <div v-if="!selectedSignedTemplateId" class="template-cards-grid">
                 <div v-for="tpl in signedTemplateCards" :key="tpl.templateId" class="template-card-pending">
@@ -534,71 +533,6 @@
                 </div>
 
                 <div v-if="filteredSignedTemplateDocuments.length === 0" class="empty-state"><i class="bi bi-file-earmark"></i><p v-if="searchQuerySignedTemplate">Aucun résultat trouvé pour "{{ searchQuerySignedTemplate }}"</p><p v-else>Aucun document pour ce template</p></div>
-              </div>
-            </template>
-
-            <!-- Onglet SELF -->
-            <template v-else-if="signedTab === 'self'">
-              <!-- Cartes templates -->
-              <div v-if="!selectedSignedTemplateId" class="template-cards-grid">
-                <div v-for="tpl in signedSelfDocumentsCards" :key="tpl.templateId" class="template-card-pending">
-                  <h4 class="template-card-title">{{ tpl.templateName }}</h4>
-                  <p class="template-card-count">{{ tpl.documents.length }} document(s)</p>
-                  <div class="template-card-actions">
-                    <button class="btn-icon" @click="previewTemplateById(tpl.templateId)" title="Aperçu template"><i class="bi bi-eye"></i></button>
-                    <button class="btn-icon primary" @click="selectedSignedTemplateId = tpl.templateId" title="Voir documents"><i class="bi bi-list"></i></button>
-                  </div>
-                </div>
-                <div v-if="signedSelfDocumentsCards.length === 0" class="empty-state"><i class="bi bi-file-earmark"></i><p>Aucun document signé par le signataire</p></div>
-              </div>
-
-              <!-- Liste d'un template -->
-              <div v-else>
-                <div class="template-docs-header">
-                  <h4 class="template-docs-title">{{ currentSignedSelfDocuments[0]?.templateName || 'Template' }}</h4>
-                  <button class="btn-secondary" @click="selectedSignedTemplateId = null">Retour aux templates →</button>
-                </div>
-
-                <!-- Recherche -->
-                <div class="search-container">
-                  <input type="text" v-model="searchQuerySignedSelf" class="search-input" placeholder="Rechercher un document..." @input="filterSignedSelfDocuments">
-                  <i class="bi bi-search search-icon"></i>
-                </div>
-
-                <div v-for="doc in paginatedSignedSelfDocuments" :key="doc.id" class="document-item">
-                  <div class="doc-info">
-                    <i class="bi bi-file-earmark-check"></i>
-                    <div class="doc-details">
-                      <span class="doc-name">{{ doc.document_name || doc.name || 'Document sans nom' }}</span>
-                      <span class="doc-meta">Signé le {{ formatDate(doc.signedAt || doc.updated_at) }}</span>
-                    </div>
-                  </div>
-                  <div class="doc-status">
-                    <span class="status-badge signed">Signé</span>
-                    <div class="doc-actions">
-                      <button class="btn-icon" title="Télécharger" @click="downloadSignedDocument(doc)"><i class="bi bi-download"></i></button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Pagination self -->
-                <div v-if="totalPagesSignedSelf > 1" class="pagination-container">
-                  <div class="pagination-info">
-                    <span>Page {{ currentPageSignedSelf }} sur {{ totalPagesSignedSelf }}</span>
-                    <span class="documents-count">({{ filteredSignedSelfDocuments.length }} documents au total)</span>
-                  </div>
-                  <div class="pagination-controls">
-                    <button class="pagination-btn prev" :disabled="currentPageSignedSelf === 1" @click="previousPageSignedSelf"><i class="bi bi-chevron-left"></i> Précédent</button>
-                    <button v-if="visiblePagesSignedSelf[0] > 1" class="pagination-btn page" @click="goToPageSignedSelf(1)">1</button>
-                    <span v-if="visiblePagesSignedSelf[0] > 2" class="pagination-dots">...</span>
-                    <button v-for="page in visiblePagesSignedSelf" :key="page" class="pagination-btn page" :class="{ 'active': page === currentPageSignedSelf }" @click="goToPageSignedSelf(page)">{{ page }}</button>
-                    <span v-if="visiblePagesSignedSelf[visiblePagesSignedSelf.length - 1] < totalPagesSignedSelf - 1" class="pagination-dots">...</span>
-                    <button v-if="visiblePagesSignedSelf[visiblePagesSignedSelf.length - 1] < totalPagesSignedSelf" class="pagination-btn page" @click="goToPageSignedSelf(totalPagesSignedSelf)">{{ totalPagesSignedSelf }}</button>
-                    <button class="pagination-btn next" :disabled="currentPageSignedSelf === totalPagesSignedSelf" @click="nextPageSignedSelf">Suivant <i class="bi bi-chevron-right"></i></button>
-                  </div>
-                </div>
-
-                <div v-if="filteredSignedSelfDocuments.length === 0" class="empty-state"><i class="bi bi-file-earmark"></i><p v-if="searchQuerySignedSelf">Aucun résultat trouvé pour "{{ searchQuerySignedSelf }}"</p><p v-else>Aucun document pour ce template</p></div>
               </div>
             </template>
           </div>
@@ -888,7 +822,6 @@ const urgentDocuments = computed(() => {
   return pendingDocuments.value.filter(doc => doc.is_urgent);
 });
 
-// eslint-disable-next-line no-unused-vars
 const sortedPendingDocuments = computed(() => {
   return [...pendingDocuments.value].sort((a, b) => {
     if (a.is_urgent && !b.is_urgent) return -1;
@@ -1627,105 +1560,62 @@ async function fetchPendingDocuments() {
   }
 }
 
-// Fonction pour récupérer tous les documents signés (pagination complete)
+// Fonction pour récupérer les documents signés
 async function fetchSignedDocuments() {
   try {
     const token = localStorage.getItem('token');
     if (!token) {
-      console.error("Token d'authentification manquant");
+      console.error('Token d\'authentification manquant');
       return;
     }
 
+    // Récupérer l'ID de l'organisation actuelle
     const currentUser = AuthService.getCurrentUser();
     const organizationId = currentUser?.organization?.id;
+    
     if (!organizationId) {
-      console.error("ID d'organisation manquant");
+      console.error('ID d\'organisation manquant');
       return;
     }
 
-    let nextUrl = 'https://ppd.camgovca.cm/api/documents/signatures/';
-    const allResults = [];
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      params: {
+        organization_id: organizationId
+      } 
+    };  
 
-    const baseConfig = {
-      headers: { Authorization: `Bearer ${token}` },
-      params: { organization_id: organizationId, page_size: 100 }
-    };
+    // Récupérer les documents signés depuis l'API DocumentSignature
+    const response = await axios.get('https://ppd.camgovca.cm/api/documents/signatures/', config);
+    if (response.data && response.data.results) {
+      signedDocuments.value = response.data.results.map(doc => {
+        // Extraction robuste des informations de template
+        const tplId = doc.template_id ||
+                     (doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_id : null) ||
+                     (doc.metadata && doc.metadata.template_id ? doc.metadata.template_id : null);
+        const tplName = doc.template_name ||
+                       (doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_name : null) ||
+                       (doc.metadata && doc.metadata.template_name ? doc.metadata.template_name : null);
 
-    // Boucler sur toutes les pages
-    while (nextUrl) {
-      const resp = await axios.get(nextUrl, baseConfig);
-      if (resp.data && resp.data.results) {
-        allResults.push(...resp.data.results);
-      }
-      nextUrl = resp.data.next; // URL absolue ou null
+        return {
+          ...doc,
+          id: doc.document_id,
+          document_name: doc.title,
+          name: doc.title,
+          signedAt: doc.created_at,
+          signedBy: doc.owner_username || 'Signataire',
+          organization_name: doc.organization_name || 'Organisation',
+          signer_role: doc.signer_role || 'Signataire',
+          isTemplate: !!tplId,
+          templateId: tplId,
+          templateName: tplName
+        };
+      });
+      
+      console.log('Documents signés récupérés depuis DocumentSignature:', signedDocuments.value);
     }
-
-    // Mapper les résultats
-    const selfSigned = allResults.map(doc => {
-      // Détection template
-      const tplId = doc.template_id ||
-                    doc.templateId ||
-                    (doc.metadata && (doc.metadata.template_used?.template_id || doc.metadata.template_id));
-      const tplName = doc.template_name || doc.templateName ||
-                      (doc.metadata && (doc.metadata.template_used?.template_name || doc.metadata.template_name));
-
-      const prepareMode = doc.prepare_mode || (doc.metadata && doc.metadata.prepare_mode);
-
-      return {
-        ...doc,
-        id: doc.document_id || doc.id,
-        document_name: doc.title || doc.document_name,
-        name: doc.title || doc.document_name,
-        signedAt: doc.created_at || doc.signed_at,
-        signedBy: doc.owner_username || doc.signed_by || 'Signataire',
-        organization_name: doc.organization_name || organizationName.value,
-        signer_role: doc.signer_role || 'Signataire',
-        isTemplate: !!tplId,
-        templateId: tplId,
-        templateName: tplName,
-        self_prepared: prepareMode === 'self'
-      };
-    });
-
-    console.log('Documents signés récupérés (total):', signedDocuments.value.length);
-
-    /* Récupération des documents issus du modèle QR positions (préparés par le collaborateur) */
-    const qrResults = await (async () => {
-      try {
-        let list = [];
-        let next = 'https://ppd.camgovca.cm/api/documents/qr-positions/';
-        const cfg = { headers: { Authorization: `Bearer ${token}` }, params: { organization_id: organizationId, status: 'signed', page_size: 100 } };
-        while (next) {
-          const r = await axios.get(next, cfg);
-          if (r.data?.results) list.push(...r.data.results);
-          next = r.data.next;
-        }
-        return list;
-      } catch (e) {
-        console.warn('QR positions fetch failed', e);
-        return [];
-      }
-    })();
-
-    const fromQr = qrResults.map(doc => {
-      const tplId = doc.template_id || doc.templateId;
-      return {
-        ...doc,
-        id: doc.document_id || doc.id,
-        document_name: doc.title || doc.document_name,
-        name: doc.title || doc.document_name,
-        signedAt: doc.updated_at || doc.signed_at || doc.created_at,
-        signedBy: doc.owner_username || doc.signed_by || 'Signataire',
-        organization_name: doc.organization_name || organizationName.value,
-        signer_role: doc.signer_role || 'Signataire',
-        isTemplate: !!tplId,
-        templateId: tplId,
-        templateName: doc.template_name || doc.templateName,
-        self_prepared: false
-      };
-    });
-
-    signedDocuments.value = [...selfSigned, ...fromQr];
   } catch (error) {
     console.error('Erreur lors de la récupération des documents signés:', error);
   }
@@ -2000,10 +1890,9 @@ watch(selectedPendingTemplateId, () => {
 });
 
 // === Gestion des documents SIGNÉS (onglets, recherche, pagination) ===
-const signedTab = ref('quick'); // 'quick' | 'template' | 'self'
-const signedQuickDocuments = computed(() => signedDocuments.value.filter(doc => !doc.isTemplate && !doc.self_prepared));
-const signedTemplateDocuments = computed(() => signedDocuments.value.filter(doc =>  doc.isTemplate));
-const signedSelfDocuments = computed(() => signedDocuments.value.filter(doc => doc.self_prepared));
+const signedTab = ref('quick');
+const signedQuickDocuments = computed(() => signedDocuments.value.filter(doc => !doc.isTemplate));
+const signedTemplateDocuments = computed(() => signedDocuments.value.filter(doc => doc.isTemplate));
 
 const selectedSignedTemplateId = ref(null);
 
@@ -2031,14 +1920,11 @@ const currentSignedTemplateDocs = computed(() => {
 // Recherche & Pagination
 const searchQuerySignedQuick = ref('');
 const searchQuerySignedTemplate = ref('');
-const searchQuerySignedSelf = ref('');
 const currentPageSignedQuick = ref(1);
 const currentPageSignedTemplate = ref(1);
-const currentPageSignedSelf = ref(1);
 
 const filteredSignedQuickDocuments = ref([]);
 const filteredSignedTemplateDocuments = ref([]);
-const filteredSignedSelfDocuments = ref([]);
 
 const paginatedSignedQuickDocuments = computed(() => {
   const start = (currentPageSignedQuick.value - 1) * itemsPerPage;
@@ -2090,31 +1976,6 @@ const visiblePagesSignedTemplate = computed(() => {
   return pages;
 });
 
-const paginatedSignedSelfDocuments = computed(() => {
-  const start = (currentPageSignedSelf.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return filteredSignedSelfDocuments.value.slice(start, end);
-});
-
-const totalPagesSignedSelf = computed(() => Math.ceil(filteredSignedSelfDocuments.value.length / itemsPerPage));
-
-const visiblePagesSignedSelf = computed(() => {
-  const pages = [];
-  const total = totalPagesSignedSelf.value;
-  const current = currentPageSignedSelf.value;
-  let start = Math.max(1, current - 2);
-  let end = Math.min(total, current + 2);
-  if (end - start < 4) {
-    if (start === 1) {
-      end = Math.min(total, start + 4);
-    } else if (end === total) {
-      start = Math.max(1, end - 4);
-    }
-  }
-  for (let i = start; i <= end; i++) pages.push(i);
-  return pages;
-});
-
 // Fonctions de filtrage
 function filterSignedQuickDocuments() {
   const query = searchQuerySignedQuick.value.toLowerCase();
@@ -2134,15 +1995,6 @@ function filterSignedTemplateDocuments() {
   currentPageSignedTemplate.value = 1;
 }
 
-function filterSignedSelfDocuments() {
-  const query = searchQuerySignedSelf.value.toLowerCase();
-  filteredSignedSelfDocuments.value = signedSelfDocuments.value.filter(doc => {
-    return (doc.document_name && doc.document_name.toLowerCase().includes(query)) ||
-           (doc.signedBy && doc.signedBy.toLowerCase().includes(query));
-  });
-  currentPageSignedSelf.value = 1;
-}
-
 // Pagination helpers
 function goToPageSignedQuick(page) { if (page >= 1 && page <= totalPagesSignedQuick.value) currentPageSignedQuick.value = page; }
 function previousPageSignedQuick() { if (currentPageSignedQuick.value > 1) currentPageSignedQuick.value--; }
@@ -2152,33 +2004,19 @@ function goToPageSignedTemplate(page) { if (page >= 1 && page <= totalPagesSigne
 function previousPageSignedTemplate() { if (currentPageSignedTemplate.value > 1) currentPageSignedTemplate.value--; }
 function nextPageSignedTemplate() { if (currentPageSignedTemplate.value < totalPagesSignedTemplate.value) currentPageSignedTemplate.value++; }
 
-function goToPageSignedSelf(page) { if (page >= 1 && page <= totalPagesSignedSelf.value) currentPageSignedSelf.value = page; }
-function previousPageSignedSelf() { if (currentPageSignedSelf.value > 1) currentPageSignedSelf.value--; }
-function nextPageSignedSelf() { if (currentPageSignedSelf.value < totalPagesSignedSelf.value) currentPageSignedSelf.value++; }
-
 // Watchers
 watch(signedQuickDocuments, () => { filterSignedQuickDocuments(); }, { immediate: true });
 watch(currentSignedTemplateDocs, () => { filterSignedTemplateDocuments(); }, { immediate: true });
-watch(signedSelfDocuments, () => { filterSignedSelfDocuments(); }, { immediate: true });
 watch(signedTab, () => {
   currentPageSignedQuick.value = 1;
   currentPageSignedTemplate.value = 1;
-  currentPageSignedSelf.value = 1;
   if (signedTab.value !== 'template') selectedSignedTemplateId.value = null;
 });
 watch(selectedSignedTemplateId, () => {
   searchQuerySignedTemplate.value = '';
   currentPageSignedTemplate.value = 1;
 });
-watch(searchQuerySignedSelf, () => {
-  filterSignedSelfDocuments();
-  currentPageSignedSelf.value = 1;
-});
 // === Fin gestion documents signés ===
-
-// Placeholder pour éviter undefined si logique future d'agrégation par template
-const signedSelfDocumentsCards = ref([]);
-const currentSignedSelfDocuments = ref([]);
 </script>
 
 <style scoped>
