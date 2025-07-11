@@ -1627,63 +1627,67 @@ async function fetchPendingDocuments() {
   }
 }
 
-// Fonction pour récupérer les documents signés
+// Fonction pour récupérer tous les documents signés (pagination complete)
 async function fetchSignedDocuments() {
   try {
     const token = localStorage.getItem('token');
     if (!token) {
-      console.error('Token d\'authentification manquant');
+      console.error("Token d'authentification manquant");
       return;
     }
 
-    // Récupérer l'ID de l'organisation actuelle
     const currentUser = AuthService.getCurrentUser();
     const organizationId = currentUser?.organization?.id;
-    
     if (!organizationId) {
-      console.error('ID d\'organisation manquant');
+      console.error("ID d'organisation manquant");
       return;
     }
 
-    const config = {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-      params: {
-        organization_id: organizationId
-      } 
-    };  
+    let nextUrl = 'https://ppd.camgovca.cm/api/documents/signatures/';
+    const allResults = [];
 
-    // Récupérer les documents signés depuis l'API DocumentSignature
-    const response = await axios.get('https://ppd.camgovca.cm/api/documents/signatures/', config);
-    if (response.data && response.data.results) {
-      signedDocuments.value = response.data.results.map(doc => {
-        // Extraction robuste des informations de template
-        const tplId = doc.template_id ||
-                     (doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_id : null) ||
-                     (doc.metadata && doc.metadata.template_id ? doc.metadata.template_id : null);
-        const tplName = doc.template_name ||
-                       (doc.metadata && doc.metadata.template_used ? doc.metadata.template_used.template_name : null) ||
-                       (doc.metadata && doc.metadata.template_name ? doc.metadata.template_name : null);
+    const baseConfig = {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { organization_id: organizationId, page_size: 100 }
+    };
 
-        return {
-          ...doc,
-          id: doc.document_id,
-          document_name: doc.title,
-          name: doc.title,
-          signedAt: doc.created_at,
-          signedBy: doc.owner_username || 'Signataire',
-          organization_name: doc.organization_name || 'Organisation',
-          signer_role: doc.signer_role || 'Signataire',
-          isTemplate: !!tplId,
-          templateId: tplId,
-          templateName: tplName,
-          self_prepared: (doc.prepare_mode === 'self') || (doc.metadata && doc.metadata.prepare_mode === 'self') || false
-        };
-      });
-      
-      console.log('Documents signés récupérés depuis DocumentSignature:', signedDocuments.value);
+    // Boucler sur toutes les pages
+    while (nextUrl) {
+      const resp = await axios.get(nextUrl, baseConfig);
+      if (resp.data && resp.data.results) {
+        allResults.push(...resp.data.results);
+      }
+      nextUrl = resp.data.next; // URL absolue ou null
     }
+
+    // Mapper les résultats
+    signedDocuments.value = allResults.map(doc => {
+      // Détection template
+      const tplId = doc.template_id ||
+                    doc.templateId ||
+                    (doc.metadata && (doc.metadata.template_used?.template_id || doc.metadata.template_id));
+      const tplName = doc.template_name || doc.templateName ||
+                      (doc.metadata && (doc.metadata.template_used?.template_name || doc.metadata.template_name));
+
+      const prepareMode = doc.prepare_mode || (doc.metadata && doc.metadata.prepare_mode);
+
+      return {
+        ...doc,
+        id: doc.document_id || doc.id,
+        document_name: doc.title || doc.document_name,
+        name: doc.title || doc.document_name,
+        signedAt: doc.created_at || doc.signed_at,
+        signedBy: doc.owner_username || doc.signed_by || 'Signataire',
+        organization_name: doc.organization_name || organizationName.value,
+        signer_role: doc.signer_role || 'Signataire',
+        isTemplate: !!tplId,
+        templateId: tplId,
+        templateName: tplName,
+        self_prepared: prepareMode === 'self'
+      };
+    });
+
+    console.log('Documents signés récupérés (total):', signedDocuments.value.length);
   } catch (error) {
     console.error('Erreur lors de la récupération des documents signés:', error);
   }
