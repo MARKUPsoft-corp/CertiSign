@@ -898,9 +898,13 @@ async function startSigningProcess() {
       if (userInfo.id) {
         formData.append('owner_id', userInfo.id);
       }
-      if (userInfo.organizationId) {
-        formData.append('organization_id', userInfo.organizationId);
-      }
+      
+      // Gestion organisation
+      const orgId = userInfo.organizationId || (userInfo.organization && userInfo.organization.id);
+      const orgName = userInfo.organizationName || (userInfo.organization && userInfo.organization.name);
+      
+      if (orgId) formData.append('organization_id', orgId);
+      if (orgName) formData.append('organization_name', orgName);
       
       console.log('Envoi de la requête de signature pour:', file.name);
       

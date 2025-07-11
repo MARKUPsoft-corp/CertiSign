@@ -78,7 +78,7 @@
           </div>
           <div class="stat-card">
             <div class="stat-content">
-              <div class="stat-value">{{ stats.total }}</div>
+              <div class="stat-value">{{ totalSignedCount }}</div>
               <div class="stat-label">Total signé</div>
             </div>
             <div class="stat-icon primary">
@@ -1989,6 +1989,8 @@ function goToPageSigned(page) { if (page >= 1 && page <= totalPagesSigned.value)
 function previousPageSigned() { if (currentPageSigned.value > 1) currentPageSigned.value--; }
 function nextPageSigned() { if (currentPageSigned.value < totalPagesSigned.value) currentPageSigned.value++; }
 // === Fin pagination combinée ===
+
+const totalSignedCount = computed(() => signedDocuments.value.length);
 
 </script>
 
