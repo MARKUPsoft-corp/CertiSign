@@ -786,7 +786,6 @@ async function startSigningProcess() {
         full_name: userInfo.fullName || '',
         organization: userInfo.organization || '',
         organization_id: userInfo.organizationId || '',
-        organization_name: userInfo.organization || '',
         signer_role: userInfo.position || userInfo.role || '',
         jwt_token: localStorage.getItem('jwtToken') || '',
         qr_position: {
@@ -901,9 +900,6 @@ async function startSigningProcess() {
       }
       if (userInfo.organizationId) {
         formData.append('organization_id', userInfo.organizationId);
-      }
-      if (userInfo.organization) {
-        formData.append('organization_name', userInfo.organization);
       }
       
       console.log('Envoi de la requête de signature pour:', file.name);

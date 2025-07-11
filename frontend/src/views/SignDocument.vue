@@ -428,7 +428,6 @@ async function startSigningProcess() {
       email: userInfo.email || '',
       full_name: userInfo.fullName || '',
       organization: userInfo.organization || '',
-      organization_name: userInfo.organization || '',
       // Ajouter les informations de position du QR code avec les pages
       qr_position: {
         x: qrPosition.value.x,
@@ -452,9 +451,6 @@ async function startSigningProcess() {
     // Ajouter l'ID utilisateur séparément pour faciliter le traitement côté backend
     if (userInfo.id) {
       formData.append('owner_id', userInfo.id);
-    }
-    if (userInfo.organization) {
-      formData.append('organization_name', userInfo.organization);
     }
     
     // Montrer les étapes du processus avec des délais raisonnables
