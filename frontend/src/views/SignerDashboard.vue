@@ -1661,7 +1661,7 @@ async function fetchSignedDocuments() {
     }
 
     // Mapper les résultats
-    signedDocuments.value = allResults.map(doc => {
+    const selfSigned = allResults.map(doc => {
       // Détection template
       const tplId = doc.template_id ||
                     doc.templateId ||
@@ -1688,6 +1688,44 @@ async function fetchSignedDocuments() {
     });
 
     console.log('Documents signés récupérés (total):', signedDocuments.value.length);
+
+    /* Récupération des documents issus du modèle QR positions (préparés par le collaborateur) */
+    const qrResults = await (async () => {
+      try {
+        let list = [];
+        let next = 'https://ppd.camgovca.cm/api/documents/qr-positions/';
+        const cfg = { headers: { Authorization: `Bearer ${token}` }, params: { organization_id: organizationId, status: 'signed', page_size: 100 } };
+        while (next) {
+          const r = await axios.get(next, cfg);
+          if (r.data?.results) list.push(...r.data.results);
+          next = r.data.next;
+        }
+        return list;
+      } catch (e) {
+        console.warn('QR positions fetch failed', e);
+        return [];
+      }
+    })();
+
+    const fromQr = qrResults.map(doc => {
+      const tplId = doc.template_id || doc.templateId;
+      return {
+        ...doc,
+        id: doc.document_id || doc.id,
+        document_name: doc.title || doc.document_name,
+        name: doc.title || doc.document_name,
+        signedAt: doc.updated_at || doc.signed_at || doc.created_at,
+        signedBy: doc.owner_username || doc.signed_by || 'Signataire',
+        organization_name: doc.organization_name || organizationName.value,
+        signer_role: doc.signer_role || 'Signataire',
+        isTemplate: !!tplId,
+        templateId: tplId,
+        templateName: doc.template_name || doc.templateName,
+        self_prepared: false
+      };
+    });
+
+    signedDocuments.value = [...selfSigned, ...fromQr];
   } catch (error) {
     console.error('Erreur lors de la récupération des documents signés:', error);
   }
