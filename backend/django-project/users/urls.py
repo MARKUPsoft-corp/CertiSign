@@ -44,6 +44,9 @@ urlpatterns = [
     # Organisations
     path('organizations/', views.get_active_organizations, name='active-organizations'),
     
+    # Statistiques homepage
+    path('homepage-stats/', views.get_homepage_stats, name='homepage-stats'),
+    
     # Inclure toutes les routes générées par le routeur
     path('', include(router.urls)),
     

@@ -82,19 +82,19 @@
       <section class="stats-section">
         <div class="stats-container" data-stagger>
           <div class="stat-card" data-animate="fade-in-up">
-            <div class="stat-value"><span class="counter">10,000+</span></div>
+            <div class="stat-value"><span class="counter">{{ formatNumber(stats.signed_documents) }}</span></div>
             <div class="stat-label">Documents signés</div>
           </div>
           <div class="stat-card" data-animate="fade-in-up">
-            <div class="stat-value"><span class="counter">1,000+</span></div>
+            <div class="stat-value"><span class="counter">{{ formatNumber(stats.active_users) }}</span></div>
             <div class="stat-label">Utilisateurs actifs</div>
           </div>
           <div class="stat-card" data-animate="fade-in-up">
-            <div class="stat-value"><span class="counter">99.9%</span></div>
+            <div class="stat-value"><span class="counter">{{ stats.availability }}</span></div>
             <div class="stat-label">Disponibilité</div>
           </div>
           <div class="stat-card" data-animate="fade-in-up">
-            <div class="stat-value"><span class="counter">100%</span></div>
+            <div class="stat-value"><span class="counter">{{ stats.legal_compliance }}</span></div>
             <div class="stat-label">Conformité légale</div>
           </div>
         </div>
@@ -301,9 +301,18 @@ import { ref, onMounted } from 'vue';
 import ThemeToggler from '@/components/ThemeToggler.vue';
 import LanguageSelector from '@/components/LanguageSelector.vue';
 import { initScrollAnimations, setupStaggeredAnimations } from '@/assets/js/scrollAnimations.js';
+import AnalyticsService from '@/services/AnalyticsService.js';
 
 // État du menu mobile
 const isMenuOpen = ref(false);
+
+// Statistiques pour la homepage
+const stats = ref({
+  signed_documents: 0,
+  active_users: 0,
+  availability: "99.9%",
+  legal_compliance: "100%"
+});
 
 // Fonction pour basculer le menu mobile
 const toggleMenu = () => {
@@ -413,9 +422,33 @@ const particlePositions = Array.from({ length: 20 }, () => ({
   delay: Math.random() * 5
 }));
 
+// Fonction pour récupérer les statistiques
+const loadHomepageStats = async () => {
+  try {
+    const analyticsService = new AnalyticsService();
+    const data = await analyticsService.getHomepageStats();
+    stats.value = data;
+  } catch (error) {
+    console.error('Erreur lors du chargement des statistiques:', error);
+  }
+};
+
+// Fonction pour formater les nombres
+const formatNumber = (num) => {
+  if (num >= 10000) {
+    return (num / 1000).toFixed(0) + 'k+';
+  } else if (num >= 1000) {
+    return (num / 1000).toFixed(1) + 'k+';
+  }
+  return num.toString();
+};
+
 // Initialisation au chargement de la page
-onMounted(() => {
+onMounted(async () => {
   document.title = "Doc@uthANTIC - Solution de Signature Électronique";
+  
+  // Charger les statistiques
+  await loadHomepageStats();
   
   // Initialiser les animations au défilement
   initScrollAnimations();

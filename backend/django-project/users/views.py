@@ -936,3 +936,42 @@ def send_pending_approval_email(sender, instance, created, **kwargs):
     if created and instance.status == 'pending':
         # Ajouter la logique d'envoi d'email ici (à implémenter)
         pass
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_homepage_stats(request):
+    """
+    Récupère les statistiques globales pour la homepage.
+    Accessible sans authentification pour afficher sur la page d'accueil.
+    """
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    try:
+        from documents.models import DocumentSignature
+        
+        # Compter les utilisateurs actifs
+        active_users_count = CustomUser.objects.filter(status='active').count()
+        
+        # Compter les documents signés
+        signed_documents_count = DocumentSignature.objects.count()
+        
+        # Autres statistiques (fixes pour l'instant)
+        availability = "99.9%"
+        legal_compliance = "100%"
+        
+        stats = {
+            'signed_documents': signed_documents_count,
+            'active_users': active_users_count,
+            'availability': availability,
+            'legal_compliance': legal_compliance
+        }
+        
+        return Response(stats, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        logger.error(f"Erreur lors de la récupération des statistiques: {e}")
+        return Response(
+            {'detail': 'Erreur lors de la récupération des statistiques'}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

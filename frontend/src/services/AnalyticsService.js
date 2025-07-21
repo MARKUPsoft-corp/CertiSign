@@ -1,6 +1,27 @@
 import DocumentService from './DocumentService';
+import axios from 'axios';
 
 class AnalyticsService {
+  
+  /**
+   * Récupère les statistiques globales pour la homepage
+   * @returns {Promise<Object>} - Statistiques avec le nombre d'utilisateurs actifs, documents signés, etc.
+   */
+  async getHomepageStats() {
+    try {
+      const response = await axios.get('https://ppd.camgovca.cm/api/users/homepage-stats/');
+      return response.data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des statistiques homepage:', error);
+      // Retourner des valeurs par défaut en cas d'erreur
+      return {
+        signed_documents: 0,
+        active_users: 0,
+        availability: "99.9%",
+        legal_compliance: "100%"
+      };
+    }
+  }
   
   /**
    * Récupère et analyse les données d'activité pour les graphiques
