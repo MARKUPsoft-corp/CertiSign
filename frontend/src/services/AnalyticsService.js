@@ -1,6 +1,9 @@
 import DocumentService from './DocumentService';
 import axios from 'axios';
 
+// URL de l'API définie comme dans les autres services
+const API_URL = process.env.VUE_APP_API_URL || 'https://ppd.camgovca.cm';
+
 class AnalyticsService {
   
   /**
@@ -9,10 +12,25 @@ class AnalyticsService {
    */
   async getHomepageStats() {
     try {
-      const response = await axios.get('https://ppd.camgovca.cm/api/users/homepage-stats/');
+      const url = `${API_URL}/api/users/homepage-stats/`;
+      console.log('Récupération des statistiques depuis:', url);
+      
+      const response = await axios.get(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        timeout: 10000
+      });
+      
+      console.log('Statistiques récupérées avec succès:', response.data);
       return response.data;
     } catch (error) {
       console.error('Erreur lors de la récupération des statistiques homepage:', error);
+      console.error('Status:', error.response?.status);
+      console.error('Data:', error.response?.data);
+      console.error('Message:', error.message);
+      
       // Retourner des valeurs par défaut en cas d'erreur
       return {
         signed_documents: 0,
