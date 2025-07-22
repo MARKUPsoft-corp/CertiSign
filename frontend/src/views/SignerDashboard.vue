@@ -56,10 +56,12 @@
       <div v-if="showPrepareChoice" class="modal-overlay" @click.self="closePrepareChoice">
         <div class="choice-modal">
           <div class="modal-header">
-            <div class="modal-icon">
-              <i class="bi bi-pen"></i>
+            <div class="header-left">
+              <div class="modal-icon">
+                <i class="bi bi-pen"></i>
+              </div>
+              <h3 class="modal-title">Préparer et signer un document</h3>
             </div>
-            <h3 class="modal-title">Préparer et signer un document</h3>
             <button class="modal-close" @click="closePrepareChoice">
               <i class="bi bi-x-lg"></i>
             </button>
@@ -4360,29 +4362,36 @@ async function deleteTemplate(template) {
 .choice-modal .modal-header {
   background: linear-gradient(135deg, #ff9500, #ffb347);
   color: white;
-  padding: 2rem;
-  text-align: center;
+  padding: 1.25rem 2rem;
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
 }
 
+.choice-modal .header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .choice-modal .modal-icon {
-  width: 80px;
-  height: 80px;
+  width: 40px;
+  height: 40px;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
+  font-size: 18px;
   animation: pulse 2s infinite;
+  flex-shrink: 0;
 }
 
 .choice-modal .modal-title {
-  font-size: 1.8rem;
+  font-size: 1.25rem;
   font-weight: 700;
   margin: 0;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -4608,7 +4617,7 @@ async function deleteTemplate(template) {
   padding: 0 !important;
 }
 
-/* Responsive pour les templates */
+/* Responsive pour les templates et la modale */
 @media (max-width: 768px) {
   .templates-grid {
     grid-template-columns: 1fr;
@@ -4621,6 +4630,21 @@ async function deleteTemplate(template) {
   .template-actions {
     justify-content: center;
     flex-wrap: wrap;
+  }
+  
+  /* Modale responsive */
+  .choice-modal .modal-header {
+    padding: 1rem 1.5rem;
+  }
+  
+  .choice-modal .modal-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+  
+  .choice-modal .modal-title {
+    font-size: 1.1rem;
   }
   
   .section-header {
