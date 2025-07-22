@@ -937,9 +937,31 @@ async function startSigningProcess() {
       if (userInfo.id) {
         formData.append('owner_id', userInfo.id);
       }
-      if (userInfo.organizationId) {
-        formData.append('organization_id', userInfo.organizationId);
+      
+      // Gestion complète des informations d'organisation (comme dans SignSimple)
+      const orgId = userInfo.organizationId || (userInfo.organization && userInfo.organization.id);
+      const orgName = userInfo.organizationName || (userInfo.organization && userInfo.organization.name);
+      
+      if (orgId) {
+        formData.append('organization_id', orgId);
+        console.log('Organization ID ajouté:', orgId);
       }
+      if (orgName) {
+        formData.append('organization_name', orgName);
+        console.log('Organization name ajouté:', orgName);
+      }
+      
+      // Ajouter le rôle du signataire si disponible
+      const signerRole = userInfo.position || userInfo.role || 'Signataire';
+      formData.append('signer_role', signerRole);
+      console.log('Signer role ajouté:', signerRole);
+      
+      // Ajouter le nom du signataire si disponible
+      const signerName = userInfo.first_name && userInfo.last_name ? 
+        `${userInfo.first_name} ${userInfo.last_name}` : 
+        userInfo.username || 'Signataire';
+      formData.append('signer_name', signerName);
+      console.log('Signer name ajouté:', signerName);
       
       console.log('Envoi de la requête de signature pour:', file.name);
       

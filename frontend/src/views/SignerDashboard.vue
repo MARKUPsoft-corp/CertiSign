@@ -52,44 +52,48 @@
 
     <!-- Contenu principal -->
     <main class="main-content">
-      <!-- Modal de sélection du type de signature -->
-      <div v-if="showSignatureOptionsModal" class="modal-overlay" @click.self="hideSignatureOptions">
-        <div class="signature-options-modal">
+      <!-- Modal de choix de signature (inspiré de CollaboratorDashboard) -->
+      <div v-if="showPrepareChoice" class="modal-overlay" @click.self="closePrepareChoice">
+        <div class="choice-modal">
           <div class="modal-header">
-            <h3 class="modal-title">Choisir un mode de signature</h3>
-            <button class="modal-close" @click="hideSignatureOptions">
+            <div class="modal-icon">
+              <i class="bi bi-pen"></i>
+            </div>
+            <h3 class="modal-title">Préparer et signer un document</h3>
+            <button class="modal-close" @click="closePrepareChoice">
               <i class="bi bi-x-lg"></i>
             </button>
           </div>
-          <div class="modal-body signature-options-body">
-            <div class="signature-options-grid">
-              <!-- Option 1: Signature à partir d'un template -->
-              <div class="signature-option-card" @click="selectSignatureOption('template')">
+          
+          <div class="modal-body">
+            <p class="choice-description">Comment souhaitez-vous signer votre document ?</p>
+            
+            <div class="choice-options">
+              <button class="choice-option" @click="selectTemplatePreparation">
                 <div class="option-icon template">
-                  <i class="bi bi-file-earmark-check"></i>
+                  <i class="bi bi-file-earmark-richtext"></i>
                 </div>
                 <div class="option-content">
-                  <h4 class="option-title">Signer à partir d'un template</h4>
-                  <p class="option-description">Utilisez un template prédéfini pour signer rapidement votre document</p>
+                  <h4 class="option-title">Signature avec template</h4>
+                  <p class="option-description">Utilisez un template prédéfini pour signer rapidement</p>
                 </div>
                 <div class="option-arrow">
                   <i class="bi bi-chevron-right"></i>
                 </div>
-              </div>
+              </button>
               
-              <!-- Option 2: Signature rapide -->
-              <div class="signature-option-card" @click="selectSignatureOption('quick')">
-                <div class="option-icon quick">
+              <button class="choice-option" @click="selectDirectPreparation" :disabled="isProcessingChoice">
+                <div class="option-icon direct">
                   <i class="bi bi-lightning-charge"></i>
                 </div>
                 <div class="option-content">
                   <h4 class="option-title">Signature rapide</h4>
-                  <p class="option-description">Signez un document rapidement en quelques étapes simples</p>
+                  <p class="option-description">Signez un document rapidement en quelques étapes</p>
                 </div>
                 <div class="option-arrow">
                   <i class="bi bi-chevron-right"></i>
                 </div>
-              </div>
+              </button>
             </div>
           </div>
         </div>
@@ -128,7 +132,7 @@
               <i class="bi bi-file-earmark-check"></i>
             </div>
           </div>
-          <button class="stat-card action-stat" @click="showSignatureOptions">
+          <button class="stat-card action-stat" @click="openPrepareDocument">
             <div class="stat-content">
               <div class="stat-value"><i class="bi bi-plus-circle"></i></div>
               <div class="stat-label">Préparez et signez vous-même</div>
@@ -940,8 +944,9 @@ const myTemplates = ref([]);
 const loadingTemplates = ref(false);
 const selectedTemplate = ref(null);
 
-// Variables pour la modale de choix de signature
-const showSignatureOptionsModal = ref(false);
+// Variables pour la modale de choix de signature (inspiré du CollaboratorDashboard)
+const showPrepareChoice = ref(false);
+const isProcessingChoice = ref(false); // Protection contre les clics multiples
 
 // Classification des documents en attente par mode de préparation
 const pendingTab = ref('quick'); // 'quick' ou 'template'
@@ -2455,32 +2460,49 @@ function openCreateTemplateFromPrepare() {
   activeSection.value = 'create-template';
 }
 
-// === NOUVELLES MÉTHODES POUR LA MODALE DE SIGNATURE ===
+// === NOUVELLES MÉTHODES POUR LA MODALE DE SIGNATURE (basé sur CollaboratorDashboard) ===
 
-// Fonction pour afficher les options de signature
-function showSignatureOptions() {
-  showSignatureOptionsModal.value = true;
+// Fonction pour ouvrir la modale de choix de signature
+function openPrepareDocument() {
+  showPrepareChoice.value = true;
 }
 
-// Fonction pour masquer les options de signature
-function hideSignatureOptions() {
-  showSignatureOptionsModal.value = false;
+// Fonction pour fermer la modale de choix
+function closePrepareChoice() {
+  showPrepareChoice.value = false;
 }
 
-// Gérer la sélection d'une option de signature
-function selectSignatureOption(option) {
-  hideSignatureOptions();
+// Sélection de la signature avec template
+function selectTemplatePreparation() {
+  closePrepareChoice();
+  // Ouvrir directement la vue de signature avec template
+  activeSection.value = 'sign-with-template';
+}
+
+// Sélection de la signature rapide
+function selectDirectPreparation() {
+  console.log('selectDirectPreparation appelée', activeSection.value);
   
-  switch(option) {
-    case 'template':
-      activeSection.value = 'sign-with-template';
-      break;
-    case 'quick':
-      activeSection.value = 'sign-simple';
-      break;
-    default:
-      activeSection.value = '';
+  // Éviter les appels multiples
+  if (activeSection.value === 'sign-simple' || isProcessingChoice.value) {
+    console.log('Section déjà active ou en cours de traitement, ignoring...');
+    return;
   }
+  
+  // Marquer comme en cours de traitement
+  isProcessingChoice.value = true;
+  
+  // Fermer la modal de choix
+  closePrepareChoice();
+  
+  // Afficher la section de signature rapide
+  activeSection.value = 'sign-simple';
+  console.log('Section activeSection définie à:', activeSection.value);
+  
+  // Réinitialiser le flag après un délai
+  setTimeout(() => {
+    isProcessingChoice.value = false;
+  }, 1000);
 }
 
 
@@ -4269,157 +4291,232 @@ async function deleteTemplate(template) {
   color: white;
 }
 
-/* === STYLES POUR LA MODALE DE SIGNATURE === */
+/* === STYLES POUR LA MODALE DE SIGNATURE (inspiré de CollaboratorDashboard) === */
 
-/* Signature Options Modal */
-.signature-options-modal {
-  background-color: var(--bg-light);
+/* Modal de choix */
+.choice-modal {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
   border-radius: 20px;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   width: 90%;
-  max-width: 800px;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
-  animation: modalIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  animation: modalSlideIn 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   overflow: hidden;
-  z-index: 10001;
   position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.signature-options-body {
-  padding: 30px;
-}
-
-.signature-options-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.signature-option-card {
-  background-color: var(--card-bg);
-  border-radius: 16px;
-  border: 1px solid var(--border-color);
-  padding: 25px;
+.choice-modal .modal-header {
+  background: linear-gradient(135deg, var(--accent-color, #06ffa5), #39ffb4);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+  position: relative;
   display: flex;
-  position: relative;
-  overflow: hidden;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.choice-modal .modal-icon {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  animation: pulse 2s infinite;
+}
+
+.choice-modal .modal-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.choice-modal .modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.choice-modal .modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.choice-modal .modal-body {
+  padding: 2.5rem;
+}
+
+.choice-description {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--text-muted, #6c757d);
+  margin-bottom: 2rem;
+}
+
+.choice-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.choice-option {
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(6, 255, 165, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
 }
 
-.signature-option-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-  border-color: var(--primary-color);
+.choice-option:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: var(--accent-color, #06ffa5);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(6, 255, 165, 0.2);
 }
 
-.option-icon {
+.choice-option .option-icon {
   width: 60px;
   height: 60px;
-  min-width: 60px;
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 20px;
-  transition: all 0.3s ease;
   font-size: 1.8rem;
+  transition: all 0.3s ease;
 }
 
-.signature-option-card:hover .option-icon {
+.choice-option .option-icon.template {
+  background: rgba(6, 255, 165, 0.1);
+  color: var(--accent-color, #06ffa5);
+}
+
+.choice-option .option-icon.direct {
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--primary-color, #3a86ff);
+}
+
+.choice-option:hover .option-icon {
   transform: scale(1.1) rotate(5deg);
 }
 
-.option-icon.template {
-  background-color: rgba(58, 134, 255, 0.1);
-  color: var(--primary-color);
-}
-
-.option-icon.quick {
-  background-color: rgba(255, 149, 0, 0.1);
-  color: #ff9500;
-}
-
-.option-content {
+.choice-option .option-content {
   flex: 1;
 }
 
-.option-title {
-  font-size: 18px;
+.choice-option .option-title {
+  font-size: 1.2rem;
   font-weight: 600;
-  margin: 0 0 10px 0;
-  color: var(--text-color);
+  color: var(--text-color, #333);
+  margin: 0 0 0.5rem 0;
 }
 
-.option-description {
-  font-size: 14px;
-  color: var(--text-secondary);
+.choice-option .option-description {
+  font-size: 0.95rem;
+  color: var(--text-muted, #6c757d);
   margin: 0;
-  line-height: 1.5;
 }
 
-.option-arrow {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
+.choice-option .option-arrow {
   font-size: 1.5rem;
-  color: var(--text-secondary);
+  color: var(--text-muted, #6c757d);
   opacity: 0.5;
   transition: all 0.3s ease;
 }
 
-.signature-option-card:hover .option-arrow {
-  right: 15px;
+.choice-option:hover .option-arrow {
   opacity: 1;
-  color: var(--primary-color);
+  color: var(--accent-color, #06ffa5);
+  transform: translateX(5px);
 }
 
-/* Animation for modals */
-@keyframes modalIn {
+/* Animation pour la modale */
+@keyframes modalSlideIn {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: translateY(-30px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0) scale(1);
   }
 }
 
-/* Dark Mode Optimization */
-:global(.dark-theme) .signature-options-modal {
-  background-color: rgba(30, 41, 59, 0.95);
-  backdrop-filter: blur(10px);
+/* Mode sombre */
+:global(.dark-theme) .choice-modal {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-:global(.dark-theme) .signature-option-card {
-  background-color: rgba(30, 41, 59, 0.7);
-  backdrop-filter: blur(10px);
+:global(.dark-theme) .choice-option {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(6, 255, 165, 0.2);
 }
 
-/* Responsive pour la modale */
+:global(.dark-theme) .choice-option:hover {
+  background: rgba(15, 23, 42, 1);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .signature-options-modal {
+  .choice-modal {
     width: 95%;
+    margin: 1rem;
   }
   
-  .signature-options-grid {
-    grid-template-columns: 1fr;
+  .choice-modal .modal-header {
+    padding: 1.5rem;
   }
   
-  .signature-option-card {
-    padding: 20px;
+  .choice-modal .modal-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
   }
   
-  .option-icon {
+  .choice-modal .modal-title {
+    font-size: 1.5rem;
+  }
+  
+  .choice-modal .modal-body {
+    padding: 1.5rem;
+  }
+  
+  .choice-option {
+    padding: 1rem;
+  }
+  
+  .choice-option .option-icon {
     width: 50px;
     height: 50px;
-    min-width: 50px;
     font-size: 1.5rem;
-    margin-right: 15px;
   }
 }
 
@@ -4481,6 +4578,6 @@ async function deleteTemplate(template) {
     flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
+      }
   }
-}
 </style> 
