@@ -4049,26 +4049,12 @@ async function deleteTemplate(template) {
 
 /* === STYLES POUR LES TEMPLATES === */
 
-/* Section header avec bouton */
+/* Section header avec bouton - comme CollaboratorDashboard */
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(255, 149, 0, 0.1);
-  position: relative;
-}
-
-.section-header::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 80px;
-  height: 3px;
-  background: linear-gradient(90deg, #ff9500, #ffb347, #ff9500);
-  border-radius: 3px;
 }
 
 /* État de chargement */
@@ -4243,6 +4229,18 @@ async function deleteTemplate(template) {
   padding: 0;
   box-shadow: none;
   border: none;
+  overflow: visible;
+  max-height: none;
+}
+
+.create-template-section :deep(.create-template-container) {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.create-template-section :deep(.section-card) {
+  max-height: none !important;
+  overflow: visible !important;
 }
 
 /* Responsive pour les templates */
