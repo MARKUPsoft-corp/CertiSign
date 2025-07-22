@@ -4293,24 +4293,72 @@ async function deleteTemplate(template) {
 
 /* === STYLES POUR LA MODALE DE SIGNATURE (inspiré de CollaboratorDashboard) === */
 
-/* Modal de choix */
+/* Modal overlay - Positionnement correct comme CollaboratorDashboard */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(33, 37, 41, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+  animation: fade-in 0.3s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Modal de choix - Couleurs orange du SignerDashboard */
 .choice-modal {
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(15px);
+  backdrop-filter: blur(20px);
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 20px 60px rgba(255, 149, 0, 0.15);
+  border: 1px solid rgba(255, 149, 0, 0.1);
   width: 90%;
   max-width: 600px;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   animation: modalSlideIn 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   overflow: hidden;
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.choice-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff9500, #ffb347, #ff9500);
+  background-size: 200% 100%;
+  border-radius: 20px 20px 0 0;
+  animation: gradientMove 3s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .choice-modal .modal-header {
-  background: linear-gradient(135deg, var(--accent-color, #06ffa5), #39ffb4);
+  background: linear-gradient(135deg, #ff9500, #ffb347);
   color: white;
   padding: 2rem;
   text-align: center;
@@ -4382,7 +4430,7 @@ async function deleteTemplate(template) {
 
 .choice-option {
   background: rgba(255, 255, 255, 0.8);
-  border: 2px solid rgba(6, 255, 165, 0.1);
+  border: 2px solid rgba(255, 149, 0, 0.1);
   border-radius: 16px;
   padding: 1.5rem;
   display: flex;
@@ -4397,9 +4445,9 @@ async function deleteTemplate(template) {
 
 .choice-option:hover {
   background: rgba(255, 255, 255, 1);
-  border-color: var(--accent-color, #06ffa5);
+  border-color: #ff9500;
   transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(6, 255, 165, 0.2);
+  box-shadow: 0 15px 30px rgba(255, 149, 0, 0.2);
 }
 
 .choice-option .option-icon {
@@ -4414,13 +4462,13 @@ async function deleteTemplate(template) {
 }
 
 .choice-option .option-icon.template {
-  background: rgba(6, 255, 165, 0.1);
-  color: var(--accent-color, #06ffa5);
+  background: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
 }
 
 .choice-option .option-icon.direct {
   background: rgba(58, 134, 255, 0.1);
-  color: var(--primary-color, #3a86ff);
+  color: #3a86ff;
 }
 
 .choice-option:hover .option-icon {
@@ -4453,7 +4501,7 @@ async function deleteTemplate(template) {
 
 .choice-option:hover .option-arrow {
   opacity: 1;
-  color: var(--accent-color, #06ffa5);
+  color: #ff9500;
   transform: translateX(5px);
 }
 
@@ -4472,16 +4520,17 @@ async function deleteTemplate(template) {
 /* Mode sombre */
 :global(.dark-theme) .choice-modal {
   background: rgba(30, 41, 59, 0.95);
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 149, 0, 0.1);
 }
 
 :global(.dark-theme) .choice-option {
   background: rgba(15, 23, 42, 0.8);
-  border-color: rgba(6, 255, 165, 0.2);
+  border-color: rgba(255, 149, 0, 0.2);
 }
 
 :global(.dark-theme) .choice-option:hover {
   background: rgba(15, 23, 42, 1);
+  border-color: #ff9500;
 }
 
 /* Responsive */
