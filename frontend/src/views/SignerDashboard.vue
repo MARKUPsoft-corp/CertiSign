@@ -52,6 +52,49 @@
 
     <!-- Contenu principal -->
     <main class="main-content">
+      <!-- Modal de sélection du type de signature -->
+      <div v-if="showSignatureOptionsModal" class="modal-overlay" @click.self="hideSignatureOptions">
+        <div class="signature-options-modal">
+          <div class="modal-header">
+            <h3 class="modal-title">Choisir un mode de signature</h3>
+            <button class="modal-close" @click="hideSignatureOptions">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          <div class="modal-body signature-options-body">
+            <div class="signature-options-grid">
+              <!-- Option 1: Signature à partir d'un template -->
+              <div class="signature-option-card" @click="selectSignatureOption('template')">
+                <div class="option-icon template">
+                  <i class="bi bi-file-earmark-check"></i>
+                </div>
+                <div class="option-content">
+                  <h4 class="option-title">Signer à partir d'un template</h4>
+                  <p class="option-description">Utilisez un template prédéfini pour signer rapidement votre document</p>
+                </div>
+                <div class="option-arrow">
+                  <i class="bi bi-chevron-right"></i>
+                </div>
+              </div>
+              
+              <!-- Option 2: Signature rapide -->
+              <div class="signature-option-card" @click="selectSignatureOption('quick')">
+                <div class="option-icon quick">
+                  <i class="bi bi-lightning-charge"></i>
+                </div>
+                <div class="option-content">
+                  <h4 class="option-title">Signature rapide</h4>
+                  <p class="option-description">Signez un document rapidement en quelques étapes simples</p>
+                </div>
+                <div class="option-arrow">
+                  <i class="bi bi-chevron-right"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Section de bienvenue -->
       <section class="welcome-section">
         <div class="welcome-content">
@@ -65,7 +108,7 @@
       </section>
 
       <!-- Statistiques -->
-      <section class="stats-section" v-if="activeSection !== 'sign-simple' && activeSection !== 'create-template'">
+      <section class="stats-section" v-if="activeSection !== 'sign-simple' && activeSection !== 'create-template' && activeSection !== 'sign-with-template'">
         <div class="stats-container">
           <div class="stat-card">
             <div class="stat-content">
@@ -85,7 +128,7 @@
               <i class="bi bi-file-earmark-check"></i>
             </div>
           </div>
-          <button class="stat-card action-stat" @click="activeSection = 'sign-simple'">
+          <button class="stat-card action-stat" @click="showSignatureOptions">
             <div class="stat-content">
               <div class="stat-value"><i class="bi bi-plus-circle"></i></div>
               <div class="stat-label">Préparez et signez vous-même</div>
@@ -98,7 +141,7 @@
       </section>
 
       <!-- Actions rapides -->
-      <section class="quick-actions" v-if="activeSection !== 'sign-simple' && activeSection !== 'create-template'">
+      <section class="quick-actions" v-if="activeSection !== 'sign-simple' && activeSection !== 'create-template' && activeSection !== 'sign-with-template'">
         <div class="actions-grid">
           <div class="action-card urgent" v-if="urgentDocuments.length > 0" @click="activeSection = 'urgent'" :class="{ 'active': activeSection === 'urgent' }">
             <div class="action-icon">
@@ -122,13 +165,7 @@
             <span class="action-title">Mes Templates</span>
             <span class="action-description">{{ myTemplates.length }} modèles créés</span>
           </button>
-          <button class="action-card" @click="activeSection = 'prepare-with-template'" :class="{ 'active': activeSection === 'prepare-with-template' }">
-            <div class="action-icon primary">
-              <i class="bi bi-file-earmark-plus"></i>
-            </div>
-            <span class="action-title">Préparer avec Template</span>
-            <span class="action-description">Utiliser un modèle existant</span>
-          </button>
+
           <button class="action-card" @click="activeSection = 'signed'" :class="{ 'active': activeSection === 'signed' }">
             <div class="action-icon success">
               <i class="bi bi-file-earmark-check"></i>
@@ -713,19 +750,16 @@
           </div>
         </div>
 
-        <!-- Préparation avec template -->
-        <div v-if="activeSection === 'prepare-with-template'" class="section-content">
-          <PrepareDocumentWithTemplate 
-            :available-templates="myTemplates"
-            @close="activeSection = ''" 
-            @document-prepared="onDocumentPreparedWithTemplate"
-            @create-template="openCreateTemplateFromPrepare"
-          />
-        </div>
+
 
         <!-- Création de template -->
         <div v-if="activeSection === 'create-template'" class="section-content create-template-section">
           <CreateTemplate @close="activeSection = ''" @template-created="onTemplateCreated"/>
+        </div>
+
+        <!-- Signature avec template -->
+        <div v-if="activeSection === 'sign-with-template'" class="section-content sign-with-template-section">
+          <SignWithTemplateMultiple @close="activeSection = ''" />
         </div>
 
         <!-- Signature directe par le signataire -->
@@ -866,6 +900,7 @@ import TemplateService from '@/services/TemplateService.js';
 import SignSimpleSigner from '@/views/SignSimpleSigner.vue';
 import CreateTemplate from '@/views/CreateTemplate.vue';
 import PrepareDocumentWithTemplate from '@/views/PrepareDocumentWithTemplate.vue';
+import SignWithTemplateMultiple from '@/views/SignWithTemplateMultiple.vue';
 
 const router = useRouter();
 
@@ -904,6 +939,9 @@ const signedDocuments = ref([]);
 const myTemplates = ref([]);
 const loadingTemplates = ref(false);
 const selectedTemplate = ref(null);
+
+// Variables pour la modale de choix de signature
+const showSignatureOptionsModal = ref(false);
 
 // Classification des documents en attente par mode de préparation
 const pendingTab = ref('quick'); // 'quick' ou 'template'
@@ -2417,27 +2455,35 @@ function openCreateTemplateFromPrepare() {
   activeSection.value = 'create-template';
 }
 
-function onDocumentPreparedWithTemplate(result) {
-  console.log('Documents préparés avec template:', result);
-  
-  // Fermer la section de préparation avec template
-  activeSection.value = '';
-  
-  // Traiter le résultat selon le type
-  if (result.type === 'direct_sign') {
-    // Le document a été préparé et peut être signé immédiatement
-    activeSection.value = 'pending';
-  } else if (result.type === 'draft') {
-    // Document sauvegardé comme brouillon
-    activeSection.value = 'pending';
-  } else {
-    // Document en attente de signature
-    activeSection.value = 'pending';
-  }
-  
-  // Actualiser les données
-  fetchDocuments();
+// === NOUVELLES MÉTHODES POUR LA MODALE DE SIGNATURE ===
+
+// Fonction pour afficher les options de signature
+function showSignatureOptions() {
+  showSignatureOptionsModal.value = true;
 }
+
+// Fonction pour masquer les options de signature
+function hideSignatureOptions() {
+  showSignatureOptionsModal.value = false;
+}
+
+// Gérer la sélection d'une option de signature
+function selectSignatureOption(option) {
+  hideSignatureOptions();
+  
+  switch(option) {
+    case 'template':
+      activeSection.value = 'sign-with-template';
+      break;
+    case 'quick':
+      activeSection.value = 'sign-simple';
+      break;
+    default:
+      activeSection.value = '';
+  }
+}
+
+
 
 // Fonctions utilitaires pour les templates (reprises du CollaboratorDashboard)
 function getQrSizeLabel(size) {
@@ -4223,6 +4269,160 @@ async function deleteTemplate(template) {
   color: white;
 }
 
+/* === STYLES POUR LA MODALE DE SIGNATURE === */
+
+/* Signature Options Modal */
+.signature-options-modal {
+  background-color: var(--bg-light);
+  border-radius: 20px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  animation: modalIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  overflow: hidden;
+  z-index: 10001;
+  position: relative;
+}
+
+.signature-options-body {
+  padding: 30px;
+}
+
+.signature-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.signature-option-card {
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  padding: 25px;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.signature-option-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary-color);
+}
+
+.option-icon {
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  transition: all 0.3s ease;
+  font-size: 1.8rem;
+}
+
+.signature-option-card:hover .option-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.option-icon.template {
+  background-color: rgba(58, 134, 255, 0.1);
+  color: var(--primary-color);
+}
+
+.option-icon.quick {
+  background-color: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
+}
+
+.option-content {
+  flex: 1;
+}
+
+.option-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: var(--text-color);
+}
+
+.option-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.option-arrow {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.signature-option-card:hover .option-arrow {
+  right: 15px;
+  opacity: 1;
+  color: var(--primary-color);
+}
+
+/* Animation for modals */
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Dark Mode Optimization */
+:global(.dark-theme) .signature-options-modal {
+  background-color: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+:global(.dark-theme) .signature-option-card {
+  background-color: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+/* Responsive pour la modale */
+@media (max-width: 768px) {
+  .signature-options-modal {
+    width: 95%;
+  }
+  
+  .signature-options-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .signature-option-card {
+    padding: 20px;
+  }
+  
+  .option-icon {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    font-size: 1.5rem;
+    margin-right: 15px;
+  }
+}
+
 /* Section de création de template */
 .create-template-section {
   background: transparent;
@@ -4241,6 +4441,25 @@ async function deleteTemplate(template) {
 .create-template-section :deep(.section-card) {
   max-height: none !important;
   overflow: visible !important;
+}
+
+/* Section de signature avec template */
+.sign-with-template-section {
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  border: none;
+  overflow: visible;
+  max-height: none;
+}
+
+.sign-with-template-section :deep(.sign-document-container) {
+  max-height: none !important;
+  overflow: visible !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
 }
 
 /* Responsive pour les templates */
