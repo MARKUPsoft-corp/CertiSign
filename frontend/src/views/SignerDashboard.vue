@@ -65,7 +65,7 @@
       </section>
 
       <!-- Statistiques -->
-      <section class="stats-section" v-if="activeSection !== 'sign-simple'">
+      <section class="stats-section" v-if="activeSection !== 'sign-simple' && activeSection !== 'create-template'">
         <div class="stats-container">
           <div class="stat-card">
             <div class="stat-content">
@@ -98,7 +98,7 @@
       </section>
 
       <!-- Actions rapides -->
-      <section class="quick-actions" v-if="activeSection !== 'sign-simple'">
+      <section class="quick-actions" v-if="activeSection !== 'sign-simple' && activeSection !== 'create-template'">
         <div class="actions-grid">
           <div class="action-card urgent" v-if="urgentDocuments.length > 0" @click="activeSection = 'urgent'" :class="{ 'active': activeSection === 'urgent' }">
             <div class="action-icon">
@@ -135,13 +135,6 @@
             </div>
             <span class="action-title">Signés</span>
             <span class="action-description">{{ signedDocuments.length }} documents signés</span>
-          </button>
-          <button class="action-card" @click="activeSection = 'history'" :class="{ 'active': activeSection === 'history' }">
-            <div class="action-icon primary">
-              <i class="bi bi-clock-history"></i>
-            </div>
-            <span class="action-title">Historique</span>
-            <span class="action-description">Voir toutes les signatures</span>
           </button>
         </div>
       </section>
@@ -647,35 +640,7 @@
           </div>
         </div>
 
-        <!-- Historique -->
-        <div v-if="activeSection === 'history'" class="section-content">
-          <h3 class="content-title">
-            <i class="bi bi-clock-history"></i>
-            Historique des signatures
-          </h3>
-          
-          <div class="history-timeline">
-            <div v-for="entry in signatureHistory" :key="entry.id" class="timeline-item">
-              <div class="timeline-marker" :class="entry.status">
-                <i class="bi" :class="getStatusIcon(entry.status)"></i>
-              </div>
-              <div class="timeline-content">
-                <div class="timeline-header">
-                  <span class="timeline-title">{{ entry.action }}</span>
-                  <span class="timeline-date">{{ formatDateTime(entry.timestamp) }}</span>
-                </div>
-                <div class="timeline-details">
-                  <span class="document-name">{{ entry.documentName }}</span>
-                  <span class="timeline-description">{{ entry.description }}</span>
-                </div>
-              </div>
-            </div>
-            <div v-if="signatureHistory.length === 0" class="empty-state">
-              <i class="bi bi-clock"></i>
-              <p>Aucun historique disponible</p>
-            </div>
-          </div>
-        </div>
+
 
         <!-- Gestion de mes templates -->
         <div v-if="activeSection === 'my-templates'" class="section-content">
@@ -684,7 +649,7 @@
               <i class="bi bi-file-earmark-richtext"></i>
               Mes Templates de Signature
             </h3>
-            <button class="btn-primary" @click="openCreateTemplateModal">
+            <button class="btn-primary" @click="activeSection = 'create-template'">
               <i class="bi bi-plus"></i>
               Nouveau Template
             </button>
@@ -701,10 +666,6 @@
             <span class="empty-description">
               Créez votre premier template pour accélérer la préparation de vos documents
             </span>
-            <button class="btn-primary" @click="openCreateTemplateModal">
-              <i class="bi bi-plus"></i>
-              Créer mon premier template
-            </button>
           </div>
           
           <div v-else class="templates-grid">
@@ -762,16 +723,16 @@
           />
         </div>
 
+        <!-- Création de template -->
+        <div v-if="activeSection === 'create-template'" class="section-content create-template-section">
+          <CreateTemplate @close="activeSection = ''" @template-created="onTemplateCreated"/>
+        </div>
+
         <!-- Signature directe par le signataire -->
         <div v-if="activeSection === 'sign-simple'" class="section-content sign-section">
           <SignSimpleSigner @close="activeSection = ''" :organization-name="organizationName" />
         </div>
       </section>
-
-      <!-- Section de création de template -->
-      <div v-if="showCreateTemplate" class="section-content create-template-section">
-        <CreateTemplate @close="closeCreateTemplate" @template-created="onTemplateCreated"/>
-      </div>
 
       <!-- Section par défaut si aucune section active -->
       <section v-if="!activeSection" class="default-content">
@@ -937,39 +898,11 @@ const pendingDocuments = ref([]);
 // Documents signés
 const signedDocuments = ref([]);
 
-// Historique des signatures
-const signatureHistory = ref([
-  {
-    id: 1,
-    action: 'Document signé',
-    documentName: 'Convention collective 2024.pdf',
-    description: 'Signature électronique appliquée avec succès',
-    timestamp: new Date('2024-01-11T14:30:00'),
-    status: 'signed'
-  },
-  {
-    id: 2,
-    action: 'Document reçu',
-    documentName: 'Rapport annuel 2023.pdf',
-    description: 'Assigné pour signature par Jean Dupont',
-    timestamp: new Date('2024-01-12T09:15:00'),
-    status: 'received'
-  },
-  {
-    id: 3,
-    action: 'Document signé',
-    documentName: 'Accord de partenariat.pdf',
-    description: 'Signature électronique appliquée avec succès',
-    timestamp: new Date('2024-01-10T16:45:00'),
-    status: 'signed'
-  }
-]);
+
 
 // Variables pour la gestion des templates
 const myTemplates = ref([]);
-const showCreateTemplate = ref(false);
 const loadingTemplates = ref(false);
-const showPrepareWithTemplate = ref(false);
 const selectedTemplate = ref(null);
 
 // Classification des documents en attente par mode de préparation
@@ -1069,26 +1002,7 @@ function formatDate(dateStr) {
   }
 }
 
-function formatDateTime(dateStr) {
-  if (!dateStr) return 'Date inconnue';
-  
-  try {
-    const date = new Date(dateStr);
-    if (isNaN(date.getTime())) {
-      return 'Date invalide';
-    }
-    
-    return new Intl.DateTimeFormat('fr-FR', {
-      day: 'numeric',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).format(date);
-  } catch (error) {
-    console.error('Erreur de formatage de date:', error);
-    return 'Date invalide';
-  }
-}
+
 
 function getTimeElapsed(dateStr) {
   if (!dateStr) return '0j';
@@ -1114,14 +1028,7 @@ function getTimeElapsed(dateStr) {
   }
 }
 
-function getStatusIcon(status) {
-  const icons = {
-    'signed': 'bi-file-earmark-check',
-    'received': 'bi-file-earmark-plus',
-    'pending': 'bi-hourglass-split'
-  };
-  return icons[status] || 'bi-circle';
-}
+
 
 // Méthodes pour la signature
 function signDocument(doc) {
@@ -2482,15 +2389,7 @@ async function loadMyTemplates() {
   }
 }
 
-function openCreateTemplateModal() {
-  console.log('Ouverture de la création de template');
-  showCreateTemplate.value = true;
-}
 
-function closeCreateTemplate() {
-  console.log('Fermeture de la création de template');
-  showCreateTemplate.value = false;
-}
 
 function onTemplateCreated(templateData) {
   console.log('Template créé avec succès:', templateData);
@@ -2507,9 +2406,6 @@ function onTemplateCreated(templateData) {
   
   myTemplates.value.unshift(newTemplateForList);
   
-  // Fermer la vue de création
-  closeCreateTemplate();
-  
   // Passer à la section templates pour voir le nouveau template
   activeSection.value = 'my-templates';
   
@@ -2517,10 +2413,8 @@ function onTemplateCreated(templateData) {
 }
 
 function openCreateTemplateFromPrepare() {
-  // Fermer la vue de préparation avec template
-  activeSection.value = '';
   // Ouvrir la création de template
-  openCreateTemplateModal();
+  activeSection.value = 'create-template';
 }
 
 function onDocumentPreparedWithTemplate(result) {
@@ -3727,100 +3621,7 @@ async function deleteTemplate(template) {
   box-shadow: 0 4px 12px rgba(255, 149, 0, 0.2);
 }
 
-/* Historique timeline */
-.history-timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
 
-.timeline-item {
-  display: flex;
-  gap: 1.25rem;
-  align-items: flex-start;
-}
-
-.timeline-marker {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  color: white;
-  flex-shrink: 0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.timeline-item:hover .timeline-marker {
-  transform: scale(1.05);
-}
-
-.timeline-marker.signed {
-  background: linear-gradient(45deg, #28a745, #5bc85a);
-}
-
-.timeline-marker.received {
-  background: linear-gradient(45deg, #ff9500, #ffb347);
-}
-
-.timeline-marker.pending {
-  background: linear-gradient(45deg, #6c757d, #adb5bd);
-}
-
-.timeline-content {
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  flex: 1;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-  transition: all 0.3s ease;
-}
-
-.timeline-item:hover .timeline-content {
-  background: rgba(255, 255, 255, 1);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(255, 149, 0, 0.08);
-  border-color: rgba(255, 149, 0, 0.12);
-}
-
-.timeline-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.timeline-title {
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: var(--text-color, #333);
-}
-
-.timeline-date {
-  font-size: 0.85rem;
-  color: var(--text-muted, #6c757d);
-}
-
-.timeline-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.document-name {
-  font-weight: 500;
-  color: var(--text-color, #333);
-  font-size: 0.95rem;
-}
-
-.timeline-description {
-  font-size: 0.9rem;
-  color: var(--text-muted, #6c757d);
-}
 
 /* État vide */
 .empty-state {
@@ -3933,15 +3734,6 @@ async function deleteTemplate(template) {
   .doc-actions {
     width: 100%;
     justify-content: flex-end;
-  }
-  .timeline-item {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .timeline-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
   }
   .signature-modal-content {
     width: 95%;
