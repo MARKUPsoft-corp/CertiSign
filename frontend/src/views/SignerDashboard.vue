@@ -115,6 +115,20 @@
             <span class="action-title">À signer</span>
             <span class="action-description">{{ pendingDocuments.length }} documents en attente</span>
           </button>
+          <button class="action-card" @click="activeSection = 'my-templates'" :class="{ 'active': activeSection === 'my-templates' }">
+            <div class="action-icon accent">
+              <i class="bi bi-file-earmark-richtext"></i>
+            </div>
+            <span class="action-title">Mes Templates</span>
+            <span class="action-description">{{ myTemplates.length }} modèles créés</span>
+          </button>
+          <button class="action-card" @click="activeSection = 'prepare-with-template'" :class="{ 'active': activeSection === 'prepare-with-template' }">
+            <div class="action-icon primary">
+              <i class="bi bi-file-earmark-plus"></i>
+            </div>
+            <span class="action-title">Préparer avec Template</span>
+            <span class="action-description">Utiliser un modèle existant</span>
+          </button>
           <button class="action-card" @click="activeSection = 'signed'" :class="{ 'active': activeSection === 'signed' }">
             <div class="action-icon success">
               <i class="bi bi-file-earmark-check"></i>
@@ -663,11 +677,101 @@
           </div>
         </div>
 
+        <!-- Gestion de mes templates -->
+        <div v-if="activeSection === 'my-templates'" class="section-content">
+          <div class="section-header">
+            <h3 class="content-title">
+              <i class="bi bi-file-earmark-richtext"></i>
+              Mes Templates de Signature
+            </h3>
+            <button class="btn-primary" @click="openCreateTemplateModal">
+              <i class="bi bi-plus"></i>
+              Nouveau Template
+            </button>
+          </div>
+          
+          <div v-if="loadingTemplates" class="loading-state">
+            <div class="spinner"></div>
+            <p>Chargement des templates...</p>
+          </div>
+          
+          <div v-else-if="myTemplates.length === 0" class="empty-state">
+            <i class="bi bi-file-earmark-richtext"></i>
+            <p>Aucun template créé</p>
+            <span class="empty-description">
+              Créez votre premier template pour accélérer la préparation de vos documents
+            </span>
+            <button class="btn-primary" @click="openCreateTemplateModal">
+              <i class="bi bi-plus"></i>
+              Créer mon premier template
+            </button>
+          </div>
+          
+          <div v-else class="templates-grid">
+            <div v-for="template in myTemplates" :key="template.id" class="template-card">
+              <div class="template-header">
+                <div class="template-icon">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                </div>
+                <div class="template-status">
+                  <span class="template-badge">Template</span>
+                </div>
+              </div>
+              <div class="template-content">
+                <h4 class="template-title" :title="template.name">{{ template.name }}</h4>
+                <div class="template-meta">
+                  <div class="meta-item">
+                    <i class="bi bi-calendar"></i>
+                    <span>Créé le {{ formatDate(template.createdAt) }}</span>
+                  </div>
+                  <div class="meta-item">
+                    <i class="bi bi-grid"></i>
+                    <span>{{ template.pageApplication === 'all' ? 'Toutes les pages' : 'Pages spécifiques' }}</span>
+                  </div>
+                  <div class="meta-item">
+                    <i class="bi bi-qr-code"></i>
+                    <span>Taille QR: {{ getQrSizeLabel(template.qrSize) }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="template-actions">
+                <button class="btn-icon" title="Aperçu" @click="previewTemplate(template)">
+                  <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn-icon primary" title="Modifier" @click="editTemplate(template)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn-icon success" title="Utiliser ce template" @click="useTemplate(template)">
+                  <i class="bi bi-file-earmark-plus"></i>
+                </button>
+                <button class="btn-icon danger" title="Supprimer" @click="confirmDeleteTemplate(template)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Préparation avec template -->
+        <div v-if="activeSection === 'prepare-with-template'" class="section-content">
+          <PrepareDocumentWithTemplate 
+            :available-templates="myTemplates"
+            @close="activeSection = ''" 
+            @document-prepared="onDocumentPreparedWithTemplate"
+            @create-template="openCreateTemplateFromPrepare"
+          />
+        </div>
+
         <!-- Signature directe par le signataire -->
         <div v-if="activeSection === 'sign-simple'" class="section-content sign-section">
           <SignSimpleSigner @close="activeSection = ''" :organization-name="organizationName" />
         </div>
       </section>
+
+      <!-- Section de création de template -->
+      <div v-if="showCreateTemplate" class="section-content create-template-section">
+        <CreateTemplate @close="closeCreateTemplate" @template-created="onTemplateCreated"/>
+      </div>
 
       <!-- Section par défaut si aucune section active -->
       <section v-if="!activeSection" class="default-content">
@@ -799,6 +903,8 @@ import AuthService from '@/services/AuthService';
 import axios from 'axios';
 import TemplateService from '@/services/TemplateService.js';
 import SignSimpleSigner from '@/views/SignSimpleSigner.vue';
+import CreateTemplate from '@/views/CreateTemplate.vue';
+import PrepareDocumentWithTemplate from '@/views/PrepareDocumentWithTemplate.vue';
 
 const router = useRouter();
 
@@ -858,6 +964,13 @@ const signatureHistory = ref([
     status: 'signed'
   }
 ]);
+
+// Variables pour la gestion des templates
+const myTemplates = ref([]);
+const showCreateTemplate = ref(false);
+const loadingTemplates = ref(false);
+const showPrepareWithTemplate = ref(false);
+const selectedTemplate = ref(null);
 
 // Classification des documents en attente par mode de préparation
 const pendingTab = ref('quick'); // 'quick' ou 'template'
@@ -1600,6 +1713,7 @@ onMounted(() => {
   document.title = 'Signataire - Doc@uthANTIC';
   fetchUserData();
   fetchDocuments();
+  loadMyTemplates(); // Charger les templates du signataire
   initStats();
   
   // Activer la section "pending" par défaut
@@ -2340,6 +2454,163 @@ function nextPageUrgent() { if (currentPageUrgent.value < totalPagesUrgent.value
 // === Fin pagination combinée ===
 
 const totalUrgentCount = computed(() => urgentDocuments.value.length);
+
+// === NOUVELLES MÉTHODES POUR LA GESTION DES TEMPLATES ===
+
+// Méthodes de gestion des templates
+async function loadMyTemplates() {
+  try {
+    loadingTemplates.value = true;
+    console.log('Chargement des templates du signataire...');
+    
+    const response = await TemplateService.getTemplates(organizationName.value);
+    myTemplates.value = response.results.map(template => ({
+      id: template.id,
+      name: template.name,
+      createdAt: new Date(template.created_at),
+      pageApplication: template.page_application,
+      qrSize: template.qr_size,
+      hasSignature: !!template.signature_image
+    }));
+    
+    console.log('Templates chargés:', myTemplates.value.length);
+  } catch (error) {
+    console.error('Erreur lors du chargement des templates:', error);
+    myTemplates.value = [];
+  } finally {
+    loadingTemplates.value = false;
+  }
+}
+
+function openCreateTemplateModal() {
+  console.log('Ouverture de la création de template');
+  showCreateTemplate.value = true;
+}
+
+function closeCreateTemplate() {
+  console.log('Fermeture de la création de template');
+  showCreateTemplate.value = false;
+}
+
+function onTemplateCreated(templateData) {
+  console.log('Template créé avec succès:', templateData);
+  
+  // Ajouter le nouveau template à la liste locale
+  const newTemplateForList = {
+    id: templateData.id,
+    name: templateData.name,
+    createdAt: new Date(templateData.createdAt),
+    pageApplication: templateData.pageApplication,
+    qrSize: templateData.qrSize,
+    hasSignature: templateData.hasSignature
+  };
+  
+  myTemplates.value.unshift(newTemplateForList);
+  
+  // Fermer la vue de création
+  closeCreateTemplate();
+  
+  // Passer à la section templates pour voir le nouveau template
+  activeSection.value = 'my-templates';
+  
+  console.log('Template ajouté à la liste avec succès');
+}
+
+function openCreateTemplateFromPrepare() {
+  // Fermer la vue de préparation avec template
+  activeSection.value = '';
+  // Ouvrir la création de template
+  openCreateTemplateModal();
+}
+
+function onDocumentPreparedWithTemplate(result) {
+  console.log('Documents préparés avec template:', result);
+  
+  // Fermer la section de préparation avec template
+  activeSection.value = '';
+  
+  // Traiter le résultat selon le type
+  if (result.type === 'direct_sign') {
+    // Le document a été préparé et peut être signé immédiatement
+    activeSection.value = 'pending';
+  } else if (result.type === 'draft') {
+    // Document sauvegardé comme brouillon
+    activeSection.value = 'pending';
+  } else {
+    // Document en attente de signature
+    activeSection.value = 'pending';
+  }
+  
+  // Actualiser les données
+  fetchDocuments();
+}
+
+// Fonctions utilitaires pour les templates (reprises du CollaboratorDashboard)
+function getQrSizeLabel(size) {
+  const sizeLabels = {
+    small: 'Petit',
+    medium: 'Moyen',
+    large: 'Grand'
+  };
+  return sizeLabels[size] || 'Moyen';
+}
+
+async function previewTemplate(template) {
+  try {
+    selectedTemplate.value = template;
+    console.log('Prévisualisation du template:', template.name);
+    
+    // Récupérer le blob du fichier d'aperçu
+    const previewBlob = await TemplateService.downloadPreview(template.id);
+    
+    // Créer une URL pour le blob et l'ouvrir dans un nouvel onglet
+    const url = URL.createObjectURL(previewBlob);
+    window.open(url, '_blank');
+    
+    // Nettoyer l'URL après un délai
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    
+  } catch (error) {
+    console.error('Erreur lors du chargement de l\'aperçu:', error);
+    alert('Impossible de charger l\'aperçu du template.');
+  }
+}
+
+function editTemplate(template) {
+  console.log('Édition du template:', template.name);
+  // Pour l'instant, rediriger vers la page d'édition ou ouvrir une modal
+  // Cette fonctionnalité peut être ajoutée plus tard si nécessaire
+  alert('Fonctionnalité d\'édition à venir');
+}
+
+function useTemplate(template) {
+  console.log('Utilisation du template:', template.name);
+  // Sélectionner le template et ouvrir la vue de préparation avec template
+  selectedTemplate.value = template;
+  activeSection.value = 'prepare-with-template';
+}
+
+function confirmDeleteTemplate(template) {
+  console.log('Confirmation de suppression du template:', template.name);
+  if (confirm(`Êtes-vous sûr de vouloir supprimer le template "${template.name}" ?`)) {
+    deleteTemplate(template);
+  }
+}
+
+async function deleteTemplate(template) {
+  try {
+    await TemplateService.deleteTemplate(template.id);
+    
+    // Supprimer le template de la liste locale
+    myTemplates.value = myTemplates.value.filter(t => t.id !== template.id);
+    
+    console.log('Template supprimé avec succès');
+    alert('Template supprimé avec succès !');
+  } catch (error) {
+    console.error('Erreur lors de la suppression du template:', error);
+    alert('Une erreur est survenue lors de la suppression du template.');
+  }
+}
 
 </script>
 
@@ -3982,5 +4253,225 @@ const totalUrgentCount = computed(() => urgentDocuments.value.length);
   border: none !important;
   box-shadow: none !important;
   padding: 0 !important;
+}
+
+/* === STYLES POUR LES TEMPLATES === */
+
+/* Section header avec bouton */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 149, 0, 0.1);
+  position: relative;
+}
+
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #ff9500, #ffb347, #ff9500);
+  border-radius: 3px;
+}
+
+/* État de chargement */
+.loading-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted, #6c757d);
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 149, 0, 0.2);
+  border-radius: 50%;
+  border-top-color: #ff9500;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.empty-description {
+  display: block;
+  font-size: 0.95rem;
+  opacity: 0.8;
+  margin: 1rem 0 1.5rem;
+}
+
+/* Grille des templates */
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.template-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 149, 0, 0.1);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.template-card:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 149, 0, 0.15);
+  border-color: rgba(255, 149, 0, 0.2);
+}
+
+.template-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.template-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(45deg, #ff9500, #ffb347);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.template-status {
+  display: flex;
+  align-items: center;
+}
+
+.template-badge {
+  background: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  text-transform: uppercase;
+}
+
+.template-content {
+  margin-bottom: 1.5rem;
+}
+
+.template-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+  margin-bottom: 1rem;
+  word-break: break-word;
+}
+
+.template-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-muted, #6c757d);
+}
+
+.meta-item i {
+  color: #ff9500;
+  width: 16px;
+  text-align: center;
+}
+
+.template-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Boutons d'action template */
+.template-actions .btn-icon {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  width: 36px;
+  height: 36px;
+}
+
+.template-actions .btn-icon.primary {
+  background: rgba(58, 134, 255, 0.1);
+  border-color: rgba(58, 134, 255, 0.15);
+  color: var(--primary-color, #3a86ff);
+}
+
+.template-actions .btn-icon.primary:hover {
+  background: var(--primary-color, #3a86ff);
+  color: white;
+}
+
+.template-actions .btn-icon.success {
+  background: rgba(40, 167, 69, 0.1);
+  border-color: rgba(40, 167, 69, 0.15);
+  color: #28a745;
+}
+
+.template-actions .btn-icon.success:hover {
+  background: #28a745;
+  color: white;
+}
+
+.template-actions .btn-icon.danger {
+  background: rgba(220, 53, 69, 0.1);
+  border-color: rgba(220, 53, 69, 0.15);
+  color: #dc3545;
+}
+
+.template-actions .btn-icon.danger:hover {
+  background: #dc3545;
+  color: white;
+}
+
+/* Section de création de template */
+.create-template-section {
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  border: none;
+}
+
+/* Responsive pour les templates */
+@media (max-width: 768px) {
+  .templates-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .template-card {
+    padding: 1.25rem;
+  }
+  
+  .template-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
 }
 </style> 
