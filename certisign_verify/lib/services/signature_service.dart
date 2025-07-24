@@ -166,6 +166,101 @@ class SignatureService {
     print('⚠️ La prévisualisation PDF est désactivée temporairement');
     return null;
   }
+  
+  /// Vérifie un document avec l'API docs.camgovca.cm (format androidSignature)
+  /// 
+  /// Cette méthode traite les QR codes au format [SIGNATURE_344_CHARS][DOCUMENT_ID]
+  /// et récupère le document PDF si la vérification est positive
+  Future<Map<String, dynamic>> verifyDocumentWithDocsAPI(String androidSignature) async {
+    print('\n=== Vérification via l\'API docs.camgovca.cm ===');
+    
+    try {
+      // Extraire l'ID du document (après les 344 premiers caractères)
+      final docId = androidSignature.substring(344);
+      print('ℹ️ ID du document: $docId');
+      print('ℹ️ Taille de la signature: ${androidSignature.substring(0, 344).length} caractères');
+      
+      // 1. Vérifier la signature via traiter_controle.php
+      final verifyUrl = Uri.parse('https://docs.camgovca.cm/src/traiter_controle.php');
+      
+      print('ℹ️ Envoi de la requête de vérification à $verifyUrl');
+      
+      final verifyResponse = await http.post(
+        verifyUrl,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'CertiSign-Mobile/1.0',
+        },
+        body: {
+          'androidSignature': androidSignature,
+        },
+      );
+      
+      print('📡 Status Code: ${verifyResponse.statusCode}');
+      print('📝 Réponse: ${verifyResponse.body.trim()}');
+      
+      if (verifyResponse.statusCode != 200) {
+        return {
+          'valid': false,
+          'error': 'Erreur du serveur de vérification: ${verifyResponse.statusCode}',
+          'details': verifyResponse.body
+        };
+      }
+      
+      final responseText = verifyResponse.body.trim();
+      final isValid = responseText.contains('Document valide et authentique');
+      
+      print('✅ Document ${isValid ? 'valide' : 'invalide'}');
+      
+      // 2. Télécharger le PDF si le document est valide
+      String? documentBase64;
+      if (isValid) {
+        print('📥 Téléchargement du PDF...');
+        
+        final pdfUrl = Uri.parse('https://docs.camgovca.cm/pdf/$docId.pdf');
+        
+        final pdfResponse = await http.get(pdfUrl);
+        
+        if (pdfResponse.statusCode == 200) {
+          documentBase64 = base64Encode(pdfResponse.bodyBytes);
+          print('✅ PDF téléchargé avec succès (${pdfResponse.bodyBytes.length} octets)');
+        } else {
+          print('❌ Échec du téléchargement PDF: ${pdfResponse.statusCode}');
+        }
+      }
+      
+      // 3. Construire la réponse dans le format attendu par l'application
+      return {
+        'valid': isValid,
+        'verification_info': <String, dynamic>{
+          'signature_date': DateTime.now().toIso8601String(), // Date de vérification
+          'document_id': docId,
+          'document_title': '$docId.pdf',
+        },
+        'message': isValid 
+            ? 'Document valide et authentique' 
+            : 'Document invalide - La signature ne correspond pas',
+        'api_response': {
+          'original_filename': '$docId.pdf',
+          'signature_date': DateTime.now().toIso8601String(),
+          'document_id': docId,
+          'valid': isValid,
+          'original_document': documentBase64,
+        },
+        'original_document_base64': documentBase64,
+      };
+      
+    } catch (e) {
+      print('❌ Exception lors de la vérification: $e');
+      return {
+        'valid': false,
+        'error': 'Exception lors de la vérification',
+        'details': e.toString()
+      };
+    } finally {
+      print('=== Fin de vérification docs.camgovca.cm ===\n');
+    }
+  }
   /// Vérifie la signature en utilisant la clé publique et le hash du document
   /// Retourne true si la signature est authentique et valide
   Future<bool> verifySignature({
@@ -302,15 +397,25 @@ class SignatureService {
   
   /// Extrait l'ID du document à partir du contenu du QR code
   /// 
-  /// Selon la nouvelle logique, le QR code contient directement l'ID du document
-  /// au format UUID (par exemple: "0dfd1040-44b7-4a28-a5bb-d9e4c1ed55d6")
+  /// Supporte deux formats :
+  /// 1. UUID direct (format actuel) : "0dfd1040-44b7-4a28-a5bb-d9e4c1ed55d6"
+  /// 2. AndroidSignature (format legacy) : "[344_CHARS_SIGNATURE][DOCUMENT_ID]"
   String? extractDocumentId(String qrContent) {
-    // Vérifier si le contenu est un UUID valide
+    // 1. Vérifier si le contenu est un UUID valide (format actuel)
     if (RegExp(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', caseSensitive: false).hasMatch(qrContent)) {
       return qrContent;
     }
     
-    // Essayer de décoder comme JSON pour la compatibilité avec l'ancien format
+    // 2. NOUVEAU : Vérifier le format androidSignature (344 chars + document ID)
+    if (qrContent.length > 344) {
+      final docId = qrContent.substring(344);
+      if (RegExp(r'^DCS\d+$').hasMatch(docId)) {
+        // Préfixer avec 'android:' pour identifier le type
+        return 'android:$qrContent';
+      }
+    }
+    
+    // 3. Essayer de décoder comme JSON pour la compatibilité avec l'ancien format
     try {
       final jsonData = json.decode(qrContent) as Map<String, dynamic>;
       if (jsonData.containsKey('document_id')) {
@@ -320,7 +425,7 @@ class SignatureService {
       // Ce n'est pas du JSON, continuer
     }
     
-    // Tenter d'extraire un UUID du texte
+    // 4. Tenter d'extraire un UUID du texte
     final uuidMatch = RegExp(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', caseSensitive: false).firstMatch(qrContent);
     if (uuidMatch != null) {
       return uuidMatch.group(1);

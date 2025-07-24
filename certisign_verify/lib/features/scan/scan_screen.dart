@@ -7,6 +7,7 @@ import '../../core/theme.dart';
 import '../../services/signature_service.dart';
 import '../../shared/app_header.dart';
 import '../verify/verify_screen.dart';
+import '../verify/verify_screen_legacy.dart';
 
 class ScanScreen extends StatefulWidget {
   const ScanScreen({super.key});
@@ -303,24 +304,56 @@ class _ScanScreenState extends State<ScanScreen> with SingleTickerProviderStateM
         
         print('ID du document extrait: $documentId');
         
-        // 2. Vérifier le document avec le backend Django via le service
-        final verificationResult = await _signatureService.verifyDocumentWithServer(documentId);
+        // 2. Vérifier le type de document et utiliser la bonne API
+        Map<String, dynamic> verificationResult;
+        String cleanDocumentId;
+        bool isAndroidFormat = false;
+        
+        if (documentId.startsWith('android:')) {
+          // Format androidSignature - utiliser l'API docs.camgovca.cm
+          isAndroidFormat = true;
+          final androidSignature = documentId.substring(8); // Retirer le préfixe 'android:'
+          cleanDocumentId = androidSignature.substring(344); // Extraire l'ID propre
+          
+          print('🔄 Format androidSignature détecté - utilisation de l\'API docs.camgovca.cm');
+          verificationResult = await _signatureService.verifyDocumentWithDocsAPI(androidSignature);
+        } else {
+          // Format UUID classique - utiliser l'API existante
+          cleanDocumentId = documentId;
+          print('🔄 Format UUID détecté - utilisation de l\'API standard');
+          verificationResult = await _signatureService.verifyDocumentWithServer(documentId);
+        }
         
         // Fermer l'indicateur de vérification
         if (mounted) Navigator.of(context).pop();
         
-        // 3. Navigation vers l'écran de résultat avec le résultat de vérification
+        // 3. Navigation vers l'écran approprié selon le format
         if (mounted) {
-          print('Navigation vers l\'écran de vérification');
-          
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => VerifyScreen(
-                documentId: documentId,
-                verificationResult: verificationResult,
+          if (isAndroidFormat) {
+            // Router vers la page legacy pour les documents androidSignature
+            print('Navigation vers l\'écran de vérification legacy');
+            
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => VerifyScreenLegacy(
+                  documentId: cleanDocumentId,
+                  verificationResult: verificationResult,
+                ),
               ),
-            ),
-          ).then((_) => _resetScanner());
+            ).then((_) => _resetScanner());
+          } else {
+            // Router vers la page normale pour les UUID
+            print('Navigation vers l\'écran de vérification standard');
+            
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => VerifyScreen(
+                  documentId: cleanDocumentId,
+                  verificationResult: verificationResult,
+                ),
+              ),
+            ).then((_) => _resetScanner());
+          }
         }
       } catch (e, stackTrace) {
         // En cas d'erreur inattendue, fermer le dialogue et afficher un message
