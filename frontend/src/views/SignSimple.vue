@@ -2763,10 +2763,10 @@ function editDocumentPositioning() {
 }
 
 .intro-banner {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.8) 0%, rgba(21, 128, 61, 0.9) 100%);
+  background: rgba(34, 197, 94, 0.1);
   border-radius: 12px;
   padding: 20px;
-  color: white;
+  color: #333;
   margin-bottom: 30px;
   display: flex;
   align-items: center;
@@ -2824,9 +2824,9 @@ function editDocumentPositioning() {
 }
 
 .type-icon {
-  width: 70px;
-  height: 70px;
-  border-radius: 20px;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2836,17 +2836,13 @@ function editDocumentPositioning() {
 }
 
 .type-icon.permanent {
-  background: linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(69, 160, 73, 0.9));
-  color: white;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(76, 175, 80, 0.3);
+  background: rgba(40, 167, 69, 0.1);
+  color: #28a745;
 }
 
 .type-icon.ephemeral {
-  background: linear-gradient(135deg, rgba(255, 152, 0, 0.8), rgba(245, 124, 0, 0.9));
-  color: white;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 152, 0, 0.3);
+  background: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
 }
 
 .signature-type-card:hover .type-icon {
@@ -2983,21 +2979,18 @@ function editDocumentPositioning() {
   width: 50px;
   height: 50px;
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.8), rgba(21, 128, 61, 0.9));
-  color: white;
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--primary-color, #3a86ff);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
   margin-bottom: 5px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
 .preset-btn.custom .preset-icon {
-  background: linear-gradient(135deg, rgba(255, 152, 0, 0.8), rgba(245, 124, 0, 0.9));
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 152, 0, 0.3);
+  background: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
 }
 
 .preset-label {
