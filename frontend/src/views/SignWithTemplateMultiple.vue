@@ -837,10 +837,13 @@ function nextStep() {
       // Depuis prévisualisation vers certificat
       currentStep.value = 5;
     } else if (currentStep.value === 5) {
-      // Arrivée à l'étape de signature, lancer le processus
-      console.log('Démarrage du processus de signature');
-      startSigningProcess();
+      // Depuis certificat vers signature
+      console.log('Passage à l\'étape de signature');
       currentStep.value = 6;
+      // Lancer le processus de signature après un court délai pour laisser l'interface se mettre à jour
+      setTimeout(() => {
+        startSigningProcess();
+      }, 100);
     } else {
       // Navigation normale pour les autres étapes
       currentStep.value++;
@@ -1296,7 +1299,7 @@ async function startSigningProcess() {
     console.log('Tous les documents ont été signés avec succès');
     
     // Passer à l'étape de téléchargement
-    currentStep.value = 5;
+    currentStep.value = 7;
     signatureStatus.value = 'success';
     
   } catch (error) {
