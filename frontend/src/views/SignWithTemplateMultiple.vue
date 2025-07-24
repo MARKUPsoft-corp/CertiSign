@@ -132,8 +132,8 @@
           </div>
         </div>
         
-        <!-- Étape 2: Sélection du template (anciennement étape 0) -->
-        <div v-if="currentStep === 2 || (currentStep === 1 && signatureType === 'permanent')" class="step-body">
+        <!-- Étape 2: Sélection du template -->
+        <div v-if="currentStep === 2" class="step-body">
           <div class="template-selection-banner">
             <i class="bi bi-layout-text-window-reverse"></i>
             <div>
@@ -210,8 +210,8 @@
           </div>
         </div>
 
-        <!-- Étape 3: Sélection des documents à signer (anciennement étape 1) -->
-        <div v-if="currentStep === 3 || (currentStep === 2 && signatureType === 'permanent')" class="step-body">
+        <!-- Étape 3: Sélection des documents à signer -->
+        <div v-if="currentStep === 3" class="step-body">
           <div class="template-info-banner">
             <i class="bi bi-files"></i>
             <div>
@@ -278,8 +278,8 @@
           </div>
         </div>
 
-        <!-- Étape 4: Prévisualisation des documents avec onglets (anciennement étape 2) -->
-        <div v-if="currentStep === 4 || (currentStep === 3 && signatureType === 'permanent')" class="step-body">
+        <!-- Étape 4: Prévisualisation des documents avec onglets -->
+        <div v-if="currentStep === 4" class="step-body">
           <div class="documents-summary">
             <h4>{{ selectedFiles.length }} document(s) sélectionné(s) pour la signature</h4>
             <p>Vous pouvez prévisualiser chaque document en cliquant sur les onglets ci-dessous.</p>
@@ -346,8 +346,8 @@
           </div>
         </div>
 
-        <!-- Étape 5: Saisie du certificat et du mot de passe (anciennement étape 3) -->
-        <div v-if="currentStep === 5 || (currentStep === 4 && signatureType === 'permanent')" class="step-body">
+        <!-- Étape 5: Saisie du certificat et du mot de passe -->
+        <div v-if="currentStep === 5" class="step-body">
           <div class="certificate-info-banner">
             <i class="bi bi-shield-lock-fill"></i>
             <div>
@@ -384,8 +384,8 @@
           </div>
         </div>
 
-        <!-- Étape 6: En cours de signature (anciennement étape 4) -->
-        <div v-if="currentStep === 6 || (currentStep === 5 && signatureType === 'permanent')" class="step-body signature-processing">
+        <!-- Étape 6: En cours de signature -->
+        <div v-if="currentStep === 6" class="step-body signature-processing">
           <div v-if="signatureStatus === 'loading'">
             <div class="processing-animation">
               <i class="bi bi-shield-fill-check pulsing"></i>
@@ -422,8 +422,8 @@
           </div>
         </div>
 
-        <!-- Étape 7: Téléchargement des documents signés (anciennement étape 5) -->
-        <div v-if="currentStep === 7 || (currentStep === 6 && signatureType === 'permanent')" class="step-body signature-complete">
+        <!-- Étape 7: Téléchargement des documents signés -->
+        <div v-if="currentStep === 7" class="step-body signature-complete">
           <div class="success-animation">
             <i class="bi bi-check-circle-fill"></i>
           </div>
@@ -500,7 +500,7 @@
         </button>
         
         <button 
-          v-if="currentStep === 7 || (currentStep === 6 && signatureType === 'permanent')" 
+          v-if="currentStep === 7" 
           @click="closeSignature" 
           class="nav-button primary"
         >
@@ -825,16 +825,22 @@ function nextStep() {
     } else if (currentStep.value === 1 && signatureType.value === 'ephemeral') {
       // Depuis la configuration expiration vers sélection template
       currentStep.value = 2;
-    } else if (currentStep.value === 4 || (currentStep.value === 3 && signatureType.value === 'permanent')) {
+    } else if (currentStep.value === 2) {
+      // Depuis l'étape template vers sélection documents
+      currentStep.value = 3;
+    } else if (currentStep.value === 3) {
       // Arrivée à l'étape de prévisualisation, créer les prévisualisations
       console.log('Création des prévisualisations pour', selectedFiles.value.length, 'documents');
       createDocumentPreviews();
-      currentStep.value++;
-    } else if (currentStep.value === 6 || (currentStep.value === 5 && signatureType.value === 'permanent')) {
+      currentStep.value = 4;
+    } else if (currentStep.value === 4) {
+      // Depuis prévisualisation vers certificat
+      currentStep.value = 5;
+    } else if (currentStep.value === 5) {
       // Arrivée à l'étape de signature, lancer le processus
       console.log('Démarrage du processus de signature');
       startSigningProcess();
-      currentStep.value++;
+      currentStep.value = 6;
     } else {
       // Navigation normale pour les autres étapes
       currentStep.value++;
@@ -851,6 +857,15 @@ function prevStep() {
     } else if (currentStep.value === 2 && signatureType.value === 'ephemeral') {
       // Si on est au template et type éphémère, revenir à la configuration
       currentStep.value = 1;
+    } else if (currentStep.value === 3) {
+      // Depuis sélection documents vers template
+      currentStep.value = 2;
+    } else if (currentStep.value === 4) {
+      // Depuis prévisualisation vers sélection documents
+      currentStep.value = 3;
+    } else if (currentStep.value === 5) {
+      // Depuis certificat vers prévisualisation
+      currentStep.value = 4;
     } else {
       currentStep.value--;
     }
