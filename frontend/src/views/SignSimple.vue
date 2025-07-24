@@ -227,7 +227,7 @@
         </div>
 
         <!-- ÉTAPE 3: Prévisualisation des documents (ancienne étape 1) -->
-        <div v-if="currentStep === 3 || (currentStep === 2 && signatureType === 'permanent')" class="step-body">
+        <div v-if="currentStep === 3" class="step-body">
           <div class="documents-summary">
             <h4>{{ selectedFiles.length }} document(s) sélectionné(s) pour la signature</h4>
             <p>Vous pouvez prévisualiser chaque document en cliquant sur les onglets ci-dessous.</p>
@@ -662,13 +662,6 @@ const durationPresets = [
     icon: 'bi-hourglass-split'
   },
   { 
-    value: '1week', 
-    label: '1 semaine', 
-    description: 'Documents à court terme',
-    hours: 168,
-    icon: 'bi-calendar-week'
-  },
-  { 
     value: '1month', 
     label: '1 mois', 
     description: 'Durée standard recommandée',
@@ -817,13 +810,13 @@ const canProceedToNextStep = computed(() => {
       return customExpirationDate.value !== '' && expirationDate.value > new Date();
     }
     return selectedDuration.value !== '';
-  } else if (currentStep.value === 2 || (currentStep.value === 1 && signatureType.value === 'permanent')) {
+  } else if (currentStep.value === 2) {
     // Étape sélection documents: Au moins un fichier PDF doit être sélectionné
     return selectedFiles.value.length > 0;
-  } else if (currentStep.value === 3 || (currentStep.value === 2 && signatureType.value === 'permanent')) {
+  } else if (currentStep.value === 3) {
     // Étape prévisualisation: Les prévisualisations doivent être chargées
     return selectedFiles.value.length > 0;
-  } else if (currentStep.value === 4 || (currentStep.value === 3 && signatureType.value === 'permanent')) {
+  } else if (currentStep.value === 4) {
     // Étape positionnement: Tous les documents doivent avoir leurs positions confirmées
     return selectedFiles.value.every((_, index) => 
       documentPositions.value[index]?.completed === true
@@ -868,7 +861,7 @@ function nextStep() {
   }
   
   // Actions spécifiques selon l'étape atteinte
-  if (currentStep.value === 3 || (currentStep.value === 2 && signatureType.value === 'permanent')) {
+  if (currentStep.value === 3) {
     // Arrivée à l'étape de prévisualisation
     console.log('Création des prévisualisations pour', selectedFiles.value.length, 'documents');
     createDocumentPreviews();
@@ -2770,7 +2763,7 @@ function editDocumentPositioning() {
 }
 
 .intro-banner {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.8) 0%, rgba(21, 128, 61, 0.9) 100%);
   border-radius: 12px;
   padding: 20px;
   color: white;
@@ -2778,6 +2771,8 @@ function editDocumentPositioning() {
   display: flex;
   align-items: center;
   gap: 15px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
 .intro-banner i {
@@ -2805,25 +2800,27 @@ function editDocumentPositioning() {
 }
 
 .signature-type-card {
-  background: var(--card-bg);
-  border: 2px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(229, 231, 235, 0.6);
   border-radius: 16px;
   padding: 25px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(10px);
 }
 
 .signature-type-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 15px 30px rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.6);
 }
 
 .signature-type-card.selected {
-  border-color: var(--primary-color);
-  background: linear-gradient(135deg, rgba(58, 134, 255, 0.05) 0%, rgba(255, 255, 255, 0.95) 100%);
-  box-shadow: 0 10px 25px rgba(58, 134, 255, 0.15);
+  border-color: rgba(34, 197, 94, 0.8);
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(255, 255, 255, 0.9) 100%);
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.2);
 }
 
 .type-icon {
@@ -2839,13 +2836,17 @@ function editDocumentPositioning() {
 }
 
 .type-icon.permanent {
-  background: linear-gradient(135deg, #4caf50, #45a049);
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(69, 160, 73, 0.9));
   color: white;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
 .type-icon.ephemeral {
-  background: linear-gradient(135deg, #ff9800, #f57c00);
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.8), rgba(245, 124, 0, 0.9));
   color: white;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 152, 0, 0.3);
 }
 
 .signature-type-card:hover .type-icon {
@@ -2982,17 +2983,21 @@ function editDocumentPositioning() {
   width: 50px;
   height: 50px;
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--primary-color), #4c63d2);
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.8), rgba(21, 128, 61, 0.9));
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
   margin-bottom: 5px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
 .preset-btn.custom .preset-icon {
-  background: linear-gradient(135deg, #ff9800, #f57c00);
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.8), rgba(245, 124, 0, 0.9));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 152, 0, 0.3);
 }
 
 .preset-label {
