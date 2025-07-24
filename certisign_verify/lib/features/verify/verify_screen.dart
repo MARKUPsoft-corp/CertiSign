@@ -49,6 +49,11 @@ class _VerifyScreenState extends State<VerifyScreen> {
   String _documentTitle = 'Document vérifié';
   String? _originalDocumentBase64;
   
+  // 🆕 Variables pour les signatures éphémères
+  bool _isExpired = false;
+  String? _signatureType;
+  DateTime? _expirationDate;
+  
   @override
   void initState() {
     super.initState();
@@ -106,8 +111,28 @@ class _VerifyScreenState extends State<VerifyScreen> {
           }
         }
         
-        // Récupérer le document original en base64 si disponible
-        if (apiResponse.containsKey('original_document')) {
+        // 🆕 Traiter les informations de signature éphémère
+        if (apiResponse.containsKey('signature_type')) {
+          _signatureType = apiResponse['signature_type'] as String?;
+          print('Type de signature: $_signatureType');
+        }
+        
+        if (apiResponse.containsKey('expiration_date')) {
+          try {
+            _expirationDate = DateTime.parse(apiResponse['expiration_date'] as String);
+            print('Date d\'expiration: $_expirationDate');
+          } catch (e) {
+            print('Erreur de parsing de la date d\'expiration: $e');
+          }
+        }
+        
+        if (apiResponse.containsKey('is_expired')) {
+          _isExpired = apiResponse['is_expired'] as bool? ?? false;
+          print('Document expiré: $_isExpired');
+        }
+        
+        // Récupérer le document original en base64 si disponible (sauf si expiré)
+        if (apiResponse.containsKey('original_document') && !_isExpired) {
           // Vérifier le type avant de faire la conversion
           final originalDoc = apiResponse['original_document'];
           if (originalDoc is String) {
@@ -546,6 +571,26 @@ class _VerifyScreenState extends State<VerifyScreen> {
               delay: 200,
             ),
             
+            // 🆕 Type de signature
+            if (_signatureType != null)
+              _buildDetailItem(
+                isDarkMode: isDarkMode,
+                icon: _signatureType == 'ephemeral' ? FontAwesomeIcons.clock : FontAwesomeIcons.shieldHalved,
+                title: 'Type de signature',
+                value: _signatureType == 'ephemeral' ? 'Éphémère' : 'Pérenne',
+                delay: 225,
+              ),
+            
+            // 🆕 Date d'expiration (si signature éphémère)
+            if (_signatureType == 'ephemeral' && _expirationDate != null)
+              _buildDetailItem(
+                isDarkMode: isDarkMode,
+                icon: FontAwesomeIcons.calendarXmark,
+                title: 'Date d\'expiration',
+                value: DateFormat('dd/MM/yyyy à HH:mm').format(_expirationDate!),
+                delay: 250,
+              ),
+            
             // ID du document
             _buildDetailItem(
               isDarkMode: isDarkMode,
@@ -554,7 +599,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
               value: _getPreviewText(widget.documentId),
               isLongValue: true,
               fullValue: widget.documentId,
-              delay: 250,
+              delay: _signatureType == 'ephemeral' ? 275 : 250,
             ),
             
             // Nom du document
@@ -567,7 +612,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                      (widget.verificationResult['api_response'] as Map<String, dynamic>).containsKey('original_filename')
                      ? widget.verificationResult['api_response']['original_filename']
                      : _documentTitle,
-              delay: 300,
+              delay: _signatureType == 'ephemeral' ? 325 : 300,
             ),
             
             // Titre de la section signataire
@@ -806,10 +851,12 @@ class _VerifyScreenState extends State<VerifyScreen> {
             ),
             child: Icon(
               _isVerified
-                  ? FontAwesomeIcons.circleCheck
+                  ? (_isExpired ? FontAwesomeIcons.clock : FontAwesomeIcons.circleCheck)
                   : FontAwesomeIcons.circleXmark,
               size: 40,
-              color: _isVerified ? successColor : errorColor,
+              color: _isVerified 
+                  ? (_isExpired ? Colors.orange : successColor)
+                  : errorColor,
             ),
           ).animate(onPlay: (controller) => controller.repeat(reverse: true, period: const Duration(seconds: 3)))
             .scale(begin: const Offset(1.0, 1.0), end: const Offset(1.05, 1.05)),
@@ -818,12 +865,16 @@ class _VerifyScreenState extends State<VerifyScreen> {
           
           // Titre du résultat avec effet d'éclat
           Text(
-            _isVerified ? 'DOCUMENT AUTHENTIQUE' : 'VÉRIFICATION ÉCHOUÉE',
+            _isVerified 
+                ? (_isExpired ? 'DOCUMENT AUTHENTIQUE MAIS EXPIRÉ' : 'DOCUMENT AUTHENTIQUE')
+                : 'VÉRIFICATION ÉCHOUÉE',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w800,
                   letterSpacing: 1.2,
-                  color: _isVerified ? successColor : errorColor,
+                  color: _isVerified 
+                      ? (_isExpired ? Colors.orange : successColor)
+                      : errorColor,
                 ),
           ),
           
@@ -850,7 +901,9 @@ class _VerifyScreenState extends State<VerifyScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             child: Text(
               _isVerified
-                  ? 'La signature numérique de ce document a été vérifiée avec succès et authentifiée.'
+                  ? (_isExpired 
+                      ? 'Ce document est authentique mais sa signature a expiré. Il n\'est plus considéré comme valide.'
+                      : 'La signature numérique de ce document a été vérifiée avec succès et authentifiée.')
                   : _errorMessage ?? 'La vérification du document a échoué. La signature pourrait être falsifiée.',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(

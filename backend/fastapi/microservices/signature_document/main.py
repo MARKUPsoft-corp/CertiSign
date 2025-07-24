@@ -1124,18 +1124,60 @@ async def verify_document(
                 "document_id": document_id
             }
         
-        # Préparation de la réponse avec informations du signataire
-        response_data = {
-            "valid": True,
-            "message": "Document authentique et intègre",
-            "document_id": document_id,
-            "signature_date": signature_data.get('created_at', 'Inconnue')
-        }
+        # 🆕 VÉRIFICATION DES SIGNATURES ÉPHÉMÈRES
+        signature_type = signature_data.get('signature_type', 'permanent')
+        expiration_date = signature_data.get('expiration_date')
         
-        # Ajout des informations du signataire si disponibles
-        if 'signer_info' in signature_data and signature_data['signer_info']:
-            logger.info(f"[{correlation_id}] Ajout des informations du signataire à la réponse")
-            response_data["signer_info"] = signature_data['signer_info']
+        logger.info(f"[{correlation_id}] Type de signature: {signature_type}")
+        if expiration_date:
+            logger.info(f"[{correlation_id}] Date d'expiration: {expiration_date}")
+        
+        # Vérifier si la signature est éphémère et si elle a expiré
+        is_expired = False
+        if signature_type == 'ephemeral' and expiration_date:
+            try:
+                expiration_datetime = datetime.fromisoformat(expiration_date.replace('Z', '+00:00'))
+                current_datetime = datetime.now(expiration_datetime.tzinfo)
+                is_expired = current_datetime > expiration_datetime
+                
+                logger.info(f"[{correlation_id}] Vérification expiration - Actuel: {current_datetime}, Expiration: {expiration_datetime}, Expiré: {is_expired}")
+            except Exception as e:
+                logger.error(f"[{correlation_id}] Erreur lors de la vérification de l'expiration: {e}")
+                # En cas d'erreur, considérer comme non expiré pour la sécurité
+                is_expired = False
+        
+        # Préparation de la réponse selon le type de signature et l'expiration
+        if signature_type == 'ephemeral' and is_expired:
+            # Signature éphémère expirée
+            response_data = {
+                "valid": True,  # La signature est toujours valide cryptographiquement
+                "message": "Document authentique mais obsolète",
+                "document_id": document_id,
+                "signature_date": signature_data.get('created_at', 'Inconnue'),
+                "signature_type": signature_type,
+                "expiration_date": expiration_date,
+                "is_expired": True
+            }
+            logger.info(f"[{correlation_id}] Signature éphémère expirée - Informations limitées retournées")
+        else:
+            # Signature pérenne ou éphémère valide
+            response_data = {
+                "valid": True,
+                "message": "Document authentique et intègre",
+                "document_id": document_id,
+                "signature_date": signature_data.get('created_at', 'Inconnue'),
+                "signature_type": signature_type,
+                "is_expired": False
+            }
+            
+            # Ajouter la date d'expiration pour les signatures éphémères valides
+            if signature_type == 'ephemeral' and expiration_date:
+                response_data["expiration_date"] = expiration_date
+            
+            # Ajout des informations du signataire si disponibles (uniquement pour les signatures valides)
+            if 'signer_info' in signature_data and signature_data['signer_info']:
+                logger.info(f"[{correlation_id}] Ajout des informations du signataire à la réponse")
+                response_data["signer_info"] = signature_data['signer_info']
         
         # DEBUG: Afficher toutes les clés des données de signature
         logger.info(f"[{correlation_id}] DEBUG - Clés des données de signature: {list(signature_data.keys())}")
@@ -1144,8 +1186,11 @@ async def verify_document(
         if 'signed_file_url' in signature_data:
             logger.info(f"[{correlation_id}] DEBUG - signed_file_url valeur: {signature_data['signed_file_url']}")
         
-        # TÉLÉCHARGER UNIQUEMENT LE DOCUMENT SIGNÉ (pas d'original)
-        if return_original_document and 'signed_file_url' in signature_data and signature_data['signed_file_url']:
+        # TÉLÉCHARGER UNIQUEMENT LE DOCUMENT SIGNÉ (pas d'original) - SAUF SI EXPIRÉ
+        if (return_original_document and 
+            'signed_file_url' in signature_data and 
+            signature_data['signed_file_url'] and 
+            not (signature_type == 'ephemeral' and is_expired)):
             try:
                 # Obtenir l'URL complète du document signé
                 signed_file_url = signature_data['signed_file_url']
@@ -1189,8 +1234,13 @@ async def verify_document(
                 logger.error(f"[{correlation_id}] ⚠️ AUCUN DOCUMENT ne sera retourné (pas de fallback)")
         
         elif return_original_document:
-            logger.warning(f"[{correlation_id}] ⚠️ AUCUN document signé trouvé - signed_file_url manquant ou vide")
-            logger.warning(f"[{correlation_id}] 🚫 AUCUN DOCUMENT ne sera retourné (politique: SIGNÉ UNIQUEMENT)")
+            if signature_type == 'ephemeral' and is_expired:
+                logger.info(f"[{correlation_id}] 🕐 Document éphémère expiré - Téléchargement refusé")
+                response_data["download_blocked"] = True
+                response_data["download_reason"] = "Document éphémère expiré"
+            else:
+                logger.warning(f"[{correlation_id}] ⚠️ AUCUN document signé trouvé - signed_file_url manquant ou vide")
+                logger.warning(f"[{correlation_id}] 🚫 AUCUN DOCUMENT ne sera retourné (politique: SIGNÉ UNIQUEMENT)")
         else:
             logger.info(f"[{correlation_id}] ℹ️ return_original_document=False, téléchargement non demandé")
         
