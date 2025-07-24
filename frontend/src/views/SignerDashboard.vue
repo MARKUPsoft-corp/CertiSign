@@ -805,6 +805,89 @@
         </div>
         
         <div class="signature-modal-body">
+          <!-- 🆕 SECTION TYPE DE SIGNATURE -->
+          <div class="signature-type-section">
+            <div class="section-title">Type de signature</div>
+            <div class="signature-type-options">
+              <div class="signature-type-option" 
+                   :class="{ selected: signatureType === 'permanent' }"
+                   @click="signatureType = 'permanent'">
+                <div class="type-icon permanent">
+                  <i class="bi bi-shield-lock-fill"></i>
+                </div>
+                <div class="type-content">
+                  <h4>Signature Pérenne</h4>
+                  <p>Valide indéfiniment</p>
+                </div>
+                <div class="type-badge" v-if="signatureType === 'permanent'">
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </div>
+              
+              <div class="signature-type-option"
+                   :class="{ selected: signatureType === 'ephemeral' }"
+                   @click="signatureType = 'ephemeral'">
+                <div class="type-icon ephemeral">
+                  <i class="bi bi-clock-history"></i>
+                </div>
+                <div class="type-content">
+                  <h4>Signature Éphémère</h4>
+                  <p>Avec date d'expiration</p>
+                </div>
+                <div class="type-badge" v-if="signatureType === 'ephemeral'">
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 🆕 SECTION CONFIGURATION EXPIRATION (si éphémère) -->
+          <div v-if="signatureType === 'ephemeral'" class="expiration-section">
+            <div class="section-title">Période de validité</div>
+            
+            <!-- Durées pré-définies -->
+            <div class="duration-presets">
+              <div class="presets-grid">
+                <button v-for="preset in durationPresets" 
+                       :key="preset.value"
+                       :class="['preset-btn', { active: selectedDuration === preset.value }]"
+                       @click="selectDuration(preset.value)">
+                  <div class="preset-icon">
+                    <i :class="preset.icon"></i>
+                  </div>
+                  <div class="preset-label">{{ preset.label }}</div>
+                  <div class="preset-desc">{{ preset.description }}</div>
+                </button>
+                
+                <!-- Option personnalisée -->
+                <button :class="['preset-btn', 'custom', { active: selectedDuration === 'custom' }]"
+                       @click="selectDuration('custom')">
+                  <div class="preset-icon">
+                    <i class="bi bi-calendar-plus"></i>
+                  </div>
+                  <div class="preset-label">Personnalisé</div>
+                  <div class="preset-desc">Choisir une date</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Sélecteur de date personnalisée -->
+            <div v-if="selectedDuration === 'custom'" class="custom-date-selector">
+              <label>Date et heure d'expiration</label>
+              <input type="datetime-local" 
+                     v-model="customExpirationDate"
+                     :min="minExpirationDate"
+                     class="date-input">
+              <small>La signature expirera le {{ formatExpirationDisplay }}</small>
+            </div>
+
+            <!-- Résumé de l'expiration -->
+            <div v-if="expirationDate" class="expiration-summary">
+              <i class="bi bi-info-circle"></i>
+              <span>La signature expirera <strong>{{ durationDescription }}</strong></span>
+            </div>
+          </div>
+
           <div class="document-preview">
             <div class="document-name">{{ currentDocument?.document_name || 'Document' }}</div>
             <div class="document-info">
@@ -925,6 +1008,50 @@ const showPassword = ref(false);
 const isSigningInProgress = ref(false);
 const signatureStatus = ref(null);
 const isDragging = ref(false);
+
+// 🆕 NOUVELLES VARIABLES POUR SIGNATURES ÉPHÉMÈRES
+const signatureType = ref('permanent'); // 'permanent' ou 'ephemeral'
+const selectedDuration = ref('1month'); // Durée sélectionnée par défaut
+const customExpirationDate = ref(''); // Date personnalisée
+
+// Durées pré-définies
+const durationPresets = [
+  { 
+    value: '1day', 
+    label: '1 jour', 
+    description: 'Idéal pour documents urgents',
+    hours: 24,
+    icon: 'bi-hourglass-split'
+  },
+  { 
+    value: '1month', 
+    label: '1 mois', 
+    description: 'Standard pour la plupart des cas',
+    hours: 720,
+    icon: 'bi-calendar-month'
+  },
+  { 
+    value: '3months', 
+    label: '3 mois', 
+    description: 'Pour les documents importants',
+    hours: 2160,
+    icon: 'bi-calendar-range'
+  },
+  { 
+    value: '6months', 
+    label: '6 mois', 
+    description: 'Validité prolongée',
+    hours: 4320,
+    icon: 'bi-calendar-date'
+  },
+  { 
+    value: '1year', 
+    label: '1 an', 
+    description: 'Validité maximale recommandée',
+    hours: 8760,
+    icon: 'bi-calendar-check'
+  }
+];
 
 // Statistiques
 const stats = ref({
@@ -1074,6 +1201,75 @@ function getTimeElapsed(dateStr) {
 }
 
 
+
+// 🆕 PROPRIÉTÉS CALCULÉES POUR SIGNATURES ÉPHÉMÈRES
+// Date minimale pour l'expiration (demain)
+const minExpirationDate = computed(() => {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return tomorrow.toISOString().slice(0, 16);
+});
+
+// Date d'expiration calculée
+const expirationDate = computed(() => {
+  if (signatureType.value !== 'ephemeral') return null;
+  
+  if (selectedDuration.value === 'custom' && customExpirationDate.value) {
+    return new Date(customExpirationDate.value);
+  }
+  
+  const preset = durationPresets.find(p => p.value === selectedDuration.value);
+  if (preset) {
+    const date = new Date();
+    date.setHours(date.getHours() + preset.hours);
+    return date;
+  }
+  
+  return null;
+});
+
+// Formatage de l'affichage de l'expiration
+const formatExpirationDisplay = computed(() => {
+  if (!expirationDate.value) return 'Non définie';
+  
+  return expirationDate.value.toLocaleDateString('fr-FR', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+});
+
+// Description de la durée
+const durationDescription = computed(() => {
+  if (signatureType.value !== 'ephemeral') return '';
+  
+  if (selectedDuration.value === 'custom') {
+    if (!expirationDate.value) return 'Date personnalisée';
+    
+    const now = new Date();
+    const diff = expirationDate.value - now;
+    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    
+    if (days === 1) return 'dans 1 jour';
+    if (days < 30) return `dans ${days} jours`;
+    if (days < 365) return `dans ${Math.ceil(days / 30)} mois`;
+    return `dans ${Math.ceil(days / 365)} an(s)`;
+  } else {
+    const preset = durationPresets.find(p => p.value === selectedDuration.value);
+    return preset ? preset.description : '';
+  }
+});
+
+// 🆕 MÉTHODE POUR LA SÉLECTION DE DURÉE
+function selectDuration(duration) {
+  selectedDuration.value = duration;
+  if (duration !== 'custom') {
+    customExpirationDate.value = '';
+  }
+}
 
 // Méthodes pour la signature
 function signDocument(doc) {
@@ -1400,6 +1596,16 @@ async function submitSignature() {
         positions_count: signaturePosition.positions?.length || 0,
         positions_detail: signaturePosition.positions
       });
+    }
+    
+    // 🆕 AJOUTER LES DONNÉES D'EXPIRATION POUR SIGNATURES ÉPHÉMÈRES DANS LES MÉTADONNÉES
+    metadataObject.signature_type = signatureType.value === 'ephemeral' ? 'ephemeral' : 'permanent';
+    
+    if (signatureType.value === 'ephemeral' && expirationDate.value) {
+      metadataObject.expiration_date = expirationDate.value.toISOString();
+      console.log('🕐 Signature éphémère configurée, expiration:', expirationDate.value.toISOString());
+    } else {
+      console.log('🔒 Signature pérenne configurée (pas d\'expiration)');
     }
     
     const metadata = JSON.stringify(metadataObject);
@@ -4653,4 +4859,246 @@ async function deleteTemplate(template) {
     align-items: flex-start;
       }
   }
+/* 🆕 STYLES POUR SIGNATURES ÉPHÉMÈRES DANS LA MODAL */
+
+/* Section type de signature */
+.signature-type-section {
+  margin-bottom: 25px;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 15px;
+}
+
+.signature-type-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.signature-type-option {
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(229, 231, 235, 0.6);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+.signature-type-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.6);
+}
+
+.signature-type-option.selected {
+  border-color: rgba(34, 197, 94, 0.8);
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(255, 255, 255, 0.9) 100%);
+  box-shadow: 0 5px 15px rgba(34, 197, 94, 0.2);
+}
+
+.type-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.type-icon.permanent {
+  background: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+.type-icon.ephemeral {
+  background: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
+}
+
+.signature-type-option:hover .type-icon {
+  transform: scale(1.05);
+}
+
+.type-content h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 5px 0;
+  color: var(--text-color);
+}
+
+.type-content p {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.type-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Section configuration expiration */
+.expiration-section {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: rgba(58, 134, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(58, 134, 255, 0.2);
+}
+
+.duration-presets {
+  margin-bottom: 20px;
+}
+
+.presets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.preset-btn {
+  background: white;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-height: 90px;
+}
+
+.preset-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary-color);
+}
+
+.preset-btn.active {
+  background: rgba(58, 134, 255, 0.1);
+  border-color: var(--primary-color);
+}
+
+.preset-btn.custom {
+  border-style: dashed;
+}
+
+.preset-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--primary-color, #3a86ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 3px;
+}
+
+.preset-btn.custom .preset-icon {
+  background: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
+}
+
+.preset-label {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 0.85rem;
+}
+
+.preset-desc {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Sélecteur de date personnalisée */
+.custom-date-selector {
+  background: var(--bg-light);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.custom-date-selector label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.date-input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
+}
+
+.custom-date-selector small {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* Résumé de l'expiration */
+.expiration-summary {
+  background: rgba(58, 134, 255, 0.1);
+  border: 1px solid rgba(58, 134, 255, 0.3);
+  border-radius: 8px;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.expiration-summary i {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.expiration-summary span {
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.expiration-summary strong {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
 </style> 
