@@ -73,21 +73,7 @@
           </div>
           <div class="modal-body signature-options-body">
             <div class="signature-options-grid">
-              <!-- Option 1: Signer à partir d'un template -->
-              <div class="signature-option-card" @click="selectSignatureOption('template')">
-                <div class="option-icon template">
-                  <i class="bi bi-file-earmark-check"></i>
-                </div>
-                <div class="option-content">
-                  <h4 class="option-title">Signer à partir d'un template</h4>
-                  <p class="option-description">Utilisez un template prédéfini pour signer rapidement votre document</p>
-                </div>
-                <div class="option-arrow">
-                  <i class="bi bi-chevron-right"></i>
-                </div>
-              </div>
-              
-              <!-- Option 2: Signature rapide -->
+              <!-- Option 1: Signature rapide -->
               <div class="signature-option-card" @click="selectSignatureOption('quick')">
                 <div class="option-icon quick">
                   <i class="bi bi-lightning-charge"></i>
@@ -124,65 +110,9 @@
         <SignDocument @close="setActiveContent('dashboard')" />
       </div>
       
-      <!-- Composant de signature à partir d'un template -->
-      <div v-else-if="activeContent === 'sign-template'" class="integrated-component-container">
-        <div class="template-selection-container">
-          <div class="section-header">
-            <h2 class="section-title">Signer avec un template</h2>
-            <button class="btn btn-outline-secondary" @click="setActiveContent('dashboard')">
-              <i class="bi bi-arrow-left"></i> Retour
-            </button>
-          </div>
-          
-          <div v-if="loading" class="loading-state">
-            <div class="spinner"></div>
-            <p>Chargement des templates...</p>
-          </div>
-          
-          <div v-else-if="templates.length === 0" class="empty-templates">
-            <i class="bi bi-file-earmark-text"></i>
-            <p>Vous n'avez pas encore de templates</p>
-            <button class="btn btn-primary" @click="setActiveContent('templates')">Créer un template</button>
-          </div>
-          
-          <div v-else class="templates-grid template-selection-grid">
-            <div v-for="(template, index) in templates" :key="index" class="template-card">
-              <div class="template-header">
-                <div class="template-icon">
-                  <i class="bi bi-file-earmark-pdf"></i>
-                </div>
-                <div class="template-status">
-                  <span class="template-badge">Template</span>
-                </div>
-              </div>
-              <div class="template-content">
-                <h3 class="template-title" :title="template.name">{{ template.name }}</h3>
-                <div class="template-meta">
-                  <div class="meta-item">
-                    <i class="bi bi-calendar"></i>
-                    <span>Créé le: {{ template.date }}</span>
-                  </div>
-                  <div class="meta-item">
-                    <i class="bi bi-grid"></i>
-                    <span>{{ template.pageApplication === 'all' ? 'Toutes les pages' : 'Pages spécifiques' }}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="template-main-actions">
-                <button class="action-btn primary full-width sign-template-btn" @click="signWithTemplate(template)">
-                  <i class="bi bi-pen"></i> 
-                  <span>Signer avec ce template</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
       
-      <!-- Composant de signature avec template intégré -->
-      <div v-else-if="activeContent === 'sign-with-template'" class="integrated-component-container">
-        <SignWithTemplate :template-data="selectedTemplate" @close="setActiveContent('dashboard')" />
-      </div>
+
       
       <!-- Section de signature multiple de documents -->
       <div v-else-if="activeContent === 'sign-multiple'" class="integrated-component-container">
@@ -514,7 +444,7 @@ import SignDocument from '@/views/SignDocument.vue';
 import MyDocuments from '@/views/MyDocuments.vue';
 import UserHistory from '@/views/UserHistory.vue';
 import UserProfile from '@/views/UserProfile.vue';
-import SignWithTemplate from '@/views/SignWithTemplate.vue'; // Importer le nouveau composant
+
 import SignWithTemplateMultiple from '@/views/SignWithTemplateMultiple.vue'; // Importer le composant de signature multiple
 import SignSimple from '@/views/SignSimple.vue'; // Importer le composant de signature rapide
 // VerifyDocument a été supprimé
@@ -525,7 +455,7 @@ import QrPositioner from '@/components/QrPositioner.vue';
 
 const router = useRouter();
 const isMenuOpen = ref(false);
-const activeContent = ref('dashboard'); // 'dashboard', 'documents', 'sign', 'history', 'templates', 'sign-template', 'sign-multiple'
+const activeContent = ref('dashboard'); // 'dashboard', 'documents', 'sign', 'history', 'templates', 'sign-multiple'
 const showNewTemplateModal = ref(false);
 const showSignatureOptionsModal = ref(false);
 
@@ -566,9 +496,6 @@ function selectSignatureOption(option) {
   hideSignatureOptions();
   
   switch(option) {
-    case 'template':
-      setActiveContent('sign-template');
-      break;
     case 'quick':
       setActiveContent('signSimple');
       break;
@@ -580,50 +507,7 @@ function selectSignatureOption(option) {
   }
 }
 
-// Fonction pour signer avec un template spécifique
-function signWithTemplate(template) {
-  console.log('Signature avec le template (structure brute):', template);
-  
-  // Inspection détaillée du template pour trouver l'image de signature
-  console.log('Inspection du template:');
-  console.log('- ID du template:', template.id);
-  
-  // Récupérer le template complet depuis le service pour obtenir l'image de signature
-  TemplateService.getTemplate(template.id)
-    .then(templateDetails => {
-      console.log('Template complet récupéré depuis API:', templateDetails);
-      
-      // Préparer le template avec les données nécessaires pour la signature
-      const preparedTemplate = {
-        ...template,
-        // S'assurer que toutes les données nécessaires sont présentes et correctement formatées
-        signatureImage: templateDetails.signature_image || null,
-        signaturePositions: templateDetails.signature_positions || [],
-        pageApplication: templateDetails.page_application || template.pageApplication || 'all',
-        qrSize: templateDetails.qr_size || template.qrSize || 'medium',
-        qrPositions: {
-          positions: templateDetails.qr_positions || []
-        },
-        selectedPages: templateDetails.selected_pages || []
-      };
-      
-      console.log('Template préparé pour la signature:', preparedTemplate);
-      console.log('Image de signature extraite:', preparedTemplate.signatureImage ? 'Présente' : 'Absente');
-      console.log('Positions de signature:', preparedTemplate.signaturePositions);
-      
-      // Stocker le template préparé pour le passer au composant
-      selectedTemplate.value = preparedTemplate;
-      
-      // Changer l'affichage vers le composant de signature avec template
-      activeContent.value = 'sign-with-template';
-    })
-    .catch(error => {
-      console.error('Erreur lors de la récupération des détails du template:', error);
-      // Fallback en cas d'erreur
-      selectedTemplate.value = template;
-      activeContent.value = 'sign-with-template';
-    });
-}
+
 
 // Fonctions de navigation
 function setActiveContent(contentType) {
@@ -3265,10 +3149,7 @@ async function fetchUserDocuments() {
   transform: scale(1.1) rotate(5deg);
 }
 
-.option-icon.template {
-  background-color: rgba(58, 134, 255, 0.1);
-  color: var(--primary-color);
-}
+
 
 .option-icon.quick {
   background-color: rgba(255, 149, 0, 0.1);
@@ -3396,111 +3277,9 @@ async function fetchUserDocuments() {
   line-height: 1.6;
 }
 
-/* Template Selection Container */
-.template-selection-container {
-  max-width: 1400px;
-  width: 90%;
-  margin: 0 auto;
-  padding: 40px 30px;
-  animation: fadeIn 0.5s ease-out;
-}
 
-/* Template Selection Grid */
-.template-selection-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 35px;
-  margin-top: 40px;
-  margin-bottom: 40px;
-}
 
-@media (max-width: 1200px) {
-  .template-selection-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
 
-@media (max-width: 768px) {
-  .signature-options-modal {
-    width: 95%;
-  }
-  
-  .signature-options-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .template-selection-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .signature-option-card {
-    padding: 20px;
-  }
-  
-  .option-icon {
-    width: 50px;
-    height: 50px;
-    min-width: 50px;
-    font-size: 1.5rem;
-    margin-right: 15px;
-  }
-}
-
-.template-selection-grid .template-card {
-  min-height: 280px;
-  transform-origin: center center;
-  padding: 25px;
-}
-
-.template-selection-grid .template-icon {
-  width: 60px;
-  height: 60px;
-  font-size: 1.8rem;
-}
-
-.template-selection-grid .template-title {
-  font-size: 20px;
-  margin-bottom: 15px;
-}
-
-.template-selection-grid .meta-item {
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-.template-selection-grid .action-btn {
-  padding: 14px 20px;
-  font-size: 16px;
-  margin-top: 15px;
-  white-space: nowrap;
-  height: auto;
-  min-height: 50px;
-  width: 100%;
-  text-transform: none;
-  letter-spacing: 0.5px;
-}
-
-.sign-template-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font-weight: 600;
-  padding: 16px 24px;
-  border-radius: 25px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(var(--primary-color-rgb), 0.3);
-}
-
-.sign-template-btn i {
-  font-size: 18px;
-  margin: 0;
-}
-
-.sign-template-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(var(--primary-color-rgb), 0.4);
-}
 
 /* Styles pour la section de bienvenue améliorée */
 .underlined-text {
