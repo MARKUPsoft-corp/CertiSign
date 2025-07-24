@@ -1241,15 +1241,20 @@ async function startSigningProcess() {
       formData.append('document', file);
       formData.append('certificate', certificateFile.value);
       formData.append('password', certificatePassword.value);
-      formData.append('metadata', JSON.stringify(userMetadata));
+      // 🆕 AJOUTER LES DONNÉES D'EXPIRATION POUR SIGNATURES ÉPHÉMÈRES DANS LES MÉTADONNÉES
+      const signatureMetadata = {
+        ...userMetadata,
+        signature_type: signatureType.value === 'ephemeral' ? 'ephemeral' : 'permanent'
+      };
       
-      // 🆕 AJOUTER LES DONNÉES D'EXPIRATION POUR SIGNATURES ÉPHÉMÈRES
       if (signatureType.value === 'ephemeral' && expirationDate.value) {
-        formData.append('expires_at', expirationDate.value.toISOString());
-        console.log('Signature éphémère configurée, expiration:', expirationDate.value.toISOString());
+        signatureMetadata.expiration_date = expirationDate.value.toISOString();
+        console.log('🕐 Signature éphémère configurée, expiration:', expirationDate.value.toISOString());
       } else {
-        console.log('Signature pérenne configurée (pas d\'expiration)');
+        console.log('🔒 Signature pérenne configurée (pas d\'expiration)');
       }
+      
+      formData.append('metadata', JSON.stringify(signatureMetadata));
       
       if (userInfo.id) {
         formData.append('owner_id', userInfo.id);

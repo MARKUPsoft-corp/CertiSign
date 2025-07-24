@@ -102,6 +102,24 @@ class DocumentSignature(models.Model):
     # Métadonnées supplémentaires (facultatif)
     metadata = models.JSONField(_('Métadonnées'), blank=True, null=True)
     
+    # 🆕 NOUVEAUX CHAMPS POUR SIGNATURES ÉPHÉMÈRES
+    signature_type = models.CharField(
+        _('Type de signature'), 
+        max_length=20,
+        choices=[
+            ('permanent', _('Pérenne')),
+            ('ephemeral', _('Éphémère')),
+        ],
+        default='permanent',
+        help_text=_('Type de signature : pérenne (valide indéfiniment) ou éphémère (avec date d\'expiration)')
+    )
+    expiration_date = models.DateTimeField(
+        _('Date d\'expiration'), 
+        blank=True, 
+        null=True,
+        help_text=_('Date d\'expiration pour les signatures éphémères. Laissez vide pour les signatures pérennes.')
+    )
+    
     class Meta:
         verbose_name = _('Signature de document')
         verbose_name_plural = _('Signatures de documents')
@@ -112,6 +130,42 @@ class DocumentSignature(models.Model):
             return f"Signature - {self.title} ({self.document_id})"
         else:
             return f"Signature - {self.document_id}"
+    
+    @property
+    def is_valid(self):
+        """
+        Retourne True si la signature est encore valide, False si elle a expiré.
+        Les signatures pérennes sont toujours valides.
+        """
+        if self.signature_type == 'permanent':
+            return True
+        
+        if self.signature_type == 'ephemeral' and self.expiration_date:
+            from django.utils import timezone
+            return timezone.now() <= self.expiration_date
+        
+        # Si type éphémère mais pas de date d'expiration, considérer comme invalide
+        return False
+    
+    @property 
+    def validity_status(self):
+        """
+        Retourne le statut de validité sous forme de chaîne.
+        """
+        if self.signature_type == 'permanent':
+            return 'valid'
+        
+        if self.signature_type == 'ephemeral':
+            if not self.expiration_date:
+                return 'invalid'  # Éphémère sans date d'expiration
+            
+            from django.utils import timezone
+            if timezone.now() <= self.expiration_date:
+                return 'valid'
+            else:
+                return 'expired'
+        
+        return 'invalid'
     
     @classmethod
     def create_from_signature_data(cls, document_id, original_hash, signature, public_key_pem, 

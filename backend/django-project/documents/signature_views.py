@@ -454,6 +454,35 @@ def standard_store_signature_public(request):
         signer_role = request.POST.get('signer_role')
         signer_name = request.POST.get('signer_name')
         
+        # 🆕 TRAITEMENT DES SIGNATURES ÉPHÉMÈRES
+        signature_type = 'permanent'  # Valeur par défaut
+        expiration_date = None
+        
+        # Extraire les informations de type de signature depuis les métadonnées
+        metadata_str = request.POST.get('metadata') or request.POST.get('user_metadata')
+        if metadata_str:
+            try:
+                import json
+                metadata_dict = json.loads(metadata_str)
+                logger.info(f"Métadonnées parsées: {list(metadata_dict.keys())}")
+                
+                # Extraire le type de signature
+                if 'signature_type' in metadata_dict:
+                    signature_type = metadata_dict['signature_type']
+                    logger.info(f"Type de signature extrait: {signature_type}")
+                
+                # Extraire la date d'expiration pour les signatures éphémères
+                if signature_type == 'ephemeral' and 'expiration_date' in metadata_dict:
+                    from django.utils.dateparse import parse_datetime
+                    expiration_date = parse_datetime(metadata_dict['expiration_date'])
+                    logger.info(f"Date d'expiration extraite: {expiration_date}")
+                    
+            except (json.JSONDecodeError, ValueError) as e:
+                logger.warning(f"Erreur lors du parsing des métadonnées: {str(e)}")
+                # Continuer avec les valeurs par défaut
+        
+        logger.info(f"Configuration signature - Type: {signature_type}, Expiration: {expiration_date}")
+        
         # Récupérer l'organisation si un ID est fourni
         organization = None
         if organization_id:
@@ -494,7 +523,10 @@ def standard_store_signature_public(request):
             organization=organization,
             organization_name=organization_name,
             signer_role=signer_role,
-            signer_name=signer_name
+            signer_name=signer_name,
+            # 🆕 NOUVEAUX CHAMPS POUR SIGNATURES ÉPHÉMÈRES
+            signature_type=signature_type,
+            expiration_date=expiration_date
         )
         
         # Associer les fichiers
@@ -768,6 +800,35 @@ def store_signature_public(request):
         except DocumentSignature.DoesNotExist:
             pass
         
+        # 🆕 TRAITEMENT DES SIGNATURES ÉPHÉMÈRES (pour store_signature_public)
+        signature_type = 'permanent'  # Valeur par défaut
+        expiration_date = None
+        
+        # Extraire les informations de type de signature depuis les métadonnées
+        metadata_str = request.data.get('metadata') or request.data.get('user_metadata')
+        if metadata_str:
+            try:
+                import json
+                metadata_dict = json.loads(metadata_str)
+                logger.info(f"Métadonnées parsées (store_signature_public): {list(metadata_dict.keys())}")
+                
+                # Extraire le type de signature
+                if 'signature_type' in metadata_dict:
+                    signature_type = metadata_dict['signature_type']
+                    logger.info(f"Type de signature extrait: {signature_type}")
+                
+                # Extraire la date d'expiration pour les signatures éphémères
+                if signature_type == 'ephemeral' and 'expiration_date' in metadata_dict:
+                    from django.utils.dateparse import parse_datetime
+                    expiration_date = parse_datetime(metadata_dict['expiration_date'])
+                    logger.info(f"Date d'expiration extraite: {expiration_date}")
+                    
+            except (json.JSONDecodeError, ValueError) as e:
+                logger.warning(f"Erreur lors du parsing des métadonnées: {str(e)}")
+                # Continuer avec les valeurs par défaut
+        
+        logger.info(f"Configuration signature (store_signature_public) - Type: {signature_type}, Expiration: {expiration_date}")
+        
         # Créer la signature de document
         document_signature = DocumentSignature(
             document_id=document_id,
@@ -779,7 +840,10 @@ def store_signature_public(request):
             organization=organization,
             organization_name=organization_name,
             signer_role=signer_role,
-            signer_name=signer_name
+            signer_name=signer_name,
+            # 🆕 NOUVEAUX CHAMPS POUR SIGNATURES ÉPHÉMÈRES
+            signature_type=signature_type,
+            expiration_date=expiration_date
         )
         
         # Associer les fichiers

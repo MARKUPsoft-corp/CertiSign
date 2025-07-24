@@ -50,8 +50,8 @@ class DocumentSignatureAdmin(admin.ModelAdmin):
     """
     Interface d'administration pour les signatures de documents.
     """
-    list_display = ('document_id', 'title_display', 'owner_display', 'organization_display', 'signer_role_display', 'created_at_display', 'has_original', 'has_signed')
-    list_filter = ('created_at', 'owner', 'organization', 'signer_role')
+    list_display = ('document_id', 'title_display', 'owner_display', 'organization_display', 'signer_role_display', 'signature_type_display', 'validity_status_display', 'created_at_display', 'has_original', 'has_signed')
+    list_filter = ('created_at', 'owner', 'organization', 'signer_role', 'signature_type')
     search_fields = ('document_id', 'title', 'original_hash', 'owner__username', 'organization__name', 'signer_role')
     readonly_fields = ('document_id', 'created_at', 'display_original_file', 'display_signed_file',
                         'original_hash', 'signature_preview', 'public_key_preview')
@@ -59,6 +59,9 @@ class DocumentSignatureAdmin(admin.ModelAdmin):
     fieldsets = (
         (_('Informations générales'), {
             'fields': ('document_id', 'title', 'owner', 'organization', 'signer_role', 'created_at')
+        }),
+        (_('Type de signature'), {
+            'fields': ('signature_type', 'expiration_date'),
         }),
         (_('Fichiers'), {
             'fields': ('display_original_file', 'display_signed_file'),
@@ -93,6 +96,25 @@ class DocumentSignatureAdmin(admin.ModelAdmin):
             return obj.organization.name
         return "-"
     organization_display.short_description = _('Organisation')
+    
+    def signature_type_display(self, obj):
+        """Affiche le type de signature avec une icône."""
+        if obj.signature_type == 'permanent':
+            return f"🔒 {obj.get_signature_type_display()}"
+        else:
+            return f"⏰ {obj.get_signature_type_display()}"
+    signature_type_display.short_description = _('Type')
+    
+    def validity_status_display(self, obj):
+        """Affiche le statut de validité avec une couleur."""
+        status = obj.validity_status
+        if status == 'valid':
+            return f"✅ Valide"
+        elif status == 'expired':
+            return f"❌ Expirée"
+        else:
+            return f"⚠️ Invalide"
+    validity_status_display.short_description = _('Statut')
     
     def signer_role_display(self, obj):
         """Affiche le rôle du signataire."""

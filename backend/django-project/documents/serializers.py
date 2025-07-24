@@ -23,6 +23,10 @@ class DocumentSignatureSerializer(serializers.ModelSerializer):
     created_at_display = serializers.DateTimeField(source='created_at', format='%Y-%m-%d %H:%M:%S', read_only=True)
     organization_name = serializers.CharField(source='organization.name', read_only=True)
     
+    # 🆕 CHAMPS CALCULÉS POUR LES SIGNATURES ÉPHÉMÈRES
+    is_valid = serializers.ReadOnlyField()
+    validity_status = serializers.ReadOnlyField()
+    
     class Meta:
         model = DocumentSignature
         fields = [
@@ -30,7 +34,9 @@ class DocumentSignatureSerializer(serializers.ModelSerializer):
             'owner', 'owner_username', 'original_file', 'signed_file',
             'created_at', 'created_at_display', 'original_hash', 
             'signature', 'public_key_pem', 'metadata',
-            'organization', 'organization_name', 'signer_role'
+            'organization', 'organization_name', 'signer_role',
+            # 🆕 NOUVEAUX CHAMPS POUR SIGNATURES ÉPHÉMÈRES
+            'signature_type', 'expiration_date', 'is_valid', 'validity_status'
         ]
         read_only_fields = ['document_id', 'created_at', 'created_at_display']
         extra_kwargs = {
