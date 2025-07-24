@@ -357,7 +357,12 @@ def get_signature_by_id(request, document_id):
             "public_key_pem": signature.public_key_pem,
             "created_at": signature.created_at.isoformat(),
             "title": signature.title,
-            "signer_info": signer_info
+            "signer_info": signer_info,
+            # 🆕 NOUVELLES INFORMATIONS POUR LES SIGNATURES ÉPHÉMÈRES
+            "signature_type": signature.signature_type,
+            "expiration_date": signature.expiration_date.isoformat() if signature.expiration_date else None,
+            "is_valid": signature.is_valid,
+            "validity_status": signature.validity_status
         })
         
     except Exception as e:
@@ -677,7 +682,12 @@ def standard_get_signature_public(request):
             "original_file_url": original_file_url,
             "original_file_path": original_file_path,
             "signed_file_url": signed_file_url,  # 🎯 NOUVEAU !
-            "signed_file_path": signed_file_path  # 🎯 NOUVEAU !
+            "signed_file_path": signed_file_path,  # 🎯 NOUVEAU !
+            # 🆕 NOUVELLES INFORMATIONS POUR LES SIGNATURES ÉPHÉMÈRES
+            "signature_type": signature.signature_type,
+            "expiration_date": signature.expiration_date.isoformat() if signature.expiration_date else None,
+            "is_valid": signature.is_valid,
+            "validity_status": signature.validity_status
         })
         
     except Exception as e:
