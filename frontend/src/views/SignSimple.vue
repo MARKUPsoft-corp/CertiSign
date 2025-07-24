@@ -27,13 +27,167 @@
 
       <!-- Contenu principal qui change selon l'étape courante -->
       <div class="step-content">
-        <!-- Étape 0: Sélection des documents à signer -->
+        <!-- 🆕 ÉTAPE 0: Choix du type de signature (pérenne ou éphémère) -->
         <div v-if="currentStep === 0" class="step-body">
+          <div class="signature-type-selection">
+            <div class="intro-banner">
+              <i class="bi bi-lightning-charge"></i>
+              <div>
+                <h4>Type de signature</h4>
+                <p>Choisissez le type de signature pour vos documents</p>
+              </div>
+            </div>
+
+            <div class="signature-type-options">
+              <!-- Option 1: Signature Pérenne -->
+              <div class="signature-type-card" 
+                   :class="{'selected': signatureType === 'permanent'}" 
+                   @click="selectSignatureType('permanent')">
+                <div class="type-icon permanent">
+                  <i class="bi bi-shield-lock"></i>
+                </div>
+                <div class="type-content">
+                  <h4 class="type-title">Signature Pérenne</h4>
+                  <p class="type-description">Valide indéfiniment, comme le système actuel</p>
+                  <ul class="type-features">
+                    <li><i class="bi bi-check-circle"></i> Valable à vie</li>
+                    <li><i class="bi bi-check-circle"></i> Sécurité maximale</li>
+                    <li><i class="bi bi-check-circle"></i> Usage standard</li>
+                  </ul>
+                </div>
+                <div class="type-badge recommended" v-if="signatureType === 'permanent'">
+                  <i class="bi bi-star-fill"></i>
+                  Sélectionné
+                </div>
+              </div>
+              
+              <!-- Option 2: Signature Éphémère -->
+              <div class="signature-type-card" 
+                   :class="{'selected': signatureType === 'ephemeral'}" 
+                   @click="selectSignatureType('ephemeral')">
+                <div class="type-icon ephemeral">
+                  <i class="bi bi-clock-history"></i>
+                </div>
+                <div class="type-content">
+                  <h4 class="type-title">Signature Éphémère</h4>
+                  <p class="type-description">Valide pendant une période définie</p>
+                  <ul class="type-features">
+                    <li><i class="bi bi-check-circle"></i> Période configurable</li>
+                    <li><i class="bi bi-check-circle"></i> Auto-expiration</li>
+                    <li><i class="bi bi-check-circle"></i> Documents temporaires</li>
+                  </ul>
+                </div>
+                <div class="type-badge new" v-if="signatureType === 'ephemeral'">
+                  <i class="bi bi-star-fill"></i>
+                  Sélectionné
+                </div>
+              </div>
+            </div>
+
+            <!-- Aperçu du choix -->
+            <div class="selection-preview" v-if="signatureType">
+              <div class="preview-content">
+                <i class="bi" :class="signatureType === 'permanent' ? 'bi-shield-lock' : 'bi-clock-history'"></i>
+                <div>
+                  <strong>Type sélectionné :</strong> 
+                  {{ signatureType === 'permanent' ? 'Signature Pérenne' : 'Signature Éphémère' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🆕 ÉTAPE 1: Configuration de la période de validité (si éphémère) -->
+        <div v-if="currentStep === 1 && signatureType === 'ephemeral'" class="step-body">
+          <div class="expiration-configuration">
+            <div class="intro-banner">
+              <i class="bi bi-clock-history"></i>
+              <div>
+                <h4>Période de validité</h4>
+                <p>Définissez combien de temps vos signatures resteront valides</p>
+              </div>
+            </div>
+
+            <!-- Durées pré-définies -->
+            <div class="duration-presets">
+              <h5>Durées courantes</h5>
+              <div class="presets-grid">
+                <button v-for="preset in durationPresets" 
+                        :key="preset.value"
+                        :class="['preset-btn', {'selected': selectedDuration === preset.value}]"
+                        @click="selectDuration(preset.value)">
+                  <div class="preset-icon">
+                    <i :class="preset.icon"></i>
+                  </div>
+                  <div class="preset-label">{{ preset.label }}</div>
+                  <div class="preset-desc">{{ preset.description }}</div>
+                </button>
+                
+                <!-- Option personnalisée -->
+                <button :class="['preset-btn custom', {'selected': selectedDuration === 'custom'}]"
+                        @click="selectDuration('custom')">
+                  <div class="preset-icon">
+                    <i class="bi bi-calendar-date"></i>
+                  </div>
+                  <div class="preset-label">Personnalisé</div>
+                  <div class="preset-desc">Date au choix</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Configuration date personnalisée -->
+            <div v-if="selectedDuration === 'custom'" class="custom-date-config">
+              <h5>Date d'expiration personnalisée</h5>
+              <div class="date-input-group">
+                <label for="custom-date">Expire le :</label>
+                <input type="datetime-local" 
+                       id="custom-date"
+                       v-model="customExpirationDate"
+                       :min="minDateTime"
+                       class="custom-date-input">
+              </div>
+            </div>
+
+            <!-- Aperçu de l'expiration -->
+            <div class="expiration-preview" v-if="expirationDate">
+              <div class="preview-card">
+                <div class="preview-header">
+                  <i class="bi bi-calendar-check"></i>
+                  <h5>Aperçu de l'expiration</h5>
+                </div>
+                <div class="preview-content">
+                  <div class="expiration-info">
+                    <div class="info-item">
+                      <span class="label">Date d'expiration :</span>
+                      <span class="value">{{ formatExpirationDisplay }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="label">Durée de validité :</span>
+                      <span class="value">{{ durationDescription }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="label">Type de signature :</span>
+                      <span class="value">Éphémère</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ÉTAPE 2: Sélection des documents à signer (ancienne étape 0) -->
+        <div v-if="currentStep === 2 || (currentStep === 1 && signatureType === 'permanent')" class="step-body">
           <div class="template-info-banner">
             <i class="bi bi-files"></i>
             <div>
-              <h4>Signature rapide de documents</h4>
-              <p>Sélectionnez un ou plusieurs documents PDF. Vous pourrez définir les positions du QR code et de la signature à l'étape suivante.</p>
+              <h4>Sélection des documents</h4>
+              <p>Sélectionnez un ou plusieurs documents PDF à signer avec une signature 
+                 <strong>{{ signatureType === 'permanent' ? 'pérenne' : 'éphémère' }}</strong>
+                 <span v-if="signatureType === 'ephemeral'">
+                   (expire {{ formatExpirationDisplay }})
+                 </span>
+              </p>
             </div>
           </div>
 
@@ -62,13 +216,18 @@
                   <div class="document-name" :title="file.name">{{ file.name }}</div>
                   <div class="document-size">{{ formatFileSize(file.size) }}</div>
                 </div>
+                <!-- Badge type de signature -->
+                <div class="signature-type-badge" :class="signatureType">
+                  <i class="bi" :class="signatureType === 'permanent' ? 'bi-shield-lock' : 'bi-clock-history'"></i>
+                  {{ signatureType === 'permanent' ? 'Pérenne' : 'Éphémère' }}
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Étape 1: Prévisualisation des documents avec onglets -->
-        <div v-if="currentStep === 1" class="step-body">
+        <!-- ÉTAPE 3: Prévisualisation des documents (ancienne étape 1) -->
+        <div v-if="currentStep === 3 || (currentStep === 2 && signatureType === 'permanent')" class="step-body">
           <div class="documents-summary">
             <h4>{{ selectedFiles.length }} document(s) sélectionné(s) pour la signature</h4>
             <p>Vous pouvez prévisualiser chaque document en cliquant sur les onglets ci-dessous.</p>
@@ -135,8 +294,8 @@
           </div>
         </div>
 
-        <!-- Étape 2: Positionnement du QR code et de la signature -->
-        <div v-if="currentStep === 2" class="step-body">
+        <!-- Étape 4: Positionnement du QR code et de la signature -->
+        <div v-if="currentStep === 4" class="step-body">
           <div class="positioning-info-banner">
             <i class="bi bi-cursor"></i>
             <div>
@@ -276,13 +435,19 @@
           </div>
         </div>
 
-        <!-- Étape 3: Saisie du certificat et du mot de passe -->
-        <div v-if="currentStep === 3" class="step-body">
+        <!-- Étape 5: Saisie du certificat et du mot de passe -->
+        <div v-if="currentStep === 5" class="step-body">
           <div class="certificate-info-banner">
             <i class="bi bi-shield-lock-fill"></i>
             <div>
               <h4>Certificat numérique</h4>
-              <p>Pour signer les {{ selectedFiles.length }} documents, vous devez fournir un certificat PFX (.pfx) et son mot de passe.</p>
+              <p>Pour signer les {{ selectedFiles.length }} documents avec une signature 
+                 <strong>{{ signatureType === 'permanent' ? 'pérenne' : 'éphémère' }}</strong>
+                 <span v-if="signatureType === 'ephemeral'">
+                   (expire {{ formatExpirationDisplay }})
+                 </span>, 
+                 vous devez fournir un certificat PFX (.pfx) et son mot de passe.
+              </p>
             </div>
           </div>
 
@@ -311,11 +476,30 @@
                 </button>
               </div>
             </div>
+
+            <!-- Résumé de la signature à effectuer -->
+            <div class="signature-summary">
+              <h5>Résumé de la signature</h5>
+              <div class="summary-details">
+                <div class="summary-item">
+                  <i class="bi bi-files"></i>
+                  <span><strong>{{ selectedFiles.length }}</strong> document(s) à signer</span>
+                </div>
+                <div class="summary-item">
+                  <i class="bi" :class="signatureType === 'permanent' ? 'bi-shield-lock' : 'bi-clock-history'"></i>
+                  <span>Signature <strong>{{ signatureType === 'permanent' ? 'pérenne' : 'éphémère' }}</strong></span>
+                </div>
+                <div v-if="signatureType === 'ephemeral'" class="summary-item">
+                  <i class="bi bi-calendar-check"></i>
+                  <span>Expire le <strong>{{ formatExpirationDisplay }}</strong></span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Étape 4: En cours de signature -->
-        <div v-if="currentStep === 4" class="step-body signature-processing">
+        <!-- Étape 6: En cours de signature -->
+        <div v-if="currentStep === 6" class="step-body signature-processing">
           <div v-if="signatureStatus === 'loading'">
             <div class="processing-animation">
               <i class="bi bi-shield-fill-check pulsing"></i>
@@ -352,8 +536,8 @@
           </div>
         </div>
 
-        <!-- Étape 5: Téléchargement des documents signés -->
-        <div v-if="currentStep === 5" class="step-body signature-complete">
+        <!-- Étape 7: Téléchargement des documents signés -->
+        <div v-if="currentStep === 7" class="step-body signature-complete">
           <div class="success-animation">
             <i class="bi bi-check-circle-fill"></i>
           </div>
@@ -411,7 +595,7 @@
       <!-- Boutons de navigation entre les étapes -->
       <div class="step-navigation">
         <button 
-          v-if="currentStep > 0 && currentStep < 5" 
+          v-if="currentStep > 0 && currentStep < 7" 
           @click="prevStep" 
           class="nav-button secondary"
         >
@@ -421,7 +605,7 @@
         <div class="spacer" v-if="currentStep > 0"></div>
         
         <button 
-          v-if="currentStep < 4" 
+          v-if="currentStep < 6" 
           @click="nextStep" 
           class="nav-button primary"
           :disabled="!canProceedToNextStep"
@@ -430,7 +614,7 @@
         </button>
         
         <button 
-          v-if="currentStep === 5" 
+          v-if="currentStep === 7" 
           @click="closeSignature" 
           class="nav-button primary"
         >
@@ -450,7 +634,9 @@ const emit = defineEmits(['close']);
 
 // Étapes du workflow de signature rapide
 const steps = [
-  { label: 'Sélection' },
+  { label: 'Type de signature' },
+  { label: 'Configuration expiration' },
+  { label: 'Sélection documents' },
   { label: 'Prévisualisation' },
   { label: 'Positionnement' },
   { label: 'Certificat' },
@@ -460,6 +646,116 @@ const steps = [
 
 // Étape courante
 const currentStep = ref(0);
+
+// 🆕 NOUVELLES VARIABLES POUR SIGNATURES ÉPHÉMÈRES
+const signatureType = ref(''); // 'permanent' ou 'ephemeral'
+const selectedDuration = ref('1month'); // Durée sélectionnée par défaut
+const customExpirationDate = ref(''); // Date personnalisée
+
+// Durées pré-définies
+const durationPresets = [
+  { 
+    value: '1day', 
+    label: '1 jour', 
+    description: 'Idéal pour documents urgents',
+    hours: 24,
+    icon: 'bi-hourglass-split'
+  },
+  { 
+    value: '1week', 
+    label: '1 semaine', 
+    description: 'Documents à court terme',
+    hours: 168,
+    icon: 'bi-calendar-week'
+  },
+  { 
+    value: '1month', 
+    label: '1 mois', 
+    description: 'Durée standard recommandée',
+    hours: 720,
+    icon: 'bi-calendar-month'
+  },
+  { 
+    value: '3months', 
+    label: '3 mois', 
+    description: 'Projets à moyen terme',
+    hours: 2160,
+    icon: 'bi-calendar-range'
+  },
+  { 
+    value: '6months', 
+    label: '6 mois', 
+    description: 'Documents à long terme',
+    hours: 4320,
+    icon: 'bi-calendar2-range'
+  },
+  { 
+    value: '1year', 
+    label: '1 an', 
+    description: 'Durée maximale recommandée',
+    hours: 8760,
+    icon: 'bi-calendar-year'
+  }
+];
+
+// Date minimum pour le sélecteur (maintenant + 1 heure)
+const minDateTime = computed(() => {
+  const now = new Date();
+  now.setHours(now.getHours() + 1);
+  return now.toISOString().slice(0, 16);
+});
+
+// Date d'expiration calculée
+const expirationDate = computed(() => {
+  if (signatureType.value !== 'ephemeral') return null;
+  
+  if (selectedDuration.value === 'custom') {
+    return customExpirationDate.value ? new Date(customExpirationDate.value) : null;
+  } else {
+    const preset = durationPresets.find(p => p.value === selectedDuration.value);
+    if (preset) {
+      const expiration = new Date();
+      expiration.setHours(expiration.getHours() + preset.hours);
+      return expiration;
+    }
+  }
+  return null;
+});
+
+// Affichage formaté de la date d'expiration
+const formatExpirationDisplay = computed(() => {
+  if (!expirationDate.value) return 'Non définie';
+  
+  return expirationDate.value.toLocaleDateString('fr-FR', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+});
+
+// Description de la durée
+const durationDescription = computed(() => {
+  if (signatureType.value !== 'ephemeral') return '';
+  
+  if (selectedDuration.value === 'custom') {
+    if (!expirationDate.value) return 'Date personnalisée';
+    
+    const now = new Date();
+    const diff = expirationDate.value - now;
+    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    
+    if (days === 1) return 'dans 1 jour';
+    if (days < 30) return `dans ${days} jours`;
+    if (days < 365) return `dans ${Math.ceil(days / 30)} mois`;
+    return `dans ${Math.ceil(days / 365)} an(s)`;
+  } else {
+    const preset = durationPresets.find(p => p.value === selectedDuration.value);
+    return preset ? preset.description : '';
+  }
+});
 
 // Références aux éléments DOM
 const fileInput = ref(null);
@@ -494,21 +790,46 @@ const uploadedSignatureImage = ref(null);
 const documentPositions = ref({});
 const activePositioningIndex = ref(0);
 
+// 🆕 MÉTHODES POUR SIGNATURES ÉPHÉMÈRES
+function selectSignatureType(type) {
+  signatureType.value = type;
+  console.log('Type de signature sélectionné:', type);
+}
+
+function selectDuration(duration) {
+  selectedDuration.value = duration;
+  console.log('Durée sélectionnée:', duration);
+  
+  // Réinitialiser la date personnalisée si on sélectionne un preset
+  if (duration !== 'custom') {
+    customExpirationDate.value = '';
+  }
+}
+
 // Propriété calculée pour contrôler la progression des étapes
 const canProceedToNextStep = computed(() => {
   if (currentStep.value === 0) {
-    // Étape 0: Au moins un fichier PDF doit être sélectionné
+    // Étape 0: Un type de signature doit être sélectionné
+    return signatureType.value !== '';
+  } else if (currentStep.value === 1 && signatureType.value === 'ephemeral') {
+    // Étape 1: Configuration expiration pour signatures éphémères
+    if (selectedDuration.value === 'custom') {
+      return customExpirationDate.value !== '' && expirationDate.value > new Date();
+    }
+    return selectedDuration.value !== '';
+  } else if (currentStep.value === 2 || (currentStep.value === 1 && signatureType.value === 'permanent')) {
+    // Étape sélection documents: Au moins un fichier PDF doit être sélectionné
     return selectedFiles.value.length > 0;
-  } else if (currentStep.value === 1) {
-    // Étape 1: Les prévisualisations doivent être chargées
+  } else if (currentStep.value === 3 || (currentStep.value === 2 && signatureType.value === 'permanent')) {
+    // Étape prévisualisation: Les prévisualisations doivent être chargées
     return selectedFiles.value.length > 0;
-  } else if (currentStep.value === 2) {
-    // Étape 2: Tous les documents doivent avoir leurs positions confirmées
+  } else if (currentStep.value === 4 || (currentStep.value === 3 && signatureType.value === 'permanent')) {
+    // Étape positionnement: Tous les documents doivent avoir leurs positions confirmées
     return selectedFiles.value.every((_, index) => 
       documentPositions.value[index]?.completed === true
     );
-  } else if (currentStep.value === 3) {
-    // Étape 3: Le certificat et le mot de passe doivent être fournis
+  } else if (currentStep.value === 5 || (currentStep.value === 4 && signatureType.value === 'permanent')) {
+    // Étape certificat: Le certificat et le mot de passe doivent être fournis
     return certificateFile.value !== null && certificatePassword.value.trim() !== '';
   }
   
@@ -517,26 +838,60 @@ const canProceedToNextStep = computed(() => {
 
 // Méthodes de navigation entre les étapes
 function nextStep() {
-  if (currentStep.value < steps.length - 1 && canProceedToNextStep.value) {
-    // Incrémenter d'abord l'étape
-    currentStep.value++;
-    
-    // Puis exécuter les actions selon la nouvelle étape
-    if (currentStep.value === 1) {
-      // Arrivée à l'étape de prévisualisation, créer les prévisualisations
-      console.log('Création des prévisualisations pour', selectedFiles.value.length, 'documents');
-      createDocumentPreviews();
-    } else if (currentStep.value === 4) {
-      // Arrivée à l'étape de signature, lancer le processus
-      console.log('Démarrage du processus de signature');
-      startSigningProcess();
-    }
+  console.log('nextStep appelée, currentStep:', currentStep.value, 'signatureType:', signatureType.value);
+  
+  if (!canProceedToNextStep.value) {
+    console.log('Impossible de passer à l\'étape suivante');
+    return;
   }
+  
+  // Logique spéciale pour le workflow éphémère vs permanent
+  if (currentStep.value === 0) {
+    // Depuis l'étape de choix du type
+    if (signatureType.value === 'permanent') {
+      // Skip l'étape de configuration et aller directement à la sélection
+      currentStep.value = 2;
+      console.log('Signature permanente: saut vers sélection documents (étape 2)');
+    } else {
+      // Aller à la configuration expiration
+      currentStep.value = 1;
+      console.log('Signature éphémère: vers configuration expiration (étape 1)');
+    }
+  } else if (currentStep.value === 1 && signatureType.value === 'ephemeral') {
+    // Depuis la configuration expiration vers sélection documents
+    currentStep.value = 2;
+    console.log('Configuration finie: vers sélection documents (étape 2)');
+  } else if (currentStep.value < steps.length - 1) {
+    // Navigation normale pour les autres étapes
+    currentStep.value++;
+    console.log('Navigation normale vers étape:', currentStep.value);
+  }
+  
+  // Actions spécifiques selon l'étape atteinte
+  if (currentStep.value === 3 || (currentStep.value === 2 && signatureType.value === 'permanent')) {
+    // Arrivée à l'étape de prévisualisation
+    console.log('Création des prévisualisations pour', selectedFiles.value.length, 'documents');
+    createDocumentPreviews();
+     } else if (currentStep.value === 6) {
+     // Arrivée à l'étape de signature
+     console.log('Démarrage du processus de signature');
+     startSigningProcess();
+   }
 }
 
 function prevStep() {
   if (currentStep.value > 0) {
-    currentStep.value--;
+    // Logique spéciale pour revenir en arrière avec les signatures éphémères
+    if (currentStep.value === 2 && signatureType.value === 'permanent') {
+      // Si on est à la sélection et type permanent, revenir au choix du type
+      currentStep.value = 0;
+    } else if (currentStep.value === 2 && signatureType.value === 'ephemeral') {
+      // Si on est à la sélection et type éphémère, revenir à la configuration
+      currentStep.value = 1;
+    } else {
+      // Navigation normale
+      currentStep.value--;
+    }
   }
 }
 
@@ -895,6 +1250,14 @@ async function startSigningProcess() {
       formData.append('password', certificatePassword.value);
       formData.append('metadata', JSON.stringify(userMetadata));
       
+      // 🆕 AJOUTER LES DONNÉES D'EXPIRATION POUR SIGNATURES ÉPHÉMÈRES
+      if (signatureType.value === 'ephemeral' && expirationDate.value) {
+        formData.append('expires_at', expirationDate.value.toISOString());
+        console.log('Signature éphémère configurée, expiration:', expirationDate.value.toISOString());
+      } else {
+        console.log('Signature pérenne configurée (pas d\'expiration)');
+      }
+      
       if (userInfo.id) {
         formData.append('owner_id', userInfo.id);
       }
@@ -959,7 +1322,7 @@ async function startSigningProcess() {
     console.log('Tous les documents ont été signés avec succès');
     
     // Passer à l'étape de téléchargement
-    currentStep.value = 5;
+    currentStep.value = 7;
     signatureStatus.value = 'success';
     
   } catch (error) {
@@ -2396,6 +2759,442 @@ function editDocumentPositioning() {
   .document-status-badge {
     font-size: 0.75rem;
     padding: 4px 8px;
+  }
+}
+
+/* 🆕 STYLES POUR SIGNATURES ÉPHÉMÈRES */
+
+/* Sélection du type de signature */
+.signature-type-selection {
+  padding: 20px 0;
+}
+
+.intro-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.intro-banner i {
+  font-size: 2.5rem;
+  opacity: 0.9;
+}
+
+.intro-banner h4 {
+  margin: 0 0 5px 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.intro-banner p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 1rem;
+}
+
+.signature-type-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.signature-type-card {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  padding: 25px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.signature-type-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.signature-type-card.selected {
+  border-color: var(--primary-color);
+  background: linear-gradient(135deg, rgba(58, 134, 255, 0.05) 0%, rgba(255, 255, 255, 0.95) 100%);
+  box-shadow: 0 10px 25px rgba(58, 134, 255, 0.15);
+}
+
+.type-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.type-icon.permanent {
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: white;
+}
+
+.type-icon.ephemeral {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: white;
+}
+
+.signature-type-card:hover .type-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.type-content h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: var(--text-color);
+}
+
+.type-content p {
+  color: var(--text-secondary);
+  margin: 0 0 15px 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.type-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.type-features li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.type-features li i {
+  color: var(--primary-color);
+  font-size: 0.8rem;
+}
+
+.type-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.type-badge.recommended {
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: white;
+}
+
+.type-badge.new {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: white;
+}
+
+.selection-preview {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 15px 20px;
+  margin-top: 20px;
+}
+
+.preview-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: var(--text-color);
+}
+
+.preview-content i {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+/* Configuration de l'expiration */
+.expiration-configuration {
+  padding: 20px 0;
+}
+
+.duration-presets h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: var(--text-color);
+}
+
+.presets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.preset-btn {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.preset-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.preset-btn.selected {
+  border-color: var(--primary-color);
+  background: linear-gradient(135deg, rgba(58, 134, 255, 0.1), rgba(255, 255, 255, 0.9));
+  box-shadow: 0 8px 20px rgba(58, 134, 255, 0.15);
+}
+
+.preset-btn.custom.selected {
+  border-color: #ff9800;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 255, 255, 0.9));
+}
+
+.preset-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary-color), #4c63d2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.preset-btn.custom .preset-icon {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+}
+
+.preset-label {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.preset-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Configuration date personnalisée */
+.custom-date-config {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.custom-date-config h5 {
+  margin: 0 0 15px 0;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.date-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.date-input-group label {
+  font-weight: 500;
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.custom-date-input {
+  padding: 12px 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--input-bg);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.custom-date-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
+}
+
+/* Aperçu de l'expiration */
+.expiration-preview {
+  margin-top: 25px;
+}
+
+.preview-card {
+  background: linear-gradient(135deg, #e3f2fd, #f8f9ff);
+  border: 1px solid rgba(58, 134, 255, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.preview-header {
+  background: var(--primary-color);
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.preview-header h5 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.preview-header i {
+  font-size: 1.2rem;
+}
+
+.preview-content {
+  padding: 20px;
+}
+
+.expiration-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-item .label {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.info-item .value {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* Badge type de signature sur les documents */
+.signature-type-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  backdrop-filter: blur(5px);
+}
+
+.signature-type-badge.permanent {
+  background: rgba(76, 175, 80, 0.9);
+  color: white;
+}
+
+.signature-type-badge.ephemeral {
+  background: rgba(255, 152, 0, 0.9);
+  color: white;
+}
+
+.signature-type-badge i {
+  font-size: 0.6rem;
+}
+
+/* Résumé de signature dans l'étape certificat */
+.signature-summary {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 25px;
+}
+
+.signature-summary h5 {
+  margin: 0 0 15px 0;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.summary-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-color);
+}
+
+.summary-item i {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .signature-type-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .presets-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+  
+  .preset-btn {
+    padding: 15px 10px;
+  }
+  
+  .preset-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
   }
 }
 </style> 
