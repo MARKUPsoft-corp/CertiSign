@@ -425,11 +425,21 @@ const particlePositions = Array.from({ length: 20 }, () => ({
 // Fonction pour récupérer les statistiques
 const loadHomepageStats = async () => {
   try {
+    console.log('Début du chargement des statistiques...');
     const analyticsService = new AnalyticsService();
     const data = await analyticsService.getHomepageStats();
+    console.log('Données reçues:', data);
     stats.value = data;
+    console.log('Statistiques mises à jour:', stats.value);
   } catch (error) {
     console.error('Erreur lors du chargement des statistiques:', error);
+    // Forcer des valeurs de test pour vérifier l'affichage
+    stats.value = {
+      signed_documents: 42,
+      active_users: 15,
+      availability: "99.9%",
+      legal_compliance: "100%"
+    };
   }
 };
 

@@ -8,12 +8,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:certisign_verify/main.dart';
+import 'package:docuthantic/main.dart';
 
 void main() {
-  testWidgets('Vérification de l\'application CertiSign', (WidgetTester tester) async {
+  testWidgets('Vérification de l\'application Doc@uthANTIC', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const CertiSignVerifyApp());
+    await tester.pumpWidget(const DocuthAnticApp());
 
     // Vérifier que l'application se lance correctement
     // Ce test de base vérifie simplement que l'application peut être initialisée

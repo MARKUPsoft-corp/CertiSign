@@ -37,10 +37,9 @@ class ThemeProvider extends ChangeNotifier {
       _themeMode = ThemeMode.light;
       _isDarkMode = false;
     } else {
-      // Par défaut, utiliser la préférence du système
-      final brightness = WidgetsBinding.instance.platformDispatcher.platformBrightness;
-      _isDarkMode = brightness == Brightness.dark;
-      _themeMode = _isDarkMode ? ThemeMode.dark : ThemeMode.light;
+      // Par défaut, utiliser le mode sombre
+      _isDarkMode = true;
+      _themeMode = ThemeMode.dark;
     }
     
     notifyListeners();

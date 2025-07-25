@@ -9,10 +9,33 @@ class AnalyticsService {
    */
   async getHomepageStats() {
     try {
-      const response = await axios.get('https://ppd.camgovca.cm/api/users/homepage-stats/');
+      // Essayer d'abord l'URL de production
+      let response;
+      try {
+        response = await axios.get('https://ppd.camgovca.cm/api/users/homepage-stats/', {
+          timeout: 10000,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        });
+      } catch (prodError) {
+        console.log('Erreur avec l\'URL de production, essai avec localhost...');
+        // En cas d'échec, essayer localhost
+        response = await axios.get('http://localhost:8000/api/users/homepage-stats/', {
+          timeout: 10000,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        });
+      }
+      
+      console.log('Statistiques récupérées avec succès:', response.data);
       return response.data;
     } catch (error) {
       console.error('Erreur lors de la récupération des statistiques homepage:', error);
+      console.error('Détails de l\'erreur:', error.response?.data || error.message);
       // Retourner des valeurs par défaut en cas d'erreur
       return {
         signed_documents: 0,

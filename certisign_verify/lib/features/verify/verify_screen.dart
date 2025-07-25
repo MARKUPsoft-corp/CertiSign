@@ -3,6 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 import '../../shared/app_header.dart';
 import '../../utils/document_preview_utils.dart';
@@ -591,16 +595,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                 delay: 250,
               ),
             
-            // ID du document
-            _buildDetailItem(
-              isDarkMode: isDarkMode,
-              icon: FontAwesomeIcons.idCard,
-              title: 'ID du document',
-              value: _getPreviewText(widget.documentId),
-              isLongValue: true,
-              fullValue: widget.documentId,
-              delay: _signatureType == 'ephemeral' ? 275 : 250,
-            ),
+
             
             // Nom du document
             _buildDetailItem(
@@ -612,7 +607,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                      (widget.verificationResult['api_response'] as Map<String, dynamic>).containsKey('original_filename')
                      ? widget.verificationResult['api_response']['original_filename']
                      : _documentTitle,
-              delay: _signatureType == 'ephemeral' ? 325 : 300,
+              delay: _signatureType == 'ephemeral' ? 275 : 250,
             ),
             
             // Titre de la section signataire
@@ -621,7 +616,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
               effects: [
                 FadeEffect(
                   duration: const Duration(milliseconds: 400),
-                  delay: const Duration(milliseconds: 350),
+                  delay: const Duration(milliseconds: 275),
                 ),
               ],
               child: Container(
@@ -671,17 +666,10 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     icon: FontAwesomeIcons.user,
                     title: 'Nom du signataire',
                     value: signerInfo['full_name']?.toString() ?? 'Non spécifié',
-                    delay: 350,
+                    delay: 300,
                   ),
                   
-                  // Email du signataire
-                  _buildDetailItem(
-                    isDarkMode: isDarkMode,
-                    icon: FontAwesomeIcons.envelope,
-                    title: 'Email',
-                    value: signerInfo['email']?.toString() ?? 'Non spécifié',
-                    delay: 400,
-                  ),
+
                   
                   // Organisation du signataire (si disponible)
                   if (signerInfo.containsKey('organization') && 
@@ -692,27 +680,12 @@ class _VerifyScreenState extends State<VerifyScreen> {
                       icon: FontAwesomeIcons.building,
                       title: 'Organisation',
                       value: signerInfo['organization'].toString(),
-                      delay: 450,
+                      delay: 350,
                     ),
                   
-                  // Rôle ou fonction du signataire
-                  _buildDetailItem(
-                    isDarkMode: isDarkMode,
-                    icon: FontAwesomeIcons.idBadge,
-                    title: 'Rôle',
-                    value: signerInfo['role']?.toString() ?? 'Non spécifié',
-                    delay: 500,
-                  ),
+
                   
-                  // Date de signature (si disponible)
-                  if (_signatureDate != null)
-                    _buildDetailItem(
-                      isDarkMode: isDarkMode,
-                      icon: FontAwesomeIcons.calendar,
-                      title: 'Date de signature',
-                      value: DateFormat('dd/MM/yyyy à HH:mm').format(_signatureDate!),
-                      delay: 550,
-                    ),
+
                 ],
               );
             }),
@@ -724,7 +697,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
               effects: [
                 FadeEffect(
                   duration: const Duration(milliseconds: 400),
-                  delay: const Duration(milliseconds: 600),
+                  delay: const Duration(milliseconds: 400),
                 ),
               ],
               child: Row(
@@ -1247,7 +1220,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     ),
                   ),
                 
-                // Bouton pour télécharger le document signé
+                // Bouton pour partager le document signé
                 Positioned(
                   bottom: 16,
                   right: 16,
@@ -1267,17 +1240,13 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     ),
                     child: IconButton(
                       icon: const Icon(
-                        FontAwesomeIcons.download,
+                        FontAwesomeIcons.share,
                         size: 20,
                         color: Colors.white,
                       ),
                       onPressed: () {
                         if (_originalDocumentBase64 != null) {
-                          DocumentPreviewUtils.saveDocument(
-                            context,
-                            _originalDocumentBase64!,
-                            _documentTitle,
-                          );
+                          _shareDocument();
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -1331,5 +1300,34 @@ class _VerifyScreenState extends State<VerifyScreen> {
       _documentTitle,
       _isVerified,
     );
+  }
+  
+  /// Partage le document signé
+  void _shareDocument() async {
+    try {
+      // Convertir le base64 en bytes
+      final bytes = base64Decode(_originalDocumentBase64!);
+      
+      // Créer un fichier temporaire
+      final tempDir = await getTemporaryDirectory();
+      final tempFile = File('${tempDir.path}/${_documentTitle}');
+      await tempFile.writeAsBytes(bytes);
+      
+      // Partager le fichier
+      await Share.shareXFiles(
+        [XFile(tempFile.path)],
+        text: 'Document signé vérifié avec CertiSign\nDocument: $_documentTitle',
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erreur lors du partage: $e'),
+            duration: const Duration(seconds: 2),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }
