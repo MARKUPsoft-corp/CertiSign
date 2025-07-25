@@ -568,7 +568,8 @@ const qrStyle = computed(() => {
 const signatureStyle = computed(() => {
   const position = getCurrentPageSignaturePosition();
   // La taille est un pourcentage de la largeur de la page
-  const width = `${(signatureSize.value / 100) * 595}px`;  // 595px = largeur A4 affichée
+  // Le backend applique width_percent = signature_size * 0.6
+  const width = `${(signatureSize.value * 0.6 / 100) * 595}px`;  // 595px = largeur A4 (viewport)
   
   return {
     left: `${position.x}%`,
@@ -1072,7 +1073,8 @@ async function generateModifiedPdf() {
         // Utiliser la même échelle que dans l'interface de positionnement
         // La taille dans l'interface est signatureSize.value * 2 (en pixels)
         // On calcule donc un facteur d'échelle proportionnel à la largeur de la page
-        const scaleFactor = signatureSize.value / 100; // ratio direct par rapport à la largeur de page
+        // Le backend convertit signature_size en width_percent = signature_size * 0.6
+const scaleFactor = (signatureSize.value * 0.6) / 100;
         const sigWidth = width * scaleFactor;
         const sigHeight = (signatureEmbed.height / signatureEmbed.width) * sigWidth;
         
