@@ -101,6 +101,63 @@
         </div>
       </div>
 
+      <!-- Modal de modification de template -->
+      <div v-if="showEditModal" class="modal-overlay" @click.self="closeEditModal">
+        <div class="edit-modal">
+          <div class="modal-header">
+            <div class="modal-title-section">
+              <div class="modal-icon">
+                <i class="bi bi-pencil"></i>
+              </div>
+              <h3 class="modal-title">Modifier le template : {{ editingTemplate?.name }}</h3>
+            </div>
+            <button class="modal-close" @click="closeEditModal">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="template-form">
+              <div class="form-group">
+                <label for="edit-template-name">Nom du template</label>
+                <input 
+                  type="text" 
+                  id="edit-template-name" 
+                  v-model="editingTemplate.name" 
+                  placeholder="Saisissez un nom pour ce template" 
+                  class="form-control"
+                >
+              </div>
+            </div>
+            
+            <!-- Afficher QR Positioner pour modification -->
+            <div v-if="editingTemplate.file" class="qr-positioner-wrapper">
+              <QrPositioner 
+                :pdfFile="editingTemplate.file"
+                :preloadedPositions="editingTemplate.qrPositions"
+                @position-confirmed="handleEditPositionConfirmed"
+                @signature-uploaded="handleEditSignatureUploaded"
+                @pdf-generated="handleEditPdfGenerated"
+              />
+            </div>
+            <div v-else-if="loadingEditFile" class="loading-edit-file">
+              <div class="spinner"></div>
+              <p>Chargement du fichier PDF original...</p>
+            </div>
+            <div v-else class="edit-file-error">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              <p>Impossible de charger le fichier PDF original pour modification.</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" @click="closeEditModal" :disabled="isUpdating">Annuler</button>
+            <button class="btn btn-primary" @click="updateTemplate" :disabled="!canUpdateTemplate || isUpdating">
+              <span v-if="isUpdating"><i class="bi bi-hourglass-split spin"></i> Mise à jour...</span>
+              <span v-else>Mettre à jour</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Section de bienvenue -->
       <section class="welcome-section">
         <div class="welcome-content">
@@ -990,6 +1047,7 @@ import SignSimpleSigner from '@/views/SignSimpleSigner.vue';
 import CreateTemplate from '@/views/CreateTemplate.vue';
 import PrepareDocumentWithTemplate from '@/views/PrepareDocumentWithTemplate.vue';
 import SignWithTemplateMultiple from '@/views/SignWithTemplateMultiple.vue';
+import QrPositioner from '@/components/QrPositioner.vue';
 
 const router = useRouter();
 
@@ -1072,6 +1130,21 @@ const signedDocuments = ref([]);
 const myTemplates = ref([]);
 const loadingTemplates = ref(false);
 const selectedTemplate = ref(null);
+
+// Variables pour l'édition de template
+const showEditModal = ref(false);
+const editingTemplate = ref({
+  id: null,
+  name: '',
+  file: null,
+  qrPositions: null,
+  signatureImage: null,
+  generatedPdfFile: null,
+  generatedPdfBlob: null,
+  generatedPdfDataUrl: null
+});
+const loadingEditFile = ref(false);
+const isUpdating = ref(false);
 
 // Variables pour la modale de choix de signature (inspiré du CollaboratorDashboard)
 const showPrepareChoice = ref(false);
@@ -2613,6 +2686,13 @@ function nextPageUrgent() { if (currentPageUrgent.value < totalPagesUrgent.value
 
 const totalUrgentCount = computed(() => urgentDocuments.value.length);
 
+// Computed property pour vérifier si le template peut être mis à jour
+const canUpdateTemplate = computed(() => {
+  return editingTemplate.value.name && 
+         editingTemplate.value.file && 
+         editingTemplate.value.qrPositions;
+});
+
 // === NOUVELLES MÉTHODES POUR LA GESTION DES TEMPLATES ===
 
 // Méthodes de gestion des templates
@@ -2746,11 +2826,163 @@ async function previewTemplate(template) {
   }
 }
 
-function editTemplate(template) {
-  console.log('Édition du template:', template.name);
-  // Pour l'instant, rediriger vers la page d'édition ou ouvrir une modal
-  // Cette fonctionnalité peut être ajoutée plus tard si nécessaire
-  alert('Fonctionnalité d\'édition à venir');
+// Fonction pour éditer un template
+async function editTemplate(template) {
+  try {
+    loadingEditFile.value = true;
+    selectedTemplate.value = template;
+    
+    // Récupérer les détails complets du template depuis l'API
+    const templateDetails = await TemplateService.getTemplate(template.id);
+    
+    // Récupérer le fichier PDF original pour l'afficher dans QrPositioner
+    let originalPdfBlob = null;
+    try {
+      originalPdfBlob = await TemplateService.downloadOriginal(template.id);
+    } catch (pdfError) {
+      console.error('Erreur lors du téléchargement du PDF original:', pdfError);
+    }
+    
+    // Créer un File à partir du Blob si disponible
+    let originalFile = null;
+    if (originalPdfBlob) {
+      originalFile = new File([originalPdfBlob], `${templateDetails.name}.pdf`, { 
+        type: 'application/pdf' 
+      });
+    }
+    
+    // Préparer les données pour l'édition
+    editingTemplate.value = {
+      id: templateDetails.id,
+      name: templateDetails.name,
+      file: originalFile,
+      qrPositions: {
+        qr: {
+          size: templateDetails.qr_size,
+          positions: templateDetails.qr_positions,
+          pages: templateDetails.selected_pages && templateDetails.selected_pages.length > 0 ? 
+                 templateDetails.selected_pages : 'all'
+        },
+        mode: templateDetails.page_application,
+        signature: templateDetails.signature_positions ? {
+          positions: templateDetails.signature_positions,
+          size: templateDetails.signature_size || 50
+        } : null
+      },
+      signatureImage: null,
+      generatedPdfFile: null,
+      generatedPdfBlob: null,
+      generatedPdfDataUrl: null
+    };
+    
+    // Ouvrir la modale d'édition
+    showEditModal.value = true;
+  } catch (error) {
+    console.error('Erreur lors de la récupération des détails du template:', error);
+    alert('Une erreur est survenue lors de la récupération des détails du template.');
+  } finally {
+    loadingEditFile.value = false;
+  }
+}
+
+// Fonction pour fermer la modal d'édition
+function closeEditModal() {
+  showEditModal.value = false;
+  editingTemplate.value = {
+    id: null,
+    name: '',
+    file: null,
+    qrPositions: null,
+    signatureImage: null,
+    generatedPdfFile: null,
+    generatedPdfBlob: null,
+    generatedPdfDataUrl: null
+  };
+  selectedTemplate.value = null;
+}
+
+// Fonctions pour gérer les événements du QrPositioner en mode édition
+function handleEditPositionConfirmed(positionData) {
+  editingTemplate.value.qrPositions = positionData;
+}
+
+function handleEditSignatureUploaded(file) {
+  console.log('Signature uploadée pour édition:', file.name);
+  editingTemplate.value.signatureImage = file;
+}
+
+function handleEditPdfGenerated(pdfData) {
+  console.log('PDF généré pour édition:', pdfData.file.name);
+  editingTemplate.value.generatedPdfBlob = pdfData.blob;
+  editingTemplate.value.generatedPdfFile = pdfData.file;
+  editingTemplate.value.generatedPdfDataUrl = pdfData.dataUrl;
+}
+
+// Fonction pour mettre à jour un template
+async function updateTemplate() {
+  if (!canUpdateTemplate.value) return;
+  
+  try {
+    isUpdating.value = true;
+    
+    // Vérifier si nous avons un PDF généré
+    if (!editingTemplate.value.generatedPdfFile) {
+      alert('Veuillez d\'abord générer un aperçu du document et confirmer.');
+      return;
+    }
+    
+    // Préparer les données pour l'API
+    const templateData = {
+      name: editingTemplate.value.name,
+      qr_size: editingTemplate.value.qrPositions.qr.size,
+      page_application: editingTemplate.value.qrPositions.mode,
+      qr_positions: editingTemplate.value.qrPositions.qr.positions,
+      signature_positions: editingTemplate.value.qrPositions.signature ? 
+                          editingTemplate.value.qrPositions.signature.positions : null,
+      signature_size: editingTemplate.value.qrPositions.signature ? 
+                     editingTemplate.value.qrPositions.signature.size : 50,
+      selected_pages: editingTemplate.value.qrPositions.qr.pages !== 'all' ? 
+                     editingTemplate.value.qrPositions.qr.pages : []
+    };
+    
+    // Ajouter les fichiers si disponibles
+    if (editingTemplate.value.file) {
+      templateData.original_document = editingTemplate.value.file;
+    }
+    
+    if (editingTemplate.value.signatureImage) {
+      templateData.signature_image = editingTemplate.value.signatureImage;
+    }
+    
+    if (editingTemplate.value.generatedPdfFile) {
+      templateData.preview_document = editingTemplate.value.generatedPdfFile;
+    }
+    
+    // Mettre à jour le template via l'API
+    await TemplateService.updateTemplate(editingTemplate.value.id, templateData);
+    
+    // Mettre à jour le template dans la liste locale
+    const index = myTemplates.value.findIndex(t => t.id === editingTemplate.value.id);
+    if (index !== -1) {
+      myTemplates.value[index] = {
+        ...myTemplates.value[index],
+        name: templateData.name,
+        qrSize: templateData.qr_size,
+        pageApplication: templateData.page_application,
+      };
+    }
+    
+    // Afficher un message de succès
+    alert('Template mis à jour avec succès !');
+    
+    // Fermer la modale
+    closeEditModal();
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du template:', error);
+    alert('Une erreur est survenue lors de la mise à jour du template.');
+  } finally {
+    isUpdating.value = false;
+  }
 }
 
 function useTemplate(template) {
@@ -4859,6 +5091,237 @@ async function deleteTemplate(template) {
     align-items: flex-start;
       }
   }
+/* 🆕 STYLES POUR LA MODAL D'ÉDITION DE TEMPLATE */
+
+.edit-modal {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 800px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.edit-modal .modal-header {
+  background: linear-gradient(135deg, #ff9500 0%, #ff6b35 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-modal .modal-title-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.edit-modal .modal-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.edit-modal .modal-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.edit-modal .modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-modal .modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.edit-modal .modal-body {
+  padding: 2rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.edit-modal .template-form {
+  margin-bottom: 2rem;
+}
+
+.edit-modal .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.edit-modal .form-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.edit-modal .form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid rgba(229, 231, 235, 0.6);
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.edit-modal .form-control:focus {
+  outline: none;
+  border-color: #ff9500;
+  box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.1);
+}
+
+.edit-modal .qr-positioner-wrapper {
+  border: 2px solid rgba(229, 231, 235, 0.6);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.edit-modal .loading-edit-file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--text-color);
+}
+
+.edit-modal .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 149, 0, 0.2);
+  border-top: 4px solid #ff9500;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.edit-modal .edit-file-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: #dc3545;
+  text-align: center;
+}
+
+.edit-modal .edit-file-error i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.edit-modal .modal-footer {
+  background: rgba(248, 249, 250, 0.8);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  border-top: 1px solid rgba(229, 231, 235, 0.6);
+}
+
+.edit-modal .btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 1rem;
+}
+
+.edit-modal .btn-secondary {
+  background: rgba(108, 117, 125, 0.1);
+  color: #6c757d;
+}
+
+.edit-modal .btn-secondary:hover {
+  background: rgba(108, 117, 125, 0.2);
+}
+
+.edit-modal .btn-primary {
+  background: linear-gradient(135deg, #ff9500 0%, #ff6b35 100%);
+  color: white;
+}
+
+.edit-modal .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(255, 149, 0, 0.3);
+}
+
+.edit-modal .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.edit-modal .spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive pour la modal d'édition */
+@media (max-width: 768px) {
+  .edit-modal {
+    width: 95vw;
+    max-height: 95vh;
+  }
+  
+  .edit-modal .modal-header {
+    padding: 1rem 1.5rem;
+  }
+  
+  .edit-modal .modal-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+  
+  .edit-modal .modal-title {
+    font-size: 1.1rem;
+  }
+  
+  .edit-modal .modal-body {
+    padding: 1.5rem;
+  }
+  
+  .edit-modal .modal-footer {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+  }
+  
+  .edit-modal .btn {
+    width: 100%;
+  }
+}
+
 /* 🆕 STYLES POUR SIGNATURES ÉPHÉMÈRES DANS LA MODAL */
 
 /* Section type de signature */
