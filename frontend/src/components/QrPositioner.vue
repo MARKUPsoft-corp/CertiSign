@@ -28,7 +28,7 @@
         <img :src="signatureImageUrl" alt="Signature" class="signature-image-preview">
         <div class="signature-controls">
           <div class="slider-container">
-            <label for="signature-size">Taille: {{ signatureSize }}%</label>
+            <label for="signature-size">Largeur: {{ signatureSize }}% de la page</label>
             <input 
               type="range" 
               id="signature-size" 
@@ -568,7 +568,7 @@ const qrStyle = computed(() => {
 const signatureStyle = computed(() => {
   const position = getCurrentPageSignaturePosition();
   // La taille est un pourcentage de la largeur de la page
-  const width = `${signatureSize.value * 2}px`;
+  const width = `${(signatureSize.value / 100) * 595}px`;  // 595px = largeur A4 affichée
   
   return {
     left: `${position.x}%`,
@@ -1072,7 +1072,7 @@ async function generateModifiedPdf() {
         // Utiliser la même échelle que dans l'interface de positionnement
         // La taille dans l'interface est signatureSize.value * 2 (en pixels)
         // On calcule donc un facteur d'échelle proportionnel à la largeur de la page
-        const scaleFactor = (signatureSize.value * 2) / 595; // 595 est la largeur standard d'une page A4 en points
+        const scaleFactor = signatureSize.value / 100; // ratio direct par rapport à la largeur de page
         const sigWidth = width * scaleFactor;
         const sigHeight = (signatureEmbed.height / signatureEmbed.width) * sigWidth;
         
