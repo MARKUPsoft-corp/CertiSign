@@ -2799,9 +2799,10 @@ function editDocumentPositioning() {
 
 .signature-type-options {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* 240px pour permettre 2 colonnes dans des modales plus étroites */
   gap: 20px;
   margin-bottom: 25px;
+  align-items: stretch;
 }
 
 .signature-type-card {
