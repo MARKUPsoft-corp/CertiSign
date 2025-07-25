@@ -1456,7 +1456,8 @@ function initializeFromPreloadedPositions() {
       fetch(imageUrl)
         .then(r => r.blob())
         .then(blob => {
-          const file = new File([blob], 'preloaded_signature', { type: blob.type || 'image/png' });
+          const imgExt = (blob.type && blob.type.split('/')[1]) ? blob.type.split('/')[1].replace('jpeg', 'jpg') : 'png';
+          const file = new File([blob], `preloaded_signature.${imgExt}`, { type: blob.type || 'image/png' });
           signatureImage.value = file;
           if (signatureImageUrl.value) {
             URL.revokeObjectURL(signatureImageUrl.value);

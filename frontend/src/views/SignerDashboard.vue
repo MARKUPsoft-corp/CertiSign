@@ -2936,7 +2936,8 @@ async function editTemplate(template) {
         const imgResponse = await fetch(templateDetails.signature_image);
         if (imgResponse.ok) {
           const imgBlob = await imgResponse.blob();
-          const imgFile = new File([imgBlob], 'signature_image', { type: imgBlob.type || 'image/png' });
+          const imgExtension = (imgBlob.type && imgBlob.type.split('/')[1]) ? imgBlob.type.split('/')[1].replace('jpeg', 'jpg') : 'png';
+          const imgFile = new File([imgBlob], `signature_image.${imgExtension}`, { type: imgBlob.type || 'image/png' });
           editingTemplate.value.signatureImage = imgFile;
           // Ajouter la référence de l'image dans les positions préchargées
           if (editingTemplate.value.qrPositions.signature) {
