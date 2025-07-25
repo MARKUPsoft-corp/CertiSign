@@ -567,14 +567,16 @@ const qrStyle = computed(() => {
 
 const signatureStyle = computed(() => {
   const position = getCurrentPageSignaturePosition();
-  // La taille est un pourcentage de la largeur de la page
+  // Récupérer dynamiquement la largeur réelle de la page affichée
+  const pageEl = previewContainer.value?.querySelector('.a4-page');
+  const pageWidthPx = pageEl ? pageEl.getBoundingClientRect().width : 595; // fallback 595
   // Le backend applique width_percent = signature_size * 0.6
-  const width = `${(signatureSize.value * 0.6 / 100) * 595}px`;  // 595px = largeur A4 (viewport)
+  const widthPx = (signatureSize.value * 0.6 / 100) * pageWidthPx;
   
   return {
     left: `${position.x}%`,
     top: `${position.y}%`,
-    width: width,
+    width: `${widthPx}px`,
     transform: 'translate(-50%, -50%)',
     cursor: isDraggingSignature.value ? 'grabbing' : 'grab'
   };
