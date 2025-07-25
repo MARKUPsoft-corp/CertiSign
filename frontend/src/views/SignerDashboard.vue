@@ -3044,9 +3044,14 @@ async function updateTemplate() {
 
 function useTemplate(template) {
   console.log('Utilisation du template:', template.name);
-  // Sélectionner le template et ouvrir la vue de préparation avec template
-  selectedTemplate.value = template;
-  activeSection.value = 'prepare-with-template';
+  // Stocker l'ID du template dans le localStorage pour pré-sélection ultérieure
+  try {
+    localStorage.setItem('selectedTemplateId', template.id);
+  } catch (e) {
+    console.warn('Impossible de sauvegarder le template sélectionné dans le localStorage', e);
+  }
+  // Ouvrir directement la section de signature avec template
+  activeSection.value = 'sign-with-template';
 }
 
 function confirmDeleteTemplate(template) {

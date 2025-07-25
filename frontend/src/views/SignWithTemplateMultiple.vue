@@ -646,6 +646,22 @@ async function loadTemplates() {
     }
     
     console.log('Templates disponibles pour cette organisation:', availableTemplates.value.length);
+
+    // Vérifier si un template a été sélectionné précédemment depuis le tableau de bord signer
+    try {
+      const storedTemplateId = localStorage.getItem('selectedTemplateId');
+      if (storedTemplateId) {
+        const preselected = availableTemplates.value.find(t => String(t.id) === String(storedTemplateId));
+        if (preselected) {
+          console.log('Template pré-sélectionné trouvé dans le localStorage:', preselected.name);
+          selectTemplate(preselected);
+        }
+        // Nettoyer la sélection du localStorage pour éviter les effets de bords
+        localStorage.removeItem('selectedTemplateId');
+      }
+    } catch (e) {
+      console.warn('Impossible d’accéder au localStorage pour la pré-sélection du template', e);
+    }
   } catch (error) {
     console.error('Erreur lors du chargement des templates:', error);
     availableTemplates.value = [];
