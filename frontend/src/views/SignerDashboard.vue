@@ -5626,4 +5626,165 @@ async function deleteTemplate(template) {
   font-weight: 600;
 }
 
+/* =======================
+   Styles – Section Édition de Template
+   ======================= */
+.edit-template-section {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.edit-template-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.edit-template-header .header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.edit-template-header .modal-icon {
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--primary-color, #3a86ff);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.edit-template-header .modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+  margin: 0;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.35rem;
+  color: var(--text-muted, #6c757d);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+  color: var(--text-color, #333);
+}
+
+.edit-template-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.template-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.template-form label {
+  font-weight: 500;
+}
+
+.template-form .form-control {
+  padding: 0.75rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.qr-positioner-wrapper {
+  border: 1px dashed #ced4da;
+  border-radius: 12px;
+  padding: 1rem;
+  background: #f9fafb;
+}
+
+.loading-edit-file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0;
+  color: var(--text-muted, #6c757d);
+}
+
+.loading-edit-file .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e9ecef;
+  border-top-color: var(--primary-color, #3a86ff);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.edit-file-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem 0;
+  color: #dc3545;
+}
+
+.edit-template-footer {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.edit-template-footer .btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.edit-template-footer .btn.btn-primary {
+  background: var(--primary-color, #3a86ff);
+  border: none;
+  color: #fff;
+}
+
+.edit-template-footer .btn.btn-primary[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.edit-template-footer .btn.btn-secondary {
+  background: #e9ecef;
+  border: none;
+  color: var(--text-color, #333);
+}
+
+.edit-template-footer .btn.btn-secondary:hover {
+  background: #dee2e6;
+}
+
+@media (max-width: 768px) {
+  .edit-template-section {
+    padding: 1.25rem;
+  }
+  .edit-template-body {
+    gap: 1.25rem;
+  }
+}
+
 </style> 
