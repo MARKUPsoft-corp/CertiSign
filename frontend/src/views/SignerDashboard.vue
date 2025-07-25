@@ -171,7 +171,7 @@
       </section>
 
       <!-- Statistiques -->
-      <section class="stats-section" v-if="activeSection !== 'sign-simple' && activeSection !== 'create-template' && activeSection !== 'sign-with-template'">
+      <section class="stats-section" v-if="activeSection !== 'sign-simple' && activeSection !== 'create-template' && activeSection !== 'sign-with-template' && activeSection !== 'edit-template'">
         <div class="stats-container">
           <div class="stat-card">
             <div class="stat-content">
@@ -204,7 +204,7 @@
       </section>
 
       <!-- Actions rapides -->
-      <section class="quick-actions" v-if="activeSection !== 'sign-simple' && activeSection !== 'create-template' && activeSection !== 'sign-with-template'">
+      <section class="quick-actions" v-if="activeSection !== 'sign-simple' && activeSection !== 'create-template' && activeSection !== 'sign-with-template' && activeSection !== 'edit-template'">
         <div class="actions-grid">
           <div class="action-card urgent" v-if="urgentDocuments.length > 0" @click="activeSection = 'urgent'" :class="{ 'active': activeSection === 'urgent' }">
             <div class="action-icon">
@@ -828,6 +828,62 @@
         <!-- Signature directe par le signataire -->
         <div v-if="activeSection === 'sign-simple'" class="section-content sign-section">
           <SignSimpleSigner @close="activeSection = ''" :organization-name="organizationName" />
+        </div>
+
+        <!-- Édition de template -->
+        <div v-if="activeSection === 'edit-template'" class="section-content edit-template-section">
+          <div class="edit-template-header">
+            <div class="header-left">
+              <div class="modal-icon">
+                <i class="bi bi-pencil"></i>
+              </div>
+              <h3 class="modal-title">Modifier le template : {{ editingTemplate?.name }}</h3>
+            </div>
+            <button class="modal-close" @click="closeEditModal">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+
+          <div class="edit-template-body">
+            <div class="template-form">
+              <div class="form-group">
+                <label for="edit-template-name">Nom du template</label>
+                <input 
+                  type="text" 
+                  id="edit-template-name" 
+                  v-model="editingTemplate.name" 
+                  placeholder="Saisissez un nom pour ce template" 
+                  class="form-control"
+                >
+              </div>
+            </div>
+
+            <div v-if="editingTemplate.file" class="qr-positioner-wrapper">
+              <QrPositioner 
+                :pdfFile="editingTemplate.file"
+                :preloadedPositions="editingTemplate.qrPositions"
+                @position-confirmed="handleEditPositionConfirmed"
+                @signature-uploaded="handleEditSignatureUploaded"
+                @pdf-generated="handleEditPdfGenerated"
+              />
+            </div>
+            <div v-else-if="loadingEditFile" class="loading-edit-file">
+              <div class="spinner"></div>
+              <p>Chargement du fichier PDF original...</p>
+            </div>
+            <div v-else class="edit-file-error">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              <p>Impossible de charger le fichier PDF original pour modification.</p>
+            </div>
+          </div>
+
+          <div class="edit-template-footer">
+            <button class="btn btn-secondary" @click="closeEditModal" :disabled="isUpdating">Annuler</button>
+            <button class="btn btn-primary" @click="updateTemplate" :disabled="!canUpdateTemplate || isUpdating">
+              <span v-if="isUpdating"><i class="bi bi-hourglass-split spin"></i> Mise à jour...</span>
+              <span v-else>Mettre à jour</span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -2875,8 +2931,8 @@ async function editTemplate(template) {
       generatedPdfDataUrl: null
     };
     
-    // Ouvrir la modale d'édition
-    showEditModal.value = true;
+    // Ouvrir la section d'édition
+    activeSection.value = 'edit-template';
   } catch (error) {
     console.error('Erreur lors de la récupération des détails du template:', error);
     alert('Une erreur est survenue lors de la récupération des détails du template.');
@@ -2887,6 +2943,7 @@ async function editTemplate(template) {
 
 // Fonction pour fermer la modal d'édition
 function closeEditModal() {
+  activeSection.value = '';
   showEditModal.value = false;
   editingTemplate.value = {
     id: null,
