@@ -2930,6 +2930,23 @@ async function editTemplate(template) {
       generatedPdfBlob: null,
       generatedPdfDataUrl: null
     };
+    // Télécharger l'image de signature si disponible
+    if (templateDetails.signature_image) {
+      try {
+        const imgResponse = await fetch(templateDetails.signature_image);
+        if (imgResponse.ok) {
+          const imgBlob = await imgResponse.blob();
+          const imgFile = new File([imgBlob], 'signature_image', { type: imgBlob.type || 'image/png' });
+          editingTemplate.value.signatureImage = imgFile;
+          // Ajouter la référence de l'image dans les positions préchargées
+          if (editingTemplate.value.qrPositions.signature) {
+            editingTemplate.value.qrPositions.signature.image = URL.createObjectURL(imgFile);
+          }
+        }
+      } catch (imgError) {
+        console.warn('Impossible de télécharger l\'image de signature:', imgError);
+      }
+    }
     
     // Ouvrir la section d'édition
     activeSection.value = 'edit-template';

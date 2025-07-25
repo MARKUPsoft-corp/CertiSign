@@ -1448,6 +1448,27 @@ function initializeFromPreloadedPositions() {
     }
   }
   
+  // Initialiser l'image de signature si fournie
+  if (props.preloadedPositions.signature && props.preloadedPositions.signature.image) {
+    try {
+      const imageUrl = props.preloadedPositions.signature.image;
+      // Récupérer l'image puis créer un File pour disposer d'un type mime
+      fetch(imageUrl)
+        .then(r => r.blob())
+        .then(blob => {
+          const file = new File([blob], 'preloaded_signature', { type: blob.type || 'image/png' });
+          signatureImage.value = file;
+          if (signatureImageUrl.value) {
+            URL.revokeObjectURL(signatureImageUrl.value);
+          }
+          signatureImageUrl.value = URL.createObjectURL(file);
+        })
+        .catch(err => console.warn('Impossible de précharger l\'image de signature:', err));
+    } catch (e) {
+      console.warn('Erreur lors du préchargement de l\'image de signature:', e);
+    }
+  }
+  
   // Émettre un événement pour informer le composant parent des positions chargées
   emit('position-changed', getPositionData());
 }
