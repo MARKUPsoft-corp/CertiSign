@@ -3052,8 +3052,13 @@ async function updateTemplate() {
     // Fermer la modale
     closeEditModal();
   } catch (error) {
-    console.error('Erreur lors de la mise à jour du template:', error);
-    alert('Une erreur est survenue lors de la mise à jour du template.');
+    if (error.response && error.response.data) {
+      console.error('Détails du backend:', error.response.data);
+      alert(`Erreur du serveur : ${JSON.stringify(error.response.data)}`);
+    } else {
+      console.error('Erreur lors de la mise à jour du template:', error);
+      alert('Une erreur est survenue lors de la mise à jour du template.');
+    }
   } finally {
     isUpdating.value = false;
   }

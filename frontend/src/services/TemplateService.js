@@ -165,7 +165,11 @@ class TemplateService {
       
       return response.data;
     } catch (error) {
-      console.error(`Erreur lors de la mise à jour du template ${templateId}:`, error);
+      if (error.response && error.response.data) {
+        console.error(`Erreur lors de la mise à jour du template ${templateId}:`, error.response.data);
+      } else {
+        console.error(`Erreur lors de la mise à jour du template ${templateId}:`, error);
+      }
       throw error;
     }
   }
