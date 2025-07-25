@@ -2146,9 +2146,9 @@ watch(signedTab, () => {
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(6, 255, 165, 0.2);
   padding: 1.25rem 2.5rem;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  position: relative; /* le header défile maintenant avec la page */
+  top: auto;
+  z-index: initial;
   box-shadow: 0 2px 15px rgba(6, 255, 165, 0.1);
 }
 

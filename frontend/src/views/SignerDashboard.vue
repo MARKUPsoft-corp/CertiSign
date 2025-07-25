@@ -3150,9 +3150,9 @@ async function deleteTemplate(template) {
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 149, 0, 0.2);
   padding: 1.25rem 2.5rem;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  position: relative; /* le header défile maintenant avec la page */
+  top: auto;
+  z-index: initial;
   box-shadow: 0 2px 15px rgba(255, 149, 0, 0.1);
 }
 
