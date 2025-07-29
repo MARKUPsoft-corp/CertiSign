@@ -10,6 +10,11 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+# Personnalisation de l'interface d'administration
+admin.site.site_header = "Doc@uthANTIC - Administration"
+admin.site.site_title = "Doc@uthANTIC - Administration"
+admin.site.index_title = "Administration Doc@uthANTIC"
+
 # Configuration de Swagger/OpenAPI
 schema_view = get_schema_view(
    openapi.Info(

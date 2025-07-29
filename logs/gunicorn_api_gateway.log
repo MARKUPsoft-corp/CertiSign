@@ -1,0 +1,43 @@
+[2025-07-29 13:09:24 +0100] [74136] [INFO] Starting gunicorn 23.0.0
+[2025-07-29 13:09:24 +0100] [74136] [INFO] Listening at: http://127.0.0.1:8001 (74136)
+[2025-07-29 13:09:24 +0100] [74136] [INFO] Using worker: uvicorn.workers.UvicornWorker
+[2025-07-29 13:09:24 +0100] [74143] [INFO] Booting worker with pid: 74143
+[2025-07-29 13:09:24 +0100] [74147] [INFO] Booting worker with pid: 74147
+[2025-07-29 13:09:25 +0100] [74150] [INFO] Booting worker with pid: 74150
+[2025-07-29 13:09:25 +0100] [74152] [INFO] Booting worker with pid: 74152
+[2025-07-29 13:09:33 +0100] [74152] [INFO] Started server process [74152]
+[2025-07-29 13:09:33 +0100] [74152] [INFO] Waiting for application startup.
+[2025-07-29 13:09:33 +0100] [74152] [INFO] Application startup complete.
+[2025-07-29 13:09:33 +0100] [74143] [INFO] Started server process [74143]
+[2025-07-29 13:09:33 +0100] [74143] [INFO] Waiting for application startup.
+[2025-07-29 13:09:33 +0100] [74143] [INFO] Application startup complete.
+[2025-07-29 13:09:33 +0100] [74147] [INFO] Started server process [74147]
+[2025-07-29 13:09:33 +0100] [74147] [INFO] Waiting for application startup.
+[2025-07-29 13:09:33 +0100] [74147] [INFO] Application startup complete.
+[2025-07-29 13:09:33 +0100] [74150] [INFO] Started server process [74150]
+[2025-07-29 13:09:33 +0100] [74150] [INFO] Waiting for application startup.
+[2025-07-29 13:09:33 +0100] [74150] [INFO] Application startup complete.
+[2025-07-29 14:34:37 +0100] [74136] [CRITICAL] WORKER TIMEOUT (pid:74143)
+[2025-07-29 14:34:37 +0100] [74136] [CRITICAL] WORKER TIMEOUT (pid:74147)
+[2025-07-29 14:34:37 +0100] [74136] [CRITICAL] WORKER TIMEOUT (pid:74150)
+[2025-07-29 14:34:37 +0100] [74136] [CRITICAL] WORKER TIMEOUT (pid:74152)
+[2025-07-29 14:34:38 +0100] [74136] [ERROR] Worker (pid:74152) was sent SIGKILL! Perhaps out of memory?
+[2025-07-29 14:34:38 +0100] [74136] [ERROR] Worker (pid:74143) was sent SIGKILL! Perhaps out of memory?
+[2025-07-29 14:34:38 +0100] [74136] [ERROR] Worker (pid:74147) was sent SIGKILL! Perhaps out of memory?
+[2025-07-29 14:34:39 +0100] [74136] [ERROR] Worker (pid:74150) was sent SIGKILL! Perhaps out of memory?
+[2025-07-29 14:34:39 +0100] [87239] [INFO] Booting worker with pid: 87239
+[2025-07-29 14:34:39 +0100] [87241] [INFO] Booting worker with pid: 87241
+[2025-07-29 14:34:39 +0100] [87247] [INFO] Booting worker with pid: 87247
+[2025-07-29 14:34:39 +0100] [87248] [INFO] Booting worker with pid: 87248
+[2025-07-29 14:34:46 +0100] [87241] [INFO] Started server process [87241]
+[2025-07-29 14:34:46 +0100] [87241] [INFO] Waiting for application startup.
+[2025-07-29 14:34:46 +0100] [87241] [INFO] Application startup complete.
+[2025-07-29 14:34:46 +0100] [87239] [INFO] Started server process [87239]
+[2025-07-29 14:34:46 +0100] [87239] [INFO] Waiting for application startup.
+[2025-07-29 14:34:46 +0100] [87239] [INFO] Application startup complete.
+[2025-07-29 14:34:47 +0100] [87247] [INFO] Started server process [87247]
+[2025-07-29 14:34:47 +0100] [87247] [INFO] Waiting for application startup.
+[2025-07-29 14:34:47 +0100] [87248] [INFO] Started server process [87248]
+[2025-07-29 14:34:47 +0100] [87248] [INFO] Waiting for application startup.
+[2025-07-29 14:34:47 +0100] [87247] [INFO] Application startup complete.
+[2025-07-29 14:34:47 +0100] [87248] [INFO] Application startup complete.

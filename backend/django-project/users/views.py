@@ -515,9 +515,7 @@ def auth_certificate_gateway(request):
             return Response({
                 'status': 'error',
                 'message': f'Erreur lors de la création du compte: {str(e)}'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
-
-
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def verify_admin_certificate(request):
@@ -546,14 +544,14 @@ def verify_admin_certificate(request):
     if role_requested != 'admin':
         return Response({
             'valid': False,
-            'errorTitle': 'Rôle invalide',
+            'errorTitle': 'Rôle invalidessssqqq',
             'errorMessage': 'Cette vérification est uniquement pour les administrateurs d\'organisation'
         })
     
     # Envoyer d'abord le certificat au microservice pour extraire les informations
     try:
-        # Utiliser l'API Gateway pour extraire les informations du certificat - Via Nginx
-        gateway_url = "https://ppd.camgovca.cm/cert/extract-cert-info-base64/"
+        # Utiliser l'API GatewaaDC CCXway pour extraire les informations du certificat - Via Nginx
+        gateway_url = "https:aasssa//ppd.camgovca.cssssm/cert/extract-cert-info-base64/"
         gateway_response = requests.post(
             gateway_url,
             json={
