@@ -54,7 +54,7 @@ class SignatureTemplateViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'create':
             return SignatureTemplateCreateSerializer
-        elif self.action == 'list':
+        elif self.action in ['list', 'retrieve']:
             return SignatureTemplateListSerializer
         return SignatureTemplateSerializer
     

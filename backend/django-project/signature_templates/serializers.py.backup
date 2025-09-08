@@ -20,13 +20,7 @@ class SignatureTemplateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = SignatureTemplate
-        fields = [
-            'id', 'name', 'created_at', 'updated_at',
-            'user', 'user_details', 'organization_name', 'user_role', 'organization_role',
-            'original_document', 'original_document_name', 'signature_image', 'preview_document',
-            'qr_size', 'page_application', 'qr_positions', 'signature_positions',
-            'selected_pages', 'signature_size'
-        ]
+        fields = '__all__'
         read_only_fields = ('created_at', 'updated_at')
     
     def get_original_document_name(self, obj):
@@ -104,3 +98,25 @@ class SignatureTemplateCreateSerializer(serializers.ModelSerializer):
         if not value.name.lower().endswith('.pdf'):
             raise serializers.ValidationError("Le document original doit être un fichier PDF.")
         return value
+    
+    def validate_signature_image(self, value):
+        # Vérifier que l'image est dans un format accepté
+        valid_extensions = ['.jpg', '.jpeg', '.png']
+        ext = '.' + value.name.split('.')[-1].lower()
+        if ext not in valid_extensions:
+            raise serializers.ValidationError("L'image de signature doit être au format JPG ou PNG.")
+        return value
+    
+    def create(self, validated_data):
+        # Assurez-vous que l'utilisateur actuel est défini comme propriétaire
+        user = self.context['request'].user
+        validated_data['user'] = user
+        
+        # Récupérer les informations sur l'organisation de l'utilisateur si disponibles
+        if user.organization:
+            validated_data['organization_name'] = user.organization.name
+            validated_data['organization_role'] = getattr(user, 'role', 'collaborator')
+        
+        validated_data['user_role'] = getattr(user, 'role', 'user')
+        
+        return super().create(validated_data) 

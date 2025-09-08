@@ -1398,85 +1398,54 @@ async function editTemplate(template) {
     loadingEditFile.value = true;
     selectedTemplate.value = template;
     
-    console.log("🔍 [DEBUG] Édition du template:", template);
-    console.log("🔍 [DEBUG] Template ID:", template.id);
-    
     // Récupérer les détails complets du template depuis l'API
     const templateDetails = await TemplateService.getTemplate(template.id);
-    console.log("🔍 [DEBUG] Détails du template depuis l'API:", templateDetails);
-    console.log("🔍 [DEBUG] QR Positions:", templateDetails.qr_positions);
-    console.log("🔍 [DEBUG] Signature Positions:", templateDetails.signature_positions);
-    console.log("🔍 [DEBUG] Page Application:", templateDetails.page_application);
-    console.log("🔍 [DEBUG] Selected Pages:", templateDetails.selected_pages);
-    console.log("🔍 [DEBUG] Signature Size:", templateDetails.signature_size);
-    console.log("🔍 [DEBUG] Has Signature Image:", !!templateDetails.signature_image);
     
     // Récupérer le fichier PDF original pour l'afficher dans QrPositioner
     let originalPdfBlob = null;
     try {
       originalPdfBlob = await TemplateService.downloadOriginal(template.id);
-      console.log("✅ [DEBUG] PDF original téléchargé avec succès");
     } catch (pdfError) {
-      console.error("❌ [DEBUG] Erreur lors du téléchargement du PDF original:", pdfError);
+      console.error('Erreur lors du téléchargement du PDF original:', pdfError);
     }
     
     // Créer un File à partir du Blob si disponible
     let originalFile = null;
     if (originalPdfBlob) {
       originalFile = new File([originalPdfBlob], `${templateDetails.name}.pdf`, { 
-        type: "application/pdf" 
+        type: 'application/pdf' 
       });
-      console.log("✅ [DEBUG] File PDF créé:", originalFile);
     }
-    
-    // Récupérer l'image de signature si elle existe
-    let signatureImageUrl = null;
-    if (templateDetails.signature_image) {
-      try {
-        signatureImageUrl = templateDetails.signature_image;
-        console.log("✅ [DEBUG] URL de l'image de signature:", signatureImageUrl);
-      } catch (signatureError) {
-        console.error("❌ [DEBUG] Erreur lors de la récupération de l'image de signature:", signatureError);
-      }
-    }
-    
-    // Préparer la structure des données pour QrPositioner
-    const qrPositionsData = {
-      qr: {
-        size: templateDetails.qr_size,
-        positions: templateDetails.qr_positions || {},
-        pages: templateDetails.selected_pages && templateDetails.selected_pages.length > 0 ? 
-               templateDetails.selected_pages : "all"
-      },
-      mode: templateDetails.page_application,
-      signature: templateDetails.signature_positions && Object.keys(templateDetails.signature_positions).length > 0 ? {
-        positions: templateDetails.signature_positions,
-        size: templateDetails.signature_size || 50,
-        image: signatureImageUrl
-      } : null
-    };
-    
-    console.log("🔍 [DEBUG] Structure des données préparée pour QrPositioner:", qrPositionsData);
     
     // Préparer les données pour l'édition
     editingTemplate.value = {
       id: templateDetails.id,
       name: templateDetails.name,
       file: originalFile,
-      qrPositions: qrPositionsData,
+      qrPositions: {
+        qr: {
+          size: templateDetails.qr_size,
+          positions: templateDetails.qr_positions,
+          pages: templateDetails.selected_pages && templateDetails.selected_pages.length > 0 ? 
+                 templateDetails.selected_pages : 'all'
+        },
+        mode: templateDetails.page_application,
+        signature: templateDetails.signature_positions ? {
+          positions: templateDetails.signature_positions,
+          size: templateDetails.signature_size || 50
+        } : null
+      },
       signatureImage: null,
       generatedPdfFile: null,
       generatedPdfBlob: null,
       generatedPdfDataUrl: null
     };
     
-    console.log("✅ [DEBUG] Template préparé pour édition:", editingTemplate.value);
-    
     // Ouvrir la modale d'édition
     showEditModal.value = true;
   } catch (error) {
-    console.error("❌ [DEBUG] Erreur lors de la récupération des détails du template:", error);
-    alert("Une erreur est survenue lors de la récupération des détails du template.");
+    console.error('Erreur lors de la récupération des détails du template:', error);
+    alert('Une erreur est survenue lors de la récupération des détails du template.');
   } finally {
     loadingEditFile.value = false;
   }

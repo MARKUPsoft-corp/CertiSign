@@ -1,0 +1,101 @@
+from django.db import models
+from django.contrib.auth import get_user_model
+import os
+import json
+from documents.storage import sftp_storage
+
+User = get_user_model()
+
+def template_original_path(instance, filename):
+    """Chemin de stockage pour les documents originaux"""
+    return f'templates/{instance.user.id}/original/{filename}'
+
+def template_signature_path(instance, filename):
+    """Chemin de stockage pour les images de signature"""
+    return f'templates/{instance.user.id}/signatures/{filename}'
+
+def template_preview_path(instance, filename):
+    """Chemin de stockage pour les aperçus PDF générés avec nom fixe"""
+    # Utiliser un nom fixe basé sur l'ID du template pour écraser l'ancien aperçu
+    if instance.pk:
+        return f"templates/{instance.user.id}/previews/template_{instance.pk}_preview.pdf"
+    else:
+        # Pour les nouveaux templates, utiliser un nom temporaire
+        return f"templates/{instance.user.id}/previews/temp_preview.pdf"
+
+class SignatureTemplate(models.Model):
+    """Modèle pour les templates de signature"""
+    
+    # Choix pour le type d'application des pages
+    PAGE_APPLICATION_CHOICES = [
+        ('all', 'Toutes les pages (même position)'),
+        ('current', 'Page actuelle uniquement'),
+        ('custom', 'Pages personnalisées (même position)'),
+        ('individual', 'Position individuelle par page'),
+    ]
+    
+    # Choix pour la taille du QR code
+    QR_SIZE_CHOICES = [
+        ('small', 'Petit'),
+        ('medium', 'Moyen'),
+        ('large', 'Grand'),
+    ]
+    
+    # Informations de base
+    name = models.CharField(max_length=255, verbose_name="Nom du template")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Date de mise à jour")
+    
+    # Utilisateur et organisation
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='signature_templates', verbose_name="Utilisateur")
+    organization_name = models.CharField(max_length=255, blank=True, null=True, verbose_name="Nom de l'organisation")
+    user_role = models.CharField(max_length=100, blank=True, null=True, verbose_name="Rôle de l'utilisateur")
+    organization_role = models.CharField(max_length=100, blank=True, null=True, verbose_name="Rôle dans l'organisation")
+    
+    # Documents
+    original_document = models.FileField(upload_to=template_original_path, storage=sftp_storage, verbose_name="Document original")
+    signature_image = models.ImageField(upload_to=template_signature_path, storage=sftp_storage, blank=True, null=True, verbose_name="Image de signature")
+    preview_document = models.FileField(upload_to=template_preview_path, storage=sftp_storage, blank=True, null=True, verbose_name="Aperçu du document")
+    
+    # Configuration du QR code
+    qr_size = models.CharField(max_length=10, choices=QR_SIZE_CHOICES, default='medium', verbose_name="Taille du QR code")
+    page_application = models.CharField(max_length=20, choices=PAGE_APPLICATION_CHOICES, default='all', verbose_name="Application des pages")
+    
+    # Positions stockées au format JSON
+    qr_positions = models.JSONField(default=dict, verbose_name="Positions du QR code")
+    signature_positions = models.JSONField(default=dict, blank=True, null=True, verbose_name="Positions de la signature")
+    selected_pages = models.JSONField(default=list, blank=True, null=True, verbose_name="Pages sélectionnées")
+    
+    # Configuration de la signature
+    signature_size = models.IntegerField(default=50, verbose_name="Taille de la signature (%)")
+    
+    class Meta:
+        verbose_name = "Template de signature"
+        verbose_name_plural = "Templates de signature"
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        if self.organization_name:
+            return f"{self.name} ({self.organization_name})"
+        return f"{self.name} ({self.user.username})"
+    
+    def get_qr_positions_display(self):
+        """Affiche les positions du QR code de manière lisible"""
+        if not self.qr_positions:
+            return "Aucune position définie"
+        
+        if self.page_application == 'all':
+            if 'default' in self.qr_positions:
+                pos = self.qr_positions['default']
+                return f"Toutes les pages: X={pos.get('x')}%, Y={pos.get('y')}%"
+            return "Position par défaut"
+        
+        if self.page_application == 'individual':
+            pages = len(self.qr_positions)
+            return f"Positions individuelles sur {pages} pages"
+        
+        return f"Positions définies pour le mode {self.get_page_application_display()}"
+    
+    def get_file_name(self):
+        """Renvoie le nom du fichier original"""
+        return os.path.basename(self.original_document.name)
