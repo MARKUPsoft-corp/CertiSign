@@ -1551,9 +1551,9 @@ async function submitSignature() {
     let signaturePosition = null;
     
     // Vérifier si le document a des informations de signature
-    if (documentDetails.signature_image || documentDetails.signature_positions) {
+    if (documentDetails.signature_image_url || documentDetails.signature_positions) {
       console.log('Informations de signature trouvées dans le document:', {
-        has_image: !!documentDetails.signature_image,
+        has_image: !!documentDetails.signature_image_url,
         has_positions: !!documentDetails.signature_positions,
         signature_size: documentDetails.signature_size
       });
@@ -1562,41 +1562,37 @@ async function submitSignature() {
       signaturePosition = {};
       
       // Ajouter l'image de signature si disponible
-      if (documentDetails.signature_image) {
-        // L'image est stockée comme un fichier dans le backend Django
-        // On doit la récupérer et la convertir en base64 pour le microservice
+      if (documentDetails.signature_image_url) {
+        // L'image est accessible via l'endpoint SFTP
         try {
-          let imageUrl = documentDetails.signature_image;
-          // Construire l'URL absolue si nécessaire
-          if (imageUrl.startsWith('/')) {
-            imageUrl = `https://ppd.camgovca.cm${imageUrl}`;
-          } else if (!imageUrl.startsWith('https')) {
-            imageUrl = `https://ppd.camgovca.cm/${imageUrl}`;
-          }
+          console.log('Récupération de l\'image de signature via SFTP...');
           
-          console.log('Récupération de l\'image de signature depuis:', imageUrl);
-          
-          // Télécharger l'image de signature
-          const imageResponse = await axios.get(imageUrl, {
+          // Utiliser l'endpoint SFTP pour télécharger l'image de signature
+          const imageResponse = await axios.get(documentDetails.signature_image_url, {
             headers: {
               'Authorization': `Bearer ${token}`
             },
             responseType: 'blob'
           });
           
-          // Convertir l'image en base64
+          // Convertir l'image en base64 avec le bon type MIME
           const imageBlob = imageResponse.data;
           const imageBase64 = await new Promise((resolve) => {
             const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
+            reader.onload = () => {
+              // Remplacer le type MIME par image/png
+              const base64String = String(reader.result);
+              const correctedBase64 = base64String.replace('application/octet-stream', 'image/png');
+              resolve(correctedBase64);
+            };
             reader.readAsDataURL(imageBlob);
           });
           
           signaturePosition.signature_image = imageBase64;
-          console.log('Image de signature convertie en base64:', imageBase64.substring(0, 50) + '...');
+          console.log('Image de signature récupérée via SFTP et convertie en base64 (PNG):', imageBase64.substring(0, 50) + '...');
           
         } catch (imageError) {
-          console.error('Erreur lors de la récupération de l\'image de signature:', imageError);
+          console.error('Erreur lors de la récupération de l\'image de signature via SFTP:', imageError);
           console.log('Signature sera appliquée sans image personnalisée');
         }
       }
@@ -1672,30 +1668,24 @@ async function submitSignature() {
       console.log('Aucune information de signature trouvée dans le document');
     }
     
-    // Vérifier si le document a une URL de fichier
-    if (!documentDetails.document_file) {
-      throw new Error('Aucun fichier disponible pour ce document');
+    // Vérifier si le document a une URL de fichier disponible
+    if (!documentDetails.document_file_url && !documentDetails.generated_pdf_url) {
+      throw new Error('Aucun fichier PDF disponible pour ce document');
     }
     
-    // Construire l'URL absolue du document
-    let fileUrl = documentDetails.document_file;
-    // Si l'URL commence par un slash, on le traite comme un chemin relatif au backend
-    if (fileUrl.startsWith('/')) {
-      fileUrl = `https://ppd.camgovca.cm${fileUrl}`;
-    } else if (!fileUrl.startsWith('https')) {
-      // Si l'URL ne commence pas par https, on ajoute le préfixe
-      fileUrl = `https://ppd.camgovca.cm/${fileUrl}`;
-    }
+    // Récupérer le document via l'endpoint SFTP au lieu de l'URL directe
+    console.log('Récupération du document via l\'endpoint SFTP...');
     
-    console.log('Récupération du document à l\'URL:', fileUrl);
-    
-    // Télécharger le document à partir de son URL
-    const response = await axios.get(fileUrl, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-      responseType: 'blob'
-    });
+    // Utiliser l'endpoint SFTP pour télécharger le document
+    const response = await axios.get(
+      `https://ppd.camgovca.cm/api/documents/qr-positions/${documentDetails.id}/download_document/`,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        responseType: 'blob'
+      }
+    );
     
     // Créer un objet File à partir du Blob pour l'envoi
     const documentFile = new File(
@@ -1863,38 +1853,20 @@ async function submitSignature() {
 function previewDocument(doc) {
   console.log('Prévisualiser le document:', doc.document_name);
   
-  // Si le document a une URL de fichier, ouvrir dans un nouvel onglet
-  if (doc.document_file) {
+  // Utiliser les URLs SFTP pour la prévisualisation
+  if (doc.document_file_url || doc.generated_pdf_url) {
     try {
-      // Construire l'URL absolue correcte sans double slash
-      let fileUrl = doc.document_file;
+      // Priorité au PDF généré, sinon utiliser le document original
+      let fileUrl = doc.generated_pdf_url || doc.document_file_url;
       
-      // Si l'URL commence par un slash, on le traite comme un chemin relatif au backend
-      if (fileUrl.startsWith('/')) {
-        fileUrl = `https://ppd.camgovca.cm${fileUrl}`;
-      } else if (!fileUrl.startsWith('https')) {
-        // Si l'URL ne commence pas par https, on ajoute le préfixe
-        fileUrl = `https://ppd.camgovca.cm/${fileUrl}`;
-      }
-      
-      // Ajouter l'ID de l'organisation comme paramètre de requête
-      const currentUser = AuthService.getCurrentUser();
-      const organizationId = currentUser?.organization?.id;
-      
-      if (organizationId) {
-        // Ajouter l'ID de l'organisation comme paramètre de requête
-        const separator = fileUrl.includes('?') ? '&' : '?';
-        fileUrl += `${separator}organization_id=${organizationId}`;
-      }
-      
-      console.log('Ouverture du document à l\'URL:', fileUrl);
+      console.log('Ouverture du document via SFTP à l\'URL:', fileUrl);
       window.open(fileUrl, '_blank');
     } catch (error) {
       console.error('Erreur lors de l\'ouverture du document:', error);
       alert('Impossible d\'ouvrir le document. Veuillez réessayer plus tard.');
     }
   } else {
-    console.error('Aucun fichier disponible pour ce document');
+    console.error('Aucune URL de fichier disponible pour ce document');
     alert('Aucun fichier n\'est disponible pour ce document.');
   }
 }

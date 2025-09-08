@@ -4,6 +4,7 @@ from django.db import models
 from django.core.files.base import ContentFile
 from django.http import FileResponse
 import uuid
+import os
 from rest_framework import viewsets, status, permissions, filters
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
@@ -11,6 +12,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from users.models import ActivityLog, CustomUser, Organization
 from .models import DocumentActivity, DocumentSignature, DocumentQRPosition
 from .serializers import DocumentActivitySerializer, DocumentSignatureSerializer, DocumentQRPositionSerializer
+from .utils import get_sftp_file_response, check_sftp_connection
 from datetime import datetime, timedelta
 
 class SignedDocumentViewSet(viewsets.ModelViewSet):
@@ -90,11 +92,11 @@ class SignedDocumentViewSet(viewsets.ModelViewSet):
         # Déterminer le fichier à télécharger (original ou signé)
         file_to_download = document.signed_file if document.signed_file else document.original_file
         
-        # Renvoyer le fichier comme réponse de téléchargement
-        file_handle = file_to_download.open()
-        response = FileResponse(file_handle, content_type='application/octet-stream')
-        response['Content-Disposition'] = f'attachment; filename="{file_to_download.name}"'
-        return response
+        # Utiliser l'utilitaire SFTP pour le téléchargement
+        return get_sftp_file_response(
+            file_to_download,
+            filename=os.path.basename(file_to_download.name) if file_to_download.name else None
+        )
 
     @action(detail=False, methods=['post'])
     def store_original(self, request):
@@ -380,9 +382,90 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
         # Collaborateur ne voit que ses propres documents
         return DocumentQRPosition.objects.filter(collaborator=user)
     
+    def list(self, request, *args, **kwargs):
+        """
+        Surcharge de la méthode list pour s'assurer que le serializer est utilisé
+        et que les URLs SFTP sont bien générées.
+        """
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Surcharge de la méthode retrieve pour s'assurer que le serializer est utilisé
+        et que les URLs SFTP sont bien générées.
+        """
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['get'])
+    def download_document(self, request, pk=None):
+        """
+        Télécharger le document original depuis SFTP
+        """
+        document = self.get_object()
+        if not document.document_file:
+            return Response(
+                {"detail": "Aucun document disponible pour ce fichier."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Utiliser l'utilitaire SFTP pour le téléchargement
+        import os
+        return get_sftp_file_response(
+            document.document_file,
+            filename=os.path.basename(document.document_file.name) if document.document_file.name else None
+        )
+    
+    @action(detail=True, methods=['get'])
+    def download_generated_pdf(self, request, pk=None):
+        """
+        Télécharger le PDF généré avec QR code depuis SFTP
+        """
+        document = self.get_object()
+        if not document.generated_pdf:
+            return Response(
+                {"detail": "Aucun PDF généré disponible pour ce document."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Utiliser l'utilitaire SFTP pour le téléchargement
+        import os
+        return get_sftp_file_response(
+            document.generated_pdf,
+            filename=os.path.basename(document.generated_pdf.name) if document.generated_pdf.name else None
+        )
+    
+    @action(detail=True, methods=['get'])
+    def download_signature_image(self, request, pk=None):
+        """
+        Télécharger l'image de signature depuis SFTP
+        """
+        document = self.get_object()
+        if not document.signature_image:
+            return Response(
+                {"detail": "Aucune image de signature disponible pour ce document."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Utiliser l'utilitaire SFTP pour le téléchargement
+        import os
+        return get_sftp_file_response(
+            document.signature_image,
+            filename=os.path.basename(document.signature_image.name) if document.signature_image.name else None
+        )
+    
     def create(self, request, *args, **kwargs):
         """
-        Création avec gestion détaillée des erreurs pour faciliter le débogage.
+        Création avec gestion détaillée des erreurs et gestion correcte des fichiers.
         """
         try:
             # Afficher les données reçues pour débogage
@@ -411,8 +494,12 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
             
+            # Gérer correctement les fichiers
+            # Les fichiers sont déjà dans request.FILES, pas besoin de les traiter ici
+            print("Fichiers reçus:", request.FILES)
+            
             # Créer le sérialiseur avec les données
-            serializer = self.get_serializer(data=data)
+            serializer = self.get_serializer(data=data, files=request.FILES)
             
             # Valider les données avec détails des erreurs
             if not serializer.is_valid():

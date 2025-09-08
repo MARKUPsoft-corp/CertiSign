@@ -58,14 +58,44 @@ class AuthService {
    */
   logout() {
     // Enregistrer l'activité de déconnexion avant de supprimer les tokens
-    if (this.user) {
+    if (this.token) {
       this.logActivity('logout', 'Déconnexion du système');
     }
     
+    // Supprimer les tokens et données utilisateur du localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('certificateInfo');
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('isCollaborator');
+    localStorage.removeItem('isSigner');
+    localStorage.removeItem('organizationInfo');
+    
+    // Supprimer les cookies CSRF et de session
+    this.clearCSRFCookies();
+    
+    // Réinitialiser les propriétés locales
     this.token = null;
     this.user = null;
+    
+    // Supprimer l'intercepteur axios
+    if (interceptorId !== null) {
+      axios.interceptors.request.eject(interceptorId);
+      interceptorId = null;
+    }
+    
+    console.log('Utilisateur déconnecté et cache nettoyé');
+  }
+  
+  /**
+   * Nettoie les cookies CSRF et de session
+   */
+  clearCSRFCookies() {
+    // Supprimer le cookie CSRF
+    document.cookie = 'csrftoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'sessionid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    
+    console.log('Cookies CSRF et session supprimés');
   }
 
   /**

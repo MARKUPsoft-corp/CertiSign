@@ -660,7 +660,7 @@ async function loadTemplates() {
         localStorage.removeItem('selectedTemplateId');
       }
     } catch (e) {
-      console.warn('Impossible d’accéder au localStorage pour la pré-sélection du template', e);
+      console.warn('Impossible d\'accéder au localStorage pour la pré-sélection du template', e);
     }
   } catch (error) {
     console.error('Erreur lors du chargement des templates:', error);
@@ -700,13 +700,13 @@ async function loadTemplateDetails(templateId) {
     
     console.log('Paramètres du template configurés:', templateSettings.value);
     
-    // Télécharger l'image de signature si c'est une URL
+    // Télécharger l'image de signature si c'est un endpoint SFTP
     if (templateSettings.value.signature && 
         templateSettings.value.signature.image && 
         typeof templateSettings.value.signature.image === 'string' && 
-        templateSettings.value.signature.image.startsWith('https')) {
+        templateSettings.value.signature.image.startsWith('/api/')) {
       
-      console.log('Image de signature est une URL, téléchargement en cours...');
+      console.log('Image de signature est un endpoint SFTP, téléchargement en cours...');
       await downloadSignatureImage(templateSettings.value.signature.image);
     }
   } catch (error) {
@@ -1356,10 +1356,20 @@ function closeSignature() {
 // Fonction pour télécharger l'image de signature et la convertir en base64
 async function downloadSignatureImage(imageUrl) {
   try {
-    console.log('Téléchargement de l\'image depuis:', imageUrl);
+    console.log('Téléchargement de l\'image depuis l\'endpoint SFTP:', imageUrl);
     
-    // Récupérer l'image
-    const response = await fetch(imageUrl);
+    // Construire l'URL complète
+    const fullUrl = imageUrl.startsWith('http') ? imageUrl : `https://ppd.camgovca.cm${imageUrl}`;
+    console.log('URL complète pour le téléchargement:', fullUrl);
+    
+    // Récupérer l'image via l'endpoint SFTP
+    const response = await fetch(fullUrl, {
+      credentials: 'include', // Inclure les cookies d'authentification
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    
     if (!response.ok) {
       throw new Error(`Erreur lors du téléchargement de l'image: ${response.status}`);
     }

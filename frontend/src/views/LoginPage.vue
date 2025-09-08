@@ -920,6 +920,9 @@ async function submitForm() {
     return;
   }
   
+  // Nettoyer le cache et les cookies avant l'authentification
+  clearCacheAndCookies();
+  
   // Mettre à jour le statut et réinitialiser les valeurs
   isLoading.value = true;
   isSuccess.value = false;
@@ -1117,6 +1120,26 @@ function getDashboardByRole(role) {
     default:
       return { name: 'new-dashboard' };
   }
+}
+
+// Fonction pour nettoyer le cache et les cookies avant l'authentification
+function clearCacheAndCookies() {
+  console.log('Nettoyage du cache et des cookies avant authentification...');
+  
+  // Supprimer les données du localStorage
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  localStorage.removeItem('certificateInfo');
+  localStorage.removeItem('isAdmin');
+  localStorage.removeItem('isCollaborator');
+  localStorage.removeItem('isSigner');
+  localStorage.removeItem('organizationInfo');
+  
+  // Supprimer les cookies CSRF et de session
+  document.cookie = 'csrftoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  document.cookie = 'sessionid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  
+  console.log('Cache et cookies nettoyés');
 }
 
 // Fonction pour traiter la réponse d'authentification

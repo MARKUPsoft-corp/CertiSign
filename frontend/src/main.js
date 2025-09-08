@@ -6,6 +6,9 @@ import router from './router'; //le fichier router/index.js contient la configur
 import LoginPage from './views/LoginPage.vue';
 import HomePage from './views/HomePage.vue';
 
+// Importer la configuration axios globale pour initialiser les intercepteurs CSRF
+import '@/services/axiosConfig';
+
 // Import correct de Bootstrap-Vue-Next
 import { BootstrapVue3 } from 'bootstrap-vue-next';
 

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 import os
 import json
+from documents.storage import sftp_storage
 
 User = get_user_model()
 
@@ -47,9 +48,9 @@ class SignatureTemplate(models.Model):
     organization_role = models.CharField(max_length=100, blank=True, null=True, verbose_name="Rôle dans l'organisation")
     
     # Documents
-    original_document = models.FileField(upload_to=template_original_path, verbose_name="Document original")
-    signature_image = models.ImageField(upload_to=template_signature_path, blank=True, null=True, verbose_name="Image de signature")
-    preview_document = models.FileField(upload_to=template_preview_path, blank=True, null=True, verbose_name="Aperçu du document")
+    original_document = models.FileField(upload_to=template_original_path, storage=sftp_storage, verbose_name="Document original")
+    signature_image = models.ImageField(upload_to=template_signature_path, storage=sftp_storage, blank=True, null=True, verbose_name="Image de signature")
+    preview_document = models.FileField(upload_to=template_preview_path, storage=sftp_storage, blank=True, null=True, verbose_name="Aperçu du document")
     
     # Configuration du QR code
     qr_size = models.CharField(max_length=10, choices=QR_SIZE_CHOICES, default='medium', verbose_name="Taille du QR code")

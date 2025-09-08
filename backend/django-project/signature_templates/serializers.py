@@ -13,6 +13,11 @@ class SignatureTemplateSerializer(serializers.ModelSerializer):
     user_details = UserSerializer(source='user', read_only=True)
     original_document_name = serializers.SerializerMethodField()
     
+    # Remplacer les URLs media par des endpoints SFTP
+    original_document = serializers.SerializerMethodField()
+    signature_image = serializers.SerializerMethodField()
+    preview_document = serializers.SerializerMethodField()
+    
     class Meta:
         model = SignatureTemplate
         fields = '__all__'
@@ -21,6 +26,33 @@ class SignatureTemplateSerializer(serializers.ModelSerializer):
     def get_original_document_name(self, obj):
         if obj.original_document:
             return obj.get_file_name()
+        return None
+    
+    def get_original_document(self, obj):
+        """Retourner l'endpoint SFTP absolu pour le document original"""
+        if obj.original_document:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(f"/api/signature-templates/templates/{obj.id}/download_original/")
+            return f"/api/signature-templates/templates/{obj.id}/download_original/"
+        return None
+    
+    def get_signature_image(self, obj):
+        """Retourner l'endpoint SFTP absolu pour l'image de signature"""
+        if obj.signature_image:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(f"/api/signature-templates/templates/{obj.id}/download_signature_image/")
+            return f"/api/signature-templates/templates/{obj.id}/download_signature_image/"
+        return None
+    
+    def get_preview_document(self, obj):
+        """Retourner l'endpoint SFTP absolu pour l'aperçu du document (affichage dans iframe)"""
+        if obj.preview_document:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(f"/api/signature-templates/templates/{obj.id}/preview_document/")
+            return f"/api/signature-templates/templates/{obj.id}/preview_document/"
         return None
     
     def create(self, validated_data):
@@ -38,10 +70,21 @@ class SignatureTemplateSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 class SignatureTemplateListSerializer(serializers.ModelSerializer):
+    preview_document = serializers.SerializerMethodField()
     """Sérialiseur pour la liste des templates (version allégée)"""
     class Meta:
         model = SignatureTemplate
-        fields = ('id', 'name', 'created_at', 'qr_size', 'page_application', 'organization_name')
+        fields = ('id', 'name', 'created_at', 'qr_size', 'page_application', 'organization_name', 'preview_document')
+
+
+    def get_preview_document(self, obj):
+        """Retourner l'endpoint SFTP absolu pour l'aperçu du document (affichage dans iframe)"""
+        if obj.preview_document:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(f"/api/signature-templates/templates/{obj.id}/preview_document/")
+            return f"/api/signature-templates/templates/{obj.id}/preview_document/"
+        return None
 
 class SignatureTemplateCreateSerializer(serializers.ModelSerializer):
     """Sérialiseur pour la création d'un template avec plus de validation"""

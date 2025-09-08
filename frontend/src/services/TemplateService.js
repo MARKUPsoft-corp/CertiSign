@@ -235,6 +235,13 @@ class TemplateService {
       throw error;
     }
   }
+  
+  /**
+   * Récupère l'URL de l'aperçu d'un template pour affichage inline (pas de téléchargement)
+   */
+  getPreviewUrl(templateId) {
+    return `${API_URL}/signature-templates/templates/${templateId}/preview_document/`;
+  }
 }
 
 export default new TemplateService(); 

@@ -27,22 +27,64 @@ class DocumentSignatureSerializer(serializers.ModelSerializer):
     is_valid = serializers.ReadOnlyField()
     validity_status = serializers.ReadOnlyField()
     
+    # URLs SFTP personnalisées pour les fichiers
+    original_file_url = serializers.SerializerMethodField()
+    signed_file_url = serializers.SerializerMethodField()
+    
     class Meta:
         model = DocumentSignature
         fields = [
             'document_id', 'title', 
-            'owner', 'owner_username', 'original_file', 'signed_file',
+            'owner', 'owner_username', 
             'created_at', 'created_at_display', 'original_hash', 
             'signature', 'public_key_pem', 'metadata',
             'organization', 'organization_name', 'signer_role',
             # 🆕 NOUVEAUX CHAMPS POUR SIGNATURES ÉPHÉMÈRES
-            'signature_type', 'expiration_date', 'is_valid', 'validity_status'
+            'signature_type', 'expiration_date', 'is_valid', 'validity_status',
+            # URLs SFTP
+            'original_file_url', 'signed_file_url'
         ]
         read_only_fields = ['document_id', 'created_at', 'created_at_display']
         extra_kwargs = {
             'public_key_pem': {'write_only': True},
-            'signature': {'write_only': True}
+            'signature': {'write_only': True},
+            'original_file': {'write_only': True},
+            'signed_file': {'write_only': True}
         }
+    
+    def get_original_file_url(self, obj):
+        """
+        Retourne l'URL SFTP pour le fichier original.
+        """
+        if obj.original_file:
+            request = self.context.get('request')
+            if request:
+                from django.urls import reverse
+                try:
+                    return request.build_absolute_uri(
+                        reverse('document-signature-download', kwargs={'pk': obj.document_id})
+                    )
+                except:
+                    # Fallback si l'URL n'existe pas
+                    return f"/api/documents/signatures/{obj.document_id}/download/"
+        return None
+    
+    def get_signed_file_url(self, obj):
+        """
+        Retourne l'URL SFTP pour le fichier signé.
+        """
+        if obj.signed_file:
+            request = self.context.get('request')
+            if request:
+                from django.urls import reverse
+                try:
+                    return request.build_absolute_uri(
+                        reverse('document-signature-download', kwargs={'pk': obj.document_id})
+                    )
+                except:
+                    # Fallback si l'URL n'existe pas
+                    return f"/api/documents/signatures/{obj.document_id}/download/"
+        return None
 
 class DocumentQRPositionSerializer(serializers.ModelSerializer):
     """
@@ -50,6 +92,10 @@ class DocumentQRPositionSerializer(serializers.ModelSerializer):
     """
     collaborator_username = serializers.SerializerMethodField()
     organization_name = serializers.SerializerMethodField()
+    # URLs SFTP personnalisées pour les fichiers
+    signature_image_url = serializers.SerializerMethodField()
+    document_file_url = serializers.SerializerMethodField()
+    generated_pdf_url = serializers.SerializerMethodField()
     
     class Meta:
         model = DocumentQRPosition
@@ -60,15 +106,73 @@ class DocumentQRPositionSerializer(serializers.ModelSerializer):
             'signature_image', 'signature_positions', 'signature_size',
             'collaborator', 'organization', 
             'collaborator_username', 'organization_name',
-            'status', 'metadata', 'created_at', 'updated_at'
+            'status', 'metadata', 'created_at', 'updated_at',
+            # URLs SFTP
+            'signature_image_url', 'document_file_url', 'generated_pdf_url'
         ]
         read_only_fields = ['id', 'collaborator', 'organization', 'created_at', 'updated_at']
+        extra_kwargs = {
+            'document_file': {'write_only': True},
+            'generated_pdf': {'write_only': True},
+            'signature_image': {'write_only': True}  # Masqué pour éviter les URLs /media/
+        }
     
     def get_collaborator_username(self, obj):
         return obj.collaborator.username if obj.collaborator else None
     
     def get_organization_name(self, obj):
         return obj.organization.name if obj.organization else None
+    
+    def get_signature_image_url(self, obj):
+        """
+        Retourne l'URL SFTP pour l'image de signature.
+        """
+        if obj.signature_image:
+            request = self.context.get('request')
+            if request:
+                from django.urls import reverse
+                try:
+                    return request.build_absolute_uri(
+                        reverse('document-qr-position-download-signature-image', kwargs={'pk': obj.id})
+                    )
+                except:
+                    # Fallback si l'URL n'existe pas
+                    return f"/api/documents/qr-positions/{obj.id}/download_signature_image/"
+        return None
+    
+    def get_document_file_url(self, obj):
+        """
+        Retourne l'URL SFTP pour le fichier document.
+        """
+        if obj.document_file:
+            request = self.context.get('request')
+            if request:
+                from django.urls import reverse
+                try:
+                    return request.build_absolute_uri(
+                        reverse('document-qr-position-download-document', kwargs={'pk': obj.id})
+                    )
+                except:
+                    # Fallback si l'URL n'existe pas
+                    return f"/api/documents/qr-positions/{obj.id}/download_document/"
+        return None
+    
+    def get_generated_pdf_url(self, obj):
+        """
+        Retourne l'URL SFTP pour le PDF généré.
+        """
+        if obj.generated_pdf:
+            request = self.context.get('request')
+            if request:
+                from django.urls import reverse
+                try:
+                    return request.build_absolute_uri(
+                        reverse('document-qr-position-download-generated-pdf', kwargs={'pk': obj.id})
+                    )
+                except:
+                    # Fallback si l'URL n'existe pas
+                    return f"/api/documents/qr-positions/{obj.id}/download_generated_pdf/"
+        return None
         
     def validate(self, data):
         """

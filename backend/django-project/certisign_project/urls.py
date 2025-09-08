@@ -45,7 +45,10 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
-# Ajout des URLs pour les médias en développement
+# Configuration statique uniquement (les fichiers media sont sur SFTP)
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
+    # Servir uniquement les fichiers statiques, pas les media (qui sont sur SFTP)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    
+    # Note: Les fichiers media sont stockés sur SFTP et servis via des vues spécialisées
+    # Ne pas servir MEDIA_URL depuis le système de fichiers local 

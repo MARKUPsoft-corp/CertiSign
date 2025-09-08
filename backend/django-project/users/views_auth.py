@@ -6,7 +6,8 @@ import logging
 import requests
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.middleware.csrf import get_token
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
@@ -26,6 +27,7 @@ ssl_context.verify_mode = ssl.CERT_NONE
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
+@ensure_csrf_cookie
 def get_active_organizations(request):
     """
     Récupère la liste des organisations actives.

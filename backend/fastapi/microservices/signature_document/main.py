@@ -2,6 +2,7 @@ from fastapi import FastAPI, File, UploadFile, Form, HTTPException, BackgroundTa
 from fastapi.responses import FileResponse, JSONResponse
 from signer import load_private_key, sign_file, load_public_key, verify_signature
 from django_api import store_signature_data, get_signature_data, DJANGO_API_BASE_URL
+from sftp_utils import get_sftp_file_content
 import base64
 import os
 import tempfile
@@ -1192,44 +1193,42 @@ async def verify_document(
             signature_data['signed_file_url'] and 
             not (signature_type == 'ephemeral' and is_expired)):
             try:
-                # Obtenir l'URL complète du document signé
+                # Extraire le chemin du fichier depuis l'URL Django
                 signed_file_url = signature_data['signed_file_url']
-                if not signed_file_url.startswith('http'):
-                    signed_file_url = f"{DJANGO_API_BASE_URL}{signed_file_url}"
+                # L'URL Django est de la forme /media/signatures/signed/...
+                # Nous devons extraire le chemin relatif
+                if signed_file_url.startswith('/media/'):
+                    file_path = signed_file_url[7:]  # Enlever '/media/'
+                else:
+                    file_path = signed_file_url
                 
-                logger.info(f"[{correlation_id}] 🔄 TÉLÉCHARGEMENT EXCLUSIF du document SIGNÉ depuis: {signed_file_url}")
-                logger.info(f"[{correlation_id}] ⚠️ SSL COMPLÈTEMENT DÉSACTIVÉ pour forcer le téléchargement")
+                logger.info(f"[{correlation_id}] 🔄 LECTURE DIRECTE du document SIGNÉ depuis SFTP: {file_path}")
                 
-                # Télécharger avec SSL complètement désactivé
-                async with httpx.AsyncClient(timeout=60.0, verify=False) as client:
-                    logger.info(f"[{correlation_id}] 📥 Envoi de la requête HTTP pour le document SIGNÉ...")
-                    response = await client.get(signed_file_url)
-                    logger.info(f"[{correlation_id}] 📊 Réponse HTTP reçue - Status: {response.status_code}")
+                # Lire directement depuis SFTP
+                signed_document_data = get_sftp_file_content(file_path)
+                
+                if signed_document_data:
+                    signed_filename = signature_data.get('title', f"document_signé_{document_id}.pdf")
                     
-                    if response.status_code == 200:
-                        signed_document_data = response.content
-                        signed_filename = signature_data.get('title', f"document_signé_{document_id}.pdf")
-                        
-                        # S'assurer que le nom de fichier indique que c'est signé
-                        if not 'signé' in signed_filename.lower() and not 'signed' in signed_filename.lower():
-                            name_parts = os.path.splitext(signed_filename)
-                            signed_filename = f"{name_parts[0]}_signé{name_parts[1]}"
-                        
-                        # Encoder en base64 pour l'inclure dans la réponse JSON
-                        signed_document_b64 = base64.b64encode(signed_document_data).decode('utf-8')
-                        response_data["original_document"] = signed_document_b64
-                        response_data["original_filename"] = signed_filename
-                        
-                        logger.info(f"[{correlation_id}] ✅ Document SIGNÉ ajouté à la réponse (taille: {len(signed_document_data)} octets)")
-                        logger.info(f"[{correlation_id}] 📄 Nom du fichier signé: {signed_filename}")
-                        logger.info(f"[{correlation_id}] 🔗 Base64 longueur: {len(signed_document_b64)} caractères")
-                    else:
-                        logger.error(f"[{correlation_id}] ❌ ERREUR HTTP {response.status_code} lors du téléchargement du document SIGNÉ")
-                        logger.error(f"[{correlation_id}] 📝 Contenu de l'erreur: {response.text[:500]}")
-                        logger.error(f"[{correlation_id}] ⚠️ AUCUN DOCUMENT ne sera retourné (pas de fallback vers l'original)")
+                    # S'assurer que le nom de fichier indique que c'est signé
+                    if not 'signé' in signed_filename.lower() and not 'signed' in signed_filename.lower():
+                        name_parts = os.path.splitext(signed_filename)
+                        signed_filename = f"{name_parts[0]}_signé{name_parts[1]}"
+                    
+                    # Encoder en base64 pour l'inclure dans la réponse JSON
+                    signed_document_b64 = base64.b64encode(signed_document_data).decode('utf-8')
+                    response_data["original_document"] = signed_document_b64
+                    response_data["original_filename"] = signed_filename
+                    
+                    logger.info(f"[{correlation_id}] ✅ Document SIGNÉ ajouté à la réponse (taille: {len(signed_document_data)} octets)")
+                    logger.info(f"[{correlation_id}] 📄 Nom du fichier signé: {signed_filename}")
+                    logger.info(f"[{correlation_id}] 🔗 Base64 longueur: {len(signed_document_b64)} caractères")
+                else:
+                    logger.error(f"[{correlation_id}] ❌ ERREUR lors de la lecture du document SIGNÉ depuis SFTP")
+                    logger.error(f"[{correlation_id}] ⚠️ AUCUN DOCUMENT ne sera retourné (pas de fallback vers l'original)")
             
             except Exception as e:
-                logger.error(f"[{correlation_id}] 💥 EXCEPTION lors du téléchargement du document SIGNÉ: {str(e)}")
+                logger.error(f"[{correlation_id}] 💥 EXCEPTION lors de la lecture du document SIGNÉ depuis SFTP: {str(e)}")
                 logger.error(f"[{correlation_id}] 📍 Exception détaillée:", exc_info=True)
                 logger.error(f"[{correlation_id}] ⚠️ AUCUN DOCUMENT ne sera retourné (pas de fallback)")
         

@@ -593,8 +593,7 @@
               <div class="doc-status">
                 <span class="status-badge signed">Signé</span>
                 <div class="doc-actions">
-                  <button class="btn-icon" title="Télécharger"><i class="bi bi-download"></i></button>
-                  <button class="btn-icon" title="Partager"><i class="bi bi-share"></i></button>
+                  <button class="btn-icon" title="Télécharger" @click="downloadSignedDocument(doc)"><i class="bi bi-download"></i></button>
                 </div>
               </div>
             </div>
@@ -662,8 +661,7 @@
                 <div class="doc-status">
                   <span class="status-badge signed">Signé</span>
                   <div class="doc-actions">
-                    <button class="btn-icon" title="Télécharger"><i class="bi bi-download"></i></button>
-                    <button class="btn-icon" title="Partager"><i class="bi bi-share"></i></button>
+                                      <button class="btn-icon" title="Télécharger" @click="downloadSignedDocument(doc)"><i class="bi bi-download"></i></button>
                   </div>
                 </div>
               </div>
@@ -761,7 +759,18 @@
           <iframe v-else-if="previewUrl" :src="previewUrl" class="preview-iframe" title="Aperçu du template"></iframe>
           <div v-else class="preview-error">
             <i class="bi bi-exclamation-triangle-fill"></i>
-            <p>Impossible de charger l'aperçu du template.</p>
+            <p v-if="selectedTemplate?.preview_document">
+              Impossible de charger l'aperçu du template.
+            </p>
+            <p v-else>
+              Ce template n'a pas encore d'aperçu généré. 
+              <br>L'aperçu sera disponible après la génération du PDF avec QR code.
+            </p>
+            <div class="preview-actions">
+              <button class="btn btn-primary" @click="editTemplate(selectedTemplate)">
+                <i class="bi bi-pencil"></i> Modifier le template
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1339,16 +1348,26 @@ async function previewTemplate(template) {
     showPreviewModal.value = true;
     loadingPreview.value = true;
     
-    // Récupérer le blob du fichier d'aperçu
-    const previewBlob = await TemplateService.downloadPreview(template.id);
+    // Vérifier d'abord si le template a un preview_document
+    if (!template.preview_document) {
+      console.warn('Template sans aperçu:', template);
+      previewUrl.value = null;
+      return;
+    }
     
-    // Créer une URL pour le blob
-    const url = URL.createObjectURL(previewBlob);
-    previewUrl.value = url;
+    // Utiliser directement l'URL de l'endpoint preview_document
+    // Django gère l'authentification via les cookies de session
+    const previewUrlValue = TemplateService.getPreviewUrl(template.id);
+    previewUrl.value = previewUrlValue;
     
   } catch (error) {
     console.error('Erreur lors du chargement de l\'aperçu:', error);
     previewUrl.value = null;
+    
+    // Afficher un message d'erreur plus informatif
+    if (error.response?.status === 404) {
+      console.warn('Aperçu non disponible pour ce template');
+    }
   } finally {
     loadingPreview.value = false;
   }
@@ -1595,7 +1614,8 @@ async function loadTemplates() {
       createdAt: new Date(template.created_at),
       pageApplication: template.page_application,
       qrSize: template.qr_size,
-      hasSignature: !!template.signature_image
+      hasSignature: !!template.signature_image,
+      preview_document: template.preview_document
     }));
     
     console.log('Templates chargés:', templates.value.length);
@@ -1662,27 +1682,140 @@ async function viewPendingDocument(doc) {
       throw new Error('Token d\'authentification manquant');
     }
     
-    // Appeler l'API pour récupérer les détails du document avec le PDF généré
+    // Appeler l'API pour récupérer les détails du document
     const response = await axios.get(`https://ppd.camgovca.cm/api/documents/qr-positions/${doc.id}/`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     });
     
-    if (response.data && response.data.generated_pdf) {
-      // Le PDF généré existe, l'ouvrir dans un nouvel onglet
-      console.log('PDF généré trouvé:', response.data.generated_pdf);
-      window.open(response.data.generated_pdf, '_blank');
-    } else if (response.data && response.data.document_file) {
-      // Fallback: utiliser le document original
-      console.log('Utilisation du document original:', response.data.document_file);
-      window.open(response.data.document_file, '_blank');
+    console.log('Réponse API:', response.data);
+    
+    // Utiliser les endpoints SFTP de téléchargement
+    if (response.data && response.data.generated_pdf_url) {
+      // Le PDF généré existe, utiliser l'endpoint de téléchargement SFTP
+      console.log('PDF généré trouvé, téléchargement via SFTP:', response.data.generated_pdf_url);
+      
+      // Créer un lien de téléchargement temporaire
+      const downloadLink = document.createElement('a');
+      downloadLink.href = response.data.generated_pdf_url;
+      downloadLink.download = `document_${doc.id}_generated.pdf`;
+      downloadLink.target = '_blank';
+      
+      // Ajouter le token d'authentification
+      downloadLink.setAttribute('data-token', token);
+      
+      // Déclencher le téléchargement
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      
+    } else if (response.data && response.data.document_file_url) {
+      // Fallback: utiliser le document original via SFTP
+      console.log('Utilisation du document original via SFTP:', response.data.document_file_url);
+      
+      const downloadLink = document.createElement('a');
+      downloadLink.href = response.data.document_file_url;
+      downloadLink.download = `document_${doc.id}_original.pdf`;
+      downloadLink.target = '_blank';
+      downloadLink.setAttribute('data-token', token);
+      
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      
     } else {
-      throw new Error('Aucun fichier PDF disponible pour ce document');
+      // Aucune URL de téléchargement disponible
+      console.warn('Aucune URL de téléchargement trouvée dans la réponse:', response.data);
+      
+      // Afficher un message informatif
+      alert('Ce document n\'a pas encore de fichier PDF généré. Veuillez attendre que le processus de génération soit terminé.');
     }
+    
   } catch (error) {
     console.error('Erreur lors de la récupération du PDF:', error);
+    
+    if (error.response?.status === 404) {
+      alert('Document non trouvé ou fichier non disponible.');
+    } else if (error.response?.status === 403) {
+      alert('Accès refusé. Vérifiez vos permissions.');
+    } else {
     alert(error.response?.data?.detail || error.message || 'Erreur lors du chargement du document');
+    }
+  }
+}
+
+async function downloadSignedDocument(doc) {
+  console.log('Télécharger le document signé:', doc.document_name || doc.name);
+  
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token d\'authentification manquant');
+      return;
+    }
+
+    // Récupérer l'ID de l'organisation actuelle
+    const currentUser = AuthService.getCurrentUser();
+    const organizationId = currentUser?.organization?.id;
+    
+    if (!organizationId) {
+      console.error('ID d\'organisation manquant');
+      return;
+    }
+
+    // Étape 1: Interroger DocumentSignature pour récupérer le document signé
+    const signatureUrl = `https://ppd.camgovca.cm/api/documents/signatures/?document_id=${doc.id}&organization_id=${organizationId}`;
+    
+    const signatureResponse = await axios.get(signatureUrl, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    console.log('Réponse DocumentSignature:', signatureResponse.data);
+
+    if (!signatureResponse.data.results || signatureResponse.data.results.length === 0) {
+      throw new Error('Aucune signature trouvée pour ce document');
+    }
+
+    // Prendre la première signature trouvée
+    const signature = signatureResponse.data.results[0];
+    
+    // Étape 2: Télécharger le document signé
+    const downloadUrl = `https://ppd.camgovca.cm/api/documents/signatures/${signature.document_id}/download/`;
+    
+    const response = await axios.get(downloadUrl, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      responseType: 'blob'
+    });
+
+    // Créer le blob et déclencher le téléchargement
+    const blob = new Blob([response.data], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    
+    // Déterminer le nom du fichier
+    let filename = doc.document_name || doc.name || doc.title || 'document_signe.pdf';
+    if (!filename.endsWith('.pdf')) {
+      filename += '.pdf';
+    }
+    
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Libérer l'URL objet
+    window.URL.revokeObjectURL(url);
+    
+    console.log('Document signé téléchargé avec succès');
+  } catch (error) {
+    console.error('Erreur lors du téléchargement du document signé:', error);
+    alert('Erreur lors du téléchargement du document. Veuillez réessayer.');
   }
 }
 
@@ -5245,5 +5378,52 @@ watch(signedTab, () => {
   .search-input {
     min-width: 200px;
   }
+}
+
+/* Styles pour les actions de l'aperçu */
+.preview-actions {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.preview-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.preview-actions .btn-primary {
+  background: var(--accent-color, #06ffa5);
+  color: white;
+}
+
+.preview-actions .btn-primary:hover {
+  background: var(--primary-color, #3a86ff);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 255, 165, 0.3);
+}
+
+.preview-error {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary, #6c757d);
+}
+
+.preview-error i {
+  font-size: 3rem;
+  color: var(--warning-color, #ffc107);
+  margin-bottom: 1rem;
+}
+
+.preview-error p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
 }
 </style> 

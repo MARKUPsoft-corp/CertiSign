@@ -3,6 +3,7 @@ import uuid
 from django.utils.translation import gettext_lazy as _
 from django.core.files.base import ContentFile
 from users.models import CustomUser
+from .storage import sftp_storage
 
 class DocumentActivity(models.Model):
     """
@@ -88,8 +89,8 @@ class DocumentSignature(models.Model):
     signer_name = models.CharField(_('Nom du signataire'), max_length=255, blank=True, null=True)
     
     # Fichiers du document
-    original_file = models.FileField(_('Fichier original'), upload_to='signatures/original/')
-    signed_file = models.FileField(_('Fichier signé'), upload_to='signatures/signed/')
+    original_file = models.FileField(_('Fichier original'), upload_to='signatures/original/', storage=sftp_storage)
+    signed_file = models.FileField(_('Fichier signé'), upload_to='signatures/signed/', storage=sftp_storage)
     
     # Dates
     created_at = models.DateTimeField(_('Date de création'), auto_now_add=True)
@@ -201,11 +202,11 @@ class DocumentQRPosition(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name=_('ID'))
     
     # Fichier document
-    document_file = models.FileField(_('Fichier document'), upload_to='documents/prepared/')
+    document_file = models.FileField(_('Fichier document'), upload_to='documents/prepared/', storage=sftp_storage)
     document_name = models.CharField(_('Nom du document'), max_length=255)
     
     # NOUVEAU: Fichier PDF généré avec QR code et signature intégrés
-    generated_pdf = models.FileField(_('PDF généré avec QR'), upload_to='documents/generated/', null=True, blank=True)
+    generated_pdf = models.FileField(_('PDF généré avec QR'), upload_to='documents/generated/', storage=sftp_storage, null=True, blank=True)
     
     # Informations de positionnement du QR code
     qr_x_position = models.FloatField(_('Position X du QR code'))
@@ -216,7 +217,7 @@ class DocumentQRPosition(models.Model):
     qr_mode = models.CharField(_('Mode de positionnement'), max_length=20, default='standard')
 
     # NOUVEAU: Informations de signature
-    signature_image = models.FileField(_('Image de signature'), upload_to='signatures/images/', null=True, blank=True)
+    signature_image = models.FileField(_('Image de signature'), upload_to='signatures/images/', storage=sftp_storage, null=True, blank=True)
     signature_positions = models.JSONField(_('Positions de la signature par page'), default=dict, null=True, blank=True)
     signature_size = models.IntegerField(_('Taille de la signature en %'), default=50, null=True, blank=True)
     

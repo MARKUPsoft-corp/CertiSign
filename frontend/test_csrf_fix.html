@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test CSRF Fix</title>
+</head>
+<body>
+    <h1>Test de la Gestion CSRF</h1>
+    <div id="status"></div>
+    <button onclick="testCSRF()">Tester CSRF</button>
+    <button onclick="clearCache()">Nettoyer Cache</button>
+    <button onclick="getOrganizations()">Récupérer Organisations</button>
+    
+    <script>
+        const statusDiv = document.getElementById('status');
+        
+        function log(message) {
+            console.log(message);
+            statusDiv.innerHTML += '<p>' + message + '</p>';
+        }
+        
+        function getCSRFToken() {
+            const name = 'csrftoken';
+            let cookieValue = null;
+            
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            
+            return cookieValue;
+        }
+        
+        async function ensureCSRFToken() {
+            let token = getCSRFToken();
+            
+            if (!token) {
+                log('Pas de token CSRF trouvé, tentative de récupération...');
+                try {
+                    const response = await fetch('https://ppd.camgovca.cm/api/users/organizations/', {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Accept': 'application/json',
+                        }
+                    });
+                    
+                    token = getCSRFToken();
+                    
+                    if (token) {
+                        log('Token CSRF récupéré avec succès: ' + token.substring(0, 20) + '...');
+                    } else {
+                        log('Impossible de récupérer le token CSRF');
+                    }
+                } catch (error) {
+                    log('Erreur lors de la récupération du token CSRF: ' + error.message);
+                }
+            } else {
+                log('Token CSRF déjà présent: ' + token.substring(0, 20) + '...');
+            }
+            
+            return token;
+        }
+        
+        async function testCSRF() {
+            log('=== Test CSRF ===');
+            
+            // Vérifier le token actuel
+            const currentToken = getCSRFToken();
+            log('Token CSRF actuel: ' + (currentToken ? currentToken.substring(0, 20) + '...' : 'Aucun'));
+            
+            // S'assurer d'avoir un token
+            await ensureCSRFToken();
+            
+            // Tester une requête POST
+            try {
+                const token = getCSRFToken();
+                const response = await fetch('https://ppd.camgovca.cm/api/users/auth/with-organization/', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': token
+                    },
+                    body: JSON.stringify({
+                        certificate: 'test',
+                        password: 'test',
+                        organization_id: 'none'
+                    })
+                });
+                
+                log('Réponse du serveur: ' + response.status + ' ' + response.statusText);
+                
+                if (response.status === 403) {
+                    const data = await response.json();
+                    log('Erreur CSRF: ' + JSON.stringify(data));
+                } else {
+                    log('Requête CSRF réussie');
+                }
+            } catch (error) {
+                log('Erreur lors du test CSRF: ' + error.message);
+            }
+        }
+        
+        function clearCache() {
+            log('=== Nettoyage du Cache ===');
+            
+            // Supprimer les cookies
+            document.cookie = 'csrftoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            document.cookie = 'sessionid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            
+            log('Cookies supprimés');
+            
+            // Vérifier
+            const token = getCSRFToken();
+            log('Token CSRF après nettoyage: ' + (token ? token.substring(0, 20) + '...' : 'Aucun'));
+        }
+        
+        async function getOrganizations() {
+            log('=== Récupération des Organisations ===');
+            
+            try {
+                await ensureCSRFToken();
+                
+                const token = getCSRFToken();
+                const response = await fetch('https://ppd.camgovca.cm/api/users/organizations/', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRFToken': token
+                    }
+                });
+                
+                log('Réponse organisations: ' + response.status + ' ' + response.statusText);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log('Organisations récupérées: ' + data.length + ' organisations');
+                } else {
+                    const error = await response.text();
+                    log('Erreur: ' + error);
+                }
+            } catch (error) {
+                log('Erreur lors de la récupération des organisations: ' + error.message);
+            }
+        }
+        
+        // Test automatique au chargement
+        window.onload = function() {
+            log('Page chargée, test automatique...');
+            testCSRF();
+        };
+    </script>
+</body>
+</html> 

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test CSRF Final</title>
+</head>
+<body>
+    <h1>Test Final de la Gestion CSRF</h1>
+    <div id="status"></div>
+    <button onclick="testOrganizations()">Tester Organisations</button>
+    <button onclick="testAuth()">Tester Authentification</button>
+    <button onclick="clearCache()">Nettoyer Cache</button>
+    
+    <script>
+        const statusDiv = document.getElementById('status');
+        
+        function log(message) {
+            console.log(message);
+            statusDiv.innerHTML += '<p>' + message + '</p>';
+        }
+        
+        function getCSRFToken() {
+            const name = 'csrftoken';
+            let cookieValue = null;
+            
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            
+            return cookieValue;
+        }
+        
+        async function testOrganizations() {
+            log('=== Test Organisations ===');
+            
+            try {
+                const response = await fetch('https://ppd.camgovca.cm/api/users/organizations/', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                    }
+                });
+                
+                log('Réponse organisations: ' + response.status + ' ' + response.statusText);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log('Organisations récupérées: ' + data.length + ' organisations');
+                    
+                    // Vérifier le token CSRF
+                    const token = getCSRFToken();
+                    log('Token CSRF après organisations: ' + (token ? token.substring(0, 20) + '...' : 'Aucun'));
+                } else {
+                    const error = await response.text();
+                    log('Erreur: ' + error);
+                }
+            } catch (error) {
+                log('Erreur lors de la récupération des organisations: ' + error.message);
+            }
+        }
+        
+        async function testAuth() {
+            log('=== Test Authentification ===');
+            
+            try {
+                const token = getCSRFToken();
+                log('Token CSRF avant auth: ' + (token ? token.substring(0, 20) + '...' : 'Aucun'));
+                
+                const response = await fetch('https://ppd.camgovca.cm/api/users/auth/with-organization/', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': token || ''
+                    },
+                    body: JSON.stringify({
+                        certificate: 'test',
+                        password: 'test',
+                        organization_id: 'none'
+                    })
+                });
+                
+                log('Réponse auth: ' + response.status + ' ' + response.statusText);
+                
+                if (response.status === 403) {
+                    const data = await response.json();
+                    log('Erreur CSRF: ' + JSON.stringify(data));
+                } else if (response.ok) {
+                    log('Authentification réussie (test)');
+                } else {
+                    const error = await response.text();
+                    log('Erreur auth: ' + error);
+                }
+            } catch (error) {
+                log('Erreur lors du test auth: ' + error.message);
+            }
+        }
+        
+        function clearCache() {
+            log('=== Nettoyage du Cache ===');
+            
+            // Supprimer les cookies
+            document.cookie = 'csrftoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            document.cookie = 'sessionid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            
+            log('Cookies supprimés');
+            
+            // Vérifier
+            const token = getCSRFToken();
+            log('Token CSRF après nettoyage: ' + (token ? token.substring(0, 20) + '...' : 'Aucun'));
+        }
+        
+        // Test automatique au chargement
+        window.onload = function() {
+            log('Page chargée, test automatique...');
+            testOrganizations();
+        };
+    </script>
+</body>
+</html> 

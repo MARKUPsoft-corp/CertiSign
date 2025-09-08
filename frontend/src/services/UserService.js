@@ -4,7 +4,7 @@
  * Utilise CryptoService pour les communications sécurisées
  */
 import CryptoService from './CryptoService';
-import axios from 'axios';
+import axios from '@/services/axiosConfig';
 
 class UserService {
   constructor() {
@@ -469,6 +469,7 @@ class UserService {
       console.log('Récupération de la liste des organisations');
       
       // Appel à l'API pour récupérer la liste des organisations
+      // L'intercepteur global ajoute automatiquement le token CSRF si nécessaire
       const response = await axios.get(
         `${this.baseUrl}/api/users/organizations/`,
         {
@@ -498,6 +499,7 @@ class UserService {
       console.log('Authentification avec organisation:', authData.organization_id);
       
       // Appel à l'API d'authentification avec organisation
+      // L'intercepteur global ajoute automatiquement le token CSRF
       const response = await axios.post(
         `${this.baseUrl}/api/users/auth/with-organization/`,
         authData,

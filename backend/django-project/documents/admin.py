@@ -141,16 +141,30 @@ class DocumentSignatureAdmin(admin.ModelAdmin):
     has_signed.short_description = _('Signé')
     
     def display_original_file(self, obj):
-        """Affiche un lien pour prévisualiser le document original."""
+        """Affiche un lien pour prévisualiser le document original via SFTP."""
         if obj.original_file:
-            return format_html('<a href="{}" target="_blank">Prévisualiser</a>', obj.original_file.url)
+            # Utiliser l'endpoint SFTP au lieu de l'URL directe
+            sftp_url = f"/api/documents/signatures/{obj.document_id}/download/"
+            return format_html(
+                '<a href="{}" target="_blank" style="color: #007cba; text-decoration: none;">'
+                '<i class="fas fa-file-pdf"></i> Prévisualiser via SFTP'
+                '</a>',
+                sftp_url
+            )
         return "-"
     display_original_file.short_description = _('Document original')
     
     def display_signed_file(self, obj):
-        """Affiche un lien pour prévisualiser le document signé."""
+        """Affiche un lien pour prévisualiser le document signé via SFTP."""
         if obj.signed_file:
-            return format_html('<a href="{}" target="_blank">Prévisualiser</a>', obj.signed_file.url)
+            # Utiliser l'endpoint SFTP au lieu de l'URL directe
+            sftp_url = f"/api/documents/signatures/{obj.document_id}/download/"
+            return format_html(
+                '<a href="{}" target="_blank" style="color: #007cba; text-decoration: none;">'
+                '<i class="fas fa-file-pdf"></i> Prévisualiser via SFTP'
+                '</a>',
+                sftp_url
+            )
         return "-"
     display_signed_file.short_description = _('Document signé')
     
@@ -197,25 +211,40 @@ class DocumentQRPositionAdmin(admin.ModelAdmin):
     has_generated_pdf.short_description = _('PDF Généré')
     
     def signature_preview(self, obj):
-        """Affiche un aperçu de l'image de signature."""
+        """Affiche un aperçu de l'image de signature via SFTP."""
         if obj.signature_image:
-            return format_html('<img src="{}" alt="Signature" style="max-height: 80px; max-width: 200px;" />', obj.signature_image.url)
+            # Utiliser l'endpoint SFTP au lieu de l'URL directe
+            sftp_url = f"/api/documents/qr-positions/{obj.id}/download_signature_image/"
+            return format_html(
+                '<div style="display: flex; align-items: center; gap: 10px;">'
+                '<img src="{}" alt="Signature" style="max-height: 80px; max-width: 200px;" />'
+                '<a href="{}" target="_blank" style="color: #007cba; text-decoration: none; font-size: 12px;">'
+                '<i class="fas fa-download"></i> Télécharger'
+                '</a>'
+                '</div>',
+                sftp_url, sftp_url
+            )
         return "Aucune signature"
     signature_preview.short_description = _('Aperçu signature')
     
     def generated_pdf_preview(self, obj):
-        """Affiche un lien vers le PDF généré avec QR et signature intégrés."""
+        """Affiche un lien vers le PDF généré via SFTP."""
         if obj.generated_pdf:
+            # Utiliser l'endpoint SFTP au lieu de l'URL directe
+            sftp_url = f"/api/documents/qr-positions/{obj.id}/download_generated_pdf/"
+            file_size_kb = obj.generated_pdf.size / 1024 if obj.generated_pdf.size else 0
             return format_html(
                 '<div style="display: flex; align-items: center; gap: 10px;">'
                 '<a href="{}" target="_blank" style="color: #007cba; text-decoration: none;">'
                 '<i class="fas fa-file-pdf" style="font-size: 24px; color: #d32f2f;"></i> '
                 'Voir le PDF généré'
                 '</a>'
-                '<span style="color: #666; font-size: 12px;">({:.1f} KB)</span>'
+                '<span style="color: #666; font-size: 12px;">({} KB)</span>'
+                '<a href="{}" target="_blank" style="color: #007cba; text-decoration: none; font-size: 12px;">'
+                '<i class="fas fa-download"></i> Télécharger'
+                '</a>'
                 '</div>',
-                obj.generated_pdf.url,
-                obj.generated_pdf.size / 1024 if obj.generated_pdf.size else 0
+                sftp_url, f"{file_size_kb:.1f}", sftp_url
             )
         return format_html(
             '<span style="color: #999; font-style: italic;">'

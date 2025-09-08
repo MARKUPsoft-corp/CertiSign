@@ -17,6 +17,7 @@ import logging
 
 from .models import DocumentSignature, DocumentActivity
 from .serializers import DocumentSignatureSerializer
+from .utils import get_sftp_file_response, check_sftp_connection
 from users.models import ActivityLog
 from rest_framework.decorators import authentication_classes, permission_classes
 
@@ -104,11 +105,12 @@ class DocumentSignatureViewSet(viewsets.ModelViewSet):
         if not file_to_download:
             return Response({"error": "Aucun fichier disponible pour ce document"}, status=status.HTTP_404_NOT_FOUND)
         
-        # Renvoyer le fichier comme réponse de téléchargement
-        file_handle = file_to_download.open()
-        response = FileResponse(file_handle, content_type='application/octet-stream')
-        response['Content-Disposition'] = f'attachment; filename="{file_to_download.name}"'
-        return response
+        # Utiliser l'utilitaire SFTP pour le téléchargement
+        import os
+        return get_sftp_file_response(
+            file_to_download,
+            filename=os.path.basename(file_to_download.name) if file_to_download.name else None
+        )
         
     @action(detail=True, methods=['get'])
     def download_original(self, request, document_id=None):
@@ -133,11 +135,12 @@ class DocumentSignatureViewSet(viewsets.ModelViewSet):
         if not file_to_download:
             return Response({"error": "Aucun fichier original disponible pour ce document"}, status=status.HTTP_404_NOT_FOUND)
         
-        # Renvoyer le fichier comme réponse de téléchargement
-        file_handle = file_to_download.open()
-        response = FileResponse(file_handle, content_type='application/octet-stream')
-        response['Content-Disposition'] = f'attachment; filename="original_{file_to_download.name}"'
-        return response
+        # Utiliser l'utilitaire SFTP pour le téléchargement
+        import os
+        return get_sftp_file_response(
+            file_to_download,
+            filename=f"original_{os.path.basename(file_to_download.name)}" if file_to_download.name else None
+        )
     
     @action(detail=False, methods=['post'], parser_classes=[MultiPartParser, FormParser])
     def store_signature(self, request):

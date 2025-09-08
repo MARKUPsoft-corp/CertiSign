@@ -1247,7 +1247,8 @@ function getPositionData() {
     }
     
     signatureData = {
-      imageUrl: signatureImageUrl.value,
+      image: signatureImage.value, // Transmettre le Blob directement au lieu de l'URL
+      imageUrl: signatureImageUrl.value, // Garder l'URL pour l'affichage
       size: signatureSize.value,
       pages: signaturePages,
       positions: signaturePositionsData

@@ -1,52 +1,71 @@
 from django.shortcuts import render
-from rest_framework import viewsets, permissions, status, generics
-from rest_framework.response import Response
+from rest_framework import viewsets, status, permissions, generics
 from rest_framework.decorators import action
+from rest_framework.response import Response
 from django.http import HttpResponse
 from django.conf import settings
 import os
-
 from .models import SignatureTemplate
 from .serializers import (
     SignatureTemplateSerializer,
     SignatureTemplateListSerializer,
     SignatureTemplateCreateSerializer
 )
+from documents.utils import get_sftp_file_response, get_sftp_preview_response  # Ajout de l'import SFTP
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
+class IsOwnerOrOrganizationMember(permissions.BasePermission):
     """
-    Permission personnalisée pour permettre uniquement aux propriétaires d'un objet de le modifier.
+    Permission personnalisée pour permettre aux propriétaires et membres d'organisation de gérer les templates.
     """
     def has_object_permission(self, request, view, obj):
+        user = request.user
+        
         # Les permissions de lecture sont autorisées pour toute requête
         if request.method in permissions.SAFE_METHODS:
             return True
         
-        # Les permissions d'écriture sont uniquement autorisées pour le propriétaire
-        return obj.user == request.user
+        # Le propriétaire du template peut tout faire
+        if obj.user == user:
+            return True
+        
+        # Les collaborateurs et signataires peuvent gérer les templates de leur organisation
+        if user.organization and obj.organization_name == user.organization.name:
+            # Vérifier le rôle de l'utilisateur
+            if user.is_collaborator or user.is_signer or user.is_org_admin:
+                return True
+        
+        # Les super admins Django peuvent tout faire
+        if user.is_superuser:
+            return True
+        
+        # Les super admins personnalisés peuvent tout faire
+        if hasattr(user, 'is_superadmin') and user.is_superadmin:
+            return True
+        
+        return False
 
 class SignatureTemplateViewSet(viewsets.ModelViewSet):
     """
     API endpoint pour les templates de signature.
     """
     queryset = SignatureTemplate.objects.all()
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrOrganizationMember]
     
     def get_serializer_class(self):
-        if self.action == 'list':
-            return SignatureTemplateListSerializer
-        elif self.action == 'create':
+        if self.action == 'create':
             return SignatureTemplateCreateSerializer
+        elif self.action in ['list', 'retrieve']:
+            return SignatureTemplateListSerializer
         return SignatureTemplateSerializer
     
     def get_queryset(self):
-        """
-        Filtrer les templates selon les règles métier :
-        1. Si un organization_name est fourni : seulement les templates de cette organisation
-        2. Si l'utilisateur appartient à une organisation : templates de son organisation
-        3. Si l'utilisateur n'appartient à aucune organisation : seulement ses propres templates
-        """
         user = self.request.user
+        
+        # Les super admins peuvent voir tous les templates
+        if user.is_superuser:
+            return SignatureTemplate.objects.all().order_by('-created_at')
+        
+        # Filtrer par organisation si spécifié
         organization_name = self.request.query_params.get('organization_name', None)
 
         if organization_name:
@@ -73,6 +92,25 @@ class SignatureTemplateViewSet(viewsets.ModelViewSet):
             return SignatureTemplate.objects.filter(user=user).order_by('-created_at')
     
     @action(detail=True, methods=['get'])
+    def preview_document(self, request, pk=None):
+        """
+        Afficher l'aperçu du document dans l'iframe (pas de téléchargement)
+        """
+        template = self.get_object()
+        if not template.preview_document:
+            return Response(
+                {"detail": "Aucun aperçu disponible pour ce template."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Utiliser l'utilitaire SFTP pour l'affichage (pas le téléchargement)
+        import os
+        return get_sftp_preview_response(
+            template.preview_document,
+            content_type='application/pdf'
+        )
+    
+    @action(detail=True, methods=['get'])
     def download_preview(self, request, pk=None):
         """
         Télécharger l'aperçu du document généré
@@ -84,20 +122,12 @@ class SignatureTemplateViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_404_NOT_FOUND
             )
         
-        # Construire le chemin du fichier
-        file_path = os.path.join(settings.MEDIA_ROOT, template.preview_document.name)
-        
-        if not os.path.exists(file_path):
-            return Response(
-                {"detail": "Le fichier d'aperçu n'existe pas."},
-                status=status.HTTP_404_NOT_FOUND
-            )
-        
-        # Ouvrir et retourner le fichier
-        with open(file_path, 'rb') as f:
-            response = HttpResponse(f.read(), content_type='application/pdf')
-            response['Content-Disposition'] = f'attachment; filename="{template.get_file_name()}"'
-            return response
+        # Utiliser l'utilitaire SFTP pour le téléchargement
+        import os
+        return get_sftp_file_response(
+            template.preview_document,
+            filename=os.path.basename(template.preview_document.name) if template.preview_document.name else None
+        )
     
     @action(detail=True, methods=['get'])
     def download_original(self, request, pk=None):
@@ -111,20 +141,31 @@ class SignatureTemplateViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_404_NOT_FOUND
             )
         
-        # Construire le chemin du fichier
-        file_path = os.path.join(settings.MEDIA_ROOT, template.original_document.name)
-        
-        if not os.path.exists(file_path):
+        # Utiliser l'utilitaire SFTP pour le téléchargement
+        import os
+        return get_sftp_file_response(
+            template.original_document,
+            filename=os.path.basename(template.original_document.name) if template.original_document.name else None
+        )
+    
+    @action(detail=True, methods=['get'])
+    def download_signature_image(self, request, pk=None):
+        """
+        Télécharger l'image de signature
+        """
+        template = self.get_object()
+        if not template.signature_image:
             return Response(
-                {"detail": "Le fichier original n'existe pas."},
+                {"detail": "Aucune image de signature disponible pour ce template."},
                 status=status.HTTP_404_NOT_FOUND
             )
         
-        # Ouvrir et retourner le fichier
-        with open(file_path, 'rb') as f:
-            response = HttpResponse(f.read(), content_type='application/pdf')
-            response['Content-Disposition'] = f'attachment; filename="{template.get_file_name()}"'
-            return response
+        # Utiliser l'utilitaire SFTP pour le téléchargement
+        import os
+        return get_sftp_file_response(
+            template.signature_image,
+            filename=os.path.basename(template.signature_image.name) if template.signature_image.name else None
+        )
 
 # Vues simples pour les opérations de liste et de détail
 class SignatureTemplateList(generics.ListCreateAPIView):
@@ -150,7 +191,7 @@ class SignatureTemplateDetail(generics.RetrieveUpdateDestroyAPIView):
     Récupère, met à jour ou supprime un template de signature.
     """
     serializer_class = SignatureTemplateSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrOrganizationMember]
     
     def get_queryset(self):
         user = self.request.user

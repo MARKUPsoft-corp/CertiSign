@@ -167,8 +167,25 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# Configuration SFTP pour le stockage des fichiers
+# Configuration SFTP pour le stockage des fichiers
+DEFAULT_FILE_STORAGE = 'storages.backends.sftpstorage.SFTPStorage'
+
+# Configuration du serveur SFTP
+SFTP_STORAGE_HOST = config('SFTP_HOST', default='192.168.2.102')
+SFTP_STORAGE_ROOT = config('SFTP_ROOT_PATH', default='/mnt/NFS_Storage_Pool2/Disk1/ssatl/media/')
+SFTP_STORAGE_PARAMS = {
+    'username': config('SFTP_USERNAME', default=''),
+    'password': config('SFTP_PASSWORD', default=''),
+    'port': config('SFTP_PORT', default=22, cast=int),
+    'timeout': 30,
+    'allow_agent': False,
+    'look_for_keys': False,
+}
+
+# Configuration des URLs pour les fichiers média
 MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Gardé pour compatibilité
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
