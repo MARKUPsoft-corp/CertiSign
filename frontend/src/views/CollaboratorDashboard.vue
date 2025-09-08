@@ -1326,7 +1326,8 @@ function onTemplateCreated(templateData) {
     createdAt: new Date(templateData.createdAt),
     pageApplication: templateData.pageApplication,
     qrSize: templateData.qrSize,
-    hasSignature: templateData.hasSignature
+    hasSignature: templateData.hasSignature,
+    preview_document: templateData.preview_document
   };
   
   templates.value.unshift(newTemplateForList);
@@ -1336,6 +1337,11 @@ function onTemplateCreated(templateData) {
   
   // Passer à la section templates pour voir le nouveau template
   activeSection.value = 'templates';
+  
+  // Afficher automatiquement l'aperçu du template créé
+  setTimeout(() => {
+    previewTemplate(newTemplateForList);
+  }, 500); // Petit délai pour laisser le temps à l'interface de se mettre à jour
   
   // Optionnel: afficher un message de succès
   console.log('Template ajouté à la liste avec succès');

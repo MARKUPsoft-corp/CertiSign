@@ -581,6 +581,9 @@ async function saveTemplate() {
     saveStatus.value = 'success';
     
     // Émettre un événement pour informer le parent
+    // Récupérer le template complet depuis l'API pour avoir tous les champs
+    const fullTemplate = await TemplateService.getTemplate(response.id);
+    
     emit('template-created', {
       id: response.id,
       name: templateApiData.name,
@@ -588,7 +591,8 @@ async function saveTemplate() {
       createdAt: new Date().toISOString(),
       qrSize: templateApiData.qr_size,
       pageApplication: templateApiData.page_application,
-      hasSignature: !!templateApiData.signature_image
+      hasSignature: !!templateApiData.signature_image,
+      preview_document: fullTemplate.preview_document
     });
     
   } catch (error) {
