@@ -499,7 +499,7 @@ class DocumentQRPositionViewSet(viewsets.ModelViewSet):
             print("Fichiers reçus:", request.FILES)
             
             # Créer le sérialiseur avec les données
-            serializer = self.get_serializer(data=data, files=request.FILES)
+            serializer = self.get_serializer(data=data)
             
             # Valider les données avec détails des erreurs
             if not serializer.is_valid():
