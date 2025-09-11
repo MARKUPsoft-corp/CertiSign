@@ -42,8 +42,9 @@ class DocumentSignatureViewSet(viewsets.ModelViewSet):
         user = self.request.user
         queryset = DocumentSignature.objects.all()
         
-        # Filtrage par organisation si spécifié dans les paramètres de requête
+        # Filtrage par organisation et document_id si spécifiés dans les paramètres de requête
         organization_id = self.request.query_params.get('organization_id')
+        document_id = self.request.query_params.get('document_id')
         
         # Pour les utilisateurs non authentifiés, aucune signature n'est visible
         if not user.is_authenticated:
@@ -52,7 +53,9 @@ class DocumentSignatureViewSet(viewsets.ModelViewSet):
         # Pour les superadmins, montrer toutes les signatures (avec filtres éventuels)
         if user.is_superadmin:
             if organization_id:
-                return queryset.filter(organization_id=organization_id)
+                queryset = queryset.filter(organization_id=organization_id)
+            if document_id:
+                queryset = queryset.filter(document_id=document_id)
             return queryset
         
         # Pour tous les autres utilisateurs (admin org, collaborateur, signataire),
@@ -61,13 +64,19 @@ class DocumentSignatureViewSet(viewsets.ModelViewSet):
             # Si un organization_id est spécifié, vérifier qu'il correspond à l'organisation de l'utilisateur
             if organization_id:
                 if str(user.organization.id) == organization_id:
-                    return queryset.filter(organization=user.organization)
+                    queryset = queryset.filter(organization=user.organization)
                 else:
                     # L'utilisateur demande des données d'une autre organisation
                     return DocumentSignature.objects.none()
             else:
                 # Sans filtre spécifique, montrer les documents de l'organisation de l'utilisateur
-                return queryset.filter(organization=user.organization)
+                queryset = queryset.filter(organization=user.organization)
+            
+            # Appliquer le filtre document_id si spécifié
+            if document_id:
+                queryset = queryset.filter(document_id=document_id)
+                
+            return queryset
         
         # Si l'utilisateur n'a pas d'organisation, montrer ses propres documents
         # (utilisateurs individuels sans organisation)
@@ -78,9 +87,13 @@ class DocumentSignatureViewSet(viewsets.ModelViewSet):
         else:
             # Montrer SEULEMENT les documents dont cet utilisateur est propriétaire
             # ET qui n'appartiennent à aucune organisation (sécurité)
-            return queryset.filter(
-                models.Q(owner=user) & models.Q(organization__isnull=True)
-            )
+            queryset = queryset.filter(owner=user, organization__isnull=True)
+            
+            # Appliquer le filtre document_id si spécifié
+            if document_id:
+                queryset = queryset.filter(document_id=document_id)
+                
+            return queryset
     
     @action(detail=True, methods=['get'])
     def download(self, request, document_id=None):

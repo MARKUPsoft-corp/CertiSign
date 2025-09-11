@@ -1216,11 +1216,11 @@ async function startSigningProcess() {
             } else {
               console.log('🔧 Traitement comme base64 brut...');
               // Si ce n'est pas une URL, traiter comme du base64 brut
-              let imageType = 'png';
-              if (signatureImage.startsWith('/9j/')) {
-                imageType = 'jpeg';
-              }
-              signatureImage = `data:image/${imageType};base64,${signatureImage}`;
+          let imageType = 'png';
+          if (signatureImage.startsWith('/9j/')) {
+            imageType = 'jpeg';
+          }
+          signatureImage = `data:image/${imageType};base64,${signatureImage}`;
               console.log('✅ Image corrigée en base64:', signatureImage.substring(0, 100) + '...');
             }
           } catch (error) {
