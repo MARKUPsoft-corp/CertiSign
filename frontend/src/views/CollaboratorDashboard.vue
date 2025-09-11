@@ -1350,6 +1350,7 @@ function onTemplateCreated(templateData) {
 // Fonction pour afficher l'aperçu d'un template
 async function previewTemplate(template) {
   try {
+    console.log('🔍 [DEBUG] Ouverture de l\'aperçu pour template:', template);
     selectedTemplate.value = template;
     showPreviewModal.value = true;
     loadingPreview.value = true;
@@ -1361,10 +1362,18 @@ async function previewTemplate(template) {
       return;
     }
     
-    // Utiliser directement l'URL de l'endpoint preview_document
-    // Django gère l'authentification via les cookies de session
+    // Utiliser directement l'URL de l'endpoint preview_document avec cache-busting
     const previewUrlValue = TemplateService.getPreviewUrl(template.id);
-    previewUrl.value = previewUrlValue;
+    console.log('🔍 [DEBUG] URL d\'aperçu générée:', previewUrlValue);
+    
+    // Forcer le rechargement en réinitialisant d'abord l'URL
+    previewUrl.value = null;
+    
+    // Puis définir la nouvelle URL après un petit délai
+    setTimeout(() => {
+      previewUrl.value = previewUrlValue;
+      console.log('✅ [DEBUG] URL d\'aperçu définie:', previewUrl.value);
+    }, 100);
     
   } catch (error) {
     console.error('Erreur lors du chargement de l\'aperçu:', error);
@@ -1442,18 +1451,18 @@ async function editTemplate(template) {
     
     // Préparer la structure des données pour QrPositioner
     const qrPositionsData = {
-      qr: {
-        size: templateDetails.qr_size,
+        qr: {
+          size: templateDetails.qr_size,
         positions: templateDetails.qr_positions || {},
-        pages: templateDetails.selected_pages && templateDetails.selected_pages.length > 0 ? 
+          pages: templateDetails.selected_pages && templateDetails.selected_pages.length > 0 ? 
                templateDetails.selected_pages : "all"
-      },
-      mode: templateDetails.page_application,
+        },
+        mode: templateDetails.page_application,
       signature: templateDetails.signature_positions && Object.keys(templateDetails.signature_positions).length > 0 ? {
-        positions: templateDetails.signature_positions,
+          positions: templateDetails.signature_positions,
         size: templateDetails.signature_size || 50,
         image: signatureImageUrl
-      } : null
+        } : null
     };
     
     console.log("🔍 [DEBUG] Structure des données préparée pour QrPositioner:", qrPositionsData);
@@ -1558,15 +1567,22 @@ async function updateTemplate() {
     // Mettre à jour le template via l'API
     await TemplateService.updateTemplate(editingTemplate.value.id, templateData);
     
-    // Mettre à jour le template dans la liste locale
+    // Récupérer le template complet mis à jour depuis l'API pour avoir le nouveau preview_document
+    const updatedTemplate = await TemplateService.getTemplate(editingTemplate.value.id);
+    console.log('✅ [DEBUG] Template mis à jour récupéré:', updatedTemplate);
+    
+    // Mettre à jour le template dans la liste locale avec toutes les nouvelles données
     const index = templates.value.findIndex(t => t.id === editingTemplate.value.id);
     if (index !== -1) {
       templates.value[index] = {
         ...templates.value[index],
-        name: templateData.name,
-        qrSize: templateData.qr_size,
-        pageApplication: templateData.page_application,
+        name: updatedTemplate.name,
+        qrSize: updatedTemplate.qr_size,
+        pageApplication: updatedTemplate.page_application,
+        hasSignature: !!updatedTemplate.signature_image,
+        preview_document: updatedTemplate.preview_document // ← Nouveau aperçu mis à jour
       };
+      console.log('✅ [DEBUG] Template mis à jour dans la liste locale:', templates.value[index]);
     }
     
     // Afficher un message de succès

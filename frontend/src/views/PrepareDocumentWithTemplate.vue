@@ -478,12 +478,12 @@ async function loadTemplateDetails(templateId) {
       qr_position: {
         mode: templateDetails.page_application || 'all',
         size: templateDetails.qr_size || 'medium',
-        positions: templateDetails.qr_positions?.positions || templateDetails.qr_positions || [],
+        positions: templateDetails.qr_positions || {}, // ← CORRECTION : utiliser directement qr_positions
         pages: templateDetails.selected_pages || []
       },
       signature: templateDetails.signature_image ? {
         image: templateDetails.signature_image,
-        positions: templateDetails.signature_positions || [],
+        positions: templateDetails.signature_positions || {}, // ← CORRECTION : utiliser directement signature_positions
         size: templateDetails.signature_size || 50
       } : null
     };

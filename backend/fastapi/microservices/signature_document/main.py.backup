@@ -635,43 +635,14 @@ def add_signature_image_to_pdf(pdf_data: bytes, signature_image_data: str, signa
                 
             except base64.binascii.Error as e:
                 logger.error(f"Erreur de décodage base64: {str(e)}")
-                # Essayer de nettoyer la chaîne base64 et ajouter le padding si nécessaire
+                # Essayer de nettoyer la chaîne base64 et réessayer
                 clean_image_data = ''.join(image_data.split())  # Supprimer les espaces
-                logger.info(f"🔧 Données nettoyées, longueur: {len(clean_image_data)}")
-                
-                # Supprimer les caractères non-base64
-                import re
-                clean_image_data = re.sub(r'[^A-Za-z0-9+/=]', '', clean_image_data)
-                logger.info(f"🔧 Caractères invalides supprimés, nouvelle longueur: {len(clean_image_data)}")
-                
-                # Ajouter le padding base64 si nécessaire
-                padding_needed = 4 - (len(clean_image_data) % 4)
-                if padding_needed != 4:
-                    clean_image_data += '=' * padding_needed
-                    logger.info(f"Padding ajouté: {padding_needed} caractères '=' - Nouvelle longueur: {len(clean_image_data)}")
-                
                 try:
-                    # Essayer avec validate=False pour ignorer les erreurs de format
-                    image_bytes = base64.b64decode(clean_image_data, validate=False)
-                    logger.info(f"✅ Image décodée après nettoyage et padding (validate=False), taille: {len(image_bytes)} octets")
+                    image_bytes = base64.b64decode(clean_image_data)
+                    logger.info(f"Image décodée après nettoyage, taille: {len(image_bytes)} octets")
                 except Exception as e2:
-                    logger.error(f"❌ Échec du décodage même après nettoyage et padding: {str(e2)}")
-                    logger.error(f"❌ Longueur finale des données: {len(clean_image_data)}")
-                    logger.error(f"❌ Échantillon des données finales: {clean_image_data[:100]}...")
-                    
-                    # Essayer un nettoyage plus agressif
-                    import re
-                    ultra_clean_data = re.sub(r'[^A-Za-z0-9+/=]', '', clean_image_data)
-                    padding_needed = 4 - (len(ultra_clean_data) % 4)
-                    if padding_needed != 4:
-                        ultra_clean_data += '=' * padding_needed
-                    
-                    try:
-                        image_bytes = base64.b64decode(ultra_clean_data)
-                        logger.info(f"✅ Image décodée après nettoyage ultra-agressif, taille: {len(image_bytes)} octets")
-                    except Exception as e3:
-                        logger.error(f"❌ Échec définitif du décodage: {str(e3)}")
-                        return pdf_data
+                    logger.error(f"Échec du décodage même après nettoyage: {str(e2)}")
+                    return pdf_data
             
         except Exception as e:
             logger.error(f"Erreur lors du décodage de l'image de signature: {str(e)}")

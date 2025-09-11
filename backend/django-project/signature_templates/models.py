@@ -8,15 +8,33 @@ User = get_user_model()
 
 def template_original_path(instance, filename):
     """Chemin de stockage pour les documents originaux"""
-    return f'templates/{instance.user.id}/original/{filename}'
+    # Gérer le cas où l'utilisateur n'est pas encore assigné (lors de la création)
+    if hasattr(instance, 'user') and instance.user:
+        user_id = instance.user.id
+    else:
+        # Utiliser un ID temporaire ou essayer de récupérer l'utilisateur depuis le contexte
+        user_id = 'temp'
+    return f'templates/{user_id}/original/{filename}'
 
 def template_signature_path(instance, filename):
     """Chemin de stockage pour les images de signature"""
-    return f'templates/{instance.user.id}/signatures/{filename}'
+    # Gérer le cas où l'utilisateur n'est pas encore assigné (lors de la création)
+    if hasattr(instance, 'user') and instance.user:
+        user_id = instance.user.id
+    else:
+        # Utiliser un ID temporaire ou essayer de récupérer l'utilisateur depuis le contexte
+        user_id = 'temp'
+    return f'templates/{user_id}/signatures/{filename}'
 
 def template_preview_path(instance, filename):
     """Chemin de stockage pour les aperçus PDF générés"""
-    return f'templates/{instance.user.id}/previews/{filename}'
+    # Gérer le cas où l'utilisateur n'est pas encore assigné (lors de la création)
+    if hasattr(instance, 'user') and instance.user:
+        user_id = instance.user.id
+    else:
+        # Utiliser un ID temporaire ou essayer de récupérer l'utilisateur depuis le contexte
+        user_id = 'temp'
+    return f'templates/{user_id}/previews/{filename}'
 
 class SignatureTemplate(models.Model):
     """Modèle pour les templates de signature"""

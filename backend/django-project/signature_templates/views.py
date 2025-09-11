@@ -160,11 +160,21 @@ class SignatureTemplateViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_404_NOT_FOUND
             )
         
-        # Utiliser l'utilitaire SFTP pour le téléchargement
+        # Utiliser l'utilitaire SFTP pour le téléchargement avec le bon content-type
         import os
+        import mimetypes
+        
+        # Déterminer le type MIME de l'image
+        content_type = 'image/jpeg'  # Par défaut
+        if template.signature_image.name:
+            mime_type, _ = mimetypes.guess_type(template.signature_image.name)
+            if mime_type and mime_type.startswith('image/'):
+                content_type = mime_type
+        
         return get_sftp_file_response(
             template.signature_image,
-            filename=os.path.basename(template.signature_image.name) if template.signature_image.name else None
+            filename=os.path.basename(template.signature_image.name) if template.signature_image.name else None,
+            content_type=content_type
         )
 
 # Vues simples pour les opérations de liste et de détail

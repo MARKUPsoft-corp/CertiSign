@@ -64,7 +64,6 @@ class SignatureTemplateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Assurez-vous que l'utilisateur actuel est défini comme propriétaire
         user = self.context['request'].user
-        validated_data['user'] = user
         
         # Récupérer les informations sur l'organisation de l'utilisateur si disponibles
         if user.organization:
@@ -73,7 +72,66 @@ class SignatureTemplateSerializer(serializers.ModelSerializer):
         
         validated_data['user_role'] = getattr(user, 'role', 'user')
         
-        return super().create(validated_data)
+        # Extraire les fichiers des validated_data pour les traiter séparément
+        files_data = {}
+        if 'original_document' in validated_data:
+            files_data['original_document'] = validated_data.pop('original_document')
+        if 'signature_image' in validated_data:
+            files_data['signature_image'] = validated_data.pop('signature_image')
+        if 'preview_document' in validated_data:
+            files_data['preview_document'] = validated_data.pop('preview_document')
+        
+        # Créer l'instance AVEC l'utilisateur mais SANS les fichiers d'abord
+        validated_data['user'] = user
+        instance = SignatureTemplate.objects.create(**validated_data)
+        
+        print(f"✅ [DEBUG] Template créé avec ID {instance.id} et user_id {instance.user.id}")
+        
+        # Maintenant traiter les fichiers un par un
+        if 'original_document' in files_data:
+            instance.original_document = files_data['original_document']
+            print(f"✅ [DEBUG] Document original assigné: {instance.original_document.name}")
+        
+        if 'signature_image' in files_data:
+            instance.signature_image = files_data['signature_image']
+            print(f"✅ [DEBUG] Image de signature assignée: {instance.signature_image.name}")
+        
+        if 'preview_document' in files_data:
+            instance.preview_document = files_data['preview_document']
+            print(f"✅ [DEBUG] Document de prévisualisation assigné: {instance.preview_document.name}")
+        
+        # Sauvegarder avec les fichiers
+        if files_data:
+            instance.save()
+            print(f"✅ [DEBUG] Template sauvegardé avec les fichiers")
+        
+        return instance
+    
+    def update(self, instance, validated_data):
+        print(f"🔍 [DEBUG BACKEND] Mise à jour du template {instance.id}")
+        print(f"🔍 [DEBUG BACKEND] Données reçues: {list(validated_data.keys())}")
+        
+        # Vérifier si un nouveau preview_document est fourni
+        if 'preview_document' in validated_data:
+            old_preview = instance.preview_document.name if instance.preview_document else None
+            print(f"🔍 [DEBUG BACKEND] Ancien preview: {old_preview}")
+            print(f"🔍 [DEBUG BACKEND] Nouveau preview: {validated_data['preview_document'].name}")
+            
+            # Supprimer l'ancien fichier si il existe
+            if instance.preview_document:
+                try:
+                    instance.preview_document.delete(save=False)
+                    print(f"✅ [DEBUG BACKEND] Ancien fichier supprimé")
+                except Exception as e:
+                    print(f"⚠️ [DEBUG BACKEND] Erreur lors de la suppression: {e}")
+        
+        # Mettre à jour l'instance
+        updated_instance = super().update(instance, validated_data)
+        
+        print(f"✅ [DEBUG BACKEND] Template mis à jour avec succès")
+        print(f"✅ [DEBUG BACKEND] Nouveau preview: {updated_instance.preview_document.name if updated_instance.preview_document else None}")
+        
+        return updated_instance
 
 class SignatureTemplateListSerializer(serializers.ModelSerializer):
     preview_document = serializers.SerializerMethodField()
@@ -104,3 +162,49 @@ class SignatureTemplateCreateSerializer(serializers.ModelSerializer):
         if not value.name.lower().endswith('.pdf'):
             raise serializers.ValidationError("Le document original doit être un fichier PDF.")
         return value
+    
+    def create(self, validated_data):
+        # Assurez-vous que l'utilisateur actuel est défini comme propriétaire
+        user = self.context['request'].user
+        
+        # Récupérer les informations sur l'organisation de l'utilisateur si disponibles
+        if user.organization:
+            validated_data['organization_name'] = user.organization.name
+            validated_data['organization_role'] = getattr(user, 'role', 'collaborator')
+        
+        validated_data['user_role'] = getattr(user, 'role', 'user')
+        
+        # Extraire les fichiers des validated_data pour les traiter séparément
+        files_data = {}
+        if 'original_document' in validated_data:
+            files_data['original_document'] = validated_data.pop('original_document')
+        if 'signature_image' in validated_data:
+            files_data['signature_image'] = validated_data.pop('signature_image')
+        if 'preview_document' in validated_data:
+            files_data['preview_document'] = validated_data.pop('preview_document')
+        
+        # Créer l'instance AVEC l'utilisateur mais SANS les fichiers d'abord
+        validated_data['user'] = user
+        instance = SignatureTemplate.objects.create(**validated_data)
+        
+        print(f"✅ [DEBUG CREATE] Template créé avec ID {instance.id} et user_id {instance.user.id}")
+        
+        # Maintenant traiter les fichiers un par un
+        if 'original_document' in files_data:
+            instance.original_document = files_data['original_document']
+            print(f"✅ [DEBUG CREATE] Document original assigné: {instance.original_document.name}")
+        
+        if 'signature_image' in files_data:
+            instance.signature_image = files_data['signature_image']
+            print(f"✅ [DEBUG CREATE] Image de signature assignée: {instance.signature_image.name}")
+        
+        if 'preview_document' in files_data:
+            instance.preview_document = files_data['preview_document']
+            print(f"✅ [DEBUG CREATE] Document de prévisualisation assigné: {instance.preview_document.name}")
+        
+        # Sauvegarder avec les fichiers
+        if files_data:
+            instance.save()
+            print(f"✅ [DEBUG CREATE] Template sauvegardé avec les fichiers")
+        
+        return instance

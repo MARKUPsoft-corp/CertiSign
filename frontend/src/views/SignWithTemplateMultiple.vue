@@ -683,22 +683,26 @@ async function loadTemplateDetails(templateId) {
     const templateDetails = await TemplateService.getTemplate(templateId);
     console.log('Détails du template chargés:', templateDetails);
     
-    // Configurer les paramètres du template
+    // Debug - Afficher la structure des positions
+    console.log('🔍 [DEBUG] Structure QR positions:', templateDetails.qr_positions);
+    console.log('🔍 [DEBUG] Structure Signature positions:', templateDetails.signature_positions);
+    
+    // Configurer les paramètres du template avec la structure correcte
     templateSettings.value = {
       qr_position: {
         mode: templateDetails.page_application || 'all',
         size: templateDetails.qr_size || 'medium',
-        positions: templateDetails.qr_positions?.positions || templateDetails.qr_positions || [],
+        positions: templateDetails.qr_positions || {}, // ← CORRECTION : utiliser directement qr_positions
         pages: templateDetails.selected_pages || []
       },
       signature: templateDetails.signature_image ? {
         image: templateDetails.signature_image,
-        positions: templateDetails.signature_positions || [],
-        size: templateDetails.signature_size || 50  // Ajouter la taille de signature
+        positions: templateDetails.signature_positions || {}, // ← CORRECTION : utiliser directement signature_positions
+        size: templateDetails.signature_size || 50
       } : null
     };
     
-    console.log('Paramètres du template configurés:', templateSettings.value);
+    console.log('✅ [DEBUG] Paramètres du template configurés:', templateSettings.value);
     
     // Télécharger l'image de signature si c'est un endpoint SFTP
     if (templateSettings.value.signature && 
@@ -1118,8 +1122,11 @@ async function startSigningProcess() {
         'positions_type': typeof templateSettings.value.qr_position?.positions,
         'positions_is_array': Array.isArray(templateSettings.value.qr_position?.positions),
         'positions_content': templateSettings.value.qr_position?.positions,
-        'first_position_x': templateSettings.value.qr_position?.positions?.[0]?.x,
-        'first_position_y': templateSettings.value.qr_position?.positions?.[0]?.y
+        'default_position_x': templateSettings.value.qr_position?.positions?.default?.x,
+        'default_position_y': templateSettings.value.qr_position?.positions?.default?.y,
+        'first_key': Object.keys(templateSettings.value.qr_position?.positions || {})[0],
+        'first_position_x': templateSettings.value.qr_position?.positions?.[Object.keys(templateSettings.value.qr_position?.positions || {})[0]]?.x,
+        'first_position_y': templateSettings.value.qr_position?.positions?.[Object.keys(templateSettings.value.qr_position?.positions || {})[0]]?.y
       });
       
       // Ajouter les informations de signature si disponibles dans le template
@@ -1136,13 +1143,92 @@ async function startSigningProcess() {
         
         // S'assurer que l'image est au bon format
         if (signatureImage && !signatureImage.startsWith('data:image')) {
-          console.warn('Format d\'image incorrect, tentative de correction');
-          let imageType = 'png';
-          if (signatureImage.startsWith('/9j/')) {
-            imageType = 'jpeg';
+          console.warn('🔄 Format d\'image incorrect, téléchargement depuis l\'URL');
+          console.log('🔍 URL de l\'image à télécharger:', signatureImage);
+          
+          try {
+            // Si c'est une URL, télécharger l'image et la convertir en base64
+            if (signatureImage.startsWith('http')) {
+              console.log('📥 Démarrage du téléchargement de l\'image de signature...');
+              
+              const response = await fetch(signatureImage);
+              console.log('📡 Réponse fetch:', response.status, response.ok);
+              
+              if (response.ok) {
+                const blob = await response.blob();
+                console.log('📦 Blob créé, taille:', blob.size, 'type:', blob.type);
+                
+                // Convertir le blob en base64
+                const base64 = await new Promise((resolve) => {
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    let result = reader.result;
+                    // Corriger le type MIME si nécessaire
+                    if (result.startsWith('data:application/octet-stream')) {
+                      // Détecter le type d'image à partir des premiers bytes
+                      const base64Data = result.split(',')[1];
+                      if (base64Data.startsWith('/9j/')) {
+                        result = result.replace('data:application/octet-stream', 'data:image/jpeg');
+                      } else if (base64Data.startsWith('iVBOR')) {
+                        result = result.replace('data:application/octet-stream', 'data:image/png');
+                      } else {
+                        // Par défaut, traiter comme JPEG
+                        result = result.replace('data:application/octet-stream', 'data:image/jpeg');
+                      }
+                    }
+                    resolve(result);
+                  };
+                  reader.readAsDataURL(blob);
+                });
+                
+                // Forcer le type MIME correct pour les images JPEG
+                if (base64.startsWith('data:application/octet-stream')) {
+                  // Détecter le type d'image à partir des premiers bytes
+                  const base64Data = base64.split(',')[1];
+                  if (base64Data && base64Data.startsWith('/9j/')) {
+                    signatureImage = base64.replace('data:application/octet-stream', 'data:image/jpeg');
+                    console.log('🔧 Type MIME corrigé de octet-stream vers image/jpeg');
+                  } else {
+                    signatureImage = base64.replace('data:application/octet-stream', 'data:image/png');
+                    console.log('🔧 Type MIME corrigé de octet-stream vers image/png');
+                  }
+                } else {
+                  // Forcer le type MIME correct pour les images JPEG
+                  if (base64.startsWith('data:application/octet-stream')) {
+                    // Détecter le type d'image à partir des premiers bytes
+                    const base64Data = base64.split(',')[1];
+                    if (base64Data && base64Data.startsWith('/9j/')) {
+                      signatureImage = base64.replace('data:application/octet-stream', 'data:image/jpeg');
+                      console.log('🔧 Type MIME corrigé de octet-stream vers image/jpeg');
+                    } else {
+                      signatureImage = base64.replace('data:application/octet-stream', 'data:image/png');
+                      console.log('🔧 Type MIME corrigé de octet-stream vers image/png');
+                    }
+                  } else {
+                    signatureImage = base64;
+                  }
+                }
+                console.log('✅ Image téléchargée et convertie en base64:', signatureImage.substring(0, 100) + '...');
+              } else {
+                console.error('❌ Erreur lors du téléchargement de l\'image:', response.status);
+                signatureImage = null;
+              }
+            } else {
+              console.log('🔧 Traitement comme base64 brut...');
+              // Si ce n'est pas une URL, traiter comme du base64 brut
+              let imageType = 'png';
+              if (signatureImage.startsWith('/9j/')) {
+                imageType = 'jpeg';
+              }
+              signatureImage = `data:image/${imageType};base64,${signatureImage}`;
+              console.log('✅ Image corrigée en base64:', signatureImage.substring(0, 100) + '...');
+            }
+          } catch (error) {
+            console.error('❌ Erreur lors du traitement de l\'image de signature:', error);
+            signatureImage = null;
           }
-          signatureImage = `data:image/${imageType};base64,${signatureImage}`;
-          console.log('Image corrigée:', signatureImage.substring(0, 100) + '...');
+        } else if (signatureImage) {
+          console.log('✅ Image déjà au bon format data:image');
         }
         
         // Convertir les positions de signature en format attendu par le microservice
@@ -1263,6 +1349,7 @@ async function startSigningProcess() {
       console.log('Signer name ajouté:', signerName);
       
       console.log('Envoi de la requête de signature pour:', file.name);
+      console.log('🔍 MÉTADONNÉES FINALES ENVOYÉES AU MICROSERVICE:', JSON.stringify(signatureMetadata, null, 2));
       
       // URL de l'API gateway
       const apiUrl = 'https://ppd.camgovca.cm/sign/sign';

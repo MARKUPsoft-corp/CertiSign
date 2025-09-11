@@ -1089,6 +1089,43 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal d'aperçu de template -->
+    <div v-if="showPreviewModal" class="modal-overlay" @click.self="closePreviewModal">
+      <div class="modal-content preview-modal">
+        <div class="modal-header">
+          <h3>
+            <i class="bi bi-eye"></i>
+            Aperçu du template : {{ selectedTemplate?.name }}
+          </h3>
+          <button class="modal-close" @click="closePreviewModal">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="modal-body preview-body">
+          <div v-if="loadingPreview" class="loading-preview">
+            <div class="spinner"></div>
+            <p>Chargement de l'aperçu...</p>
+          </div>
+          <iframe v-else-if="previewUrl" :src="previewUrl" class="preview-iframe" title="Aperçu du template"></iframe>
+          <div v-else class="preview-error">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <p v-if="selectedTemplate?.preview_document">
+              Impossible de charger l'aperçu du template.
+            </p>
+            <p v-else>
+              Ce template n'a pas encore d'aperçu généré. 
+              <br>L'aperçu sera disponible après la génération du PDF avec QR code.
+            </p>
+            <div class="preview-actions">
+              <button class="btn btn-primary" @click="editTemplate(selectedTemplate)">
+                <i class="bi bi-pencil"></i> Modifier le template
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -1186,6 +1223,11 @@ const signedDocuments = ref([]);
 const myTemplates = ref([]);
 const loadingTemplates = ref(false);
 const selectedTemplate = ref(null);
+
+// Variables pour l'aperçu de template
+const showPreviewModal = ref(false);
+const loadingPreview = ref(false);
+const previewUrl = ref(null);
 
 // Variables pour l'édition de template
 const showEditModal = ref(false);
@@ -2736,7 +2778,8 @@ async function loadMyTemplates() {
       createdAt: new Date(template.created_at),
       pageApplication: template.page_application,
       qrSize: template.qr_size,
-      hasSignature: !!template.signature_image
+      hasSignature: !!template.signature_image,
+      preview_document: template.preview_document // Added this line
     }));
     
     console.log('Templates chargés:', myTemplates.value.length);
@@ -2760,7 +2803,8 @@ function onTemplateCreated(templateData) {
     createdAt: new Date(templateData.createdAt),
     pageApplication: templateData.pageApplication,
     qrSize: templateData.qrSize,
-    hasSignature: templateData.hasSignature
+    hasSignature: templateData.hasSignature,
+    preview_document: templateData.preview_document // Added this line
   };
   
   myTemplates.value.unshift(newTemplateForList);
@@ -2835,23 +2879,55 @@ function getQrSizeLabel(size) {
 
 async function previewTemplate(template) {
   try {
+    console.log('🔍 [DEBUG] Ouverture de l\'aperçu pour template:', template);
     selectedTemplate.value = template;
-    console.log('Prévisualisation du template:', template.name);
+    showPreviewModal.value = true;
+    loadingPreview.value = true;
     
-    // Récupérer le blob du fichier d'aperçu
-    const previewBlob = await TemplateService.downloadPreview(template.id);
+    // Vérifier d'abord si le template a un preview_document
+    if (!template.preview_document) {
+      console.warn('Template sans aperçu:', template);
+      previewUrl.value = null;
+      return;
+    }
     
-    // Créer une URL pour le blob et l'ouvrir dans un nouvel onglet
-    const url = URL.createObjectURL(previewBlob);
-    window.open(url, '_blank');
+    // Utiliser directement l'URL de l'endpoint preview_document avec cache-busting
+    const previewUrlValue = TemplateService.getPreviewUrl(template.id);
+    console.log('🔍 [DEBUG] URL d\'aperçu générée:', previewUrlValue);
     
-    // Nettoyer l'URL après un délai
-    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    // Forcer le rechargement en réinitialisant d'abord l'URL
+    previewUrl.value = null;
+    
+    // Puis définir la nouvelle URL après un petit délai
+    setTimeout(() => {
+      previewUrl.value = previewUrlValue;
+      console.log('✅ [DEBUG] URL d\'aperçu définie:', previewUrl.value);
+    }, 100);
     
   } catch (error) {
     console.error('Erreur lors du chargement de l\'aperçu:', error);
-    alert('Impossible de charger l\'aperçu du template.');
+    previewUrl.value = null;
+    
+    // Afficher un message d'erreur plus informatif
+    if (error.response?.status === 404) {
+      console.warn('Aperçu non disponible pour ce template');
+    }
+  } finally {
+    loadingPreview.value = false;
   }
+}
+
+// Fonction pour fermer la modal d'aperçu
+function closePreviewModal() {
+  showPreviewModal.value = false;
+  
+  // Nettoyer l'URL pour libérer la mémoire
+  if (previewUrl.value) {
+    URL.revokeObjectURL(previewUrl.value);
+    previewUrl.value = null;
+  }
+  
+  selectedTemplate.value = null;
 }
 
 // Fonction pour éditer un template
@@ -2860,8 +2936,18 @@ async function editTemplate(template) {
     loadingEditFile.value = true;
     selectedTemplate.value = template;
     
+    console.log("🔍 [DEBUG] Édition du template:", template);
+    console.log("🔍 [DEBUG] Template ID:", template.id);
+    
     // Récupérer les détails complets du template depuis l'API
     const templateDetails = await TemplateService.getTemplate(template.id);
+    console.log("🔍 [DEBUG] Détails du template depuis l'API:", templateDetails);
+    console.log("🔍 [DEBUG] QR Positions:", templateDetails.qr_positions);
+    console.log("🔍 [DEBUG] Signature Positions:", templateDetails.signature_positions);
+    console.log("🔍 [DEBUG] Page Application:", templateDetails.page_application);
+    console.log("🔍 [DEBUG] Selected Pages:", templateDetails.selected_pages);
+    console.log("🔍 [DEBUG] Signature Size:", templateDetails.signature_size);
+    console.log("🔍 [DEBUG] Has Signature Image:", !!templateDetails.signature_image);
     
     // Récupérer le fichier PDF original pour l'afficher dans QrPositioner
     let originalPdfBlob = null;
@@ -2902,6 +2988,8 @@ async function editTemplate(template) {
       generatedPdfBlob: null,
       generatedPdfDataUrl: null
     };
+    
+    console.log("🔍 [DEBUG] Structure des données préparée pour QrPositioner:", editingTemplate.value.qrPositions);
     // Télécharger l'image de signature si disponible
     if (templateDetails.signature_image) {
       try {
@@ -3008,15 +3096,22 @@ async function updateTemplate() {
     // Mettre à jour le template via l'API
     await TemplateService.updateTemplate(editingTemplate.value.id, templateData);
     
-    // Mettre à jour le template dans la liste locale
+    // Récupérer le template complet mis à jour depuis l'API pour avoir le nouveau preview_document
+    const updatedTemplate = await TemplateService.getTemplate(editingTemplate.value.id);
+    console.log('✅ [DEBUG] Template mis à jour récupéré:', updatedTemplate);
+    
+    // Mettre à jour le template dans la liste locale avec toutes les nouvelles données
     const index = myTemplates.value.findIndex(t => t.id === editingTemplate.value.id);
     if (index !== -1) {
       myTemplates.value[index] = {
         ...myTemplates.value[index],
-        name: templateData.name,
-        qrSize: templateData.qr_size,
-        pageApplication: templateData.page_application,
+        name: updatedTemplate.name,
+        qrSize: updatedTemplate.qr_size,
+        pageApplication: updatedTemplate.page_application,
+        hasSignature: !!updatedTemplate.signature_image,
+        preview_document: updatedTemplate.preview_document // ← Nouveau aperçu mis à jour
       };
+      console.log('✅ [DEBUG] Template mis à jour dans la liste locale:', myTemplates.value[index]);
     }
     
     // Afficher un message de succès
@@ -5779,6 +5874,330 @@ async function deleteTemplate(template) {
   }
   .edit-template-body {
     gap: 1.25rem;
+  }
+}
+
+/* =================================
+   STYLES POUR LA MODALE D'APERÇU
+   ================================= */
+
+/* Modal d'aperçu - Identique au CollaboratorDashboard */
+.preview-modal {
+  background-color: var(--bg-light, #ffffff);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 1000px;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  animation: modalSlideIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  overflow: hidden;
+  border: 1px solid var(--border-color, #e0e0e0);
+}
+
+/* En-tête de la modale d'aperçu */
+.preview-modal .modal-header {
+  background: linear-gradient(135deg, #ff9500, #ffb347);
+  color: white;
+  padding: 25px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.preview-modal .modal-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.preview-modal .modal-header i {
+  font-size: 1.5rem;
+}
+
+.preview-modal .modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 12px;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.preview-modal .modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Corps de la modale d'aperçu */
+.preview-body {
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  background: var(--bg-light, #ffffff);
+}
+
+/* Contenu d'aperçu */
+.loading-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: var(--text-secondary, #6c757d);
+}
+
+.loading-preview .spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 149, 0, 0.2);
+  border-top: 4px solid #ff9500;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+.preview-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: #fff;
+}
+
+.preview-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  text-align: center;
+  color: var(--text-secondary, #6c757d);
+  padding: 30px;
+}
+
+.preview-error i {
+  font-size: 4rem;
+  color: #ff9500;
+  margin-bottom: 20px;
+}
+
+.preview-error p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.preview-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Animation de slide-in pour la modale */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive pour la modale d'aperçu */
+@media (max-width: 768px) {
+  .preview-modal {
+    width: 95%;
+    height: 90vh;
+  }
+  
+  .preview-modal .modal-header {
+    padding: 20px;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .preview-modal .modal-header h3 {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* =================================
+   STYLES POUR LA MODALE D'APERÇU
+   ================================= */
+
+/* Modal d'aperçu - Identique au CollaboratorDashboard */
+.preview-modal {
+  background-color: var(--bg-light, #ffffff);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 1000px;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  animation: modalSlideIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  overflow: hidden;
+  border: 1px solid var(--border-color, #e0e0e0);
+}
+
+/* En-tête de la modale d'aperçu */
+.preview-modal .modal-header {
+  background: linear-gradient(135deg, #ff9500, #ffb347);
+  color: white;
+  padding: 25px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.preview-modal .modal-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.preview-modal .modal-header i {
+  font-size: 1.5rem;
+}
+
+.preview-modal .modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 12px;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.preview-modal .modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Corps de la modale d'aperçu */
+.preview-body {
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  background: var(--bg-light, #ffffff);
+}
+
+/* Contenu d'aperçu */
+.loading-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: var(--text-secondary, #6c757d);
+}
+
+.loading-preview .spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 149, 0, 0.2);
+  border-top: 4px solid #ff9500;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+.preview-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: #fff;
+}
+
+.preview-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  text-align: center;
+  color: var(--text-secondary, #6c757d);
+  padding: 30px;
+}
+
+.preview-error i {
+  font-size: 4rem;
+  color: #ff9500;
+  margin-bottom: 20px;
+}
+
+.preview-error p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.preview-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Animation de slide-in pour la modale */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive pour la modale d'aperçu */
+@media (max-width: 768px) {
+  .preview-modal {
+    width: 95%;
+    height: 90vh;
+  }
+  
+  .preview-modal .modal-header {
+    padding: 20px;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .preview-modal .modal-header h3 {
+    flex-direction: column;
+    gap: 10px;
   }
 }
 

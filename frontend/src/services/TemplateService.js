@@ -242,7 +242,9 @@ class TemplateService {
    * Récupère l'URL de l'aperçu d'un template pour affichage inline (pas de téléchargement)
    */
   getPreviewUrl(templateId) {
-    return `${API_URL}/signature-templates/templates/${templateId}/preview_document/`;
+    // Ajouter un paramètre de cache-busting pour forcer le rechargement
+    const timestamp = new Date().getTime();
+    return `${API_URL}/signature-templates/templates/${templateId}/preview_document/?v=${timestamp}`;
   }
 }
 
