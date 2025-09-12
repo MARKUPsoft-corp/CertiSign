@@ -103,7 +103,7 @@
                 <div class="qr-mock" :class="selectedQrSize">
                   <div class="qr-pattern"></div>
                 </div>
-                <!-- Texte ANTIC supprimé -->
+                <div class="qr-label">ANTIC</div>
               </div>
             </div>
             
@@ -381,7 +381,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted, onUnmounted, watch, defineEmits, defineProps } from 'vue';
 import VuePdfEmbed from 'vue-pdf-embed';
-import { PDFDocument, rgb } from 'pdf-lib';
+import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import QRCode from 'qrcode';
 
 // Props
@@ -905,21 +905,16 @@ async function generateModifiedPdf() {
         // Générer un vrai QR code avec qrcode
         const qrSize = qrSizes.find(s => s.name === selectedQrSize.value).size;
         
-        // CORRECTION DÉFINITIVE: Réduire la taille du QR code dans l'aperçu final
-        // L'interface utilise size.size en pixels, mais l'aperçu final doit être plus petit
-        const qrDisplaySize = qrSize * 0.7; // Réduction de 30% pour correspondre à l'interface
-        
         // Convertir la position de pourcentage à coordonnées absolues
         const qrPosX = (position.x / 100) * width;
         const qrPosY = (position.y / 100) * height;
         
         try {
           // Générer le QR code comme une URL de données
-          // IMPORTANT: Utiliser la taille exacte, pas de multiplication par 2
           const qrDataUrl = await QRCode.toDataURL('https://antic.cm/verify?id=DEMO-QR-CODE', {
             errorCorrectionLevel: 'H',
             margin: 1,
-            width: qrDisplaySize, // Taille exacte, pas de multiplication
+            width: qrSize * 2, // Plus grande résolution pour meilleure qualité
             color: {
               dark: '#000000',
               light: '#ffffff'
@@ -934,10 +929,10 @@ async function generateModifiedPdf() {
           
           // D'abord dessiner un rectangle blanc comme fond
           page.drawRectangle({
-            x: qrPosX - (qrDisplaySize / 2) - 5, // Un peu plus grand que le QR code
-            y: height - qrPosY - (qrDisplaySize / 2) - 5,
-            width: qrDisplaySize + 10,
-            height: qrDisplaySize + 10,
+            x: qrPosX - (qrSize / 2) - 5, // Un peu plus grand que le QR code
+            y: height - qrPosY - (qrSize / 2) - 5,
+            width: qrSize + 10,
+            height: qrSize + 10,
             color: rgb(1, 1, 1), // blanc
             opacity: 1,
             borderWidth: 1,
@@ -947,10 +942,10 @@ async function generateModifiedPdf() {
           
           // Ensuite dessiner le QR code
           page.drawImage(qrImage, {
-            x: qrPosX - (qrDisplaySize / 2),
-            y: height - qrPosY - (qrDisplaySize / 2), // Conversion des coordonnées Y
-            width: qrDisplaySize,
-            height: qrDisplaySize
+            x: qrPosX - (qrSize / 2),
+            y: height - qrPosY - (qrSize / 2), // Conversion des coordonnées Y
+            width: qrSize,
+            height: qrSize
           });
         } catch (qrError) {
           console.error('Erreur lors de la génération du QR code:', qrError);
@@ -966,7 +961,31 @@ async function generateModifiedPdf() {
           });
         }
         
-        // Texte "ANTIC" supprimé de l'aperçu final
+        // Ajouter le texte "ANTIC" sous le QR code dans un rectangle blanc
+        const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+        
+        // Mesurer la largeur du texte pour centrer
+        const textWidth = font.widthOfTextAtSize('ANTIC', 10);
+        
+        // Dessiner un rectangle blanc comme fond pour le texte
+        page.drawRectangle({
+          x: qrPosX - (textWidth / 2) - 5,
+          y: height - qrPosY - (qrSize / 2) - 25,
+          width: textWidth + 10,
+          height: 16,
+          color: rgb(1, 1, 1), // blanc
+          opacity: 1,
+          borderWidth: 0
+        });
+        
+        // Dessiner le texte
+        page.drawText('ANTIC', {
+          x: qrPosX - (textWidth / 2),
+          y: height - qrPosY - (qrSize / 2) - 22,
+          size: 10,
+          font: font,
+          color: rgb(0, 0, 0)
+        });
       }
       
       // Ajouter la signature si nécessaire pour cette page
@@ -1053,31 +1072,19 @@ async function generateModifiedPdf() {
         }
         
         // Calculer la taille et position de l'image
-        // CORRECTION PRÉCISE: Utiliser exactement la même logique que l'interface
-        // L'interface utilise: widthPx = (signatureSize.value * 0.6 / 100) * pageWidthPx
-        // Où pageWidthPx est la largeur réelle de l'élément DOM (généralement 595px)
-        // Pour être cohérent, on utilise 595 comme référence standard (format A4)
-        const standardPageWidth = 595; // Largeur standard A4 en pixels/points
-        const widthPx = (signatureSize.value * 0.6 / 100) * standardPageWidth;
-        const sigWidth = widthPx;
+        // Utiliser la même échelle que dans l'interface de positionnement
+        // La taille dans l'interface est signatureSize.value * 2 (en pixels)
+        // On calcule donc un facteur d'échelle proportionnel à la largeur de la page
+        // Le backend convertit signature_size en width_percent = signature_size * 0.6
+const scaleFactor = (signatureSize.value * 0.6) / 100;
+        const sigWidth = width * scaleFactor;
         const sigHeight = (signatureEmbed.height / signatureEmbed.width) * sigWidth;
         
         // Convertir la position de pourcentage à coordonnées absolues
-        // CORRECTION: Utiliser les mêmes dimensions de référence que l'interface
-        const sigPosX = (position.x / 100) * standardPageWidth - (sigWidth / 2);
-        const sigPosY = (position.y / 100) * (height * standardPageWidth / width) - (sigHeight / 2);
+        const sigPosX = (position.x / 100) * width - (sigWidth / 2);
+        const sigPosY = (position.y / 100) * height - (sigHeight / 2);
         
-        // DEBUG: Logs pour vérifier les dimensions
-        console.log('=== DEBUG DIMENSIONS SIGNATURE ===');
-        console.log('signatureSize.value:', signatureSize.value);
-        console.log('standardPageWidth:', standardPageWidth);
-        console.log('widthPx calculé:', widthPx);
-        console.log('PDF width:', width, 'height:', height);
-        console.log('Calculé sigWidth:', sigWidth, 'sigHeight:', sigHeight);
-        console.log('Position originale:', position.x, position.y);
-        console.log('Position convertie:', sigPosX, sigPosY);
-        console.log('Position finale Y (avec inversion):', height - sigPosY - sigHeight);
-                // Dessiner l'image
+        // Dessiner l'image
         page.drawImage(signatureEmbed, {
           x: sigPosX,
           y: height - sigPosY - sigHeight, // Conversion des coordonnées Y
