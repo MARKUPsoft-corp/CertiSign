@@ -671,7 +671,7 @@ def add_signature_image_to_pdf(pdf_data: bytes, signature_image_data: str, signa
                         logger.info(f"✅ Image décodée après nettoyage ultra-agressif, taille: {len(image_bytes)} octets")
                     except Exception as e3:
                         logger.error(f"❌ Échec définitif du décodage: {str(e3)}")
-                    return pdf_data
+                        return pdf_data
             
         except Exception as e:
             logger.error(f"Erreur lors du décodage de l'image de signature: {str(e)}")
@@ -763,8 +763,7 @@ def add_signature_image_to_pdf(pdf_data: bytes, signature_image_data: str, signa
                         
                         # Ajuster la position pour centrer l'image à la position spécifiée
                         x_position = x_position - (width_points / 2)
-                        # CORRECTION: Inverser Y comme dans QrPositioner (height - y - height_element)
-                        y_position = page_height - y_position - height_points
+                        y_position = y_position - (height_points / 2)
                         
                         # Dessiner l'image de signature
                         try:
