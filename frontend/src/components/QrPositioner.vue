@@ -103,7 +103,7 @@
                 <div class="qr-mock" :class="selectedQrSize">
                   <div class="qr-pattern"></div>
                 </div>
-                <div class="qr-label">ANTIC</div>
+                
               </div>
             </div>
             
@@ -381,7 +381,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted, onUnmounted, watch, defineEmits, defineProps } from 'vue';
 import VuePdfEmbed from 'vue-pdf-embed';
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, rgb } from 'pdf-lib';
 import QRCode from 'qrcode';
 
 // Props
@@ -903,7 +903,9 @@ async function generateModifiedPdf() {
         }
         
         // Générer un vrai QR code avec qrcode
-        const qrSize = qrSizes.find(s => s.name === selectedQrSize.value).size;
+        // Utiliser les mêmes tailles que dans le CSS pour la cohérence
+        const qrSizeMapping = { small: 34, medium: 54, large: 74 };
+        const qrSize = qrSizeMapping[selectedQrSize.value] || 54;
         
         // Convertir la position de pourcentage à coordonnées absolues
         const qrPosX = (position.x / 100) * width;
@@ -960,32 +962,6 @@ async function generateModifiedPdf() {
             opacity: 0.8
           });
         }
-        
-        // Ajouter le texte "ANTIC" sous le QR code dans un rectangle blanc
-        const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-        
-        // Mesurer la largeur du texte pour centrer
-        const textWidth = font.widthOfTextAtSize('ANTIC', 10);
-        
-        // Dessiner un rectangle blanc comme fond pour le texte
-        page.drawRectangle({
-          x: qrPosX - (textWidth / 2) - 5,
-          y: height - qrPosY - (qrSize / 2) - 25,
-          width: textWidth + 10,
-          height: 16,
-          color: rgb(1, 1, 1), // blanc
-          opacity: 1,
-          borderWidth: 0
-        });
-        
-        // Dessiner le texte
-        page.drawText('ANTIC', {
-          x: qrPosX - (textWidth / 2),
-          y: height - qrPosY - (qrSize / 2) - 22,
-          size: 10,
-          font: font,
-          color: rgb(0, 0, 0)
-        });
       }
       
       // Ajouter la signature si nécessaire pour cette page
@@ -1714,11 +1690,6 @@ watch(() => props.preloadedPositions, (newVal) => {
   background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
 }
 
-.qr-label {
-  font-size: 10px;
-  font-weight: 600;
-  color: #333;
-}
 
 .position-info {
   margin-top: 12px;
