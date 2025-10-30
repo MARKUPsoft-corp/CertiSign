@@ -1151,7 +1151,12 @@ async function startSigningProcess() {
             if (signatureImage.startsWith('http')) {
               console.log('📥 Démarrage du téléchargement de l\'image de signature...');
               
-              const response = await fetch(signatureImage);
+              const token = localStorage.getItem("token");
+              const response = await fetch(signatureImage, {
+                headers: {
+                  "Authorization": `Bearer ${token}`
+                }
+              });
               console.log('📡 Réponse fetch:', response.status, response.ok);
               
               if (response.ok) {
