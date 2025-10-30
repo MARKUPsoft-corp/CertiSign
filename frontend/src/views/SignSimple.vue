@@ -1021,7 +1021,12 @@ function handleIndividualPositionConfirmed(positionData) {
     documentPositions.value[activePositioningIndex.value] = {};
   }
   
-  documentPositions.value[activePositioningIndex.value].qr_position = positionData.qr;
+  // Stocker les données QR avec le mode et l'orientation
+  documentPositions.value[activePositioningIndex.value].qr_position = {
+    ...positionData.qr,
+    mode: positionData.mode,  // Ajouter le mode depuis positionData
+    orientation: positionData.orientation  // Ajouter l'orientation
+  };
   
   if (positionData.signature) {
     documentPositions.value[activePositioningIndex.value].signature = {
@@ -1094,36 +1099,43 @@ async function startSigningProcess() {
       console.log(`Paramètres de position pour le document ${i} (${file.name}):`, documentPosition);
       
       // Extraire les positions QR pour ce document spécifique
+      const qrMode = documentPosition?.qr_position?.mode || 'all';
       let qrX = 85; // valeur par défaut
       let qrY = 90; // valeur par défaut
       
-      if (documentPosition?.qr_position?.positions) {
-        // Vérifier si positions est un objet avec des clés numériques
-        if (typeof documentPosition.qr_position.positions === 'object' && 
-            !Array.isArray(documentPosition.qr_position.positions)) {
-          
-          console.log('Positions QR sous format objet, extraction de la première position');
-          const firstPageKey = Object.keys(documentPosition.qr_position.positions)[0];
-          if (firstPageKey && documentPosition.qr_position.positions[firstPageKey]) {
-            const firstPosition = documentPosition.qr_position.positions[firstPageKey];
+      // En mode individual, ne pas extraire x/y par défaut
+      // car chaque page a sa propre position dans l'objet positions
+      if (qrMode !== 'individual') {
+        if (documentPosition?.qr_position?.positions) {
+          // Vérifier si positions est un objet avec des clés numériques
+          if (typeof documentPosition.qr_position.positions === 'object' && 
+              !Array.isArray(documentPosition.qr_position.positions)) {
+            
+            console.log('Positions QR sous format objet, extraction de la première position');
+            const firstPageKey = Object.keys(documentPosition.qr_position.positions)[0];
+            if (firstPageKey && documentPosition.qr_position.positions[firstPageKey]) {
+              const firstPosition = documentPosition.qr_position.positions[firstPageKey];
+              qrX = firstPosition.x || 85;
+              qrY = firstPosition.y || 90;
+              console.log(`Position QR extraite de la page ${firstPageKey}: x=${qrX}, y=${qrY}`);
+            }
+          } else if (Array.isArray(documentPosition.qr_position.positions) && 
+                     documentPosition.qr_position.positions.length > 0) {
+            
+            console.log('Positions QR sous format tableau, extraction de la première position');
+            const firstPosition = documentPosition.qr_position.positions[0];
             qrX = firstPosition.x || 85;
             qrY = firstPosition.y || 90;
-            console.log(`Position QR extraite de la page ${firstPageKey}: x=${qrX}, y=${qrY}`);
+            console.log(`Position QR extraite du tableau: x=${qrX}, y=${qrY}`);
           }
-        } else if (Array.isArray(documentPosition.qr_position.positions) && 
-                   documentPosition.qr_position.positions.length > 0) {
-          
-          console.log('Positions QR sous format tableau, extraction de la première position');
-          const firstPosition = documentPosition.qr_position.positions[0];
-          qrX = firstPosition.x || 85;
-          qrY = firstPosition.y || 90;
-          console.log(`Position QR extraite du tableau: x=${qrX}, y=${qrY}`);
+        } else if (documentPosition?.qr_position?.x && documentPosition?.qr_position?.y) {
+          // Position unique
+          qrX = documentPosition.qr_position.x;
+          qrY = documentPosition.qr_position.y;
+          console.log(`Position QR unique: x=${qrX}, y=${qrY}`);
         }
-      } else if (documentPosition?.qr_position?.x && documentPosition?.qr_position?.y) {
-        // Position unique
-        qrX = documentPosition.qr_position.x;
-        qrY = documentPosition.qr_position.y;
-        console.log(`Position QR unique: x=${qrX}, y=${qrY}`);
+      } else {
+        console.log('Mode individual détecté : les positions x/y par défaut ne seront pas envoyées');
       }
       
       // Créer les métadonnées utilisateur avec les paramètres de position pour ce document
@@ -1137,15 +1149,19 @@ async function startSigningProcess() {
         signer_role: userInfo.position || userInfo.role || '',
         jwt_token: localStorage.getItem('jwtToken') || '',
         qr_position: {
-          x: qrX,
-          y: qrY,
           size: documentPosition?.qr_position?.size || 'medium',
           pages: documentPosition?.qr_position?.pages || 'all',
-          positions: documentPosition?.qr_position?.positions || [],
-          mode: documentPosition?.qr_position?.mode || 'all'
+          positions: documentPosition?.qr_position?.positions || {},
+          mode: qrMode
         },
         signature_position: null
       };
+      
+      // Ajouter x/y seulement si pas en mode individual
+      if (qrMode !== 'individual') {
+        userMetadata.qr_position.x = qrX;
+        userMetadata.qr_position.y = qrY;
+      }
       
       console.log('Métadonnées QR position préparées pour le document', i, ':', {
         qr_position: userMetadata.qr_position

@@ -62,12 +62,38 @@
           </div>
         </div>
 
+        <!-- Contrôles d'orientation -->
+        <div class="orientation-controls">
+          <span class="orientation-label"><i class="bi bi-phone-landscape"></i> Orientation :</span>
+          <label class="orientation-option">
+            <input type="radio" value="auto" v-model="orientationMode"/>
+            <span>Auto</span>
+          </label>
+          <label class="orientation-option">
+            <input type="radio" value="portrait" v-model="orientationMode"/>
+            <span>Portrait</span>
+          </label>
+          <label class="orientation-option">
+            <input type="radio" value="paysage" v-model="orientationMode"/>
+            <span>Paysage</span>
+          </label>
+        </div>
+
         <!-- Zone d'aperçu A4 -->
         <div class="a4-preview-container" ref="previewContainer">
-          <div class="debug-info" v-if="false">
-            Debug: Page {{ currentPage }}/{{ totalPages }}, PDF loaded: {{ pdfLoaded }}
+          <!-- BASE : debug format -->
+          <div class="debug-info">
+            <strong>Page {{ currentPage }}/{{ totalPages }}:</strong> {{ realPdfPageWidth }} × {{ realPdfPageHeight }}px
+            <span v-if="orientationMode === 'auto'" class="auto-badge">🔄 Auto-détecté: {{ orientationAuto }}</span>
+            <span v-else class="manual-badge">🔧 Manuel: {{ orientationEffective }}</span>
+          </div>
+          <!-- Indicateur de scroll pour mode paysage -->
+          <div v-if="orientationEffective === 'paysage'" class="scroll-hint">
+            <i class="bi bi-arrow-left-right"></i>
+            <span>Faites défiler horizontalement pour voir les contrôles</span>
           </div>
           <div class="a4-page" 
+               :style="{ width: scaledWidth + 'px', height: scaledHeight + 'px', aspectRatio: scaledWidth + '/' + scaledHeight }"
                @mousedown="handleDragStart"
                @touchstart="handleTouchStart">
             
@@ -77,8 +103,8 @@
                 v-if="pdfSource"
                 :source="pdfSource"
                 :page="currentPage"
-                :width="595"
-                :height="842"
+                :width="scaledWidth"
+                :height="scaledHeight"
                 @loaded="onPdfLoaded"
                 @loading-failed="onPdfLoadError"
                 @rendered="onPdfRendered"
@@ -144,13 +170,13 @@
               :class="['page-thumbnail', { active: currentPage === page }]"
               @click="goToPage(page)"
             >
-              <div class="page-thumb-content">
+              <div class="page-thumb-content" :style="{ aspectRatio: thumbAspectRatio }">
                 <vue-pdf-embed
                   v-if="pdfSource"
                   :source="pdfSource"
                   :page="page"
-                  :width="80"
-                  :height="113"
+                  :width="thumbWidth"
+                  :height="thumbHeight"
                   class="page-thumb-pdf"
                 />
                 <div v-else class="page-thumb-placeholder">
@@ -457,6 +483,69 @@ const selectedQrSize = ref('medium');
 // Références DOM
 const previewContainer = ref(null);
 
+// Pour le format interactif dynamique (ajouts)
+// Dimensions A4 standard en points PDF
+const A4_PORTRAIT_WIDTH = 595;
+const A4_PORTRAIT_HEIGHT = 842;
+const A4_LANDSCAPE_WIDTH = 842;
+const A4_LANDSCAPE_HEIGHT = 595;
+
+const realPdfPageWidth = ref(A4_PORTRAIT_WIDTH); // Valeurs A4 portrait par défaut
+const realPdfPageHeight = ref(A4_PORTRAIT_HEIGHT);
+const orientationMode = ref('auto'); // 'auto' | 'portrait' | 'paysage'
+
+// Détermine l'orientation automatique basée sur les dimensions réelles du PDF
+const orientationAuto = computed(() => 
+  realPdfPageWidth.value > realPdfPageHeight.value ? 'paysage' : 'portrait'
+);
+
+// Orientation effective appliquée (auto ou manuelle)
+const orientationEffective = computed(() => 
+  orientationMode.value === 'auto' ? orientationAuto.value : orientationMode.value
+);
+
+// Dimensions de l'aperçu selon l'orientation sélectionnée
+// En mode portrait : on utilise les dimensions A4 portrait (595 x 842)
+// En mode paysage : on utilise les dimensions A4 paysage (842 x 595)
+const scaledWidth = computed(() => {
+  const orientation = orientationEffective.value;
+  
+  if (orientation === 'portrait') {
+    return A4_PORTRAIT_WIDTH;
+  } else {
+    // paysage
+    return A4_LANDSCAPE_WIDTH;
+  }
+});
+
+const scaledHeight = computed(() => {
+  const orientation = orientationEffective.value;
+  
+  if (orientation === 'portrait') {
+    return A4_PORTRAIT_HEIGHT;
+  } else {
+    // paysage
+    return A4_LANDSCAPE_HEIGHT;
+  }
+});
+
+// Dimensions des miniatures adaptées à l'orientation
+const thumbWidth = computed(() => {
+  const orientation = orientationEffective.value;
+  return orientation === 'portrait' ? 80 : 113; // Inversé pour paysage
+});
+
+const thumbHeight = computed(() => {
+  const orientation = orientationEffective.value;
+  return orientation === 'portrait' ? 113 : 80; // Inversé pour paysage
+});
+
+// Aspect ratio pour les miniatures
+const thumbAspectRatio = computed(() => {
+  const orientation = orientationEffective.value;
+  return orientation === 'portrait' ? '210 / 297' : '297 / 210'; // Inversé pour paysage
+});
+
 // Méthodes pour gérer l'upload de signature
 function handleSignatureUpload(event) {
   const file = event.target.files[0];
@@ -603,6 +692,7 @@ function goToPage(pageNumber) {
 // Gestion du PDF
 const actualTotalPages = ref(1);
 const pdfInitialized = ref(false);
+const pdfPagesInfo = ref([]); // Stocker les infos de toutes les pages
 
 function onPdfLoaded(event) {
   console.log('onPdfLoaded appelé, event:', event);
@@ -612,19 +702,37 @@ function onPdfLoaded(event) {
   if (event && event._pdfInfo && event._pdfInfo.numPages) {
     actualTotalPages.value = event._pdfInfo.numPages;
     pdfInitialized.value = true;
-    console.log(`Nombre de pages détecté depuis _pdfInfo: ${event._pdfInfo.numPages}`);
-  } else if (event && event.numPages) {
-    actualTotalPages.value = event.numPages;
-    pdfInitialized.value = true;
-    console.log(`Nombre de pages détecté depuis numPages: ${event.numPages}`);
-  } else if (event && typeof event === 'number' && event > 0) {
-    actualTotalPages.value = event;
-    pdfInitialized.value = true;
-    console.log(`Nombre de pages détecté directement: ${event}`);
+    
+    // Stocker les informations de toutes les pages
+    if (event._pdfInfo?.originalInfo && Array.isArray(event._pdfInfo.originalInfo)) {
+      pdfPagesInfo.value = event._pdfInfo.originalInfo.map(pageInfo => ({
+        width: pageInfo?.width || 595,
+        height: pageInfo?.height || 842,
+        orientation: (pageInfo?.width || 595) > (pageInfo?.height || 842) ? 'paysage' : 'portrait'
+      }));
+      console.log(`PDF chargé: ${pdfPagesInfo.value.length} pages avec orientations:`, 
+        pdfPagesInfo.value.map((p, i) => `P${i+1}:${p.orientation}`).join(', '));
+    }
+    
+    // Détecter l'orientation de la première page par défaut
+    updatePageOrientation(currentPage.value);
   } else {
-    console.log('PDF chargé, mais nombre de pages non détecté depuis l\'event');
-    // Utiliser la prop comme fallback
-    actualTotalPages.value = props.totalPages || 1;
+    // Fallback
+    realPdfPageWidth.value = 595;
+    realPdfPageHeight.value = 842;
+  }
+}
+
+// Fonction pour mettre à jour l'orientation selon la page actuelle
+function updatePageOrientation(pageNumber) {
+  if (pdfPagesInfo.value.length > 0) {
+    const pageIndex = pageNumber - 1;
+    if (pageIndex >= 0 && pageIndex < pdfPagesInfo.value.length) {
+      const pageInfo = pdfPagesInfo.value[pageIndex];
+      realPdfPageWidth.value = Math.round(pageInfo.width);
+      realPdfPageHeight.value = Math.round(pageInfo.height);
+      console.log(`Page ${pageNumber}: ${pageInfo.width}x${pageInfo.height}px → ${pageInfo.orientation} (auto=${orientationAuto.value})`);
+    }
   }
 }
 
@@ -859,6 +967,10 @@ async function generateModifiedPdf() {
   }
   
   try {
+    console.log('=== Génération du PDF modifié ===');
+    console.log(`Orientation sélectionnée: ${orientationMode.value} (effective: ${orientationEffective.value})`);
+    console.log(`Dimensions de l'aperçu: ${scaledWidth.value}x${scaledHeight.value}px`);
+    
     // Lire le fichier PDF original
     const originalPdfBytes = await props.pdfFile.arrayBuffer();
     
@@ -892,6 +1004,18 @@ async function generateModifiedPdf() {
       const page = pdfDoc.getPage(pageIndex);
       const { width, height } = page.getSize();
       
+      // Calculer le ratio entre les dimensions du PDF réel et l'aperçu
+      // Les positions ont été calculées sur l'aperçu (scaledWidth × scaledHeight)
+      // L'aperçu utilise les dimensions selon l'orientation sélectionnée (portrait ou paysage)
+      const previewWidth = scaledWidth.value;
+      const previewHeight = scaledHeight.value;
+      
+      // Ratios pour convertir les tailles de l'aperçu vers le PDF réel
+      const ratioX = width / previewWidth;
+      const ratioY = height / previewHeight;
+      
+      console.log(`Page ${pageIndex + 1}: PDF réel=${width}x${height}, Aperçu=${previewWidth}x${previewHeight}, Ratios=${ratioX.toFixed(2)}x${ratioY.toFixed(2)}, Orientation=${orientationEffective.value}`);
+      
       // Ajouter le QR code si nécessaire pour cette page
       if (shouldShowQrOnPage(pageIndex + 1)) {
         // Obtenir la position du QR pour cette page
@@ -905,11 +1029,17 @@ async function generateModifiedPdf() {
         // Générer un vrai QR code avec qrcode
         // Utiliser les mêmes tailles que dans le CSS pour la cohérence
         const qrSizeMapping = { small: 34, medium: 54, large: 74 };
-        const qrSize = qrSizeMapping[selectedQrSize.value] || 54;
+        const qrSizeBase = qrSizeMapping[selectedQrSize.value] || 54;
+        // Adapter la taille du QR au ratio du PDF
+        const qrSize = qrSizeBase * Math.min(ratioX, ratioY);
         
         // Convertir la position de pourcentage à coordonnées absolues
+        // Les positions sont en % par rapport à l'aperçu, on les convertit d'abord en pixels aperçu
+        // puis on applique le ratio pour obtenir les coordonnées PDF réelles
         const qrPosX = (position.x / 100) * width;
         const qrPosY = (position.y / 100) * height;
+        
+        console.log(`QR code page ${pageIndex + 1}: Position=${position.x.toFixed(1)}%,${position.y.toFixed(1)}%, Taille=${qrSize.toFixed(1)}px, Coords=${qrPosX.toFixed(1)},${qrPosY.toFixed(1)}`);
         
         try {
           // Générer le QR code comme une URL de données
@@ -1052,13 +1182,16 @@ async function generateModifiedPdf() {
         // La taille dans l'interface est signatureSize.value * 2 (en pixels)
         // On calcule donc un facteur d'échelle proportionnel à la largeur de la page
         // Le backend convertit signature_size en width_percent = signature_size * 0.6
-const scaleFactor = (signatureSize.value * 0.6) / 100;
+        const scaleFactor = (signatureSize.value * 0.6) / 100;
         const sigWidth = width * scaleFactor;
         const sigHeight = (signatureEmbed.height / signatureEmbed.width) * sigWidth;
         
         // Convertir la position de pourcentage à coordonnées absolues
+        // Les positions sont en % et s'adaptent automatiquement aux vraies dimensions du PDF
         const sigPosX = (position.x / 100) * width - (sigWidth / 2);
         const sigPosY = (position.y / 100) * height - (sigHeight / 2);
+        
+        console.log(`Signature page ${pageIndex + 1}: Position=${position.x.toFixed(1)}%,${position.y.toFixed(1)}%, Taille=${sigWidth.toFixed(1)}x${sigHeight.toFixed(1)}px`);
         
         // Dessiner l'image
         page.drawImage(signatureEmbed, {
@@ -1238,7 +1371,13 @@ function getPositionData() {
       positions: positions,
     },
     signature: signatureData,
-    mode: pageApplication.value // Pour savoir comment interpréter les données
+    mode: pageApplication.value, // Pour savoir comment interpréter les données
+    orientation: {
+      mode: orientationMode.value, // auto, portrait, paysage
+      effective: orientationEffective.value, // Orientation effectivement appliquée
+      previewWidth: scaledWidth.value, // Largeur utilisée pour le positionnement
+      previewHeight: scaledHeight.value // Hauteur utilisée pour le positionnement
+    }
   };
 }
 
@@ -1319,6 +1458,15 @@ watch(pageApplication, (newVal) => {
     // L'utilisateur doit interagir avec le QR pour qu'il soit sauvegardé
   }
   emit('position-changed', getPositionData());
+});
+
+// Watcher pour détecter l'orientation de la page actuelle quand on change de page
+watch(currentPage, (newPage) => {
+  // Mettre à jour l'orientation automatiquement selon la page actuelle
+  // Seulement en mode auto
+  if (orientationMode.value === 'auto') {
+    updatePageOrientation(newPage);
+  }
 });
 
 // Nettoyage
@@ -1437,17 +1585,35 @@ function initializeFromPreloadedPositions() {
       fetch(imageUrl)
         .then(r => r.blob())
         .then(blob => {
-          const imgExt = (blob.type && blob.type.split('/')[1]) ? blob.type.split('/')[1].replace('jpeg', 'jpg') : 'png';
-          const file = new File([blob], `preloaded_signature.${imgExt}`, { type: blob.type || 'image/png' });
-          signatureImage.value = file;
-          if (signatureImageUrl.value) {
-            URL.revokeObjectURL(signatureImageUrl.value);
-          }
-          signatureImageUrl.value = URL.createObjectURL(file);
+          const imgExtension = (blob.type && blob.type.split('/')[1]) ? blob.type.split('/')[1].replace('jpeg', 'jpg') : 'png';
+          const imgFile = new File([blob], `signature.${imgExtension}`, { type: blob.type || 'image/png' });
+          signatureImage.value = imgFile;
+          signatureImageUrl.value = URL.createObjectURL(imgFile);
+          console.log('✅ Image de signature chargée depuis les données préchargées');
         })
-        .catch(err => console.warn('Impossible de précharger l\'image de signature:', err));
-    } catch (e) {
-      console.warn('Erreur lors du préchargement de l\'image de signature:', e);
+        .catch(error => {
+          console.error('❌ Erreur lors du chargement de l\'image de signature:', error);
+        });
+    } catch (error) {
+      console.error('❌ Erreur lors du traitement de l\'image de signature:', error);
+    }
+  }
+  
+  // Initialiser l'orientation si fournie
+  if (props.preloadedPositions.orientation) {
+    console.log('🔄 Initialisation de l\'orientation depuis les données préchargées:', props.preloadedPositions.orientation);
+    
+    // Définir le mode d'orientation
+    if (props.preloadedPositions.orientation.mode) {
+      orientationMode.value = props.preloadedPositions.orientation.mode;
+    }
+    
+    // Si les dimensions sont fournies, mettre à jour les dimensions réelles du PDF
+    // (utile pour les templates qui ont des dimensions spécifiques)
+    if (props.preloadedPositions.orientation.previewWidth && props.preloadedPositions.orientation.previewHeight) {
+      realPdfPageWidth.value = props.preloadedPositions.orientation.previewWidth;
+      realPdfPageHeight.value = props.preloadedPositions.orientation.previewHeight;
+      console.log(`📐 Dimensions d'aperçu restaurées: ${realPdfPageWidth.value}x${realPdfPageHeight.value}px`);
     }
   }
   
@@ -1517,6 +1683,8 @@ watch(() => props.preloadedPositions, (newVal) => {
   grid-template-columns: 1fr 260px; /* Réduction de 280px à 260px */
   gap: 20px; /* Réduction de 24px à 20px */
   align-items: start;
+  overflow-x: auto; /* Permettre le scroll horizontal si nécessaire */
+  min-height: 0; /* Permet au contenu de déborder */
 }
 
 /* Section aperçu du document avec design moderne */
@@ -1525,6 +1693,7 @@ watch(() => props.preloadedPositions, (newVal) => {
   border-radius: 12px;
   padding: 20px;
   border: 1px solid var(--border-color);
+  min-width: fit-content; /* S'adapte au contenu en mode paysage */
 }
 
 .preview-header {
@@ -1580,14 +1749,16 @@ watch(() => props.preloadedPositions, (newVal) => {
   padding: 20px;
   background: white;
   border-radius: 8px;
+  overflow-x: auto; /* Scroll horizontal si le PDF dépasse */
+  min-width: 0; /* Permet au flex de se réduire si nécessaire */
 }
 
 .a4-page {
   position: relative;
-  width: 595px;
-  height: 842px;
+  /* Dimensions définies dynamiquement via :style dans le template */
+  /* width, height et aspect-ratio sont contrôlés par scaledWidth et scaledHeight */
+  /* Cela permet de s'adapter à l'orientation (portrait: 595x842, paysage: 842x595) */
   max-width: 100%;
-  aspect-ratio: 210 / 297;
   background: white;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -1704,6 +1875,8 @@ watch(() => props.preloadedPositions, (newVal) => {
   display: flex;
   flex-direction: column;
   gap: 14px; /* Réduction de 16px à 14px */
+  min-width: 260px; /* Garantit la largeur minimale du panneau */
+  flex-shrink: 0; /* Empêche la compression du panneau */
 }
 
 .pages-selection, .size-controls, .all-pages-preview {
@@ -2315,18 +2488,7 @@ watch(() => props.preloadedPositions, (newVal) => {
   text-align: center;
 }
 
-/* Debug du positionnement */
-.a4-page {
-  position: relative;
-  width: 595px;
-  height: 842px;
-  max-width: 100%;
-  aspect-ratio: 210 / 297;
-  background: white;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  cursor: crosshair;
-}
+/* Debug du positionnement - Dimensions contrôlées dynamiquement via :style dans le template */
 
 .pdf-page-content {
   position: absolute;
@@ -2389,7 +2551,7 @@ watch(() => props.preloadedPositions, (newVal) => {
 
 .page-thumb-content {
   width: 100%;
-  aspect-ratio: 210 / 297;
+  /* aspect-ratio dynamique géré par thumbWidth/thumbHeight */
   background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -2510,14 +2672,45 @@ watch(() => props.preloadedPositions, (newVal) => {
 /* Debug info */
 .debug-info {
   position: absolute;
-  top: -25px;
+  top: -30px;
   left: 0;
   font-size: 11px;
-  color: #666;
-  background: #ffe;
-  padding: 2px 5px;
-  border: 1px solid #ddd;
+  color: #333;
+  background: linear-gradient(135deg, #fff8dc 0%, #fffacd 100%);
+  padding: 6px 10px;
+  border: 1px solid #daa520;
+  border-radius: 6px;
   z-index: 100;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Courier New', monospace;
+}
+
+.debug-info strong {
+  color: #000;
+  font-weight: 700;
+}
+
+.auto-badge, .manual-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+.auto-badge {
+  background: #4ade80;
+  color: #166534;
+  border: 1px solid #16a34a;
+}
+
+.manual-badge {
+  background: #60a5fa;
+  color: #1e3a8a;
+  border: 1px solid #3b82f6;
 }
 
 /* Amélioration des styles pour l'aperçu final */
@@ -3429,4 +3622,156 @@ watch(() => props.preloadedPositions, (newVal) => {
   transition: all 0.3s ease;
 }
 
+/* Contrôles d'orientation modernes */
+.orientation-controls {
+  background: var(--bg-light);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.orientation-label {
+  font-weight: 600;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  margin-right: 8px;
+}
+
+.orientation-label i {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.orientation-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  background: white;
+  border: 1px solid transparent;
+}
+
+.orientation-option:hover {
+  background: var(--hover-bg, #f0f0f0);
+  border-color: var(--primary-color);
+}
+
+.orientation-option input[type="radio"] {
+  accent-color: var(--primary-color);
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.orientation-option span {
+  font-weight: 500;
+  color: var(--text-color);
+  font-size: 0.85rem;
+}
+
+.orientation-option:has(input[type="radio"]:checked) {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.orientation-option:has(input[type="radio"]:checked) span {
+  color: white;
+}
+
+/* Indicateur de scroll en mode paysage */
+.scroll-hint {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background: var(--primary-color);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideInRight 0.5s ease-out, pulse 2s ease-in-out infinite 1s;
+}
+
+.scroll-hint i {
+  font-size: 1.1rem;
+  animation: moveHorizontal 1.5s ease-in-out infinite;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes moveHorizontal {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+/* Styles personnalisés pour les barres de défilement - Plus larges et visibles */
+.main-content::-webkit-scrollbar,
+.a4-preview-container::-webkit-scrollbar {
+  height: 16px; /* Plus large pour meilleure visibilité */
+  background: #e5e7eb; /* Gris clair visible */
+  border-radius: 8px;
+}
+
+.main-content::-webkit-scrollbar-thumb,
+.a4-preview-container::-webkit-scrollbar-thumb {
+  background: var(--primary-color); /* Couleur primaire bien visible */
+  border-radius: 8px;
+  border: 3px solid #e5e7eb; /* Bordure pour plus de contraste */
+  transition: all 0.3s ease;
+  min-width: 50px; /* Largeur minimale du thumb */
+}
+
+.main-content::-webkit-scrollbar-thumb:hover,
+.a4-preview-container::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+  border-color: #d1d5db;
+  transform: scaleY(1.1); /* Légère augmentation au survol */
+}
+
+/* Pour Firefox - Version auto (plus large) */
+.main-content,
+.a4-preview-container {
+  scrollbar-width: auto; /* auto au lieu de thin pour plus de visibilité */
+  scrollbar-color: var(--primary-color) #e5e7eb; /* thumb color / track color */
+}
 </style>

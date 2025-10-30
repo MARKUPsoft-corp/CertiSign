@@ -1578,13 +1578,29 @@ async function submitSignature() {
     
     // Créer l'objet de position avec les valeurs vérifiées
     let qrPosition = {
-      x: isNaN(xPosition) ? 85 : xPosition, // Position X par défaut à 85% si invalide
-      y: isNaN(yPosition) ? 10 : yPosition, // Position Y par défaut à 10% si invalide
       size: qrSize,
       pages: pagesValue,
       positions: positions,
       mode: positionMode
     };
+    
+    // En mode "individual", NE PAS envoyer x et y par défaut
+    // car chaque page a sa propre position dans "positions"
+    if (positionMode !== 'individual') {
+      qrPosition.x = isNaN(xPosition) ? 85 : xPosition; // Position X par défaut à 85% si invalide
+      qrPosition.y = isNaN(yPosition) ? 10 : yPosition; // Position Y par défaut à 10% si invalide
+    }
+    
+    // Ajouter les données d'orientation si disponibles
+    if (documentDetails.orientation_mode || documentDetails.orientation_data) {
+      qrPosition.orientation = {
+        mode: documentDetails.orientation_mode || 'auto',
+        effective: documentDetails.orientation_data?.effective || 'portrait',
+        previewWidth: documentDetails.orientation_data?.previewWidth || 595,
+        previewHeight: documentDetails.orientation_data?.previewHeight || 842
+      };
+      console.log('Orientation ajoutée au QR position:', qrPosition.orientation);
+    }
     
     console.log('Informations de positionnement du QR code formatées:', qrPosition);
 
@@ -2218,17 +2234,18 @@ function openBlobInNewTab(blob) {
 
 async function previewTemplateById(tplId) {
   try {
-    const blob = await TemplateService.downloadPreview(tplId);
-    openBlobInNewTab(blob);
+    // Récupérer les détails du template pour utiliser la modale d'aperçu
+    const templateDetails = await TemplateService.getTemplate(tplId);
+    
+    // Utiliser la fonction previewTemplate existante qui affiche la modale
+    await previewTemplate({
+      id: templateDetails.id,
+      name: templateDetails.name,
+      preview_document: templateDetails.preview_document
+    });
   } catch (err) {
-    console.warn('Aperçu indisponible, essai avec le document original...', err);
-    try {
-      const blob = await TemplateService.downloadOriginal(tplId);
-      openBlobInNewTab(blob);
-    } catch (e) {
-      console.error('Erreur de prévisualisation template', e);
-      alert('Impossible de prévisualiser ce template');
-    }
+    console.error('Erreur lors de l\'ouverture de l\'aperçu du template:', err);
+    alert('Impossible d\'afficher ce template.');
   }
 }
 
@@ -2981,7 +2998,13 @@ async function editTemplate(template) {
         signature: templateDetails.signature_positions ? {
           positions: templateDetails.signature_positions,
           size: templateDetails.signature_size || 50
-        } : null
+        } : null,
+        orientation: {
+          mode: templateDetails.orientation_mode || 'auto',
+          effective: templateDetails.orientation_data?.effective || 'portrait',
+          previewWidth: templateDetails.orientation_data?.previewWidth || 595,
+          previewHeight: templateDetails.orientation_data?.previewHeight || 842
+        }
       },
       signatureImage: null,
       generatedPdfFile: null,

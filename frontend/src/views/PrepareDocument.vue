@@ -543,12 +543,18 @@ function onQrPositionConfirmed(position) {
     size: position.qr?.size || 'medium',
     pages: position.qr?.pages || ['all'],
     positions: position.qr?.positions || {},
-    mode: position.qr?.mode || 'standard'
+    mode: position.mode || 'all'  // Le mode est dans position, pas position.qr
   };
   
   console.log('DEBUG - qrPosition créé:', qrPosition);
   
   documentPositions.value[activePositioningIndex.value].qr_position = qrPosition;
+  
+  // Stocker les données d'orientation
+  if (position.orientation) {
+    documentPositions.value[activePositioningIndex.value].orientation = position.orientation;
+    console.log('DEBUG - Orientation stockée:', position.orientation);
+  }
   
   // NOUVEAU: Stocker aussi les informations de signature si disponibles
   if (position.signature) {
@@ -741,6 +747,16 @@ async function submitDocument() {
         formData.append('signature_size', documentPosition.signature.size?.toString() || '50');
       } else {
         console.log('DEBUG - Aucune signature pour le document', i);
+      }
+      
+      // Ajouter les données d'orientation
+      if (documentPosition.orientation) {
+        formData.append('orientation_mode', documentPosition.orientation.mode || 'auto');
+        formData.append('orientation_data', JSON.stringify(documentPosition.orientation));
+        console.log('DEBUG - Orientation envoyée pour document', i, ':', documentPosition.orientation);
+      } else {
+        formData.append('orientation_mode', 'auto');
+        formData.append('orientation_data', JSON.stringify({}));
       }
     
     // Ajouter le statut

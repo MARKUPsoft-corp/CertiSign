@@ -561,7 +561,10 @@ async function saveTemplate() {
       signature_image: templateData.value.signatureImage,
       organization_name: userInfo.organization.name,
       user_role: userInfo.role,
-      organization_role: userInfo.organization.role
+      organization_role: userInfo.organization.role,
+      // Ajout des données d'orientation
+      orientation_mode: templateData.value.qrPositions.orientation?.mode || 'auto',
+      orientation_data: templateData.value.qrPositions.orientation || {}
     };
     
     console.log('Données à envoyer à l\'API:', {

@@ -100,6 +100,15 @@ class TemplateService {
       formData.append('signature_size', templateData.signature_size);
     }
     
+    // Ajout des données d'orientation
+    if (templateData.orientation_mode) {
+      formData.append('orientation_mode', templateData.orientation_mode);
+    }
+    
+    if (templateData.orientation_data) {
+      formData.append('orientation_data', JSON.stringify(templateData.orientation_data));
+    }
+    
     // Ajout des informations d'organisation si disponibles
     if (templateData.organization_name) {
       formData.append('organization_name', templateData.organization_name);

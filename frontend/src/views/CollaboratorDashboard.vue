@@ -1462,7 +1462,13 @@ async function editTemplate(template) {
           positions: templateDetails.signature_positions,
         size: templateDetails.signature_size || 50,
         image: signatureImageUrl
-        } : null
+        } : null,
+      orientation: {
+        mode: templateDetails.orientation_mode || 'auto',
+        effective: templateDetails.orientation_data?.effective || 'portrait',
+        previewWidth: templateDetails.orientation_data?.previewWidth || 595,
+        previewHeight: templateDetails.orientation_data?.previewHeight || 842
+      }
     };
     
     console.log("🔍 [DEBUG] Structure des données préparée pour QrPositioner:", qrPositionsData);
