@@ -1,65 +1,10 @@
 INFO:     Will watch for changes in these directories: ['/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/api_gateway']
-INFO:     Uvicorn running on https://127.0.0.1:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [5470] using StatReload
-INFO:     Started server process [5476]
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [61019] using StatReload
+INFO:     Started server process [61027]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.128:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.101:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.12:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     127.0.0.1:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     129.0.226.192:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     129.0.226.192:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     129.0.226.192:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     129.0.226.192:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     129.0.205.65:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     129.0.205.65:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     129.0.205.65:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.101:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.101:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     192.168.5.101:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
-INFO:     154.72.161.142:0 - "POST /dh-exchange/ HTTP/1.0" 200 OK
+INFO:     127.0.0.1:0 - "HEAD / HTTP/1.1" 404 Not Found
+INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.1" 200 OK
+INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.1" 200 OK
+INFO:     192.168.5.49:0 - "POST /dh-exchange/ HTTP/1.1" 200 OK

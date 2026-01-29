@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve CertiSign Certificat microservice
+After=network.target
+
+[Service]
+User=ssatl
+Group=ssatl
+WorkingDirectory=/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/microservices/lecture_certificat
+ExecStart=/home/ssatl/Documents/Doc@uthANTIC/backend/fastapi/.venv/bin/gunicorn main:app --workers 2 --worker-class uvicorn.workers.UvicornWorker --bind 127.0.0.1:8002
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

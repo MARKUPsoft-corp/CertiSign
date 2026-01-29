@@ -40,8 +40,8 @@ module.exports = defineConfig({
     host: '127.0.0.1', // Écouter SEULEMENT en local (sécurité)
     allowedHosts: 'all', // Permettre l'accès via l'IP
     
-    // Configuration HTTPS conditionnelle
-    https: getHttpsConfig(),
+    // Configuration HTTP uniquement (Nginx gère SSL)
+    https: false,
     
     // Configuration du proxy - Plus besoin car Nginx s'en charge
     // Les proxies sont désactivés car Nginx fait le routage maintenant

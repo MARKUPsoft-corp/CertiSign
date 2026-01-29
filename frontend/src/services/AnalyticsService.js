@@ -21,8 +21,8 @@ class AnalyticsService {
         });
       } catch (prodError) {
         console.log('Erreur avec l\'URL de production, essai avec localhost...');
-        // En cas d'échec, essayer localhost
-        response = await axios.get('http://localhost:8000/api/users/homepage-stats/', {
+        // En cas d'échec, essayer localhost (HTTP pour les connexions internes)
+        response = await axios.get('http://127.0.0.1:8000/api/users/homepage-stats/', {
           timeout: 10000,
           headers: {
             'Content-Type': 'application/json',
@@ -286,5 +286,5 @@ class AnalyticsService {
   }
 }
 
-const analyticsService = new AnalyticsService();
+//const analyticsService = new AnalyticsService();
 export default AnalyticsService; 

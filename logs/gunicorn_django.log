@@ -1,0 +1,107 @@
+[2025-07-29 13:09:24 +0100] [74135] [INFO] Starting gunicorn 23.0.0
+[2025-07-29 13:09:24 +0100] [74135] [INFO] Listening at: http://127.0.0.1:8000 (74135)
+[2025-07-29 13:09:24 +0100] [74135] [INFO] Using worker: sync
+[2025-07-29 13:09:24 +0100] [74140] [INFO] Booting worker with pid: 74140
+[2025-07-29 13:09:24 +0100] [74141] [INFO] Booting worker with pid: 74141
+[2025-07-29 13:09:24 +0100] [74142] [INFO] Booting worker with pid: 74142
+Forbidden: /api/users/auth/with-organization/
+Forbidden: /api/users/auth/with-organization/
+Forbidden: /api/users/auth/with-organization/
+Unauthorized: /api/users/activity-log/
+Forbidden: /api/users/auth/with-organization/
+Unauthorized: /api/users/activity-log/
+Unauthorized: /api/users/activity-log/
+Unauthorized: /api/users/homepage-stats/
+Unauthorized: /api/users/homepage-stats/
+Unauthorized: /api/users/token-verify/
+Unauthorized: /api/users/activity-log/
+Unauthorized: /api/users/activity-log/
+Forbidden: /api/users/auth/with-organization/
+[2025-07-29 14:34:37 +0100] [74135] [CRITICAL] WORKER TIMEOUT (pid:74142)
+[2025-07-29 13:34:37 +0000] [74142] [INFO] Worker exiting (pid: 74142)
+
+📫 Configuration d'envoi d'email réel activée - Les notifications seront envoyées à emmanuelyakam1@gmail.com
+[2025-07-29 14:34:41 +0100] [74135] [ERROR] Worker (pid:74142) exited with code 1
+[2025-07-29 14:34:41 +0100] [74135] [ERROR] Worker (pid:74142) exited with code 1.
+[2025-07-29 14:34:41 +0100] [87265] [INFO] Booting worker with pid: 87265
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/css/login.css
+Not Found: /static/admin/css/responsive.css
+Not Found: /static/admin/css/login.css
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/css/responsive.css
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/css/login.css
+Not Found: /static/admin/css/responsive.css
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/css/login.css
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/css/responsive.css
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/js/theme.js
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/js/nav_sidebar.js
+Not Found: /static/admin/css/responsive.css
+Not Found: /static/admin/css/login.css
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/css/dashboard.css
+Not Found: /static/admin/css/responsive.css
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/js/nav_sidebar.js
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/js/theme.js
+Not Found: /static/admin/css/login.css
+Not Found: /static/admin/css/responsive.css
+Not Found: /static/admin/js/nav_sidebar.js
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/js/theme.js
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/js/nav_sidebar.js
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/css/dashboard.css
+Not Found: /static/admin/css/responsive.css
+Unauthorized: /api/users/homepage-stats/
+Not Found: /static/admin/js/theme.js
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/js/nav_sidebar.js
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/css/responsive.css
+Not Found: /static/admin/css/dashboard.css
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/js/nav_sidebar.js
+Not Found: /static/admin/css/dashboard.css
+Not Found: /static/admin/css/responsive.css
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/js/theme.js
+Not Found: /static/admin/js/nav_sidebar.js
+Not Found: /static/admin/css/dashboard.css
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/css/responsive.css
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/js/theme.js
+Not Found: /static/admin/js/nav_sidebar.js
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/css/responsive.css
+Not Found: /static/admin/css/dashboard.css
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/js/theme.js
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/js/nav_sidebar.js
+Not Found: /static/admin/css/login.css
+Not Found: /static/admin/css/responsive.css
+Unauthorized: /api/users/homepage-stats/
+Unauthorized: /api/users/activity-log/

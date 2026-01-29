@@ -5,8 +5,10 @@ psycopg2-binary
 python-decouple
 Pillow
 drf-yasg
-django-filter
+django-filter==23.5
+django-jazzmin
 djangorestframework-simplejwt
 requests
 Werkzeug
 pyOpenSSL
+gunicorn

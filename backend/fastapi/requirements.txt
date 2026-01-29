@@ -21,3 +21,4 @@ python-dotenv
 loguru
 PyPDF2
 Pillow
+gunicorn

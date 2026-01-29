@@ -20,17 +20,30 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['*']
 
+# Optimisations pour éviter les timeouts et 502
+# Timeout pour les connexions de base de données
+DATABASE_CONNECTION_TIMEOUT = 60
+
+# Configuration pour éviter les fermetures prématurées
+CONN_MAX_AGE = 600  # 10 minutes de connexion persistante
+OPTIONS = {
+    'MAX_CONNS': 20,
+    'CONN_HEALTH_CHECKS': True,
+}
+
 #ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,192.168.4.131', cast=Csv())
 
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'django_extensions',
     
     # Third-party apps
@@ -89,6 +102,10 @@ DATABASES = {
         'PASSWORD': config('DB_PASSWORD', default='easysoft'),
         'HOST': config('DB_HOST', default='192.168.4.131'),
         'PORT': config('DB_PORT', default='5432'),
+        'CONN_MAX_AGE': 600,  # Connexions persistantes
+        'OPTIONS': {
+            'connect_timeout': 60,
+        },
     }
 }
 
@@ -167,6 +184,18 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
+# CSRF configuration - Ajout des origines autorisées
+CSRF_TRUSTED_ORIGINS = [
+    "https://ppd.camgovca.cm",
+    "https://127.0.0.1",
+    "http://127.0.0.1",
+]
+
+# Configuration CSRF pour les cookies
+CSRF_COOKIE_SECURE = True  # Cookies CSRF uniquement en HTTPS
+CSRF_COOKIE_HTTPONLY = False  # Permettre l'accès JavaScript pour les frameworks frontend
+CSRF_COOKIE_SAMESITE = 'Lax'  # Protection CSRF avec SameSite
+
 CORS_ALLOW_METHODS = [
     "DELETE",
     "GET",
@@ -227,4 +256,27 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
     'JTI_CLAIM': 'jti',
+}
+
+JAZZMIN_SETTINGS = {
+    # title of the window (Will default to current_admin_site.site_title if absent or None)
+    "site_title": "Doc@uthANTIC",
+
+    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_header": "Doc@uthANTIC",
+
+    # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_brand": "Doc@uthANTIC",
+
+    # Welcome text on the login screen
+    "welcome_sign": "Bienvenue sur le site d'administration de Doc@uthANTIC",
+
+    # Logo to use for your site, must be present in static files, used for login form
+    "site_logo": "img/doc.png",
+
+    # Copyright on the footer
+    "copyright": "ANTIC",
+
+    # The model admin to search from the search bar, search bar omitted if excluded
+    "search_model": ["users.CustomUser", "documents.Document"],
 }

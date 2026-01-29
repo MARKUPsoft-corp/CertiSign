@@ -1,0 +1,792 @@
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[0;32m✅ Aucun changement détecté. Déploiement non nécessaire.[0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m🛑 Arrêt des services CertiSign...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;31m❌ Erreur lors du pull[0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[0;32m✅ Aucun changement détecté. Déploiement non nécessaire.[0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m🛑 Arrêt des services CertiSign...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m📦 Vérification des dépendances...[0m
+[1;33m🔧 Mise à jour des dépendances Python...[0m
+[1;33m🔧 Mise à jour des dépendances Node.js...[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[1;33m🚀 Redémarrage des services CertiSign...[0m
+[0;32m✅ Services redémarrés[0m
+[1;33m🔍 Vérification du statut des services...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 06c2c988[0m
+[0;32m📅 jeu. 10 juil. 2025 12:02:02 WAT[0m
+[0;32m✨ CertiSign est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m🛑 Arrêt des services CertiSign...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m📦 Vérification des dépendances...[0m
+[1;33m🔧 Mise à jour des dépendances Python...[0m
+[1;33m🔧 Mise à jour des dépendances Node.js...[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[1;33m🚀 Redémarrage des services CertiSign...[0m
+[0;32m✅ Services redémarrés[0m
+[1;33m🔍 Vérification du statut des services...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 2e9afc2f[0m
+[0;32m📅 jeu. 10 juil. 2025 12:11:31 WAT[0m
+[0;32m✨ CertiSign est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m🛑 Arrêt des services CertiSign...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m📦 Vérification des dépendances...[0m
+[1;33m🔧 Mise à jour des dépendances Python...[0m
+[1;33m🔧 Mise à jour des dépendances Node.js...[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[1;33m🚀 Redémarrage des services CertiSign...[0m
+[0;32m✅ Services redémarrés[0m
+[1;33m🔍 Vérification du statut des services...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: de809792[0m
+[0;32m📅 jeu. 10 juil. 2025 12:21:31 WAT[0m
+[0;32m✨ CertiSign est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m🛑 Arrêt des services CertiSign...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[1;33m🚀 Redémarrage des services CertiSign...[0m
+[0;32m📋 Exécution du script de démarrage existant...[0m
+[0;32m✅ Services redémarrés via script existant[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 9fbe4c9f[0m
+[0;32m📅 jeu. 10 juil. 2025 12:30:39 WAT[0m
+[0;32m✨ CertiSign est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m🛑 Arrêt des services CertiSign...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[1;33m🚀 Redémarrage des services CertiSign...[0m
+[0;32m📋 Exécution du script de démarrage existant...[0m
+[0;32m✅ Services redémarrés via script existant[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 9f6bd3da[0m
+[0;32m📅 jeu. 10 juil. 2025 12:40:39 WAT[0m
+[0;32m✨ CertiSign est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: b76175aa[0m
+[0;32m📅 jeu. 10 juil. 2025 12:45:07 WAT[0m
+[0;32m✨ CertiSign est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 8f13d0a3[0m
+[0;32m📅 jeu. 10 juil. 2025 14:25:16 WAT[0m
+[0;32m✨ CertiSign est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 7c335932[0m
+[0;32m📅 jeu. 10 juil. 2025 14:50:07 WAT[0m
+[0;32m✨ CertiSign est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 8449737f[0m
+[0;32m📅 jeu. 10 juil. 2025 15:00:06 WAT[0m
+[0;32m✨ CertiSign est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: c9333e87[0m
+[0;32m📅 jeu. 10 juil. 2025 15:10:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: d43401fe[0m
+[0;32m📅 jeu. 10 juil. 2025 15:20:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: b6ac0788[0m
+[0;32m📅 jeu. 10 juil. 2025 15:55:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: bda20afd[0m
+[0;32m📅 jeu. 10 juil. 2025 16:00:07 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 0fed46b8[0m
+[0;32m📅 jeu. 10 juil. 2025 16:10:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 49836f66[0m
+[0;32m📅 ven. 11 juil. 2025 09:10:07 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 46e5a81f[0m
+[0;32m📅 ven. 11 juil. 2025 09:30:08 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 5fe87326[0m
+[0;32m📅 ven. 11 juil. 2025 09:45:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: f9927554[0m
+[0;32m📅 ven. 11 juil. 2025 10:00:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 676fa44f[0m
+[0;32m📅 ven. 11 juil. 2025 10:15:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: d112d936[0m
+[0;32m📅 ven. 11 juil. 2025 10:20:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: eae61440[0m
+[0;32m📅 ven. 11 juil. 2025 10:30:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 9c7460a5[0m
+[0;32m📅 ven. 11 juil. 2025 10:40:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: f99205f5[0m
+[0;32m📅 ven. 11 juil. 2025 11:00:08 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: c3e00cb7[0m
+[0;32m📅 ven. 11 juil. 2025 11:05:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 3a6aeefa[0m
+[0;32m📅 ven. 11 juil. 2025 11:15:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: f3b95a0e[0m
+[0;32m📅 ven. 11 juil. 2025 11:40:07 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 04b71b41[0m
+[0;32m📅 ven. 11 juil. 2025 11:45:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: f3f6d956[0m
+[0;32m📅 ven. 11 juil. 2025 12:10:07 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: ddf16126[0m
+[0;32m📅 ven. 11 juil. 2025 12:30:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 4e81feda[0m
+[0;32m📅 ven. 11 juil. 2025 12:45:07 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 8b628c1f[0m
+[0;32m📅 ven. 11 juil. 2025 13:00:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: cde998f2[0m
+[0;32m📅 ven. 11 juil. 2025 14:15:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 3ff2e285[0m
+[0;32m📅 ven. 11 juil. 2025 15:10:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 875b7d03[0m
+[0;32m📅 lun. 21 juil. 2025 16:05:09 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 67003da9[0m
+[0;32m📅 lun. 21 juil. 2025 16:10:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 481607fb[0m
+[0;32m📅 lun. 21 juil. 2025 16:15:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 932682be[0m
+[0;32m📅 mar. 22 juil. 2025 11:25:07 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 8dac73c4[0m
+[0;32m📅 mar. 22 juil. 2025 11:40:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 5bc3b421[0m
+[0;32m📅 mar. 22 juil. 2025 11:45:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 21021f25[0m
+[0;32m📅 mar. 22 juil. 2025 12:05:05 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: fb359821[0m
+[0;32m📅 mar. 22 juil. 2025 12:20:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: f6b26b99[0m
+[0;32m📅 mar. 22 juil. 2025 12:30:05 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 1a765469[0m
+[0;32m📅 mar. 22 juil. 2025 12:45:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 2a077810[0m
+[0;32m📅 mar. 22 juil. 2025 13:20:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 0e43e9a7[0m
+[0;32m📅 jeu. 24 juil. 2025 10:50:07 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 7cbc6e1d[0m
+[0;32m📅 jeu. 24 juil. 2025 11:50:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 5991dbd6[0m
+[0;32m📅 jeu. 24 juil. 2025 12:10:09 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: cf8312d7[0m
+[0;32m📅 jeu. 24 juil. 2025 12:20:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 49ac1019[0m
+[0;32m📅 jeu. 24 juil. 2025 13:05:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 4cba54a0[0m
+[0;32m📅 jeu. 24 juil. 2025 13:50:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: f8bfe62f[0m
+[0;32m📅 jeu. 24 juil. 2025 14:15:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: e49244cf[0m
+[0;32m📅 jeu. 24 juil. 2025 14:20:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: f2831d63[0m
+[0;32m📅 jeu. 24 juil. 2025 14:55:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 4fa510aa[0m
+[0;32m📅 jeu. 24 juil. 2025 15:10:16 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 81612d57[0m
+[0;32m📅 jeu. 24 juil. 2025 15:30:07 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 772f10d7[0m
+[0;32m📅 ven. 25 juil. 2025 08:35:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 6b9bd7a3[0m
+[0;32m📅 ven. 25 juil. 2025 12:20:10 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 7f635566[0m
+[0;32m📅 ven. 25 juil. 2025 12:45:21 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: ed0e8360[0m
+[0;32m📅 ven. 25 juil. 2025 12:50:09 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: edcf1ef2[0m
+[0;32m📅 ven. 25 juil. 2025 12:55:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: f78cb073[0m
+[0;32m📅 ven. 25 juil. 2025 13:00:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 0c299c04[0m
+[0;32m📅 ven. 25 juil. 2025 13:05:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 3f45b23d[0m
+[0;32m📅 ven. 25 juil. 2025 13:10:17 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 9015141d[0m
+[0;32m📅 ven. 25 juil. 2025 13:15:05 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 24ba8ead[0m
+[0;32m📅 ven. 25 juil. 2025 13:20:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 195af634[0m
+[0;32m📅 ven. 25 juil. 2025 13:30:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: b0b99450[0m
+[0;32m📅 ven. 25 juil. 2025 13:45:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m
+[1;33m📁 Répertoire courant: /home/ssatl/Documents/Doc@uthANTIC[0m
+[1;33m💾 Sauvegarde de l'état actuel...[0m
+[1;33m📥 Récupération des changements depuis le repository distant...[0m
+[1;33m🔄 Nouveaux changements détectés. Mise à jour en cours...[0m
+[1;33m⬇️  Pull des changements...[0m
+[0;32m✅ Code mis à jour avec succès[0m
+[1;33m🗃️  Application des migrations Django...[0m
+[0;32m🎉 Déploiement terminé avec succès ![0m
+[0;32m📍 Version déployée: 9bd421a1[0m
+[0;32m📅 ven. 25 juil. 2025 13:55:06 WAT[0m
+[0;32m✨ Doc@uthANTIC est maintenant à jour et fonctionnel ![0m

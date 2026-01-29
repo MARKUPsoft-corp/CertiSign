@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve CertiSign Django project
+After=network.target
+
+[Service]
+User=ssatl
+Group=ssatl
+WorkingDirectory=/home/ssatl/Documents/Doc@uthANTIC/backend/django-project
+ExecStart=/home/ssatl/Documents/Doc@uthANTIC/backend/django-project/.venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 certisign_project.wsgi:application
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

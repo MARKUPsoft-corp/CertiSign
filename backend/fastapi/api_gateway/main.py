@@ -59,12 +59,12 @@ async def rate_limit_error(request: Request, exc: RateLimitExceeded):
 # Dictionnaire des microservices disponibles avec leurs URL de base
 MICROSERVICES = {
     # URLs des microservices modifiées pour localhost (sécurité via Nginx)
-    # Les microservices écoutent maintenant seulement en local
-    "cert_info": "https://127.0.0.1:8002/extract-cert-info/",  # URL du microservice de traitement des certificats (form data)
-    "cert_info_base64": "https://127.0.0.1:8002/extract-cert-info-base64/",  # URL du microservice de traitement des certificats (base64/JSON)
-    "sign": "https://127.0.0.1:8003/sign",  # URL du microservice de signature
-    "verify": "https://127.0.0.1:8003/verify",  # URL du microservice de vérification - Maintenant accepte seulement l'ID du document
-    "sign/health": "https://127.0.0.1:8003/health"  # URL pour vérifier l'état du microservice de signature
+    # Les microservices écoutent maintenant seulement en local - HTTP pour les connexions internes
+    "cert_info": "http://127.0.0.1:8002/extract-cert-info/",  # URL du microservice de traitement des certificats (form data)
+    "cert_info_base64": "http://127.0.0.1:8002/extract-cert-info-base64/",  # URL du microservice de traitement des certificats (base64/JSON)
+    "sign": "http://127.0.0.1:8003/sign",  # URL du microservice de signature
+    "verify": "http://127.0.0.1:8003/verify",  # URL du microservice de vérification - Maintenant accepte seulement l'ID du document
+    "sign/health": "http://127.0.0.1:8003/health"  # URL pour vérifier l'état du microservice de signature
 }
 
 # Dictionnaire pour stocker les clés de session par identifiant client

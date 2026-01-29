@@ -1,0 +1,23 @@
+[2025-07-29 13:09:24 +0100] [74137] [INFO] Starting gunicorn 23.0.0
+[2025-07-29 13:09:24 +0100] [74137] [INFO] Listening at: http://127.0.0.1:8002 (74137)
+[2025-07-29 13:09:24 +0100] [74137] [INFO] Using worker: uvicorn.workers.UvicornWorker
+[2025-07-29 13:09:24 +0100] [74144] [INFO] Booting worker with pid: 74144
+[2025-07-29 13:09:24 +0100] [74146] [INFO] Booting worker with pid: 74146
+[2025-07-29 13:09:33 +0100] [74146] [INFO] Started server process [74146]
+[2025-07-29 13:09:33 +0100] [74146] [INFO] Waiting for application startup.
+[2025-07-29 13:09:33 +0100] [74146] [INFO] Application startup complete.
+[2025-07-29 13:09:33 +0100] [74144] [INFO] Started server process [74144]
+[2025-07-29 13:09:33 +0100] [74144] [INFO] Waiting for application startup.
+[2025-07-29 13:09:33 +0100] [74144] [INFO] Application startup complete.
+[2025-07-29 14:34:37 +0100] [74137] [CRITICAL] WORKER TIMEOUT (pid:74144)
+[2025-07-29 14:34:37 +0100] [74137] [CRITICAL] WORKER TIMEOUT (pid:74146)
+[2025-07-29 14:34:38 +0100] [74137] [ERROR] Worker (pid:74146) was sent SIGKILL! Perhaps out of memory?
+[2025-07-29 14:34:38 +0100] [74137] [ERROR] Worker (pid:74144) was sent SIGKILL! Perhaps out of memory?
+[2025-07-29 14:34:38 +0100] [87235] [INFO] Booting worker with pid: 87235
+[2025-07-29 14:34:39 +0100] [87242] [INFO] Booting worker with pid: 87242
+[2025-07-29 14:34:46 +0100] [87235] [INFO] Started server process [87235]
+[2025-07-29 14:34:46 +0100] [87235] [INFO] Waiting for application startup.
+[2025-07-29 14:34:46 +0100] [87235] [INFO] Application startup complete.
+[2025-07-29 14:34:46 +0100] [87242] [INFO] Started server process [87242]
+[2025-07-29 14:34:46 +0100] [87242] [INFO] Waiting for application startup.
+[2025-07-29 14:34:46 +0100] [87242] [INFO] Application startup complete.
